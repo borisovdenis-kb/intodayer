@@ -158,7 +158,7 @@ button:focus {
 	border: 1px solid #dbdbdb;
 	border-radius: 4px;
     width: 1200px;
-	height: 60%;
+    padding-bottom: 100px;
 }
 
 .content-top {
