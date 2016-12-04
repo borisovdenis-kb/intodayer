@@ -252,7 +252,7 @@ table {
     font-family: arial, sans-serif;
 	border: 1px solid #dddddd;
 	border-radius: 4px;
-    border-collapse: collapse;
+    // border-collapse: collapse;
     width: 99%;
 }
 
