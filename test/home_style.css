@@ -4,6 +4,7 @@
 body {
     margin: 0 auto;
     background-color: white;
+    min-width: 1200px;
 }
 
 ul {
@@ -100,6 +101,7 @@ button:focus {
     background: rgba(250, 250, 250, 1);
     padding-left: 0;
     white-space: nowrap;
+    box-shadow: inset 0px 0px 36px -15px rgba(0, 0, 0, 1);
 }
 
 .menu a {
@@ -109,18 +111,21 @@ button:focus {
     padding-left: 2em;
     padding-right: 2em;
     display: block;
+
 }
 
 .menu li {
-    // box-shadow: inset 15px 0px 36px -19px rgba(0, 0, 0, 0.5);
     transition: 0.3s ease;
 	border-top: 3px solid #8b1deb;
 }
 
+.menu li:hover{
+    background: white;
+
+}
 .menu a:hover {
-    padding-right: 100px;
-    padding-left: 100px;
-    box-shadow: none;
+    // background: rgba(139, 29, 235, 0.05);
+    // box-shadow: inset 0px -1px 0px 0px gray;
     background: white;
     transition: 0.3s ease;
 }
@@ -159,17 +164,18 @@ button:focus {
 .content-top {
     width: 100%;
     height: 160px;
-/*
     display: flex;
     flex-direction: row;
-*/
     align-items: center;
+    padding-top: 5px;
+    padding-bottom: 5;
 	border-bottom: 1px solid #dbdbdb;
 }
 
 .avatar-block {
 	margin-left: 10px;
 	margin-top: 10px;
+    margin-bottom: 10px;
     overflow: hidden;
     width: 150px;
 	height: 150px;
@@ -181,7 +187,7 @@ button:focus {
 	background-image: url('images/putin.jpg');
     background-size: contain;
     background-repeat: no-repeat;
-    border-radius: 4xp;
+    border-radius: 4px;
     padding: 10px;
     width: 110%;
     height: 110%;
@@ -246,7 +252,7 @@ table {
     font-family: arial, sans-serif;
 	border: 1px solid #dddddd;
 	border-radius: 4px;
-/*    border-collapse: collapse;*/
+    border-collapse: collapse;
     width: 99%;
 }
 
@@ -254,12 +260,14 @@ table {
 	padding: 8px;
 	text-align: left;
 	background: #0da059;
-	height: 35px;
+
 }
 
 td {
     text-align: left;
     padding: 8px;
+    padding-top: 15px;
+    padding-bottom: 15px;
 }
 
 tr:nth-child(even) {
@@ -271,6 +279,21 @@ tr:nth-child(even) {
 }
 
 /*============> Мой Вариант <============*/
+
+.title-content {
+    flex: 1 1 auto;
+    text-align: center;
+    font-size: 1.5em;
+}
+
+h1{
+    margin: 0;
+    font-size: 1em;
+
+}
+h2{
+    margin: 20px;
+}
 
 .footer {
     width: 100%;
