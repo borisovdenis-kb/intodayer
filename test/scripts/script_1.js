@@ -37,7 +37,6 @@ function setCurrentMenu(nameClass) {
 		right_shadow = menu_div[0].getElementsByClassName('group');
 		right_shadow[0].style.boxShadow = 'inset -15px 0px 36px -19px rgba(0,0,0,0.5)';
 	}
-
 }
 
 //выпадающее меню
