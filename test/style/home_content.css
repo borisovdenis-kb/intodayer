@@ -16,6 +16,7 @@ ul {
 
 a {
     text-decoration: none;
+	color: black;
     /*убираем подчеркивание текста ссылок*/
 }
 
@@ -39,6 +40,7 @@ a {
 
 .content-top {
 	margin: auto;
+	margin-bottom: 15px;
     display: flex;
     align-items: center;
 	border-radius: 4px;
@@ -65,14 +67,23 @@ a {
 
 }
 
+.table-container {
+	clear:both;
+	padding: 0;
+	margin: 0;
+	border: 1px solid #dbdbdb;
+	border-radius: 4px;
+}
+
+
 table {
 	margin: auto;
-	margin-top: 10px;
+/*	margin-top: 15px;*/
     font-family: arial, sans-serif;
-	border: 1px solid #dddddd;
 	border-radius: 4px;
 /*    border-collapse: collapse;*/
     width: 100%;
+	transition: 1s ease all;
 }
 
 .tableTop, th {
@@ -80,6 +91,10 @@ table {
 	text-align: left;
 	background: #0da059;
 
+}
+
+tr{
+	
 }
 
 td {
@@ -108,15 +123,59 @@ h2{
     margin: 20px;
 }
 
-.footer {
-    width: 100%;
-    margin-top: 200px;
-    border-top: solid 3px #3EBB3E;
-    background: rgba(242, 242, 242, 1);
-    font-family: Consolas, Arial;
-    padding-top: 30px;
-    padding-bottom: 30px;
-    font-size: 20px;
-    text-align: center;
+
+.days:first-child{
+	margin-left: 20px;
+	margin-bottom: 20px;
 }
+
+.days{
+	box-shadow: 0px 0px 0px 1px rgba(0,0,0,0.1) inset;
+	display: block;
+	float: left;
+	overflow: hidden;
+	text-align: center;
+	background-color: rgba(230, 230, 230, 1);
+	border-radius: 20px;
+	margin-right: 10px;
+	transition: .2s all ease;
+}
+
+/*для javascript*/
+.days_select{
+	background: #0da059;
+	box-shadow: none;
+}
+.days_unselect{
+	background: 'rgba(230, 230, 230, 1)';
+	box-shadow: '0px 0px 0px 1px rgba(0,0,0,0.1) inset';
+}
+/*для javascript*/
+
+
+.days a{
+	display: block;
+	padding-left: 20px;
+	padding-right: 20px;
+	line-height: 35px;
+}
+
+
+.week-name{
+	float: right;
+	line-height: 35px;
+	margin-right: 10px;
+}
+	
+
+
+
+
+
+
+
+
+
+
+
 
