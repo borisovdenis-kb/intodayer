@@ -1,0 +1,278 @@
+/*то, что скрыто вначале*/
+.top-menu{
+    display: none;
+}
+/*то, что скрыто вначале*/
+ul {
+    list-style: none;
+    margin: 0 auto;
+}
+
+a {
+    text-decoration: none;
+    font-family: 'Arial', serif;
+    transition: .2s linear;
+}
+
+button {
+    background: none;
+    border: none;
+}
+
+button:hover {
+    outline: none;
+}
+
+button:focus {
+    outline: none;
+}
+
+.top-block {
+    border-bottom: 3px solid #8b1deb;
+    background-color: rgba(242, 242, 242, 1);
+
+}
+
+.top {
+    display: block;
+    margin: auto;
+    width: 1024px;
+
+}
+
+.top-menu {
+    margin-bottom: 15px;
+    background: rgba(250, 250, 250, 1);
+    box-shadow: inset 0px -45px 30px -50px rgba(0, 0, 0, 0.4);
+
+}
+
+.top-menu ul {
+    display: flex;
+    width: 1024px;
+}
+.top-menu li{
+    width: 100%;
+}
+
+.top-menu a {
+    text-align: center;
+    color: black;
+    padding: 1em;
+    padding-left: 2em;
+    padding-right: 2em;
+    display: block;
+
+}
+
+.logo {
+    display: inline-block;
+    margin-left: 15px;
+    padding-top: 4px;
+    padding-bottom: 5px;
+    font-size: 24px;
+    font-family: 'Consolas', serif;
+
+}
+
+.logo a {
+    font-family: 'Consolas', serif;
+}
+
+.top-menu li {
+    transition: 0.3s ease;
+    /*width: 100%;*/
+}
+
+.top-menu li:hover {
+    background: white;
+}
+
+/*для javascript*/
+.select_menu {
+    background: white;
+}
+
+.leftShadow {
+    box-shadow: inset -15px 0px 36px -19px rgba(0, 0, 0, 0.5);
+
+}
+
+.rightShadow {
+    box-shadow: inset 15px 0px 36px -19px rgba(0, 0, 0, 0.5);
+}
+
+/*для javascript*/
+
+.top-menu a:hover {
+    /*
+        background: rgba(139, 29, 235, 0.05);
+        box-shadow: inset 0px -1px 0px 0px gray;
+    */
+    background: white;
+    transition: 0.3s ease;
+}
+
+.top-menu a:active {
+    background: rgba(242, 242, 242, 1);
+    transition: none;
+    transition: 0.3s ease;
+}
+
+/*Базовая обертка*/
+.droplink {
+    position: relative;
+    float: right;
+    font-size: 14px;
+    z-index: 1;
+
+}
+
+/*Стиль блока при наведении*/
+.droplink:hover {
+    transition: .1s linear;
+    background-color: #d3d3d3;
+
+}
+
+/*Заголовок в обычном состоянии*/
+.username {
+    float: left;
+    font-style: bold;
+}
+
+.droplink .username a {
+    text-align: center;
+    width: 80px;
+    display: block;
+    padding-top: 11px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    color: black;
+    text-decoration: none;
+}
+
+/*Скрываем список без наведения*/
+
+.droplink ul {
+    position: absolute;
+    list-style: none;
+    width: 110%;
+    border-radius: 4px;
+    transition: background .2s ease;
+    background: white;
+    box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.2);
+    margin-top: 20px;
+    left: -5px;
+
+}
+
+.droplink ul::after, .droplink ul::before {
+    content: '';
+    position: absolute;
+    background: white;
+    left: 30px;
+    bottom: 95px;
+    width: 15px;
+    height: 15px;
+    box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.2);
+    z-index: -1; /* Прячем за основным блоком */
+    transform: rotate(45deg); /* Поворачиваем на 45º */
+}
+
+.droplink ul::before {
+    z-index: 2; /* Накладываем поверх, чтобы скрыть следы тени */
+    box-shadow: none;
+}
+
+/*для javascript*/
+.username_color {
+    background-color: #d3d3d3;
+}
+
+.show_droplink {
+    left: -5px;
+}
+
+/*для javascript*/
+
+/*Стиль элемента списка*/
+.droplink li a {
+    position: relative;
+    z-index: 6;
+    text-align: left;
+    background-color: none;
+    display: block;
+    color: black;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 15px;
+    transition: .2s ease;
+}
+
+.dropmenu {
+    display: none;
+}
+
+.devide-line {
+    width: 100%;
+    padding: 2px;
+}
+
+.droplink li:first-child {
+    /*	border-top: 10px solid white;*/
+}
+
+.droplink li a:hover {
+    background: rgba(235, 235, 235, 1);
+}
+
+.droplink li a:active {
+    background: rgba(205, 205, 205, 1);
+}
+
+.up-arrow {
+    margin-right: 10px;
+    margin-left: 0px;
+    margin-top: 15px;
+    float: right;
+    display: inline-block;
+    border: 7px solid transparent;
+    border-top: 8px solid rgba(150, 150, 150, 1);
+}
+
+.droplink:active .up-arrow {
+    border-top-color: rgba(80, 80, 80, 1);
+}
+
+/*для javascript*/
+.unselect_up-arrow {
+    border-top-color: rgba(150, 150, 150, 1);
+}
+
+.select_up-arrow {
+    border-top-color: rgba(80, 80, 80, 1);
+}
+
+/*для javascript*/
+
+.mini-ava {
+    display: inline-block;
+    background-image: url('../images/ava.png');
+    margin-right: 12px;
+    margin-left: 4px;
+    margin-top: 3px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}	
+
+
+
+
+	
+	
+	
+	
+	
+	

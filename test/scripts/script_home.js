@@ -99,15 +99,12 @@ function setDay() {
 		objElem.classList.add('days_select');
 		selectedDay = objElem;
 		
-//		тут нужно изменить саму таблицу
+//		тут нужно подгружать таблицу
+		
+
 		
 		
-		
-		
-		
-		
-//			
-				
+//
 		$('tr').clearQueue();
 		hideTable(40,400);
 		showTable(40,400);
@@ -117,7 +114,7 @@ function setDay() {
 //Открытие и закрытие меню профиля в шапке
 var droplink = document.getElementsByClassName('droplink')[0];
 var ul_menu = droplink.getElementsByTagName("UL")[0];
-var arrow = document.getElementsByClassName("up-arrow")[0];
+var arrow = droplink.getElementsByClassName("up-arrow")[0];
 var openFlag = false;
 var timeMenuEffect = 150;
 
@@ -128,11 +125,15 @@ function openMenu() {
 	"use strict";
 	if (openFlag === false) {
 		arrow.classList.add('select_up-arrow');
+		droplink.classList.add('username_color');
+		
 		$(ul_menu).animate({
 			'margin-top': '10px'
 		}, timeMenuEffect);
 		$('.dropmenu').fadeIn(timeMenuEffect);
 		openFlag = true;
+		
+//	закрыть если нажимаем на username
 	} else if (!ul_menu.contains(event.target)) {
 		closeDroplist();
 	}
@@ -155,24 +156,34 @@ function closeDroplist() { //устанавливает свойста для з
 	if (arrow.classList.contains("select_up-arrow")) {
 		arrow.classList.remove("select_up-arrow");
 	}
+	if (droplink.classList.contains("username_color")) {
+		droplink.classList.remove("username_color");
+	}
 }
+//Открытие и закрытие меню профиля в шапке
 
-//появление таблицы
+
+//появление таблицы и страницы ============================
+var main_time = 300;
 var heightTable = $('.table-container').height();
 $('.table-container').css({'height':heightTable});
 $('tr').hide();
 
 
-$(document).ready ( function(){
-	"use strict";
-	showTable(40,400);
+$(document).ready(function () {
+	$('.top-menu').slideDown(main_time*2);
+	$('.page').fadeTo(main_time*2,1, function () {
+		showTable(40,400);
+	});
 });
 
 function showTable(interval, time){
 	"use strict";
-	$('tr').each(function(i) {
-		$(this).delay((i++) * interval).fadeTo(time,1);
-	});	
+	$('.table-container').slideDown(main_time,function() {
+		$('tr').each(function (i) {
+			$(this).delay((i++) * interval).fadeTo(time, 1);
+		});
+	});
 }
 
 function hideTable(interval, time){
@@ -181,8 +192,10 @@ function hideTable(interval, time){
 		$(this).delay((i++) * interval).fadeTo(time,0);
 	});	
 }
-
-
+//появление таблицы и страницы ============================
+$(window).resize(function() {
+	$('.top-menu li').css({'width':'100%'});
+});
 
 
 
