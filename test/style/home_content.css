@@ -1,12 +1,21 @@
-/*то, что скрыто вначале*/
-/*.page {*/
-    /*display: none;*/
-/*}*/
+/*работа шрифта для Mozilla Firefox*/
+@-moz-document url-prefix() {
+    a, table {
+        font-family: "SegoeUIRegular" !important;
+        font-weight: 300 !important;
+    }
+    .logo a{
+        font-family: "Consolas" !important;
+        /*font-weight: 300 !important;*/
+    }
+    .username a{
+        font-family: "Arial" !important;
+    }
+}
 
 .table-container{
     display: none;
 }
-/*то, что скрыто вначале*/
 
 body {
     margin: 0 auto;
@@ -83,26 +92,24 @@ a {
 
 table {
     margin: auto;
-    /*	margin-top: 15px;*/
     font-family: arial, sans-serif;
     border-radius: 4px;
-    /*    border-collapse: collapse;*/
     width: 100%;
     transition: 1s ease all;
 }
 
 .tableTop, th {
     padding: 8px;
+    padding-left:10px;
     text-align: left;
     background: #0da059;
-
 }
 
 td {
     text-align: left;
     padding: 8px;
-    padding-top: 15px;
-    padding-bottom: 15px;
+    padding-left:10px;
+    height: 40px;
 }
 
 tr:nth-child(even) {

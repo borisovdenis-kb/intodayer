@@ -97,13 +97,13 @@ button:focus {
 }
 /*тени для бразуера Firefox 1+*/
 .leftShadowMoz{
-    box-shadow: inset -5px 0px 5px -5px rgba(0, 0, 0, 0.5);
+    box-shadow: inset -5px 0px 10px -5px rgba(0, 0, 0, 0.3);
 }
 .rightShadowMoz {
-    box-shadow: inset 5px 0px 5px -5px rgba(0, 0, 0, 0.5);
+    box-shadow: inset 5px 0px 10px -5px rgba(0, 0, 0, 0.3);
 }
 .menuShadowMoz{
-    box-shadow: inset 0px -5px 5px -5px rgba(0, 0, 0, 0.5);
+    box-shadow: inset 0px -5px 10px -5px rgba(0, 0, 0, 0.3);
 }
 /*для javascript*/
 
@@ -128,7 +128,6 @@ button:focus {
     float: right;
     font-size: 14px;
     z-index: 1;
-
 }
 
 /*Стиль блока при наведении*/
@@ -147,8 +146,8 @@ button:focus {
     text-align: center;
     width: 80px;
     display: block;
-    padding-top: 11px;
-    padding-bottom: 10px;
+    padding-top: 12px;
+    padding-bottom: 9px;
     padding-left: 10px;
     color: black;
     text-decoration: none;

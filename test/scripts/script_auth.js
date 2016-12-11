@@ -26,17 +26,6 @@ function hideContent(time, mode){
     return dfd.promise();
 }
 
-//устанавливает элемент по центру
-// jQuery.fn.center = function (topPlus, leftPlus) {
-//     this.css("position","absolute");
-//     this.css("top", Math.max(0, (($(window).height() - $(this).outerHeight()) / 2) +
-//             $(window).scrollTop()) + topPlus + "px");
-//     this.css("left", Math.max(0, (($(window).width() - $(this).outerWidth()) / 2) +
-//             $(window).scrollLeft()) + leftPlus + "px");
-//     return this;
-// }
-
-
 function removeContent(){
     $('.text').detach();
     $('.enter').detach();

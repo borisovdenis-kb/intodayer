@@ -1,5 +1,5 @@
 /*работа шрифта для Mozilla Firefox*/
-@-moz-document url-prefix("http") {
+@-moz-document url-prefix() {
     * {
         font-family: "SegoeUIRegular" !important;
         font-weight: 300 !important;

@@ -155,15 +155,16 @@ function setDay(event) {
 		}
 		objElem.classList.add('days_select');
 		selectedDay = objElem;
-
-//		тут нужно подгружать таблицу
-
-
-
-
-//
 		$('tr').clearQueue();
 		hideTable(40,400);
+
+		//		тут нужно подгружать таблицу из БД
+
+
+
+
+		//
+
 		showTable(40,400);
 	}
 }
