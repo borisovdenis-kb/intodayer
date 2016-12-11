@@ -1,9 +1,21 @@
-// устанавливает подстветку меню
-//var locate = location.toString();
-//var home = locate.lastIndexOf('home');
+
+
+// установка теней меню
 
 var selectedMenu;
 var selectedDay;
+
+var leftShadow = 'leftShadow';
+var rightShadow = 'rightShadow';
+
+// Firefox 1.0+
+var isFirefox = typeof InstallTrigger !== 'undefined';
+if (isFirefox){
+	leftShadow = 'leftShadowMoz';
+	rightShadow = 'rightShadowMoz';
+	$('.top-menu').addClass('menuShadowMoz');
+	// $('a').css({'font': 'times'});
+}
 
 //Меню
 selectedMenu = document.getElementById("home");
@@ -14,16 +26,14 @@ selectedDay = document.querySelectorAll('.days')[0];
 selectedDay.classList.add('days_select');
 
 function setCurrentMenu(objElem) {
-	"use strict";
-	objElem.classList.add('select_menu');
+	$(objElem).addClass('select_menu');
 	var prev = objElem.previousSibling.previousSibling;
 	var next = objElem.nextSibling.nextSibling;
-	if (prev !== null && prev.tagName === 'LI') {
-		prev.classList.add('leftShadow');
+	if ($(prev).is('LI')) {
+		$(prev).addClass(leftShadow);
 	}
-
-	if (next !== null && next.tagName === 'LI') {
-		next.classList.add('rightShadow');
+	if ($(next).is('LI')) {
+		$(next).addClass(rightShadow);
 	}
 	selectedMenu = objElem;
 }
@@ -33,26 +43,12 @@ function setDefaultMenu() {
 	"use strict";
 	var next = selectedMenu.nextSibling.nextSibling;
 	var prev = selectedMenu.previousSibling.previousSibling;
-	selectedMenu.classList.remove('select_menu');
-	if (next && next.tagName === 'LI') {
-		if (next.classList.contains('leftShadow')) {
-			next.classList.remove('leftShadow');
-		}
-		if (next.classList.contains('rightShadow')) {
-			next.classList.remove('rightShadow');
-		}
-	}
-	if (prev && prev.tagName === 'LI') {
-		if (prev.classList.contains('leftShadow')) {
-			prev.classList.remove('leftShadow');
-		}
-		if (prev.classList.contains('rightShadow')) {
-			prev.classList.remove('rightShadow');
-		}
-	}
+	$(selectedMenu).removeClass('select_menu');
+	$(next).removeClass(rightShadow + ' ' + leftShadow);
+	$(prev).removeClass(rightShadow + ' ' + leftShadow);
 }
 
-function setMenu() {
+function setMenu(event) {
 	"use strict";
 	var objElem = event.target.parentElement;
 	setDefaultMenu(objElem);
@@ -83,33 +79,6 @@ for (var i = 0; i < elemsMenu.length; i++) {
 }
 //===============================================
 
-//Обратотка нажаний на вывод таблиц
-var daysElem = document.getElementsByClassName("week")[0];
-daysElem.addEventListener('click', setDay);
-
-function setDay() {
-	"use strict";
-	var objElem = event.target.parentElement;
-	var prevSelect = selectedDay;
-
-	if (objElem && objElem.tagName === "LI") {
-		if (prevSelect.classList.contains('days_select')) {
-			prevSelect.classList.remove('days_select');
-		}
-		objElem.classList.add('days_select');
-		selectedDay = objElem;
-		
-//		тут нужно подгружать таблицу
-		
-
-		
-		
-//
-		$('tr').clearQueue();
-		hideTable(40,400);
-		showTable(40,400);
-	}
-}
 
 //Открытие и закрытие меню профиля в шапке
 var droplink = document.getElementsByClassName('droplink')[0];
@@ -121,7 +90,7 @@ var timeMenuEffect = 150;
 droplink.addEventListener("click", openMenu);
 document.body.addEventListener("click", closeMenu);
 
-function openMenu() {
+function openMenu(event) {
 	"use strict";
 	if (openFlag === false) {
 		arrow.classList.add('select_up-arrow');
@@ -139,7 +108,7 @@ function openMenu() {
 	}
 }
 
-function closeMenu() {
+function closeMenu(event) {
 	"use strict";
 	if (openFlag && !droplink.contains(event.target)) {
 		closeDroplist();
@@ -166,8 +135,38 @@ function closeDroplist() { //устанавливает свойста для з
 //появление таблицы и страницы ============================
 var main_time = 300;
 var heightTable = $('.table-container').height();
+// $('#hideme>td').fadeTo("slow", 0.0);
 $('.table-container').css({'height':heightTable});
 $('tr').hide();
+
+//Обратотка нажаний на вывод таблиц
+var daysElem = document.getElementsByClassName("week")[0];
+daysElem.addEventListener('click', setDay);
+
+function setDay(event) {
+	"use strict";
+	// var eventObj = event || window.event;
+	var objElem = event.target.parentElement;
+	var prevSelect = selectedDay;
+
+	if (objElem && objElem.tagName === "LI") {
+		if (prevSelect.classList.contains('days_select')) {
+			prevSelect.classList.remove('days_select');
+		}
+		objElem.classList.add('days_select');
+		selectedDay = objElem;
+
+//		тут нужно подгружать таблицу
+
+
+
+
+//
+		$('tr').clearQueue();
+		hideTable(40,400);
+		showTable(40,400);
+	}
+}
 
 
 $(document).ready(function () {

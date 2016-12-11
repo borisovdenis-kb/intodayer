@@ -1,8 +1,3 @@
-/*то, что скрыто вначале*/
-.top-menu{
-    display: none;
-}
-/*то, что скрыто вначале*/
 ul {
     list-style: none;
     margin: 0 auto;
@@ -10,7 +5,7 @@ ul {
 
 a {
     text-decoration: none;
-    font-family: 'Arial', serif;
+    font-family: Arial, SegoeUIRegular;
     transition: .2s linear;
 }
 
@@ -71,7 +66,6 @@ button:focus {
     padding-top: 4px;
     padding-bottom: 5px;
     font-size: 24px;
-    font-family: 'Consolas', serif;
 
 }
 
@@ -92,16 +86,25 @@ button:focus {
 .select_menu {
     background: white;
 }
-
 .leftShadow {
+    /*box-shadow: inset -5px 0px 5px -5px rgba(0, 0, 0, 0.5);*/
     box-shadow: inset -15px 0px 36px -19px rgba(0, 0, 0, 0.5);
 
 }
-
 .rightShadow {
+    /*box-shadow: inset 5px 0px 5px -5px rgba(0, 0, 0, 0.5);*/
     box-shadow: inset 15px 0px 36px -19px rgba(0, 0, 0, 0.5);
 }
-
+/*тени для бразуера Firefox 1+*/
+.leftShadowMoz{
+    box-shadow: inset -5px 0px 5px -5px rgba(0, 0, 0, 0.5);
+}
+.rightShadowMoz {
+    box-shadow: inset 5px 0px 5px -5px rgba(0, 0, 0, 0.5);
+}
+.menuShadowMoz{
+    box-shadow: inset 0px -5px 5px -5px rgba(0, 0, 0, 0.5);
+}
 /*для javascript*/
 
 .top-menu a:hover {
@@ -138,7 +141,6 @@ button:focus {
 /*Заголовок в обычном состоянии*/
 .username {
     float: left;
-    font-style: bold;
 }
 
 .droplink .username a {
@@ -201,7 +203,6 @@ button:focus {
     position: relative;
     z-index: 6;
     text-align: left;
-    background-color: none;
     display: block;
     color: black;
     text-decoration: none;
@@ -265,9 +266,13 @@ button:focus {
     width: 30px;
     height: 30px;
     border-radius: 50%;
-}	
+}
 
-
+/*то, что скрыто вначале*/
+.top-menu{
+    display: none;
+}
+/*то, что скрыто вначале*/
 
 
 	

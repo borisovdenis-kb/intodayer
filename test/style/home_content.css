@@ -13,7 +13,7 @@ body {
     background-color: rgba(254, 254, 254, 1);
     min-width: 1024px;
     min-height: 1024px;
-    font-family: 'Arial', serif;
+    font-family: Arial, SegoeUIRegular;
 }
 
 ul {

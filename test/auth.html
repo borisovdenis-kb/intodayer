@@ -5,7 +5,9 @@
     <meta http-equiv="Content-type" content="text/html" charset="UTF-8">
     <!--    <link rel="stylesheet" type="text/css" href={% static 'css/auth_style.css' %}>-->
     <link rel="stylesheet" type="text/css" href="style/auth_style.css">
+    <link rel="stylesheet" type="text/css" href="style/fonts.css">
     <script type="text/javascript" src="library/jquery-3.1.1.js"></script>
+    <script type="text/javascript" src="library/jquery.animate-colors.js"></script>
     <!--<script type="text/javascript" src="jquery.easing.compatibility.js"></script>-->
 </head>
 <body>
@@ -73,11 +75,15 @@
                     <input id="re_pass" type="password" placeholder="Повторите пароль" required="required">
                 </li>
                 <li class="outline-checkbox">
-                    <div class="text-checkbox">
+                    <div class="check-content">
                         <input id="get-sms_checkbox" type="checkbox">
-                        <span class="form-text">Хочу получать смс рассылку об изменении в расписании</span>
+                        <label for="get-sms_checkbox"></label>
+                        <label for="get-sms_checkbox"><span></span>Хочу получать смс рассылку об изменении в расписании</label>
+
                     </div>
-                    <input id="phone" type="text" placeholder="Номер телефона" required="required">
+                    <div class="phone-content">
+                        <input id="phone" type="text" placeholder="Номер телефона" required="required">
+                    </div>
                 </li>
                 <li>
 

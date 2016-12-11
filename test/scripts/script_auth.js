@@ -65,13 +65,22 @@ function sing_in_Action(){
 }
 
 function checkbox_Action(){
+    var inputElem = '.phone-content';
     if ($(this).prop('checked')) {
-        $('#phone').slideDown(main_time*2).fadeTo(main_time,1);
+        $(this).animate({
+            'background-color': '#0da559',
+        },main_time);
+        $(inputElem).slideDown(main_time*2, function () {
+            $(inputElem).fadeTo(main_time,1);
+        });
     }
     else {
-        $('#phone').fadeTo(main_time,0).slideUp(main_time * 2, function () {
-            $('#phone').val("");
+        $(inputElem).fadeTo(main_time,0).slideUp(main_time * 2, function () {
+            $(inputElem).val("");
         });
+        $(this).animate({
+            'background-color': '#ffffff',
+        },main_time);
     }
 }
 

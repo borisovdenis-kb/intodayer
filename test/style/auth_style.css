@@ -1,70 +1,18 @@
-/*то, что скрыто вначале*/
-#phone {
-    display: none;
+/*работа шрифта для Mozilla Firefox*/
+@-moz-document url-prefix("http") {
+    * {
+        font-family: "SegoeUIRegular" !important;
+        font-weight: 300 !important;
+    }
 }
-.reg, .auth {
-    display: none;
-}
-/*то, что скрыто вначале*/
+
 body {
     margin: 0 auto;
     background-color: rgba(254, 254, 254, 1);
     min-width: 700px;
-    /*min-height: 1024px;*/
-    font-family: Segoe UI;
+    min-height: 800px;
+    font-family: SegoeUIRegular, SegoeUILight;
 }
-
-/* font-family: "SegoeUIRegular"; */
-@font-face {
-    font-family: "SegoeUIRegular";
-    src: url("../fonts/SegoeUIRegular/SegoeUIRegular.eot");
-    src: url("../fonts/SegoeUIRegular/SegoeUIRegular.eot?#iefix")format("embedded-opentype"),
-    url("../fonts/SegoeUIRegular/SegoeUIRegular.woff") format("woff"),
-    url("../fonts/SegoeUIRegular/SegoeUIRegular.ttf") format("truetype");
-    font-style: normal;
-    font-weight: normal;
-}
-/* font-family: "SegoeUIBold"; */
-@font-face {
-    font-family: "SegoeUIBold";
-    src: url("../fonts/SegoeUIBold/SegoeUIBold.eot");
-    src: url("../fonts/SegoeUIBold/SegoeUIBold.eot?#iefix")format("embedded-opentype"),
-    url("../fonts/SegoeUIBold/SegoeUIBold.woff") format("woff"),
-    url("../fonts/SegoeUIBold/SegoeUIBold.ttf") format("truetype");
-    font-style: normal;
-    font-weight: normal;
-}
-/* font-family: "SegoeUIItalic"; */
-@font-face {
-    font-family: "SegoeUIItalic";
-    src: url("../fonts/SegoeUIItalic/SegoeUIItalic.eot");
-    src: url("../fonts/SegoeUIItalic/SegoeUIItalic.eot?#iefix")format("embedded-opentype"),
-    url("../fonts/SegoeUIItalic/SegoeUIItalic.woff") format("woff"),
-    url("../fonts/SegoeUIItalic/SegoeUIItalic.ttf") format("truetype");
-    font-style: normal;
-    font-weight: normal;
-}
-/* font-family: "SegoeUILight"; */
-@font-face {
-    font-family: "SegoeUILight";
-    src: url("../fonts/SegoeUILight/SegoeUILight.eot");
-    src: url("../fonts/SegoeUILight/SegoeUILight.eot?#iefix")format("embedded-opentype"),
-    url("../fonts/SegoeUILight/SegoeUILight.woff") format("woff"),
-    url("../fonts/SegoeUILight/SegoeUILight.ttf") format("truetype");
-    font-style: normal;
-    font-weight: normal;
-}
-/* font-family: "SegoeUISemiBold"; */
-@font-face {
-    font-family: "SegoeUISemiBold";
-    src: url("../fonts/SegoeUISemiBold/SegoeUISemiBold.eot");
-    src: url("../fonts/SegoeUISemiBold/SegoeUISemiBold.eot?#iefix")format("embedded-opentype"),
-    url("../fonts/SegoeUISemiBold/SegoeUISemiBold.woff") format("woff"),
-    url("../fonts/SegoeUISemiBold/SegoeUISemiBold.ttf") format("truetype");
-    font-style: normal;
-    font-weight: normal;
-}
-
 
 ul {
     list-style: none;
@@ -82,7 +30,6 @@ a {
     background-color: rgba(255, 255, 255, 1);
     margin: auto;
     width: 1024px;
-    height: 800px;
 }
 
 .top-block {
@@ -208,7 +155,6 @@ ul {
 #sign_up a:active {
     color: rgba(230, 230, 230, 1);
     background: rgba(13, 170, 89, 1);
-    box-shadow: inset 0px 0px 0px 1px rgba(0, 0, 0, 0.3);
 }
 
 #sign_in a {
@@ -234,7 +180,7 @@ input {
     padding-bottom: 2px;
     dislay: block;
     width: 300px;
-    line-height: 50px;
+    height: 50px;
     border-radius: 4px;
     font-size: 18px;
     box-shadow: inset 0px 0px 0px 1px rgba(0, 0, 0, 0.3);
@@ -244,8 +190,9 @@ button {
     outline: none;
     border: none;
     display: block;
-    padding-top: 15px;
-    padding-bottom: 15px;
+    height: 50px;
+    padding: 0;
+    padding-bottom: 1px;
     border-radius: 4px;
     color: black;
     box-shadow: none;
@@ -253,7 +200,6 @@ button {
     width: 150px;
     background: none;
     cursor: pointer;
-    height: 50px;
     font-size: 16px;
 }
 
@@ -293,7 +239,6 @@ button {
     padding-left: 30px;
     padding-right: 40px;
     padding-bottom: 15px;
-
 }
 
 .auth {
@@ -331,7 +276,7 @@ button {
 
 .reg input {
     width: 300px;
-    line-height: 45px;
+    height: 45px;
 }
 
 .form-text {
@@ -389,20 +334,6 @@ button {
     /*box-shadow: inset 0px 0px 0px 1px rgba(0,0,0,0.1);*/
 }
 
-.text-checkbox span {
-    display: block;
-    height: 32px;
-}
-
-.text-checkbox {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
-
-    /*background: rgba(230,230,230,1);*/
-}
-
 .outline-checkbox {
     margin-top: 20px;
     margin-bottom: 20px;
@@ -412,13 +343,61 @@ button {
     box-shadow: inset 0px 0px 0px 1px rgba(0, 0, 0, 0.2);
 }
 
-#get-sms_checkbox {
+.check-content {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.check-content label {
+    display: inline;
+    vertical-align: middle;
+    margin-left: 20px;
+}
+
+.phone-content {
+    display: block;
+    opacity: 1;
+    clear: both;
+    padding-top: 10px;
+}
+
+input[type="checkbox"] {
+    display: inline-block;
+    background: inherit;
+    vertical-align: middle;
     cursor: pointer;
-    border: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    -o-appearance: none;
+    appearance: none;
     box-shadow: none;
-    outline: none;
+    border-radius: 4px;
     width: 40px;
     height: 40px;
+    border: 3px solid rgba(200, 200, 200, 1);
+    padding-bottom: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+    background-color: #ffffff;
     margin-left: 20px;
-    background: black;
 }
+
+
+
+/*то, что скрыто вначале*/
+.phone-content {
+    display: none;
+    /* IE 8 */
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+    /* IE 5-7 */
+    filter: alpha(opacity=0.0);
+    -moz-opacity: 0.0;
+    opacity: 0;
+}
+
+.reg, .auth {
+    display: none;
+    /*opacity: 0;*/
+}
+
+/*то, что скрыто вначале*/
