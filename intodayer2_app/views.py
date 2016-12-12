@@ -1,10 +1,11 @@
-from django.contrib.auth.models import User
+from django.contrib.auth.models import *
 from django.shortcuts import render_to_response
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import auth
 from django.contrib.auth.forms import UserCreationForm
 from django.template import RequestContext
 from intodayer2_app.send_sms import *
+from intodayer2_app.models import *
 
 
 def register(request):
@@ -25,6 +26,13 @@ def home_view(request):
 
     if request.user.is_authenticated():
         # show user info
+        std_id = user.myuser.student_id
+        student = Students.objects.get(id = std_id)
+        group = student.grp_id
+        cathedra = student.cthd_id
+        table = 
+        print(student)
+
         return render_to_response('home.html')
     else:
         return HttpResponseRedirect("/login")#render_to_response('auth.html')
