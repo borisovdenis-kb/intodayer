@@ -1,0 +1,118 @@
+h1{
+    font-family: helvetica;
+    font-size: 2rem;
+    margin: 0;
+    margin-top: 1rem;
+    margin-bottom: 8rem;
+}
+
+body{
+    text-align: center;
+    margin: auto;
+
+}
+
+.fields{   
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.material-textfield{
+    display: inline-block;
+    text-align: left;
+    height: 4rem;
+    padding-top: 1rem;
+}
+
+.fields input{
+    background: none;
+    border: none;
+    box-sizing: border-box;
+    display: block;
+    font-family: sans-serif;
+    font-size: 1rem;
+    padding: 0.45rem 0.1rem;
+    width: 100%;
+}
+
+input:invalid{
+    box-shadow: none
+}
+
+input:focus{
+    outline: none
+}
+
+label{
+    display: inline-block;
+    font-family: helvetica;
+    font-size: 0;
+    pointer-events: none;
+    position: relative;
+    text-transform: uppercase;
+    width: 100%;
+}
+
+label::before{
+    content: attr(data-content);
+    position: relative;
+    transition: all 0.2s ease;
+    will-change: font-size, top;
+}
+
+label::after{
+    bottom: 0.9rem;
+    content: '';
+    height: 0.3rem;
+    left: 50%;
+    position: absolute;
+    transition: all 0.2s ease;
+    width: 0;
+    will-change: width, left;
+}
+
+label::before, input[required]:focus ~ label::before{
+    font-size: 0.75rem;
+    top: -3.25rem;
+}
+
+input:focus ~ label::after{
+    left: 0%;
+    width: 100%;
+}
+
+input:invalid ~ label::before{
+    font-size: 1rem;
+    top: -2rem;
+}
+
+/*Конструктор цветов*/
+
+
+.material-textfield input{
+        border-bottom: 0.1rem solid #03A9F4;
+        color: #03A9F4
+    }
+
+    .material-textfield label::after{
+        background: #03A9F4;
+    }
+
+    .material-textfield label::before, input[required]:focus ~ label::before{
+        background: white;
+    }
+
+    .material-textfield input:invalid ~ label::before{
+        background: white;
+    }
+
+
+.cont{
+
+
+
+
+
+}

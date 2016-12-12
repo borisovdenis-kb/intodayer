@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+    <data>
+        <login>{{ login }}</login>
+        <password>{{ password }}</password>
+        <action>send</action>
+        <text>{{ text }}</text>
+        <source>{{ source }}</source>
+        {% for phone in phones  %}
+            <to number='{{ phone }}'></to>
+        {% endfor %}
+    </data>

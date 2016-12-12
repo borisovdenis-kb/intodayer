@@ -1,0 +1,111 @@
+<!--{% load staticfiles %}-->
+<html>
+<head>
+    <title>Three pachans Web Site</title>
+    <meta http-equiv="Content-type" content="text/html" charset="UTF-8">
+    <!--    <link rel="stylesheet" type="text/css" href={% static 'css/auth_style.css' %}>-->
+    <link rel="stylesheet" type="text/css" href="style/fonts.css">
+    <link rel="stylesheet" type="text/css" href="style/auth_style.css">
+    <script type="text/javascript" src="library/jquery-3.1.1.js"></script>
+    <script type="text/javascript" src="library/jquery.animate-colors.js"></script>
+    <!--<script type="text/javascript" src="jquery.easing.compatibility.js"></script>-->
+</head>
+<body>
+<div class="top-block">
+    <div class="top">
+        <div class="logo"><a href="auth.html">IntoDayer</a></div>
+        <div id="sing_up-top"><a href="#">Sign up</a></div>
+        <div id="login-top"><a href="#">Log In</a></div>
+    </div>
+</div>
+
+</body>
+
+<div class="page">
+    <div class="text">
+        <h1>Welcome to Intodayer</h1>
+        <h2>follow your day now</h2>
+    </div>
+    <div class="enter">
+        <ul>
+            <li id="sign_in"><a href="#">Sign In</a></li>
+            <li id="sign_up"><a href="#">Sign Up</a></li>
+        </ul>
+    </div>
+    <!--панель авторазации-->
+    <div class="auth">
+        <form action="" method="post">
+            <ul>
+                <div class="title-sign">Sign In to Intodayer</div>
+                <li id="name">
+                    <input type="text" placeholder="Login">
+                </li>
+                <li id="password">
+                    <input type="password" placeholder="Password">
+                </li>
+                <ul class="buttons-panel">
+                    <li class="back">
+                        <button type="button">Назад</button>
+                    </li>
+                    <li id="submit-auth">
+                        <button type="submit">Войти</button>
+                    </li>
+                </ul>
+                <div class="forgot"><a href="#">Не можете войти?</a></div>
+            </ul>
+        </form>
+    </div>
+    <!--панель авторизации-->
+
+    <!--панель регистрации-->
+    <div class="reg">
+        <form action="" autocomplete="on" methon="post">
+            <ul>
+                <div class="title-sign">Sing Up to Intodayer</div>
+                <li>
+                    <span class="form-text">Пожалуйте, заполните все обязательные поля *</span>
+                    <input id="firstname" type="text" placeholder="Имя" required="required">
+                </li>
+                <li>
+                    <input id="family" type="text" placeholder="Фамилия" required="required">
+                </li>
+                <li>
+                    <span class="form-text">Придумайте хороший пароль от 8 символов</span>
+                    <input id="new_pass" type="password" placeholder="Пароль" required="required">
+                    <input id="re_pass" type="password" placeholder="Повторите пароль" required="required">
+                </li>
+                <li class="outline-checkbox">
+                    <div class="check-content">
+                        <input id="get-sms_checkbox" type="checkbox">
+                        <label for="get-sms_checkbox"></label>
+                        <label for="get-sms_checkbox"><span></span>Хочу получать смс рассылку об изменении в расписании</label>
+
+                    </div>
+                    <div class="phone-content">
+                        <input id="phone" type="text" placeholder="Номер телефона" required="required">
+                    </div>
+                </li>
+                <li>
+
+                </li>
+                <li>
+                    <span class="form-text">Нажимая на кнопку "Регистрация" вы соглашаетесь с политикой<br>
+                            использования сервиса "Intodayer".</span>
+                    <ul class="buttons-panel">
+                        <li class="back">
+                            <button type="button">Назад</button>
+                        </li>
+                        <li id="submit-reg">
+                            <button type="submit">Регистрация</button>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </form>
+    </div>
+
+    <h3>Создавай таблицы с учебным расписанием на весь день. Каждый день.</h3>
+
+</div>
+<script type="text/javascript" src="scripts/script_auth.js"></script>
+</html>

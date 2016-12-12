@@ -1,0 +1,193 @@
+ul {
+    list-style: none;
+    margin: 0 auto;
+}
+
+a {
+    text-decoration: none;
+    font-family: 'Arial', serif;
+    transition: .2s linear;
+}
+
+button {
+    background: none;
+    border: none;
+}
+
+button:hover {
+    outline: none;
+}
+
+button:focus {
+    outline: none;
+}
+
+.menu{
+	margin-bottom: 10px;
+}
+.menu ul {
+	clear: both;
+    display: flex;
+    background: rgba(250, 250, 250, 1);
+    padding-left: 0;
+    white-space: nowrap;
+/*    box-shadow: inset 0px 0px 36px -15px rgba(0, 0, 0, 1);*/
+	box-shadow: inset 0px -45px 30px -50px rgba(0,0,0,0.4);
+}
+
+.menu a {
+    text-align: center;
+    color: black;
+    padding: 1em;
+    padding-left: 2em;
+    padding-right: 2em;
+    display: block;
+
+}
+.logo{
+	display: inline-block;
+    margin-left: 15px;
+	padding-top: 4px;
+	padding-bottom: 5px;
+	font-size: 24px;
+    font-family: 'Consolas', serif;
+	
+}
+
+.menu li {
+    transition: 0.3s ease;
+	border-top: 3px solid #8b1deb;
+	width: 100%;
+}
+
+.menu li:hover{
+    background: white;
+
+}
+
+.menu a:hover {
+/*
+    background: rgba(139, 29, 235, 0.05);
+    box-shadow: inset 0px -1px 0px 0px gray;
+*/
+    background: white;
+    transition: 0.3s ease;
+}
+
+.menu a:active {
+    background: rgba(242, 242, 242, 1);
+    transition: none;
+    transition: 0.3s ease;
+}
+
+.menu {
+    display: block;
+    width: 100%;
+    margin: 0 auto 30px;
+}
+
+/*
+.logo {
+    margin-top: 100px;
+    margin: auto;
+    font-size: 2em;
+    font-weight: bold;
+    font-family: consolas;
+    color: black;
+}
+*/
+
+
+
+/*Сбросим отступы*/
+.droplink ul,.droplink h3,.droplink h3 a{
+padding:0;margin:0
+}
+/*Базовая обертка*/
+.droplink{
+	position:relative;
+	float: right;
+	font-size: 14px;
+}
+/*Стиль блока при наведении*/
+.droplink:hover{
+	
+}
+/*Заголовок в обычном состоянии*/
+.droplink h3 a{
+	text-align:left;
+	width:100px;
+	display:block;
+	padding-left:14px;
+	padding-top:10px;
+	padding-bottom:8px;
+	color: black;
+	text-decoration:none;
+}
+.droplink h3 a img{border:none}
+/*Стиль для заголовка при наведении*/
+.droplink:hover h3 a {
+	
+	color: white;
+	background-color:#3E403D;
+	font-weight:bold;
+}
+
+/*Скрываем список без наведения*/
+.droplink ul{
+	position: absolute;
+	width: 100px;
+	list-style:none;
+	display:none;
+	
+		
+}
+/*Отображаем список при наведении*/
+.droplink:hover ul{
+/*	margin-top: 3px;*/
+	border-top: 3px solid rgba(255,255,255,0);
+	width:260px;
+	left: -140px;
+	positon: absolute;
+	display:block;
+}
+.droplink li{
+	display:block;
+	
+}
+
+
+/*Стиль элемента списка*/
+.droplink li a{
+	text-align: center;
+	background-color: #484A47;
+	width: 260px;
+	display:block;
+	color: white;
+	text-decoration:none;
+	font-size:16px;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	
+		
+}
+.droplink li a:hover{
+	background-color:black;
+	
+}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
