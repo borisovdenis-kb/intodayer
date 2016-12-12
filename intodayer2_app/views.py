@@ -3,7 +3,6 @@ from django.shortcuts import render_to_response
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import auth
 from django.contrib.auth.forms import UserCreationForm
-from django.template import RequestContext
 from intodayer2_app.send_sms import *
 from intodayer2_app.models import *
 
@@ -25,15 +24,43 @@ def home_view(request):
     """
 
     if request.user.is_authenticated():
-        # show user info
+        user = User.objects.get(username=request.user.username)
         std_id = user.myuser.student_id
         student = Students.objects.get(id = std_id)
         group = student.grp_id
         cathedra = student.cthd_id
-        table = 
-        print(student)
 
-        return render_to_response('home.html')
+        # выбираем из тиблицы расписания все записи, "нужные" данному юзеру
+        # мы получили список, состоящий из строк расписания
+        # далее генерируем расписание на неделю, в зависимости от номера и четности недели
+        table = list(SCHEDULES.objects.filter(grp_id = group, cthd_id = cathedra))
+        current_week = {'monday' :[],
+                        'tuesday' : [],
+                        'wednsday' : [],
+                        'thursday': [],
+                        'friday' : [],
+                        'saturday': [],
+                        'sanday' : []
+        }
+
+        for row in table:
+            if row.dfwk_id._def == 'Понедельник':
+                current_week['monday'].append(row)
+            elif row.dfwk_id._def == 'Вторник':
+                current_week['tuesday'].append(row)
+            elif row.dfwk_id._def == 'Среда':
+                current_week['wednsday'].append(row)
+            elif row.dfwk_id._def == 'Четверг':
+                current_week['thursday'].append(row)
+            elif row.dfwk_id._def == 'Пятница':
+                current_week['friday'].append(row)
+            elif row.dfwk_id._def == 'Суббота':
+                current_week['saturday'].append(row)
+            elif row.dfwk_id._def == 'Воскресенье':
+                current_week['sunday'].append(row)
+
+        context = current_week
+        return render_to_response('home.html', context)
     else:
         return HttpResponseRedirect("/login")#render_to_response('auth.html')
 

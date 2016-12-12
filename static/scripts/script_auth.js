@@ -90,10 +90,10 @@ $('.back').click(function() {
 });
 
 // временное действие кнопки
-$('#submit-auth').click(function() {
+/*$('#submit-auth').click(function() {
     window.location.href = "home.html";
     return false;
-});
+});*/
 
 //
 // removeContent()

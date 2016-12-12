@@ -68,6 +68,26 @@
             <li class="days"><a href="home.html">Неделя</a></li>
             <div class="week-name">Неделя 2 из 18 (08.12.16 - 15.12.16)</div>
         </ul>
+        {% for day in table %}
+            <div class="table-container">
+                <table>
+                    <tr class="tableTop">
+                        <th>Время</th>
+                        <th>Пердмет</th>
+                        <th>Аудитория</th>
+                        <th>Перподаватель</th>
+                    </tr>
+                    {% for row in day %}
+                        <tr>
+                            <td>row.time_of</td>
+                            <td>row.subj_id.name</td>
+                            <td>row.place</td>
+                            <td>row.tchr_id.name_short</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        {% endfor %}
 <!--
         <div class="table-container">
             <table>
