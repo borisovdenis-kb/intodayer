@@ -3,16 +3,20 @@
 <head>
     <title>Three pachans Web Site</title>
     <meta http-equiv="Content-type" content="text/html" charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="style/home_content.css">
-    <link rel="stylesheet" type="text/css" href="style/home_top.css">
+    <link rel="stylesheet" type="text/css" href="style/general_style.css">
+    <link rel="stylesheet" type="text/css" href="style/home_style.css">
     <link rel="stylesheet" type="text/css" href="style/fonts.css">
     <script type="text/javascript" src="library/jquery-3.1.1.js"></script>
+    <!--<link rel="stylesheet" type="text/css" href={% static "css/fonts.css"%}>-->
+    <!--<link rel="stylesheet" type="text/css" href={% static "css/home_style.css"%}>-->
+    <!--<link rel="stylesheet" type="text/css" href={% static "css/general_style.css"%}>-->
+    <!--<script type="text/javascript" src={% static "library/jquery-3.1.1.js" %}></script>-->
 </head>
 
 <body>
 <div class="top-block">
     <div class="top">
-        <div class="logo"><a href="auth.html">IntoDayer</a></div>
+        <div class="logo"><a href="welcome.html">IntoDayer</a></div>
         <div class="droplink">
             <div class="username"><a href="#">Username</a></div>
             <div class="up-arrow"></div>
@@ -34,8 +38,9 @@
         <li id="home"><a href="home.html">Сегодня</a></li>
         <li id="table"><a href="home.html">Расписание</a></li>
         <li id="events"><a href="home.html">События</a></li>
-        <li id="group"><a href="home.html">Моя группа</a></li>
-        <li id="about"><a href="home.html">О сервисе</a></li>
+        <li id="group"><a href="home.html">Моя&nbspгруппа</a></li>
+        <li id="about"><a href="home.html">О&nbspсервисе</a></li>
+        <span class="empty"></span>
     </ul>
 </div>
 
@@ -61,6 +66,28 @@
             <li class="days"><a href="home.html">Неделя</a></li>
             <div class="week-name">Неделя 2 из 18 (08.12.16 - 15.12.16)</div>
         </ul>
+
+        <!--{% for day in table %}-->
+        <!--<div class="table-container">-->
+            <!--<table>-->
+                <!--<tr class="tableTop">-->
+                    <!--<th>Время</th>-->
+                    <!--<th>Пердмет</th>-->
+                    <!--<th>Аудитория</th>-->
+                    <!--<th>Перподаватель</th>-->
+                <!--</tr>-->
+                <!--{% for row in day %}-->
+                <!--<tr>-->
+                    <!--<td>row.time_of</td>-->
+                    <!--<td>row.subj_id.name</td>-->
+                    <!--<td>row.place</td>-->
+                    <!--<td>row.tchr_id.name_short</td>-->
+                <!--</tr>-->
+                <!--{% endfor %}-->
+            <!--</table>-->
+        <!--</div>-->
+        <!--{% endfor %}-->
+
         <div class="table-container">
             <table>
                 <tr class="tableTop">
@@ -108,8 +135,10 @@
             </table>
         </div>
     </div>
-
 </div>
 </body>
+<script type="text/javascript" src="scripts/set-screen-size.js"></script>
 <script type="text/javascript" src="scripts/script_home.js"></script>
+<!--<script type="text/javascript" src={% static "scripts/set-screen-size.js"%}></script>-->
+<!--<script type="text/javascript" src={% static "scripts/script_home.js"%}></script>-->
 </html>

@@ -1,64 +1,35 @@
 /*работа шрифта для Mozilla Firefox*/
 @-moz-document url-prefix() {
     * {
-        font-family: "SegoeUIRegular" !important;
+        font-family: SegoeUIRegular !important;
         font-weight: 300 !important;
     }
 }
 
-body {
-    margin: 0 auto;
-    background-color: rgba(254, 254, 254, 1);
-    min-width: 700px;
-    min-height: 800px;
-    font-family: SegoeUIRegular, SegoeUILight;
-}
-
-ul {
-    list-style: none;
-    margin: 0;
-    padding-left: 0;
-}
-
 a {
-    text-decoration: none;
-    color: black;
-    font-family: "Segoe UI Semibold";
+    font-family: SegoeUIRegular;
 }
 
-.page {
-    background-color: rgba(255, 255, 255, 1);
-    margin: auto;
-    width: 1024px;
+body {
+    font-family: SegoeUIRegular;
 }
 
-.top-block {
-    border-bottom: 3px solid #8b1deb;
-    background-color: rgba(242, 242, 242, 1);
+input {
+    font-family: SegoeUIRegular;
+    outline: none;
+    font-size: 1em;
+    border: 0;
 }
 
-.top {
-    margin: auto;
-    width: 1024px;
-}
 
-.logo {
-    display: inline-block;
-    margin-left: 15px;
-    padding-bottom: 1px;
-    line-height: 36px;
-    font-size: 24px;
-}
-
-.logo a {
-    font-family: 'Consolas', serif;
-}
 
 #login-top, #sing_up-top {
     float: right;
     display: block;
 }
-
+#sing_up-top a{
+    margin-right: 8px;
+}
 #login-top a, #sing_up-top a {
     text-align: center;
     display: block;
@@ -66,9 +37,8 @@ a {
     font-size: 1em;
     padding-top: 4px;
     padding-bottom: 6px;
-    margin-top: 3px;
+    margin-top: 5px;
     width: 100px;
-
 }
 
 #sing_up-top a {
@@ -97,19 +67,12 @@ h2 {
 }
 
 h3 {
-    margin-bottom: 0;
+    margin-bottom: 100px;
     margin-top: 200px;
 }
 
 h4 {
     margin-top: 5px;
-}
-
-input {
-    font-family: Segoe UI;
-    outline: none;
-    font-size: 1em;
-    border: 0;
 }
 
 .enter {
@@ -122,12 +85,13 @@ ul {
 }
 
 .enter ul {
+    display: block;
     width: 100%;
-    display: flex;
-    justify-content: center;
+    text-align: center;
 }
 
 .enter li {
+    display: inline-block;
     text-align: center;
     margin: 5px;
 }
@@ -177,13 +141,17 @@ input {
     margin: 5px;
     padding-left: 20px;
     padding-rigth: 20px;
-    padding-bottom: 2px;
+    padding-bottom: 1px;
     dislay: block;
     width: 300px;
     height: 50px;
     border-radius: 4px;
     font-size: 18px;
-    box-shadow: inset 0px 0px 0px 1px rgba(0, 0, 0, 0.3);
+    box-shadow: inset 0px 0px 0px 1px rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: inset 0px 0px 0px 1px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: inset 0px 0px 0px 1px rgba(0, 0, 0, 0.2);
+    -o-box-shadow: inset 0px 0px 0px 1px rgba(0, 0, 0, 0.2);
+
 }
 
 button {
@@ -192,7 +160,7 @@ button {
     display: block;
     height: 50px;
     padding: 0;
-    padding-bottom: 1px;
+    padding-bottom: 2px;
     border-radius: 4px;
     color: black;
     box-shadow: none;
@@ -201,25 +169,6 @@ button {
     background: none;
     cursor: pointer;
     font-size: 16px;
-}
-
-.forgot a {
-    font-family: 'Arial', serif;
-}
-
-.forgot {
-    clear: both;
-    margin-top: 30px;
-    font-size: 14px;
-}
-
-.forgot a:hover {
-    color: rgba(100, 100, 100, 1);
-    text-decoration: underline;
-}
-
-.forgot a:active {
-    color: black;
 }
 
 /*панель регистрации*/
@@ -239,15 +188,6 @@ button {
     padding-left: 30px;
     padding-right: 40px;
     padding-bottom: 15px;
-}
-
-.auth {
-    display: none;
-    width: 500px;
-    margin: 150px auto;
-    padding: 40px;
-    border-radius: 8px;
-    border: 1px solid #dbdbdb;
 }
 
 .reg {
@@ -286,49 +226,94 @@ button {
     margin-top: 20px;
 }
 
-.back button {
+.back {
     color: black;
     box-shadow: inset 0px 0px 0px 1px rgba(0, 0, 0, 0.2);
 }
 
-.back button:hover {
+.back:hover {
     color: rgba(120, 120, 120, 1);
 }
 
-.back button:active {
+.back:active {
     box-shadow: inset 0px 0px 0px 1px rgba(0, 0, 0, 0.4);
     color: black;
 }
 
 .reg .buttons-panel {
-    display: flex;
-    justify-content: space-between;
-    padding-top: 20px;
-
+    display: inline-block;
+    padding-top: 15px;
 }
 
-.auth button {
-    margin: 3px;
-    width: 147px;
+.reg .back {
+    float: left;
+}
+
+.reg #submit-reg {
+    float: right;
+}
+
+.auth {
+    width: 500px;
+    margin: 150px auto;
+    padding: 40px;
+    border-radius: 8px;
+    border: 1px solid #dbdbdb;
+
 }
 
 .auth .buttons-panel {
-    display: flex;
-    justify-content: center;
-    padding-top: 20px;
+    display: block;
+    text-align: center;
+    padding-top: 5px;
 }
 
-#submit-reg button, #submit-auth button {
+.auth .buttons-panel button {
+    display: inline;
+    padding: 0;
+    margin: 0;
+    width: 147px;
+
+}
+
+.auth .buttons-panel button:first-child {
+    margin-right: 1px;
+}
+
+.auth .buttons-panel button:last-child {
+    margin-left: 1px;
+}
+
+.forgot a {
+    font-family: 'Arial', serif;
+}
+
+.forgot {
+    display: block;
+    clear: left;
+    margin-top: 30px;
+    font-size: 14px;
+}
+
+.forgot a:hover {
+    color: rgba(100, 100, 100, 1);
+    text-decoration: underline;
+}
+
+.forgot a:active {
+    color: black;
+}
+
+#submit-reg, #submit-auth {
     background: rgba(13, 165, 89, 1);
     color: white;
-    /*padding-left: 5px;*/
 }
 
-#submit-reg button:hover, #submit-auth button:hover {
+#submit-reg:hover, #submit-auth:hover {
     background: rgba(13, 180, 89, 1);
 }
 
-#submit-reg button:active, #submit-auth button:active {
+#submit-reg:active, #submit-auth:active {
     color: rgba(230, 230, 230, 1);
     background: rgba(13, 170, 89, 1);
     /*box-shadow: inset 0px 0px 0px 1px rgba(0,0,0,0.1);*/
@@ -382,8 +367,6 @@ input[type="checkbox"] {
     margin-left: 20px;
 }
 
-
-
 /*то, что скрыто вначале*/
 .phone-content {
     display: none;
@@ -400,4 +383,34 @@ input[type="checkbox"] {
     /*opacity: 0;*/
 }
 
+.text, .enter {
+    display: none;
+    /*opacity: 0;*/
+}
+
+h3{
+    display: none;
+}
 /*то, что скрыто вначале*/
+
+
+@media only screen {
+    input {
+        font-family: SegoeUIRegular !important;
+    }
+
+    body {
+
+        font-family: SegoeUIRegular !important;
+    }
+
+    h1, h2, h3, h4 {
+        font-family: SegoeUILight !important;
+    }
+    input{
+        overflow: visible;
+        -webkit-appearance: none;
+        -box-shadow: inset 0px 0px 0px 1px rgba(0, 0, 0, 0.2);
+        -webkit-box-shadow: inset 0px 0px 0px 1px rgba(0, 0, 0, 0.2);
+    }
+}

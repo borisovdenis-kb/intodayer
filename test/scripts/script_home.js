@@ -26,14 +26,15 @@ selectedDay = document.querySelectorAll('.days')[0];
 selectedDay.classList.add('days_select');
 
 function setCurrentMenu(objElem) {
-	$(objElem).addClass('select_menu');
 	var prev = objElem.previousSibling.previousSibling;
 	var next = objElem.nextSibling.nextSibling;
 	if ($(prev).is('LI')) {
 		$(prev).addClass(leftShadow);
+		$(objElem).addClass('select_menu');
 	}
 	if ($(next).is('LI')) {
 		$(next).addClass(rightShadow);
+		$(objElem).addClass('select_menu');
 	}
 	selectedMenu = objElem;
 }
@@ -51,6 +52,9 @@ function setDefaultMenu() {
 function setMenu(event) {
 	"use strict";
 	var objElem = event.target.parentElement;
+	if(!$(objElem).is('LI')){
+		return false;
+	}
 	setDefaultMenu(objElem);
 	setCurrentMenu(objElem);
 }
@@ -163,6 +167,7 @@ function setDay(event) {
 
 
 
+
 		//
 
 		showTable(40,400);
@@ -193,9 +198,9 @@ function hideTable(interval, time){
 	});	
 }
 //появление таблицы и страницы ============================
-$(window).resize(function() {
-	$('.top-menu li').css({'width':'100%'});
-});
+// $(window).resize(function() {
+// 	$('.top-menu li').css({'width':'100%'});
+// });
 
 
 
