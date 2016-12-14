@@ -5,14 +5,16 @@
     <ignored path="intodayer2.iws" />
     <ignored path=".idea/workspace.xml" />
     <file path="/settings.py" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1481549479330" ignored="false" />
-    <file path="/home.html" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1481577807826" ignored="false" />
+    <file path="/home.html" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1481583995983" ignored="false" />
     <file path="/auth_1.html" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1481553904747" ignored="false" />
     <file path="/admin.py" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1481557162939" ignored="false" />
     <file path="/models.py" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1481566352531" ignored="false" />
-    <file path="/views.py" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1481577585154" ignored="false" />
+    <file path="/views.py" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1481583839198" ignored="false" />
     <file path="/Python Console" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1481572496833" ignored="false" />
     <file path="/Django Console" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1481572530127" ignored="false" />
-    <file path="/auth.html" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1481578587651" ignored="false" />
+    <file path="/auth.html" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1481579843483" ignored="false" />
+    <file path="/urls.py" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1481580912291" ignored="false" />
+    <file path="/auth_style.css" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1481581042234" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,7 +37,7 @@
       <file leaf-file-name="views.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/intodayer2_app/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="75" column="46" selection-start="2931" selection-end="2931" vertical-scroll-proportion="0.0">
+            <state line="62" column="27" selection-start="2426" selection-end="2426" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="e#0#40#0" expanded="true" />
               </folding>
@@ -43,19 +45,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="auth.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/templates/auth.html">
+      <file leaf-file-name="models.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/intodayer2_app/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="54" column="25" selection-start="2183" selection-end="2183" vertical-scroll-proportion="-14.83871">
-              <folding />
+            <state line="72" column="4" selection-start="1731" selection-end="1739" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="e#0#28#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="script_auth.js" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/static/scripts/script_auth.js">
+      <file leaf-file-name="home.html" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/templates/home.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="82" column="36" selection-start="2510" selection-end="2510" vertical-scroll-proportion="0.42586002">
+            <state line="90" column="20" selection-start="3706" selection-end="3706" vertical-scroll-proportion="0.78571427">
               <folding />
             </state>
           </provider>
@@ -73,14 +77,16 @@
       <list>
         <option value="$PROJECT_DIR$/intodayer2/settings.py" />
         <option value="$PROJECT_DIR$/intodayer2_app/send_sms.py" />
-        <option value="$PROJECT_DIR$/intodayer2/urls.py" />
         <option value="$PROJECT_DIR$/templates/auth_1.html" />
         <option value="$PROJECT_DIR$/intodayer2_app/admin.py" />
-        <option value="$PROJECT_DIR$/intodayer2_app/models.py" />
-        <option value="$PROJECT_DIR$/templates/home.html" />
-        <option value="$PROJECT_DIR$/templates/auth.html" />
-        <option value="$PROJECT_DIR$/intodayer2_app/views.py" />
         <option value="$PROJECT_DIR$/static/scripts/script_auth.js" />
+        <option value="$PROJECT_DIR$/templates/auth.html" />
+        <option value="$PROJECT_DIR$/intodayer2/urls.py" />
+        <option value="$PROJECT_DIR$/static/css/auth_style.css" />
+        <option value="$PROJECT_DIR$/static/scripts/script_home.js" />
+        <option value="$PROJECT_DIR$/intodayer2_app/models.py" />
+        <option value="$PROJECT_DIR$/intodayer2_app/views.py" />
+        <option value="$PROJECT_DIR$/templates/home.html" />
       </list>
     </option>
   </component>
@@ -249,6 +255,7 @@
     <property name="options.lastSelected" value="preferences.sourceCode.Python" />
     <property name="recentsLimit" value="5" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../books" />
+    <property name="FullScreen" value="false" />
     <property name="dynamic.classpath" value="false" />
     <property name="options.searchVisible" value="true" />
     <property name="options.splitter.details.proportions" value="0.2" />
@@ -374,6 +381,7 @@
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
+        <env name="DJANGO_SETTINGS_MODULE" value="intodayer2.settings" />
       </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="" />
@@ -390,6 +398,8 @@
       <option name="runNoReload" value="false" />
       <option name="useCustomRunCommand" value="false" />
       <option name="customRunCommand" value="" />
+      <RunnerSettings RunnerId="PythonRunner" />
+      <ConfigurationWrapper RunnerId="PythonRunner" />
       <method />
     </configuration>
     <list size="1">
@@ -407,17 +417,17 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="960" height="1040" extended-state="0" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3129176" sideWeight="0.4688562" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.27060133" sideWeight="0.47830924" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.53114384" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.5216908" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -506,7 +516,9 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/home1.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-2.0272834" />
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-2.0272834">
+          <folding />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/intodayer2_app/apps.py">
@@ -516,48 +528,71 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/static/scripts/script_auth.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="97" column="2" selection-start="2885" selection-end="2885" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/auth_pachanz.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="18" column="53" selection-start="461" selection-end="461" vertical-scroll-proportion="-12.774194">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/intodayer2/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="21" column="17" selection-start="815" selection-end="815" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="e#644#676#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/css/auth_style.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="398" column="19" selection-start="6375" selection-end="6375" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/auth.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="110" column="10" selection-start="4635" selection-end="4635" vertical-scroll-proportion="-16.258064">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/scripts/script_home.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="143" column="2" selection-start="3736" selection-end="3736" vertical-scroll-proportion="0.56327546">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/intodayer2_app/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="72" column="11" selection-start="1731" selection-end="1738" vertical-scroll-proportion="0.0">
+        <state line="72" column="4" selection-start="1731" selection-end="1739" vertical-scroll-proportion="0.0">
           <folding>
             <element signature="e#0#28#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/home.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="75" column="40" selection-start="3055" selection-end="3055" vertical-scroll-proportion="-10.806452">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/static/css/auth_style.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="392" column="31" selection-start="6299" selection-end="6299" vertical-scroll-proportion="1.4019488">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/intodayer2_app/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="75" column="46" selection-start="2931" selection-end="2931" vertical-scroll-proportion="0.0">
+        <state line="62" column="27" selection-start="2426" selection-end="2426" vertical-scroll-proportion="0.0">
           <folding>
             <element signature="e#0#40#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/auth.html">
+    <entry file="file://$PROJECT_DIR$/templates/home.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="54" column="25" selection-start="2183" selection-end="2183" vertical-scroll-proportion="-14.83871">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/static/scripts/script_auth.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="82" column="36" selection-start="2510" selection-end="2510" vertical-scroll-proportion="0.42586002">
+        <state line="90" column="20" selection-start="3706" selection-end="3706" vertical-scroll-proportion="0.78571427">
           <folding />
         </state>
       </provider>

@@ -141,7 +141,7 @@ $('tr').hide();
 
 //Обратотка нажаний на вывод таблиц
 var daysElem = document.getElementsByClassName("week")[0];
-daysElem.addEventListener('click', setDay);
+//daysElem.addEventListener('click', setDay);
 
 function setDay(event) {
 	"use strict";

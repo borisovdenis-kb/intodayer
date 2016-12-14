@@ -96,6 +96,6 @@ $('.back').click(function() {
 });*/
 
 //
-// removeContent()
-// $('.auth').delay(1).fadeIn(300);
+removeContent()
+$('.auth').delay(1).fadeIn(300);
 

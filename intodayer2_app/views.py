@@ -25,7 +25,7 @@ def home_view(request):
 
     if request.user.is_authenticated():
         user = User.objects.get(username=request.user.username)
-        std_id = user.myuser.student_id
+        std_id = user.myuser.student_id.id
         student = Students.objects.get(id = std_id)
         group = student.grp_id
         cathedra = student.cthd_id
@@ -34,32 +34,36 @@ def home_view(request):
         # мы получили список, состоящий из строк расписания
         # далее генерируем расписание на неделю, в зависимости от номера и четности недели
         table = list(SCHEDULES.objects.filter(grp_id = group, cthd_id = cathedra))
-        current_week = {'monday' :[],
+        '''current_week = {'monday' :[],
                         'tuesday' : [],
                         'wednsday' : [],
                         'thursday': [],
                         'friday' : [],
                         'saturday': [],
                         'sanday' : []
-        }
+        }'''
+        current_week = [[], [], [], [], [], [], []]
 
         for row in table:
             if row.dfwk_id._def == 'Понедельник':
-                current_week['monday'].append(row)
+                current_week[0].append(row)
             elif row.dfwk_id._def == 'Вторник':
-                current_week['tuesday'].append(row)
+                current_week[1].append(row)
             elif row.dfwk_id._def == 'Среда':
-                current_week['wednsday'].append(row)
+                current_week[2].append(row)
             elif row.dfwk_id._def == 'Четверг':
-                current_week['thursday'].append(row)
+                current_week[3].append(row)
             elif row.dfwk_id._def == 'Пятница':
-                current_week['friday'].append(row)
+                current_week[4].append(row)
             elif row.dfwk_id._def == 'Суббота':
-                current_week['saturday'].append(row)
+                current_week[5].append(row)
             elif row.dfwk_id._def == 'Воскресенье':
-                current_week['sunday'].append(row)
+                current_week[6].append(row)
 
-        context = current_week
+        print(current_week)
+        context = {'table' : current_week,
+                   'username' : user.username
+        }
         return render_to_response('home.html', context)
     else:
         return HttpResponseRedirect("/login")#render_to_response('auth.html')
