@@ -3,7 +3,7 @@ from django.shortcuts import render_to_response
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import auth
 from django.contrib.auth.forms import UserCreationForm
-from intodayer2_app.forms import RegistrationForm
+from intodayer2_app.forms import MyUserCreationForm
 from intodayer2_app.send_sms import *
 from intodayer2_app.models import *
 
@@ -17,12 +17,13 @@ def welcome_view(request):
 
 def registration_view(request):
     if request.method == 'POST':
-        form = RegistrationForm(request.POST)
+        form = MyUserCreationForm(request.POST)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect('/login')
     else:
         form = UserCreationForm()
+
     context = {'form' : form}
     return render_to_response('registration.html', context)
 
