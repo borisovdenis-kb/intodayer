@@ -1,11 +1,23 @@
+from  django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import *
 from django.shortcuts import render_to_response
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import auth
 from django.contrib.auth.forms import UserCreationForm
-from intodayer2_app.forms import MyUserCreationForm
+from intodayer2_app.forms import EmailForm
 from intodayer2_app.send_sms import *
 from intodayer2_app.models import *
+
+
+
+class RelatedObjectDoesNotExist(BaseException):
+    """Определяем собственное исключение. Оно нужно,
+    когда возникает ошибка в обращении к user.myuser
+    """
+    def __init__(self, value):
+        self.massage = value
+    def __str__(self):
+        return repr(self.massage)
 
 
 def welcome_view(request):
@@ -17,14 +29,18 @@ def welcome_view(request):
 
 def registration_view(request):
     if request.method == 'POST':
-        form = MyUserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect('/login')
+        #form = UserCreationForm(request.POST)
+        email = EmailForm(request.POST)
+        if email.is_valid():
+            email.save()
+        return HttpResponseRedirect('/login')
     else:
         form = UserCreationForm()
+        email = EmailForm()
 
-    context = {'form' : form}
+    context = {'form' : form,
+               'email' : email
+    }
     return render_to_response('registration.html', context)
 
 '''
@@ -41,40 +57,47 @@ def registration_view(request):
             form = UserCreationForm()
         return render_to_response('reg.html')'''
 
+
 def home_view(request):
     if request.user.is_authenticated():
         user = User.objects.get(username=request.user.username)
-        std_id = user.myuser.student_id.id
-        student = Students.objects.get(id = std_id)
-        group = student.grp_id
-        cathedra = student.cthd_id
+        try:
+            std_id = user.myuser.student_id.id
+        except ObjectDoesNotExist:
+            context = {'table' : [],
+                       'username' : user.username
+            }
+        else:
+            student = Students.objects.get(id = std_id)
+            group = student.grp_id
+            cathedra = student.cthd_id
 
-        # выбираем из тиблицы расписания все записи, "нужные" данному юзеру
-        # мы получили список, состоящий из строк расписания
-        # далее генерируем расписание на неделю, в зависимости от номера и четности недели
-        table = list(SCHEDULES.objects.filter(grp_id = group, cthd_id = cathedra))
+            # выбираем из тиблицы расписания все записи, "нужные" данному юзеру
+            # мы получили список, состоящий из строк расписания
+            # далее генерируем расписание на неделю, в зависимости от номера и четности недели
+            table = list(SCHEDULES.objects.filter(grp_id = group, cthd_id = cathedra))
 
-        current_week = [[], [], [], [], [], [], []]
+            current_week = [[], [], [], [], [], [], []]
 
-        for row in table:
-            if row.dfwk_id._def == 'Понедельник':
-                current_week[0].append(row)
-            elif row.dfwk_id._def == 'Вторник':
-                current_week[1].append(row)
-            elif row.dfwk_id._def == 'Среда':
-                current_week[2].append(row)
-            elif row.dfwk_id._def == 'Четверг':
-                current_week[3].append(row)
-            elif row.dfwk_id._def == 'Пятница':
-                current_week[4].append(row)
-            elif row.dfwk_id._def == 'Суббота':
-                current_week[5].append(row)
-            elif row.dfwk_id._def == 'Воскресенье':
-                current_week[6].append(row)
+            for row in table:
+                if row.dfwk_id._def == 'Понедельник':
+                    current_week[0].append(row)
+                elif row.dfwk_id._def == 'Вторник':
+                    current_week[1].append(row)
+                elif row.dfwk_id._def == 'Среда':
+                    current_week[2].append(row)
+                elif row.dfwk_id._def == 'Четверг':
+                    current_week[3].append(row)
+                elif row.dfwk_id._def == 'Пятница':
+                    current_week[4].append(row)
+                elif row.dfwk_id._def == 'Суббота':
+                    current_week[5].append(row)
+                elif row.dfwk_id._def == 'Воскресенье':
+                    current_week[6].append(row)
 
-        context = {'table' : current_week,
-                   'username' : user.username
-        }
+            context = {'table' : current_week,
+                       'username' : user.username
+            }
         return render_to_response('home.html', context)
     else:
         return HttpResponseRedirect("/login")
