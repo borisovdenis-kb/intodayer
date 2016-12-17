@@ -7,15 +7,23 @@ from intodayer2_app.send_sms import *
 from intodayer2_app.models import *
 
 
-def register(request):
+def welcome_view(request):
+    if request.user.is_authenticated():
+        return HttpResponseRedirect("/home")
+    else:
+        return render_to_response('welcome.html')
+
+
+def registration_view(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
             new_user = form.save()
-            return HttpResponseRedirect('/main')
+            return HttpResponseRedirect('/login')
     else:
         form = UserCreationForm()
-    return render_to_response('registration.html', {'form' : form})
+    return render_to_response('reg.html')
+
 
 def home_view(request):
     """Отображает главную страницу, если пользователь
@@ -66,9 +74,10 @@ def home_view(request):
         }
         return render_to_response('home.html', context)
     else:
-        return HttpResponseRedirect("/login")#render_to_response('auth.html')
+        return HttpResponseRedirect("/login")
 
-def login(request):
+
+def login_view(request):
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -85,9 +94,11 @@ def login(request):
     else:
         return render_to_response('auth.html')
 
-def logout(request):
+
+def logout_view(request):
     auth.logout(request)
-    return HttpResponseRedirect("/home")
+    return HttpResponseRedirect("/")
+
 
 def profile_settings(request):
     if request.user.is_authenticated():

@@ -19,9 +19,10 @@ from intodayer2_app import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^login/$', views.login),
+    url(r'^$', views.welcome_view),
+    url(r'^login/$', views.login_view),
     url(r'^home/$', views.home_view),
-    url(r'^logout/$', views.logout),
-    url(r'^registration/$', views.register),
+    url(r'^logout/$', views.logout_view),
+    url(r'^registration/$', views.registration_view),
     url(r'^profile/$', views.profile_settings),
 ]

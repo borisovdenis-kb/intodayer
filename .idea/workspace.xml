@@ -5,16 +5,17 @@
     <ignored path="intodayer2.iws" />
     <ignored path=".idea/workspace.xml" />
     <file path="/settings.py" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1481549479330" ignored="false" />
-    <file path="/home.html" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1481583995983" ignored="false" />
+    <file path="/home.html" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1481984696729" ignored="false" />
     <file path="/auth_1.html" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1481553904747" ignored="false" />
     <file path="/admin.py" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1481557162939" ignored="false" />
     <file path="/models.py" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1481566352531" ignored="false" />
-    <file path="/views.py" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1481583839198" ignored="false" />
+    <file path="/views.py" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1481983736093" ignored="false" />
     <file path="/Python Console" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1481572496833" ignored="false" />
     <file path="/Django Console" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1481572530127" ignored="false" />
-    <file path="/auth.html" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1481579843483" ignored="false" />
-    <file path="/urls.py" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1481580912291" ignored="false" />
+    <file path="/auth.html" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1481984572293" ignored="false" />
+    <file path="/urls.py" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1481984244572" ignored="false" />
     <file path="/auth_style.css" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1481581042234" ignored="false" />
+    <file path="/welcome.html" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1481982218811" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,10 +35,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="views.py" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="views.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/intodayer2_app/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="62" column="27" selection-start="2426" selection-end="2426" vertical-scroll-proportion="0.0">
+            <state line="90" column="44" selection-start="3234" selection-end="3234" vertical-scroll-proportion="0.26834863">
               <folding>
                 <element signature="e#0#40#0" expanded="true" />
               </folding>
@@ -45,22 +46,22 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="models.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/intodayer2_app/models.py">
+      <file leaf-file-name="home.html" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/home.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="72" column="4" selection-start="1731" selection-end="1739" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="e#0#28#0" expanded="true" />
-              </folding>
+            <state line="31" column="51" selection-start="1389" selection-end="1389" vertical-scroll-proportion="-8.67742">
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="home.html" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/templates/home.html">
+      <file leaf-file-name="urls.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/intodayer2/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="90" column="20" selection-start="3706" selection-end="3706" vertical-scroll-proportion="0.78571427">
-              <folding />
+            <state line="27" column="1" selection-start="1057" selection-end="1057" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="e#644#676#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -80,19 +81,22 @@
         <option value="$PROJECT_DIR$/templates/auth_1.html" />
         <option value="$PROJECT_DIR$/intodayer2_app/admin.py" />
         <option value="$PROJECT_DIR$/static/scripts/script_auth.js" />
-        <option value="$PROJECT_DIR$/templates/auth.html" />
-        <option value="$PROJECT_DIR$/intodayer2/urls.py" />
         <option value="$PROJECT_DIR$/static/css/auth_style.css" />
         <option value="$PROJECT_DIR$/static/scripts/script_home.js" />
         <option value="$PROJECT_DIR$/intodayer2_app/models.py" />
-        <option value="$PROJECT_DIR$/intodayer2_app/views.py" />
+        <option value="$PROJECT_DIR$/templates/welcome.html" />
+        <option value="$PROJECT_DIR$/intodayer2/urls.py" />
+        <option value="$PROJECT_DIR$/templates/auth.html" />
         <option value="$PROJECT_DIR$/templates/home.html" />
+        <option value="$PROJECT_DIR$/intodayer2_app/views.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="width" value="960" />
-    <option name="height" value="1040" />
+    <option name="x" value="-8" />
+    <option name="y" value="-8" />
+    <option name="width" value="1936" />
+    <option name="height" value="1056" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -148,20 +152,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="test" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="intodayer2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="intodayer" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="templates" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -177,42 +167,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="static" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="scripts" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="intodayer2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="intodayer" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="static" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="intodayer2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="intodayer" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="static" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="css" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -276,6 +230,10 @@
       <recent name="C:\djangoProjects\intodayer2\static\css" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\djangoProjects\intodayer\static\scripts" />
+      <recent name="C:\djangoProjects\intodayer\templates" />
+      <recent name="C:\djangoProjects\intodayer\static" />
+      <recent name="C:\djangoProjects\intodayer\static\css" />
       <recent name="C:\djangoProjects\intodayer\intodayer2_app" />
     </key>
   </component>
@@ -416,17 +374,17 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="960" height="1040" extended-state="0" />
-    <editor active="false" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.27060133" sideWeight="0.47830924" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.27374598" sideWeight="0.67074525" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32925472" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.5216908" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -499,9 +457,11 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/test/auth.html">
+    <entry file="file://$PROJECT_DIR$/templates/home.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
+        <state line="90" column="20" selection-start="3706" selection-end="3706" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/myprofile.html">
@@ -509,91 +469,85 @@
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/index.html">
+    <entry file="file://$PROJECT_DIR$/intodayer2_app/apps.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/home1.html">
+    <entry file="file://$PROJECT_DIR$/templates/auth_pachanz.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-2.0272834">
+        <state line="18" column="53" selection-start="461" selection-end="461" vertical-scroll-proportion="-12.774194" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/css/auth_style.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="398" column="19" selection-start="6375" selection-end="6375" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/intodayer2_app/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="72" column="4" selection-start="1731" selection-end="1739" vertical-scroll-proportion="1.6146789">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/intodayer2_app/apps.py">
+    <entry file="file://$PROJECT_DIR$/intodayer2/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="21" column="0" selection-start="662" selection-end="662" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/registration.html">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/static/scripts/script_auth.js">
+    <entry file="file://$PROJECT_DIR$/templates/reg.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="97" column="2" selection-start="2885" selection-end="2885" vertical-scroll-proportion="0.0">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/auth_pachanz.html">
+    <entry file="file://$PROJECT_DIR$/templates/welcome.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="53" selection-start="461" selection-end="461" vertical-scroll-proportion="-12.774194">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/intodayer2/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="21" column="17" selection-start="815" selection-end="815" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="e#644#676#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/static/css/auth_style.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="398" column="19" selection-start="6375" selection-end="6375" vertical-scroll-proportion="0.0">
+        <state line="11" column="3" selection-start="585" selection-end="585" vertical-scroll-proportion="-7.806452">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/auth.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="110" column="10" selection-start="4635" selection-end="4635" vertical-scroll-proportion="-16.258064">
+        <state line="43" column="84" selection-start="1897" selection-end="1897" vertical-scroll-proportion="-15.612904">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/static/scripts/script_home.js">
+    <entry file="file://$PROJECT_DIR$/templates/home.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="143" column="2" selection-start="3736" selection-end="3736" vertical-scroll-proportion="0.56327546">
+        <state line="31" column="51" selection-start="1389" selection-end="1389" vertical-scroll-proportion="-8.67742">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/intodayer2_app/models.py">
+    <entry file="file://$PROJECT_DIR$/intodayer2/urls.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="72" column="4" selection-start="1731" selection-end="1739" vertical-scroll-proportion="0.0">
+        <state line="27" column="1" selection-start="1057" selection-end="1057" vertical-scroll-proportion="0.0">
           <folding>
-            <element signature="e#0#28#0" expanded="true" />
+            <element signature="e#644#676#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/intodayer2_app/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="62" column="27" selection-start="2426" selection-end="2426" vertical-scroll-proportion="0.0">
+        <state line="90" column="44" selection-start="3234" selection-end="3234" vertical-scroll-proportion="0.26834863">
           <folding>
             <element signature="e#0#40#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/home.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="90" column="20" selection-start="3706" selection-end="3706" vertical-scroll-proportion="0.78571427">
-          <folding />
         </state>
       </provider>
     </entry>
