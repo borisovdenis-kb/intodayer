@@ -3,6 +3,7 @@ from django.shortcuts import render_to_response
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import auth
 from django.contrib.auth.forms import UserCreationForm
+from intodayer2_app.forms import RegistrationForm
 from intodayer2_app.send_sms import *
 from intodayer2_app.models import *
 
@@ -16,21 +17,30 @@ def welcome_view(request):
 
 def registration_view(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = RegistrationForm(request.POST)
         if form.is_valid():
-            new_user = form.save()
+            form.save()
             return HttpResponseRedirect('/login')
     else:
         form = UserCreationForm()
-    return render_to_response('reg.html')
+    context = {'form' : form}
+    return render_to_response('registration.html', context)
 
+'''
+def registration_view(request):
+    if request.user.is_authenticated():
+        return HttpResponseRedirect('/home')
+    else:
+        if request.method == 'POST':
+            form = UserCreationForm(request.POST)
+            if form.is_valid():
+                new_user = form.save()
+                return HttpResponseRedirect('/login')
+        else:
+            form = UserCreationForm()
+        return render_to_response('reg.html')'''
 
 def home_view(request):
-    """Отображает главную страницу, если пользователь
-    зарегистрирован, и перебрасывает на страницу входа
-    в противном случае
-    """
-
     if request.user.is_authenticated():
         user = User.objects.get(username=request.user.username)
         std_id = user.myuser.student_id.id
@@ -42,14 +52,7 @@ def home_view(request):
         # мы получили список, состоящий из строк расписания
         # далее генерируем расписание на неделю, в зависимости от номера и четности недели
         table = list(SCHEDULES.objects.filter(grp_id = group, cthd_id = cathedra))
-        '''current_week = {'monday' :[],
-                        'tuesday' : [],
-                        'wednsday' : [],
-                        'thursday': [],
-                        'friday' : [],
-                        'saturday': [],
-                        'sanday' : []
-        }'''
+
         current_week = [[], [], [], [], [], [], []]
 
         for row in table:
@@ -68,7 +71,6 @@ def home_view(request):
             elif row.dfwk_id._def == 'Воскресенье':
                 current_week[6].append(row)
 
-        print(current_week)
         context = {'table' : current_week,
                    'username' : user.username
         }
