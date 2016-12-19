@@ -9,17 +9,6 @@ from intodayer2_app.send_sms import *
 from intodayer2_app.models import *
 
 
-
-class RelatedObjectDoesNotExist(BaseException):
-    """Определяем собственное исключение. Оно нужно,
-    когда возникает ошибка в обращении к user.myuser
-    """
-    def __init__(self, value):
-        self.massage = value
-    def __str__(self):
-        return repr(self.massage)
-
-
 def welcome_view(request):
     if request.user.is_authenticated():
         return HttpResponseRedirect("/home")
@@ -75,7 +64,7 @@ def home_view(request):
             # выбираем из тиблицы расписания все записи, "нужные" данному юзеру
             # мы получили список, состоящий из строк расписания
             # далее генерируем расписание на неделю, в зависимости от номера и четности недели
-            table = list(SCHEDULES.objects.filter(grp_id = group, cthd_id = cathedra))
+            table = list(Schedules.objects.filter(grp_id = group, cthd_id = cathedra))
 
             current_week = [[], [], [], [], [], [], []]
 

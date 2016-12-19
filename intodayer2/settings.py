@@ -77,8 +77,14 @@ WSGI_APPLICATION = 'intodayer2.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        #'ENGINE': 'django.db.backends.sqlite3',
+        #'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.oracle',
+        'NAME': 'ORCL',
+        'USER': 'orauser',
+        'PASSWORD': 'syspas',
+        'HOST': 'ctfssu.ru',
+        'PORT': '1521',
     }
 }
 

@@ -3,7 +3,10 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from intodayer2_app.models import *
 
-class Day_of_weeksAdmin(admin.ModelAdmin):
+class DayOfWeeksAdmin(admin.ModelAdmin):
+    list_display = ('_def',)
+
+class TimesAdmin(admin.ModelAdmin):
     list_display = ('_def',)
 
 class SubjectsAdmin(admin.ModelAdmin):
@@ -12,9 +15,14 @@ class SubjectsAdmin(admin.ModelAdmin):
 class TeachersAdmin(admin.ModelAdmin):
     list_display = ('name_short',)
 
-class SCHEDULESAdmin(admin.ModelAdmin):
-    list_display = ('grp_id',
-                    'cthd_id',
+class SchedulesAdmin(admin.ModelAdmin):
+    list_display = ('grp_grp_id',
+                    'cthd_cthd_id',
+    )
+class SchedulesSpecialAdmin(admin.ModelAdmin):
+    list_display = ('grp_grp_id',
+                    'cthd_cthd_id',
+                    'date_of',
     )
 
 class UniversitiesAdmin(admin.ModelAdmin):
@@ -31,10 +39,8 @@ class CathedrasAdmin(admin.ModelAdmin):
 
 class StudentsAdmin(admin.ModelAdmin):
     list_display = ('admission_year',
-                    'unvr_id',
-                    'fclt_id',
-                    'grp_id',
-                    'cthd_id',
+                    'grp_grp_id',
+                    'cthd_cthd_id',
     )
 
 class MyUserInLine(admin.StackedInline):
@@ -48,11 +54,13 @@ class UserAdmin(UserAdmin):
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
 admin.site.register(Students, StudentsAdmin)
+admin.site.register(Times, TimesAdmin)
 admin.site.register(Universities, UniversitiesAdmin)
 admin.site.register(Groups, GroupAdmin)
 admin.site.register(Faculties, FacultiesAdmin)
 admin.site.register(Cathedras, CathedrasAdmin)
-admin.site.register(Day_of_weeks, Day_of_weeksAdmin)
+admin.site.register(DayOfWeeks, DayOfWeeksAdmin)
 admin.site.register(Subjects, SubjectsAdmin)
 admin.site.register(Teachers, TeachersAdmin)
-admin.site.register(SCHEDULES, SCHEDULESAdmin)
+admin.site.register(Schedules, SchedulesAdmin)
+admin.site.register(SchedulesSpecial, SchedulesSpecialAdmin)
