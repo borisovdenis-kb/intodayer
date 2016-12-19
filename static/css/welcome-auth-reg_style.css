@@ -1,0 +1,416 @@
+/*работа шрифта для Mozilla Firefox*/
+@-moz-document url-prefix() {
+    * {
+        font-family: SegoeUIRegular !important;
+        font-weight: 300 !important;
+    }
+}
+
+a {
+    font-family: SegoeUIRegular;
+}
+
+body {
+    font-family: SegoeUIRegular;
+}
+
+input {
+    font-family: SegoeUIRegular;
+    outline: none;
+    font-size: 1em;
+    border: 0;
+}
+
+
+
+#login-top, #sing_up-top {
+    float: right;
+    display: block;
+}
+#sing_up-top a{
+    margin-right: 8px;
+}
+#login-top a, #sing_up-top a {
+    text-align: center;
+    display: block;
+    padding-top: 1px;
+    font-size: 1em;
+    padding-top: 4px;
+    padding-bottom: 6px;
+    margin-top: 5px;
+    width: 100px;
+}
+
+#sing_up-top a {
+    color: white;
+    background: black;
+    border-radius: 15px;
+}
+
+h1, h2, h3, h4 {
+    text-align: center;
+    font-family: Segoe UI Light;
+    margin: 0;
+    padding: 0;
+}
+
+.text {
+    margin-top: 200px;
+}
+
+h1 {
+    font-size: 4em;
+}
+
+h2 {
+    font-size: 2em;
+}
+
+h3 {
+    margin-bottom: 100px;
+    margin-top: 200px;
+}
+
+h4 {
+    margin-top: 5px;
+}
+
+.enter {
+    margin: auto;
+}
+
+ul {
+    width: 100%;
+    margin-top: 50px;
+}
+
+.enter ul {
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+
+.enter li {
+    display: inline-block;
+    text-align: center;
+    margin: 5px;
+}
+
+.enter a {
+    display: block;
+    padding-top: 16px;
+    padding-bottom: 20px;
+    width: 200px;
+    border-radius: 4px;
+    font-size: 20px;
+    color: black;
+    box-shadow: none;
+}
+
+#sign_up a {
+    background: rgba(13, 165, 89, 1);
+    color: white;
+}
+
+#sign_up a:hover {
+    background: rgba(13, 180, 89, 1);
+}
+
+#sign_up a:active {
+    color: rgba(230, 230, 230, 1);
+    background: rgba(13, 170, 89, 1);
+}
+
+#sign_in a {
+    color: black;
+    box-shadow: inset 0px 0px 0px 1px rgba(0, 0, 0, 0.2);
+}
+
+#sign_in a:hover {
+    color: rgba(120, 120, 120, 1);
+}
+
+#sign_in a:active {
+    box-shadow: inset 0px 0px 0px 1px rgba(0, 0, 0, 0.4);
+    color: black;
+}
+
+/*дальше идут стили для форма входа*/
+
+input {
+    margin: 5px;
+    padding-left: 20px;
+    padding-rigth: 20px;
+    padding-bottom: 1px;
+    dislay: block;
+    width: 300px;
+    height: 50px;
+    border-radius: 4px;
+    font-size: 18px;
+    box-shadow: inset 0px 0px 0px 1px rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: inset 0px 0px 0px 1px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: inset 0px 0px 0px 1px rgba(0, 0, 0, 0.2);
+    -o-box-shadow: inset 0px 0px 0px 1px rgba(0, 0, 0, 0.2);
+
+}
+
+button {
+    outline: none;
+    border: none;
+    display: block;
+    height: 50px;
+    padding: 0;
+    padding-bottom: 2px;
+    border-radius: 4px;
+    color: black;
+    box-shadow: none;
+    text-align: center;
+    width: 150px;
+    background: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+/*панель регистрации*/
+*:focus {
+    outline: none;
+}
+
+.form {
+    margin: 0;
+    padding: 0;
+}
+
+.reg, .auth {
+    border: 1px solid #dbdbdb;
+    border-radius: 4px;
+    padding-top: 20px;
+    padding-left: 30px;
+    padding-right: 40px;
+    padding-bottom: 15px;
+}
+
+.reg {
+    margin: 80px auto;
+    width: 600px;
+}
+
+.reg ul {
+    margin-top: 10px;
+    text-align: left;
+}
+
+.auth ul {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.title-sign {
+    font-size: 1.5em;
+}
+
+.reg .title-sign, .auth .title-sign {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.reg input {
+    width: 300px;
+    height: 45px;
+}
+
+.form-text {
+    display: block;
+    padding-left: 30px;
+    margin-bottom: 10px;
+    margin-top: 20px;
+}
+
+.back {
+    color: black;
+    box-shadow: inset 0px 0px 0px 1px rgba(0, 0, 0, 0.2);
+}
+
+.back:hover {
+    color: rgba(120, 120, 120, 1);
+}
+
+.back:active {
+    box-shadow: inset 0px 0px 0px 1px rgba(0, 0, 0, 0.4);
+    color: black;
+}
+
+.reg .buttons-panel {
+    display: inline-block;
+    padding-top: 15px;
+}
+
+.reg .back {
+    float: left;
+}
+
+.reg #submit-reg {
+    float: right;
+}
+
+.auth {
+    width: 500px;
+    margin: 150px auto;
+    padding: 40px;
+    border-radius: 8px;
+    border: 1px solid #dbdbdb;
+
+}
+
+.auth .buttons-panel {
+    display: block;
+    text-align: center;
+    padding-top: 5px;
+}
+
+.auth .buttons-panel button {
+    display: inline;
+    padding: 0;
+    margin: 0;
+    width: 147px;
+
+}
+
+.auth .buttons-panel button:first-child {
+    margin-right: 1px;
+}
+
+.auth .buttons-panel button:last-child {
+    margin-left: 1px;
+}
+
+.forgot a {
+    font-family: 'Arial', serif;
+}
+
+.forgot {
+    display: block;
+    clear: left;
+    margin-top: 30px;
+    font-size: 14px;
+}
+
+.forgot a:hover {
+    color: rgba(100, 100, 100, 1);
+    text-decoration: underline;
+}
+
+.forgot a:active {
+    color: black;
+}
+
+#submit-reg, #submit-auth {
+    background: rgba(13, 165, 89, 1);
+    color: white;
+}
+
+#submit-reg:hover, #submit-auth:hover {
+    background: rgba(13, 180, 89, 1);
+}
+
+#submit-reg:active, #submit-auth:active {
+    color: rgba(230, 230, 230, 1);
+    background: rgba(13, 170, 89, 1);
+    /*box-shadow: inset 0px 0px 0px 1px rgba(0,0,0,0.1);*/
+}
+
+.outline-checkbox {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 10px;
+    color: black;
+    border-radius: 4px;
+    box-shadow: inset 0px 0px 0px 1px rgba(0, 0, 0, 0.2);
+}
+
+.check-content {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.check-content label {
+    display: inline;
+    vertical-align: middle;
+    margin-left: 20px;
+}
+
+.phone-content {
+    display: block;
+    opacity: 1;
+    clear: both;
+    padding-top: 10px;
+}
+
+input[type="checkbox"] {
+    display: inline-block;
+    background: inherit;
+    vertical-align: middle;
+    cursor: pointer;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    -o-appearance: none;
+    appearance: none;
+    box-shadow: none;
+    border-radius: 4px;
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(200, 200, 200, 1);
+    padding-bottom: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+    background-color: #ffffff;
+    margin-left: 20px;
+}
+
+/*то, что скрыто вначале*/
+.phone-content {
+    display: none;
+    /* IE 8 */
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+    /* IE 5-7 */
+    filter: alpha(opacity=0.0);
+    -moz-opacity: 0.0;
+    opacity: 0;
+}
+
+.reg, .auth {
+    display: none;
+    /*opacity: 0;*/
+}
+
+.text, .enter {
+    display: none;
+    /*opacity: 0;*/
+}
+
+h3{
+    display: none;
+}
+/*то, что скрыто вначале*/
+
+
+@media only screen {
+    input {
+        font-family: SegoeUIRegular !important;
+    }
+
+    body {
+
+        font-family: SegoeUIRegular !important;
+    }
+
+    h1, h2, h3, h4 {
+        font-family: SegoeUILight !important;
+    }
+    input{
+        overflow: visible;
+        -webkit-appearance: none;
+        -box-shadow: inset 0px 0px 0px 1px rgba(0, 0, 0, 0.2);
+        -webkit-box-shadow: inset 0px 0px 0px 1px rgba(0, 0, 0, 0.2);
+    }
+}
