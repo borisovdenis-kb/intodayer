@@ -22,6 +22,7 @@
     <file path="$PROJECT_DIR$/../untitled/untitled/settings.py" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1482169271859" ignored="false" />
     <file path="$PROJECT_DIR$/../untitled/untitled_app/models.py" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1482171156925" ignored="false" />
     <file path="/add_schedules.html" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1482243255451" ignored="false" />
+    <file path="/script_home.js" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1482246498017" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,21 +42,19 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="views.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/intodayer2_app/views.py">
+      <file leaf-file-name="add_schedules.html" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/add_schedules.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="175" column="67" selection-start="6806" selection-end="6806" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="e#0#54#0" expanded="true" />
-              </folding>
+            <state line="24" column="0" selection-start="637" selection-end="637" vertical-scroll-proportion="-17.032259">
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="add_schedules.html" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/templates/add_schedules.html">
+      <file leaf-file-name="script_home.js" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/static/scripts/script_home.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="19" column="21" selection-start="577" selection-end="577" vertical-scroll-proportion="0.49702734">
+            <state line="204" column="3" selection-start="5029" selection-end="5029" vertical-scroll-proportion="0.8486239">
               <folding />
             </state>
           </provider>
@@ -64,16 +63,7 @@
       <file leaf-file-name="home.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/home.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="22" vertical-scroll-proportion="-0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="add_schedules.css" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/static/css/add_schedules.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="45" column="0" selection-start="642" selection-end="642" vertical-scroll-proportion="0.0">
+            <state line="19" column="37" selection-start="1014" selection-end="1014" vertical-scroll-proportion="-10.096774">
               <folding />
             </state>
           </provider>
@@ -90,7 +80,6 @@
     <option name="changedFiles">
       <list>
         <option value="$PROJECT_DIR$/static/css/auth_style.css" />
-        <option value="$PROJECT_DIR$/static/scripts/script_home.js" />
         <option value="$PROJECT_DIR$/templates/welcome.html" />
         <option value="$PROJECT_DIR$/templates/auth.html" />
         <option value="$PROJECT_DIR$/static/scripts/script_reg.js" />
@@ -102,9 +91,10 @@
         <option value="$PROJECT_DIR$/intodayer2/urls.py" />
         <option value="$PROJECT_DIR$/intodayer2_app/models.py" />
         <option value="$PROJECT_DIR$/intodayer2_app/views.py" />
+        <option value="$PROJECT_DIR$/static/css/add_schedules.css" />
         <option value="$PROJECT_DIR$/templates/home.html" />
         <option value="$PROJECT_DIR$/templates/add_schedules.html" />
-        <option value="$PROJECT_DIR$/static/css/add_schedules.css" />
+        <option value="$PROJECT_DIR$/static/scripts/script_home.js" />
       </list>
     </option>
   </component>
@@ -169,6 +159,24 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="templates" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="intodayer2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="intodayer" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="static" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="scripts" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -447,14 +455,14 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
-    <editor active="true" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32925472" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.083778016" sideWeight="0.67074525" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.15581644" sideWeight="0.67074525" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32925472" sideWeight="0.5" order="9" side_tool="true" content_ui="tabs" />
@@ -538,11 +546,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://C:/Python34/Lib/site-packages/django/contrib/auth/base_user.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="104" column="30" selection-start="3377" selection-end="3377" vertical-scroll-proportion="0.35779816" />
-      </provider>
-    </entry>
     <entry file="file://C:/Python34/Lib/site-packages/django/contrib/auth/forms.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="113" column="18" selection-start="4051" selection-end="4051" vertical-scroll-proportion="0.6857798" />
@@ -585,26 +588,12 @@
         <state line="9" column="28" selection-start="297" selection-end="297" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/intodayer2/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="86" column="23" selection-start="2569" selection-end="2569" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/intodayer2/urls.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="28" column="1" selection-start="1113" selection-end="1113" vertical-scroll-proportion="0.0">
           <folding>
             <element signature="e#644#676#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/intodayer2_app/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="146" column="69" selection-start="4834" selection-end="4834" vertical-scroll-proportion="0.55504584">
-          <folding />
         </state>
       </provider>
     </entry>
@@ -624,16 +613,39 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/home.html">
+    <entry file="file://$PROJECT_DIR$/intodayer2/settings.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="22" vertical-scroll-proportion="-0.0">
+        <state line="86" column="23" selection-start="2569" selection-end="2569" vertical-scroll-proportion="0.0">
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/intodayer2_app/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="169" column="71" selection-start="5699" selection-end="5699" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="e#0#28#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/add_schedules.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="21" selection-start="577" selection-end="577" vertical-scroll-proportion="0.49702734">
+        <state line="24" column="0" selection-start="637" selection-end="637" vertical-scroll-proportion="-17.032259">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/home.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="19" column="37" selection-start="1014" selection-end="1014" vertical-scroll-proportion="-10.096774">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/scripts/script_home.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="204" column="3" selection-start="5029" selection-end="5029" vertical-scroll-proportion="0.8486239">
           <folding />
         </state>
       </provider>

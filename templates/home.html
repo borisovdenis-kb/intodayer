@@ -51,10 +51,10 @@
     </ul>
 </div>
 
-{% block content %}
+
 <div class="page">
     <div class="content">
-
+        {% block content %}
         <div class="content-top">
             <div class="avatar-block">
                 <div class="avatar"></div>
@@ -101,8 +101,9 @@
             {% endfor %}
         {% endif %}
     </div>
-</div>
 {% endblock %}
+</div>
+
 </body>
 <!--<script type="text/javascript" src="scripts/script_home.js"></script>-->
 <script type="text/javascript" src={% static "scripts/script_home.js"%}></script>

@@ -2,7 +2,8 @@
 
 // установка теней меню
 
-var selectedMenu;
+$(document).ready(function(){
+    var selectedMenu;
 var selectedDay;
 
 var leftShadow = 'leftShadow';
@@ -99,13 +100,13 @@ function openMenu(event) {
 	if (openFlag === false) {
 		arrow.classList.add('select_up-arrow');
 		droplink.classList.add('username_color');
-		
+
 		$(ul_menu).animate({
 			'margin-top': '10px'
 		}, timeMenuEffect);
 		$('.dropmenu').fadeIn(timeMenuEffect);
 		openFlag = true;
-		
+
 //	закрыть если нажимаем на username
 	} else if (!ul_menu.contains(event.target)) {
 		closeDroplist();
@@ -195,15 +196,10 @@ function hideTable(interval, time){
 	"use strict";
 	$('tr').each(function(i) {
 		$(this).delay((i++) * interval).fadeTo(time,0);
-	});	
+	});
 }
 //появление таблицы и страницы ============================
 // $(window).resize(function() {
 // 	$('.top-menu li').css({'width':'100%'});
 // });
-
-
-
-
-
-
+});
