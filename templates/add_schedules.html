@@ -1,0 +1,24 @@
+{% extends "home.html" %}
+
+{% load staticfiles %}
+
+{% block title %}Add Schedules{% endblock %}
+
+<!--Добавляем новые стили-->
+{% block styles %}
+    <link rel="stylesheet" type="text/css" href={% static "css/add_schedules.css.css"%}>
+{%  endblock %}
+
+{% block content %}
+    <div class="content">
+        <ul class="menu">
+            <li><a href=#>Menu 1</a>
+                <ul class="submenu">
+                    <li><a href=#>Sudmenu 1</a></li>
+                    <li><a href=#>Sudmenu 1</a></li>
+                    <li><a href=#>Sudmenu 1</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+{%  endblock %}

@@ -2,7 +2,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <title>Three pachans Web Site</title>
+    <title>{% block title %}Three pachans Web Site{% endblock %}</title>
     <meta http-equiv="Content-type" content="text/html" charset="UTF-8">
 <!--
     <link rel="stylesheet" type="text/css" href="style/home_content.css">
@@ -13,7 +13,11 @@
     <link rel="stylesheet" type="text/css" href={% static "css/home_content.css"%}>
     <link rel="stylesheet" type="text/css" href={% static "css/home_top.css"%}>
     <link rel="stylesheet" type="text/css" href={% static "css/fonts.css"%}>
+    <!--Добавление в наследующие шаблоны новых стилей-->
+    {% block styles %}{%  endblock %}
     <script type="text/javascript" src={% static "library/jquery-3.1.1.js" %}></script>
+    <!--Добавление в наследующие шаблоны новых скриптов-->
+    {% block scripts %}{% endblock %}
 </head>
 
 <body>
@@ -47,8 +51,10 @@
     </ul>
 </div>
 
+{% block content %}
 <div class="page">
     <div class="content">
+
         <div class="content-top">
             <div class="avatar-block">
                 <div class="avatar"></div>
@@ -95,8 +101,8 @@
             {% endfor %}
         {% endif %}
     </div>
-
 </div>
+{% endblock %}
 </body>
 <!--<script type="text/javascript" src="scripts/script_home.js"></script>-->
 <script type="text/javascript" src={% static "scripts/script_home.js"%}></script>
