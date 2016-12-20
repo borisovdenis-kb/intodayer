@@ -25,4 +25,5 @@ urlpatterns = [
     url(r'^logout/$', views.logout_view),
     url(r'^registration/$', views.registration_view),
     url(r'^profile/$', views.profile_settings),
+    url(r'^add_schedules/$', views.add_schedules_view),
 ]

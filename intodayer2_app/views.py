@@ -47,6 +47,10 @@ def registration_view(request):
         return render_to_response('reg.html')'''
 
 def home_view(request):
+    """
+    Функция отображения главной страницы сайта
+    с расписанием на сегодня
+    """
     if request.user.is_authenticated():
         user = User.objects.get(username=request.user.username)
         try:
@@ -112,6 +116,28 @@ def login_view(request):
 def logout_view(request):
     auth.logout(request)
     return HttpResponseRedirect("/")
+
+
+def add_schedules_view(request):
+    """
+    Функция отображения страницы добавления рассписания. Если у
+    старосты уже имеется рассписание, то на этой странице выводится
+    общее рассписание, представляющее весь семестр. Если староста
+    хочет что-то изменить в нем, то с боку при наведении на конкретную
+    строку расписания будет появляться карандашек, подсказывающий
+    возможность изменения. При нажатии активируются поля ввода и староста
+    вносит свои именения. Появлется кнопка применить и все красиво.
+    Внизу при этом есть поля для добавления новых строк в рассписание.
+    Как только староста добавит новую строку и нажмет submit, то страница
+    обновится (здесь предполагается AJAX) и новая добавленная строка будет
+    отображаться в верхней части страницы в рассписании на семестр.
+    """
+    if request.user.is_authenticated():
+
+    else:
+        return HttpResponseRedirect('/login')
+
+
 
 
 def profile_settings(request):
