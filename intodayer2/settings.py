@@ -81,8 +81,8 @@ DATABASES = {
         #'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         'ENGINE': 'django.db.backends.oracle',
         'NAME': 'ORCL',
-        'USER': 'orauser',
-        'PASSWORD': 'syspas',
+        'USER': 'intodayer_tst',
+        'PASSWORD': 'tst',
         'HOST': 'ctfssu.ru',
         'PORT': '1521',
     }

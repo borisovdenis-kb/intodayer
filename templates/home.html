@@ -76,16 +76,16 @@
                         <table>
                             <tr class="tableTop">
                                 <th>Время</th>
-                                <th>Пердмет</th>
+                                <th>Предмет</th>
                                 <th>Аудитория</th>
-                                <th>Перподаватель</th>
+                                <th>Преподаватель</th>
                             </tr>
                             {% for row in day %}
                                 <tr>
-                                    <td>{{ row.time_of }}</td>
-                                    <td>{{ row.subj_id.name }}</td>
+                                    <td>{{ row.tms_tms }}</td>
+                                    <td>{{ row.subj_subj.name }}</td>
                                     <td>{{ row.place }}</td>
-                                    <td>{{ row.tchr_id.name_short }}</td>
+                                    <td>{{ row.tchr_tchr.name_short }}</td>
                                 </tr>
                             {% endfor %}
                         </table>

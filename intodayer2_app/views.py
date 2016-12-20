@@ -46,42 +46,41 @@ def registration_view(request):
             form = UserCreationForm()
         return render_to_response('reg.html')'''
 
-
 def home_view(request):
     if request.user.is_authenticated():
         user = User.objects.get(username=request.user.username)
         try:
-            std_id = user.myuser.student_id.id
+            std_id = user.customuser.stdt_stdt.stdt_id
         except ObjectDoesNotExist:
             context = {'table' : [],
                        'username' : user.username
             }
         else:
-            student = Students.objects.get(id = std_id)
-            group = student.grp_id
-            cathedra = student.cthd_id
+            student = Students.objects.get(stdt_id = std_id)
+            group = student.grp_grp_id
+            cathedra = student.cthd_cthd_id
 
             # выбираем из тиблицы расписания все записи, "нужные" данному юзеру
             # мы получили список, состоящий из строк расписания
             # далее генерируем расписание на неделю, в зависимости от номера и четности недели
-            table = list(Schedules.objects.filter(grp_id = group, cthd_id = cathedra))
+            table = list(Schedules.objects.filter(grp_grp_id = group, cthd_cthd_id = cathedra))
 
             current_week = [[], [], [], [], [], [], []]
 
             for row in table:
-                if row.dfwk_id._def == 'Понедельник':
+                if row.dfwk_dfwk.name == 'Понедельник':
                     current_week[0].append(row)
-                elif row.dfwk_id._def == 'Вторник':
+                elif row.dfwk_dfwk.name == 'Вторник':
                     current_week[1].append(row)
-                elif row.dfwk_id._def == 'Среда':
+                elif row.dfwk_dfwk.name == 'Среда':
                     current_week[2].append(row)
-                elif row.dfwk_id._def == 'Четверг':
+                elif row.dfwk_dfwk.name == 'Четверг':
                     current_week[3].append(row)
-                elif row.dfwk_id._def == 'Пятница':
+                elif row.ddfwk_dfwk.name == 'Пятница':
                     current_week[4].append(row)
-                elif row.dfwk_id._def == 'Суббота':
+                elif row.dfwk_dfwk.name == 'Суббота':
                     current_week[5].append(row)
-                elif row.dfwk_id._def == 'Воскресенье':
+                elif row.dfwk_dfwk.name == 'Воскресенье':
                     current_week[6].append(row)
 
             context = {'table' : current_week,

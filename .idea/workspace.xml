@@ -4,12 +4,12 @@
     <list default="true" id="b87d29bf-9f52-4f1a-b8b7-7a445802d676" name="Default" comment="" />
     <ignored path="intodayer2.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/settings.py" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1482173773762" ignored="false" />
-    <file path="/home.html" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1482005660532" ignored="false" />
+    <file path="/settings.py" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1482192385873" ignored="false" />
+    <file path="/home.html" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1482197729133" ignored="false" />
     <file path="/auth_1.html" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1481553904747" ignored="false" />
-    <file path="/admin.py" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1482181422168" ignored="false" />
-    <file path="/models.py" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1482181389801" ignored="false" />
-    <file path="/views.py" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1482174220563" ignored="false" />
+    <file path="/admin.py" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1482191576096" ignored="false" />
+    <file path="/models.py" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1482197370564" ignored="false" />
+    <file path="/views.py" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1482196684520" ignored="false" />
     <file path="/Python Console" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1481572496833" ignored="false" />
     <file path="/Django Console" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1481572530127" ignored="false" />
     <file path="/auth.html" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1481984572293" ignored="false" />
@@ -40,10 +40,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
+      <file leaf-file-name="views.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/intodayer2_app/views.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="74" column="51" selection-start="2652" selection-end="2652" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="e#0#54#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="models.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/intodayer2_app/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="4" column="31" selection-start="106" selection-end="106" vertical-scroll-proportion="0.0">
+            <state line="110" column="11" selection-start="3002" selection-end="3009" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="e#0#28#0" expanded="true" />
               </folding>
@@ -51,24 +62,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="0003_auto_20161219_2211.py" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/intodayer2_app/migrations/0003_auto_20161219_2211.py">
+      <file leaf-file-name="home.html" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/templates/home.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="5" column="0" selection-start="155" selection-end="155" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="e#73#112#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="0001_initial.py" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/intodayer2_app/migrations/0001_initial.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-0.0011467889">
-              <folding>
-                <element signature="e#73#112#0" expanded="true" />
-              </folding>
+            <state line="87" column="75" selection-start="3737" selection-end="3737" vertical-scroll-proportion="0.48751485">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -94,11 +92,11 @@
         <option value="$PROJECT_DIR$/templates/reg.html" />
         <option value="$PROJECT_DIR$/intodayer2_app/forms.py" />
         <option value="$PROJECT_DIR$/templates/registration.html" />
-        <option value="$PROJECT_DIR$/templates/home.html" />
+        <option value="$PROJECT_DIR$/intodayer2_app/admin.py" />
         <option value="$PROJECT_DIR$/intodayer2/settings.py" />
         <option value="$PROJECT_DIR$/intodayer2_app/views.py" />
         <option value="$PROJECT_DIR$/intodayer2_app/models.py" />
-        <option value="$PROJECT_DIR$/intodayer2_app/admin.py" />
+        <option value="$PROJECT_DIR$/templates/home.html" />
       </list>
     </option>
   </component>
@@ -164,20 +162,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="templates" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="intodayer2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="intodayer" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="static" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -423,13 +407,13 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32925472" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21344717" sideWeight="0.67074525" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.21344717" sideWeight="0.67074525" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32925472" sideWeight="0.5" order="9" side_tool="true" content_ui="tabs" />
@@ -533,20 +517,6 @@
         <state line="36" column="11" selection-start="1541" selection-end="1541" vertical-scroll-proportion="-0.7096774" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/home.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="70" column="61" selection-start="2926" selection-end="2926" vertical-scroll-proportion="0.027093597" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/intodayer2_app/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="45" selection-start="834" selection-end="834" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="e#0#54#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/intodayer2_app/tests.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
@@ -577,15 +547,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/intodayer2_app/admin.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="47" column="22" selection-start="1229" selection-end="1229" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="e#0#32#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/intodayer2/urls.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="15" column="32" selection-start="676" selection-end="676" vertical-scroll-proportion="0.0">
@@ -593,37 +554,44 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/intodayer2_app/admin.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="28" selection-start="297" selection-end="297" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/intodayer2/settings.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="92" column="40" selection-start="2639" selection-end="2639" vertical-scroll-proportion="0.0">
+        <state line="86" column="23" selection-start="2569" selection-end="2569" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/intodayer2_app/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="31" selection-start="106" selection-end="106" vertical-scroll-proportion="0.0">
+        <state line="110" column="11" selection-start="3002" selection-end="3009" vertical-scroll-proportion="0.0">
           <folding>
             <element signature="e#0#28#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/intodayer2_app/migrations/0003_auto_20161219_2211.py">
+    <entry file="file://$PROJECT_DIR$/intodayer2_app/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="0" selection-start="155" selection-end="155" vertical-scroll-proportion="0.0">
+        <state line="74" column="51" selection-start="2652" selection-end="2652" vertical-scroll-proportion="0.0">
           <folding>
-            <element signature="e#73#112#0" expanded="true" />
+            <element signature="e#0#54#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/intodayer2_app/migrations/0001_initial.py">
+    <entry file="file://$PROJECT_DIR$/templates/home.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-0.0011467889">
-          <folding>
-            <element signature="e#73#112#0" expanded="true" />
-          </folding>
+        <state line="87" column="75" selection-start="3737" selection-end="3737" vertical-scroll-proportion="0.48751485">
+          <folding />
         </state>
       </provider>
     </entry>

@@ -4,10 +4,10 @@ from django.contrib.auth.models import User
 from intodayer2_app.models import *
 
 class DayOfWeeksAdmin(admin.ModelAdmin):
-    list_display = ('_def',)
+    list_display = ('name',)
 
 class TimesAdmin(admin.ModelAdmin):
-    list_display = ('_def',)
+    list_display = ('name',)
 
 class SubjectsAdmin(admin.ModelAdmin):
     list_display = ('name',)
@@ -44,7 +44,7 @@ class StudentsAdmin(admin.ModelAdmin):
     )
 
 class MyUserInLine(admin.StackedInline):
-    model = MyUser
+    model = CustomUser
     can_delete = False
     verbose_name_plural = 'anotherData'
 
