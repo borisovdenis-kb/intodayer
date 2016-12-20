@@ -9,7 +9,7 @@
     <file path="/auth_1.html" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1481553904747" ignored="false" />
     <file path="/admin.py" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1482191576096" ignored="false" />
     <file path="/models.py" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1482238687526" ignored="false" />
-    <file path="/views.py" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1482239305664" ignored="false" />
+    <file path="/views.py" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1482239505683" ignored="false" />
     <file path="/Python Console" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1481572496833" ignored="false" />
     <file path="/Django Console" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1481572530127" ignored="false" />
     <file path="/auth.html" changelist="b87d29bf-9f52-4f1a-b8b7-7a445802d676" time="1481984572293" ignored="false" />
@@ -43,7 +43,7 @@
       <file leaf-file-name="views.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/intodayer2_app/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="132" column="67" selection-start="4897" selection-end="4897" vertical-scroll-proportion="0.646789">
+            <state line="134" column="37" selection-start="5009" selection-end="5009" vertical-scroll-proportion="0.6972477">
               <folding />
             </state>
           </provider>
@@ -597,7 +597,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/intodayer2_app/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="132" column="67" selection-start="4897" selection-end="4897" vertical-scroll-proportion="0.646789">
+        <state line="134" column="37" selection-start="5009" selection-end="5009" vertical-scroll-proportion="0.6972477">
           <folding />
         </state>
       </provider>
