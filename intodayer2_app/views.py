@@ -134,6 +134,7 @@ def add_schedules_view(request):
     Если ниодной строчки в расписании еще не было создано, то будет выводиться
     сообщения, "Создайте расписание".
     """
+
     if request.user.is_authenticated():
         user = User.objects.get(username=request.user.username)
         try:
@@ -173,9 +174,18 @@ def add_schedules_view(request):
             context = {'table' : current_week,
                        'username' : user.username
             }
-            return render_to_response('add_schedules.html', context)
     else:
         return HttpResponseRedirect('/login')
+
+    if request.method == 'POST':
+            print('0')
+            print(request.POST)
+
+            # *заносим новые данные в базу*
+
+            return HttpResponseRedirect('/add_schedules')
+    else:
+        return render_to_response('add_schedules.html', context)
 
 
 

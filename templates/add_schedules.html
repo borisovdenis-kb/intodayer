@@ -21,4 +21,21 @@
             </li>
         </ul>
     </div>
-{%  endblock %}
+    <form action="" method="post" id="add_form">
+    <ul>
+        <!--новые изменения-->
+        <li>
+            <select id="day_of_week" name="dayofweek" form="add_form">
+                <option value='Понедельник'>Понедельник</option>
+                <option value='Вторник'>Вторник</option>
+                <option value='Среда'>Среда</option>
+                <option value='Четверг'>Четверг</option>
+                <option value='Пятница'>Пятница</option>
+                <option value='Суббота'>Суббота</option>
+                <option value='Воскресенье'>Воскресенье</option>
+            </select>
+        </li>
+        <input type="submit">
+    </ul>
+</form>
+{% endblock %}
