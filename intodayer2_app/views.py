@@ -182,7 +182,7 @@ def add_schedules_view(request):
             new_data = dict(request.POST) # получаем новые данные от клиента
 
             ###########################################################################
-            #                           ЗАНОСИМ ДАННЫК БАЗУ                           #
+            #                           ЗАНОСИМ ДАННЫЕ БАЗУ                           #
             ###########################################################################
 
             count_tchr_id = len(Teachers.objects.all())  # этот говно код здесь
@@ -203,14 +203,14 @@ def add_schedules_view(request):
             new_schld_row = Schedules(schld_id = count_schld_id + 1,
                                       grp_grp_id = group,
                                       cthd_cthd_id = cathedra,
-                                      dfwk_dfwk_id = new_data['parity'][0],
+                                      dfwk_dfwk_id = new_data['dayofweek'][0],
                                       subj_subj_id = new_subject.subj_id,
                                       tchr_tchr_id = new_teacher.tchr_id,
                                       tms_tms_id = new_data['time'][0],
                                       parity = new_data['parity'][0],
                                       place = new_data['place'][0],
-                                      start_week = int(new_data['startweek'][0]),
-                                      end_week = int(new_data['endweek'][0])
+                                      start_week = new_data['startweek'][0],
+                                      end_week = new_data['endweek'][0]
             )
             new_schld_row.save()
             return HttpResponseRedirect('/add_schedules')
