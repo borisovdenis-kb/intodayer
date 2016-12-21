@@ -17,7 +17,7 @@
     {% block styles %}{%  endblock %}
     <script type="text/javascript" src={% static "library/jquery-3.1.1.js" %}></script>
     <!--Добавление в наследующие шаблоны новых скриптов-->
-    {% block scripts %}{% endblock %}
+    {% block scripts_top %}{% endblock %}
 </head>
 
 <body>
@@ -107,4 +107,7 @@
 </body>
 <!--<script type="text/javascript" src="scripts/script_home.js"></script>-->
 <script type="text/javascript" src={% static "scripts/script_home.js"%}></script>
+
+<!--Добавление в наследующие шаблоны новых скриптов-->
+{% block scripts_bottom %}{% endblock %}
 </html>

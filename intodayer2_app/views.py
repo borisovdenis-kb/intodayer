@@ -67,7 +67,7 @@ def home_view(request):
             # выбираем из тиблицы расписания все записи, "нужные" данному юзеру
             # мы получили список, состоящий из строк расписания
             # далее генерируем расписание на неделю, в зависимости от номера и четности недели
-            table = list(Schedules.objects.filter(grp_grp_id = group, cthd_cthd_id = cathedra))
+            table = list(Schedules.objects.filter(grp_grp = group, cthd_cthd = cathedra).order_by('tms_tms'))
 
             current_week = [[], [], [], [], [], [], []]
 
@@ -80,7 +80,7 @@ def home_view(request):
                     current_week[2].append(row)
                 elif row.dfwk_dfwk.name == 'Четверг':
                     current_week[3].append(row)
-                elif row.ddfwk_dfwk.name == 'Пятница':
+                elif row.dfwk_dfwk.name == 'Пятница':
                     current_week[4].append(row)
                 elif row.dfwk_dfwk.name == 'Суббота':
                     current_week[5].append(row)
@@ -151,8 +151,7 @@ def add_schedules_view(request):
             # выбираем из тиблицы расписания все записи, "нужные" данному юзеру
             # мы получили список, состоящий из строк расписания
             # далее генерируем расписание на неделю, в зависимости от номера и четности недели
-            table = list(Schedules.objects.filter(grp_grp_id = group, cthd_cthd_id = cathedra))
-
+            table = list(Schedules.objects.filter(grp_grp = group, cthd_cthd = cathedra).order_by('tms_tms'))
             current_week = [[], [], [], [], [], [], []]
 
             for row in table:
@@ -164,7 +163,7 @@ def add_schedules_view(request):
                     current_week[2].append(row)
                 elif row.dfwk_dfwk.name == 'Четверг':
                     current_week[3].append(row)
-                elif row.ddfwk_dfwk.name == 'Пятница':
+                elif row.dfwk_dfwk.name == 'Пятница':
                     current_week[4].append(row)
                 elif row.dfwk_dfwk.name == 'Суббота':
                     current_week[5].append(row)
@@ -180,9 +179,40 @@ def add_schedules_view(request):
     if request.method == 'POST':
             print('0')
             print(request.POST)
+            new_data = dict(request.POST) # получаем новые данные от клиента
 
-            # *заносим новые данные в базу*
+            ###########################################################################
+            #                           ЗАНОСИМ ДАННЫК БАЗУ                           #
+            ###########################################################################
 
+            count_tchr_id = len(Teachers.objects.all())  # этот говно код здесь
+            count_subj_id = len(Subjects.objects.all())  # потому что в БД походу
+            count_schld_id = len(Schedules.objects.all()) # не автоинкрементные поля :(
+
+            new_teacher = Teachers(tchr_id = count_tchr_id + 1,
+                                   name_short = new_data['teacher'][0]
+            )
+            new_teacher.save()
+
+            new_subject = Subjects(subj_id = count_subj_id + 1,
+                                   name = new_data['subject'][0]
+
+            )
+            new_subject.save()
+
+            new_schld_row = Schedules(schld_id = count_schld_id + 1,
+                                      grp_grp_id = group,
+                                      cthd_cthd_id = cathedra,
+                                      dfwk_dfwk_id = new_data['parity'][0],
+                                      subj_subj_id = new_subject.subj_id,
+                                      tchr_tchr_id = new_teacher.tchr_id,
+                                      tms_tms_id = new_data['time'][0],
+                                      parity = new_data['parity'][0],
+                                      place = new_data['place'][0],
+                                      start_week = int(new_data['startweek'][0]),
+                                      end_week = int(new_data['endweek'][0])
+            )
+            new_schld_row.save()
             return HttpResponseRedirect('/add_schedules')
     else:
         return render_to_response('add_schedules.html', context)
