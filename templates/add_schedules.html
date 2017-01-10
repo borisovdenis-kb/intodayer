@@ -1,0 +1,116 @@
+{% extends "home.html" %}
+
+{% load staticfiles %}
+
+{% block title %}Add Schedules{% endblock %}
+
+<!--Добавляем новые стили-->
+{% block styles %}
+    <link rel="stylesheet" type="text/css" href={% static "css/add_schedules_style.css"%}>
+{%  endblock %}
+
+{% block content %}
+
+    <div class="page">
+        <!--панель регистрации-->
+        <div class="add_schedules">
+            <form action="" autocomplete="on" method="post" id="add_form">
+                <div class="title-sign">Add Schedules</div>
+                <span class="form-text">Добавьте новые данные в вашу таблицу</span>
+                <ul class="add_menu">
+                    <!--новые изменения-->
+                    <div class="block1">
+                        <select id="day_of_week" name="dayofweek" form="add_form">
+                            <option value="1">Понедельник</option>
+                            <option value="2">Вторник</option>
+                            <option value="3">Среда</option>
+                            <option value="4">Четверг</option>
+                            <option value="5">Пятница</option>
+                            <option value="6">Суббота</option>
+                            <option value="7">Воскресенье</option>
+                        </select>
+
+                        <select id="time" name="time" form="add_form">
+                            <option value="1">8:00</option>
+                            <option value="2">9:40</option>
+                            <option value="3">11:30</option>
+                            <option value="4">13:10</option>
+                            <option value="5">15:00</option>
+                            <option value="6">16:40</option>
+                            <option value="7">18:10</option>
+                        </select>
+
+                        <select id="parity" name="parity" form="add_form">
+                            <option value="0">По чётным</option>
+                            <option value="1">По нечётным</option>
+                        </select>
+
+
+                        <input id="range_weeks-start" type="text" placeholder="Начало" required="required" name="startweek"> -
+                        <input id="range_weeks-end" type="text" placeholder="Конец" required="required" name="endweek">
+                    </div>
+
+                    <div class="block2">
+                        <input id="subject" type="text" placeholder="Предмет" required="required" name="subject">
+                        <input id="teacher" type="text" placeholder="Перподаватель" required="required" name="teacher">
+                        <input id="cabinet" type="text" placeholder="Аудитория" required="required" name="place">
+                    </div>
+
+
+                    <!--новые изменения-->
+                </ul>
+                <span class="upgrade-text">Подтвердите изменения</span>
+                <ul class="buttons-panel">
+                    <button class="back" type="button"><a href="/">Назад</a></button>
+                    <button id="submit-add" type="submit">Добавить</button>
+                </ul>
+            </form>
+        </div>
+
+        <h3>Редактируй расписание. Одним нажатием.</h3>
+    </div>
+
+{% if table %}
+    <!--Выводим существующее рассписание-->
+    {% for day in table %}
+        {% if day %}
+            <h2>{{ row.dfwk_dfwk.name }}</h2>
+            <div class="table-container">
+                <table>
+                    <tr class="tableTop">
+                        <th>Время</th>
+                        <th>Предмет</th>
+                        <th>Аудитория</th>
+                        <th>Преподаватель</th>
+                        <th>Чет/Нечет</th>
+                        <th>С</th>
+                        <th>По</th>
+                    </tr>
+                    {% for row in day %}
+                        <tr>
+                            <td>{{ row.tms_tms }}</td>
+                            <td>{{ row.subj_subj.name }}</td>
+                            <td>{{ row.place }}</td>
+                            <td>{{ row.tchr_tchr.name_short }}</td>
+                            <td>{{ row.tchr_tchr.parity }}</td>
+                            <td>{{ row.tchr_tchr.start_week }}</td>
+                            <td>{{ row.tchr_tchr.end_week }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        {% endif %}
+    {% endfor %}
+{% else %}
+    <h1>Расписание не обнаружено. Error!!!</h1>
+    <h2>Добавьте новое</h2>
+{% endif %}
+
+
+
+{% endblock %}
+
+{% block scripts_bottom %}
+    <script type="text/javascript" src={% static "scripts/set-screen-size.js"%}></script>
+    <script type="text/javascript" src={% static "scripts/script_add_schedules.js"%}></script>
+{% endblock %}

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component name="dataSourceStorage">
-  <data-source source="LOCAL" name="Django default" product="SQLite" version="3.8.11" jdbc-version="2.1" driver-name="SQLiteJDBC" driver-version="native" uuid="141b73da-f5a9-4690-8a7d-ac24e1e95447">
+  <data-source source="LOCAL" name="Django default" product="SQLite" version="3.8.11" jdbc-version="2.1" driver-name="SQLiteJDBC" driver-version="native" uuid="5019f036-55ab-43cf-bde5-75a679a7abc5">
     <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
     <jdbc-url>jdbc:sqlite:C:\djangoProjects\intodayer\db.sqlite3</jdbc-url>
     <libraries>
@@ -58,7 +58,7 @@
       <exported-key name="1" table="auth_user_groups" schema="" catalog="" columns="user_id"/>
       <exported-key name="2" table="auth_user_user_permissions" schema="" catalog="" columns="user_id"/>
       <exported-key name="3" table="django_admin_log" schema="" catalog="" columns="user_id"/>
-      <exported-key name="4" table="intodayer_app_myuser" schema="" catalog="" columns="user_id"/>
+      <exported-key name="4" table="intodayer2_app_myuser" schema="" catalog="" columns="user_id"/>
     </table>
     <table name="auth_user_groups" schema="" catalog="" type="TABLE">
       <column name="id" sqlType="INTEGER" length="2000000000" precision="10" nullable="false" jdbcType="4"/>
@@ -120,57 +120,117 @@
       <primary-key columns="session_key"/>
       <index name="django_session_de54fa62" unique="true" columns="expire_date"/>
     </table>
-    <table name="intodayer_app_cathedras" schema="" catalog="" type="TABLE">
+    <table name="intodayer2_app_cathedras" schema="" catalog="" type="TABLE">
       <column name="id" sqlType="INTEGER" length="2000000000" precision="10" nullable="false" jdbcType="4"/>
       <column name="name" sqlType="VARCHAR(255)" length="2000000000" precision="10" nullable="false" jdbcType="12"/>
+      <column name="fclt_id_id" sqlType="INTEGER" length="2000000000" precision="10" nullable="false" jdbcType="4"/>
       <primary-key columns="id"/>
-      <exported-key name="1" table="intodayer_app_students" schema="" catalog="" columns="cthd_id_id"/>
+      <foreign-key name="1" columns="fclt_id_id" ref-table="intodayer2_app_faculties" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
+      <exported-key name="1" table="intodayer2_app_schedules" schema="" catalog="" columns="cthd_id_id"/>
+      <exported-key name="2" table="intodayer2_app_students" schema="" catalog="" columns="cthd_id_id"/>
+      <index name="intodayer2_app_cathedras_01df18c0" unique="true" columns="fclt_id_id"/>
     </table>
-    <table name="intodayer_app_faculties" schema="" catalog="" type="TABLE">
+    <table name="intodayer2_app_day_of_weeks" schema="" catalog="" type="TABLE">
+      <column name="id" sqlType="INTEGER" length="2000000000" precision="10" nullable="false" jdbcType="4"/>
+      <column name="_def" sqlType="VARCHAR(50)" length="2000000000" precision="10" nullable="false" jdbcType="12"/>
+      <primary-key columns="id"/>
+      <exported-key name="1" table="intodayer2_app_schedules" schema="" catalog="" columns="dfwk_id_id"/>
+    </table>
+    <table name="intodayer2_app_faculties" schema="" catalog="" type="TABLE">
       <column name="id" sqlType="INTEGER" length="2000000000" precision="10" nullable="false" jdbcType="4"/>
       <column name="name" sqlType="VARCHAR(255)" length="2000000000" precision="10" nullable="false" jdbcType="12"/>
+      <column name="unvr_id_id" sqlType="INTEGER" length="2000000000" precision="10" nullable="false" jdbcType="4"/>
       <primary-key columns="id"/>
-      <exported-key name="1" table="intodayer_app_students" schema="" catalog="" columns="fclt_id_id"/>
+      <foreign-key name="1" columns="unvr_id_id" ref-table="intodayer2_app_universities" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
+      <exported-key name="1" table="intodayer2_app_cathedras" schema="" catalog="" columns="fclt_id_id"/>
+      <exported-key name="2" table="intodayer2_app_groups" schema="" catalog="" columns="fclt_id_id"/>
+      <exported-key name="3" table="intodayer2_app_students" schema="" catalog="" columns="fclt_id_id"/>
+      <index name="intodayer2_app_faculties_39d89b72" unique="true" columns="unvr_id_id"/>
     </table>
-    <table name="intodayer_app_groups" schema="" catalog="" type="TABLE">
+    <table name="intodayer2_app_groups" schema="" catalog="" type="TABLE">
       <column name="id" sqlType="INTEGER" length="2000000000" precision="10" nullable="false" jdbcType="4"/>
       <column name="name" sqlType="VARCHAR(255)" length="2000000000" precision="10" nullable="false" jdbcType="12"/>
+      <column name="full_def" sqlType="VARCHAR(255)" length="2000000000" precision="10" nullable="false" jdbcType="12"/>
+      <column name="fclt_id_id" sqlType="INTEGER" length="2000000000" precision="10" nullable="false" jdbcType="4"/>
       <primary-key columns="id"/>
-      <exported-key name="1" table="intodayer_app_students" schema="" catalog="" columns="grp_id_id"/>
+      <foreign-key name="1" columns="fclt_id_id" ref-table="intodayer2_app_faculties" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
+      <exported-key name="1" table="intodayer2_app_schedules" schema="" catalog="" columns="grp_id_id"/>
+      <exported-key name="2" table="intodayer2_app_students" schema="" catalog="" columns="grp_id_id"/>
+      <index name="intodayer2_app_groups_01df18c0" unique="true" columns="fclt_id_id"/>
     </table>
-    <table name="intodayer_app_myuser" schema="" catalog="" type="TABLE">
+    <table name="intodayer2_app_myuser" schema="" catalog="" type="TABLE">
       <column name="id" sqlType="INTEGER" length="2000000000" precision="10" nullable="false" jdbcType="4"/>
       <column name="phone" sqlType="VARCHAR(12)" length="2000000000" precision="10" nullable="false" jdbcType="12"/>
       <column name="student_id_id" sqlType="INTEGER" length="2000000000" precision="10" nullable="false" jdbcType="4"/>
       <column name="user_id" sqlType="INTEGER" length="2000000000" precision="10" nullable="false" jdbcType="4"/>
       <primary-key columns="id"/>
       <foreign-key name="1" columns="user_id" ref-table="auth_user" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
-      <foreign-key name="2" columns="student_id_id" ref-table="intodayer_app_students" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
-      <index name="intodayer_app_myuser_e462bf81" unique="true" columns="student_id_id"/>
+      <foreign-key name="2" columns="student_id_id" ref-table="intodayer2_app_students" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
+      <index name="intodayer2_app_myuser_e462bf81" unique="true" columns="student_id_id"/>
     </table>
-    <table name="intodayer_app_students" schema="" catalog="" type="TABLE">
+    <table name="intodayer2_app_schedules" schema="" catalog="" type="TABLE">
       <column name="id" sqlType="INTEGER" length="2000000000" precision="10" nullable="false" jdbcType="4"/>
-      <column name="admission_year" sqlType="DATE" length="2000000000" precision="10" nullable="false" jdbcType="12"/>
+      <column name="parity" sqlType="DECIMAL" length="2000000000" precision="10" nullable="false" jdbcType="6"/>
+      <column name="time_of" sqlType="TIME" length="2000000000" precision="10" nullable="false" jdbcType="12"/>
+      <column name="place" sqlType="VARCHAR(50)" length="2000000000" precision="10" nullable="false" jdbcType="12"/>
+      <column name="start_week" sqlType="VARCHAR(255)" length="2000000000" precision="10" nullable="false" jdbcType="12"/>
+      <column name="end_week" sqlType="VARCHAR(255)" length="2000000000" precision="10" nullable="false" jdbcType="12"/>
+      <column name="priority_YN" sqlType="VARCHAR(1)" length="2000000000" precision="10" nullable="false" jdbcType="12"/>
+      <column name="comment" sqlType="VARCHAR(255)" length="2000000000" precision="10" nullable="false" jdbcType="12"/>
+      <column name="cthd_id_id" sqlType="INTEGER" length="2000000000" precision="10" nullable="false" jdbcType="4"/>
+      <column name="dfwk_id_id" sqlType="INTEGER" length="2000000000" precision="10" nullable="false" jdbcType="4"/>
+      <column name="grp_id_id" sqlType="INTEGER" length="2000000000" precision="10" nullable="false" jdbcType="4"/>
+      <column name="subj_id_id" sqlType="INTEGER" length="2000000000" precision="10" nullable="false" jdbcType="4"/>
+      <column name="tchr_id_id" sqlType="INTEGER" length="2000000000" precision="10" nullable="false" jdbcType="4"/>
+      <primary-key columns="id"/>
+      <foreign-key name="1" columns="tchr_id_id" ref-table="intodayer2_app_teachers" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
+      <foreign-key name="2" columns="subj_id_id" ref-table="intodayer2_app_subjects" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
+      <foreign-key name="3" columns="grp_id_id" ref-table="intodayer2_app_groups" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
+      <foreign-key name="4" columns="dfwk_id_id" ref-table="intodayer2_app_day_of_weeks" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
+      <foreign-key name="5" columns="cthd_id_id" ref-table="intodayer2_app_cathedras" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
+      <index name="intodayer2_app_schedules_e4733c9c" unique="true" columns="tchr_id_id"/>
+      <index name="intodayer2_app_schedules_5e0c940f" unique="true" columns="subj_id_id"/>
+      <index name="intodayer2_app_schedules_0b2841ca" unique="true" columns="grp_id_id"/>
+      <index name="intodayer2_app_schedules_24b193e9" unique="true" columns="dfwk_id_id"/>
+      <index name="intodayer2_app_schedules_2c53e4ff" unique="true" columns="cthd_id_id"/>
+    </table>
+    <table name="intodayer2_app_students" schema="" catalog="" type="TABLE">
+      <column name="id" sqlType="INTEGER" length="2000000000" precision="10" nullable="false" jdbcType="4"/>
+      <column name="admission_year" sqlType="VARCHAR(4)" length="2000000000" precision="10" nullable="false" jdbcType="12"/>
       <column name="cthd_id_id" sqlType="INTEGER" length="2000000000" precision="10" nullable="false" jdbcType="4"/>
       <column name="fclt_id_id" sqlType="INTEGER" length="2000000000" precision="10" nullable="false" jdbcType="4"/>
       <column name="grp_id_id" sqlType="INTEGER" length="2000000000" precision="10" nullable="false" jdbcType="4"/>
       <column name="unvr_id_id" sqlType="INTEGER" length="2000000000" precision="10" nullable="false" jdbcType="4"/>
       <primary-key columns="id"/>
-      <foreign-key name="1" columns="unvr_id_id" ref-table="intodayer_app_universities" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
-      <foreign-key name="2" columns="grp_id_id" ref-table="intodayer_app_groups" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
-      <foreign-key name="3" columns="fclt_id_id" ref-table="intodayer_app_faculties" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
-      <foreign-key name="4" columns="cthd_id_id" ref-table="intodayer_app_cathedras" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
-      <exported-key name="1" table="intodayer_app_myuser" schema="" catalog="" columns="student_id_id"/>
-      <index name="intodayer_app_students_39d89b72" unique="true" columns="unvr_id_id"/>
-      <index name="intodayer_app_students_0b2841ca" unique="true" columns="grp_id_id"/>
-      <index name="intodayer_app_students_01df18c0" unique="true" columns="fclt_id_id"/>
-      <index name="intodayer_app_students_2c53e4ff" unique="true" columns="cthd_id_id"/>
+      <foreign-key name="1" columns="unvr_id_id" ref-table="intodayer2_app_universities" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
+      <foreign-key name="2" columns="grp_id_id" ref-table="intodayer2_app_groups" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
+      <foreign-key name="3" columns="fclt_id_id" ref-table="intodayer2_app_faculties" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
+      <foreign-key name="4" columns="cthd_id_id" ref-table="intodayer2_app_cathedras" ref-schema="" ref-catalog="" ref-columns="id" update-rule="3" delete-rule="3" deferrability="1"/>
+      <exported-key name="1" table="intodayer2_app_myuser" schema="" catalog="" columns="student_id_id"/>
+      <index name="intodayer2_app_students_39d89b72" unique="true" columns="unvr_id_id"/>
+      <index name="intodayer2_app_students_0b2841ca" unique="true" columns="grp_id_id"/>
+      <index name="intodayer2_app_students_01df18c0" unique="true" columns="fclt_id_id"/>
+      <index name="intodayer2_app_students_2c53e4ff" unique="true" columns="cthd_id_id"/>
     </table>
-    <table name="intodayer_app_universities" schema="" catalog="" type="TABLE">
+    <table name="intodayer2_app_subjects" schema="" catalog="" type="TABLE">
+      <column name="id" sqlType="INTEGER" length="2000000000" precision="10" nullable="false" jdbcType="4"/>
+      <column name="name" sqlType="VARCHAR(100)" length="2000000000" precision="10" nullable="false" jdbcType="12"/>
+      <primary-key columns="id"/>
+      <exported-key name="1" table="intodayer2_app_schedules" schema="" catalog="" columns="subj_id_id"/>
+    </table>
+    <table name="intodayer2_app_teachers" schema="" catalog="" type="TABLE">
+      <column name="id" sqlType="INTEGER" length="2000000000" precision="10" nullable="false" jdbcType="4"/>
+      <column name="name_short" sqlType="VARCHAR(255)" length="2000000000" precision="10" nullable="false" jdbcType="12"/>
+      <column name="name_full" sqlType="VARCHAR(255)" length="2000000000" precision="10" nullable="false" jdbcType="12"/>
+      <primary-key columns="id"/>
+      <exported-key name="1" table="intodayer2_app_schedules" schema="" catalog="" columns="tchr_id_id"/>
+    </table>
+    <table name="intodayer2_app_universities" schema="" catalog="" type="TABLE">
       <column name="id" sqlType="INTEGER" length="2000000000" precision="10" nullable="false" jdbcType="4"/>
       <column name="name" sqlType="VARCHAR(255)" length="2000000000" precision="10" nullable="false" jdbcType="12"/>
       <primary-key columns="id"/>
-      <exported-key name="1" table="intodayer_app_students" schema="" catalog="" columns="unvr_id_id"/>
+      <exported-key name="1" table="intodayer2_app_faculties" schema="" catalog="" columns="unvr_id_id"/>
+      <exported-key name="2" table="intodayer2_app_students" schema="" catalog="" columns="unvr_id_id"/>
     </table>
     <table name="sqlite_sequence" schema="" catalog="" type="TABLE">
       <column name="name" sqlType="" length="2000000000" precision="10" nullable="true" jdbcType="12"/>

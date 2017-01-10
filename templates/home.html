@@ -1,91 +1,114 @@
 {% load staticfiles %}
+<!DOCTYPE HTML>
 <html>
-
 <head>
-    <title>Three pachans Web Site</title>
+    <title>{% block title %}Three pachans Web Site{% endblock %}</title>
     <meta http-equiv="Content-type" content="text/html" charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href={% static 'css/home_style.css' %}>
+<!--
+    <link rel="stylesheet" type="text/css" href="style/home_content.css">
+    <link rel="stylesheet" type="text/css" href="style/home_top.css">
+    <link rel="stylesheet" type="text/css" href="style/fonts.css">
+    <script type="text/javascript" src="library/jquery-3.1.1.js"></script>
+-->
+    <link rel="stylesheet" type="text/css" href={% static "css/home_content.css"%}>
+    <link rel="stylesheet" type="text/css" href={% static "css/home_top.css"%}>
+    <link rel="stylesheet" type="text/css" href={% static "css/fonts.css"%}>
+    <!--Добавление в наследующие шаблоны новых стилей-->
+    {% block styles %}{%  endblock %}
+    <script type="text/javascript" src={% static "library/jquery-3.1.1.js" %}></script>
+    <!--Добавление в наследующие шаблоны новых скриптов-->
+    {% block scripts_top %}{% endblock %}
 </head>
 
 <body>
-    <div class="page">
-        <div class="top">
-            <ul class="flex-container row">
-                <li class="flex-logo">IntoDayer</li>
-                <div class="flex-avatar"></div>
-                <button class="flex-profile">Username</button>
-            </ul>
-        </div>
-        <div class="menu">
-            <ul>
-            <!-- Не переименовывать классы и имена страниц! -->
-                <li class="home"><a href="">Today</a></li>
-                <li class="week"><a href="week.html">Неделя</a></li>
-                <li class="table"><a href="table.html">Расписание</a></li>
-                <li class="events"><a href="events.html">События</a></li>
-                <li class="group"><a href="group.html">Моя группа</a></li>
-                <li class="about"><a href="about.html">IntoDayer</a></li>
-            </ul>
-        </div>
-        <div class="content">
-            <div class="content-top">
-                <div class=avatar-block>
-                    <div class="avatar"></div>
-                </div>
+<div class="top-block">
+    <div class="top">
+        <div class="logo"><a href="/home">IntoDayer</a></div>
+        <div class="droplink">
+            <div class="username"><a href="#">{{ username }}</a></div>
+            <div class="up-arrow"></div>
+            <div class="mini-ava"></div>
+            <div class="dropmenu">
+                <ul>
+                    <div class="devide-line"></div>
+                    <li><a href="/add_schedules">Add Schedules</a></li>
+                    <li><a href="/profile_settings">My Profile</a></li>
+                    <li><a href="/logout">Logout</a></li>
+                    <div class="devide-line"></div>
+                </ul>
             </div>
-            
-            <div class="days-container">
-                <table>
-				  <tr class="tableTop">
-					<th>Время</th>
-					<th>Пердмет</th>
-					<th>Аудитория</th>
-					<th>Перподаватель</th>
-				  </tr>
-				  <tr>
-					<td>8.00</td>
-					<td>Методы</td>
-					<td>112 ф</td>
-					<td>Линьков</td>
-				  </tr>
-				  <tr>
-					<td>9.40</td>
-					<td>Анализ</td>
-					<td>112 ф</td>
-					<td>Линьков</td>
-				  </tr>
-				  <tr>
-					<td>11.30</td>
-					<td>Методы Анализа</td>
-					<td>112 ф</td>
-					<td>Линьков</td>
-				  </tr>
-				  <tr>
-					<td>13.10</td>
-					<td>Анализ методов</td>
-					<td>112 ф</td>
-					<td>Линьков</td>
-				  </tr>
-				  <tr>
-					<td>15.00</td>
-					<td>Анализирование инцедентов</td>
-					<td>112 ф</td>
-					<td>Линьков</td>
-				  </tr>
-				  <tr>
-					<td>16.40</td>
-					<td>Модели угроз анализам и места, в которых они обитают</td>
-					<td>112 ф</td>
-					<td>Линьков</td>
-				  </tr>
-				</table>
-            </div>
-            <a href="/logout/">Log Out</a>
         </div>
-                    <div class="footer">ThreePachanZ technologies copyright 2016
-            </div>
     </div>
-</body>
-<script type="text/javascript" src="../static/scripts/script_1.js" ></script>
+</div>
+<div class="top-menu">
+    <ul id="menu">
+        <!-- Не переименовывать классы и имена страниц! -->
+        <li id="home"><a href="home.html">Сегодня</a></li>
+        <li id="table"><a href="home.html">Расписание</a></li>
+        <li id="events"><a href="home.html">События</a></li>
+        <li id="group"><a href="home.html">Моя группа</a></li>
+        <li id="about"><a href="home.html">О сервисе</a></li>
+    </ul>
+</div>
 
+
+<div class="page">
+    <div class="content">
+        {% block content %}
+        <div class="content-top">
+            <div class="avatar-block">
+                <div class="avatar"></div>
+            </div>
+            <div class="title-content">
+                <h1>Копьютерная безопасность 2012</h1>
+                <h2>Тыр-тыр: череда-черёд</h2>
+            </div>
+        </div>
+        <ul class="week">
+            <li class="days"><a href="home.html">Пн.</a></li>
+            <li class="days"><a href="home.html">Вт.</a></li>
+            <li class="days"><a href="home.html">Ср.</a></li>
+            <li class="days"><a href="home.html">Чт.</a></li>
+            <li class="days"><a href="home.html">Пт.</a></li>
+            <li class="days"><a href="home.html">Сб.</a></li>
+            <li class="days"><a href="home.html">Вс.</a></li>
+            <li class="days"><a href="home.html">Неделя</a></li>
+            <div class="week-name">Неделя 2 из 18 (08.12.16 - 15.12.16)</div>
+        </ul>
+        <!--Генерация рассписания для данного пользователя-->
+        {% if table %}
+            {% for day in table %}
+                {% if day %}
+                    <p>{{ day.0.dfwk_dfwk.name }}</p>
+                    <div class="table-container">
+                        <table>
+                            <tr class="tableTop">
+                                <th>Время</th>
+                                <th>Предмет</th>
+                                <th>Аудитория</th>
+                                <th>Преподаватель</th>
+                            </tr>
+                            {% for row in day %}
+                                <tr>
+                                    <td>{{ row.tms_tms }}</td>
+                                    <td>{{ row.subj_subj.name }}</td>
+                                    <td>{{ row.place }}</td>
+                                    <td>{{ row.tchr_tchr.name_short }}</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endblock %}
+</div>
+
+</body>
+<!--<script type="text/javascript" src="scripts/script_home.js"></script>-->
+<script type="text/javascript" src={% static "scripts/script_home.js"%}></script>
+
+<!--Добавление в наследующие шаблоны новых скриптов-->
+{% block scripts_bottom %}{% endblock %}
 </html>

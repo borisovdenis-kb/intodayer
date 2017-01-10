@@ -1,0 +1,210 @@
+BEGIN;
+--
+-- Create model Cathedras
+--
+CREATE TABLE "intodayer2_app_cathedras" ("id" integer NOT NULL PRIMARY KEY AUTOI
+NCREMENT, "name" varchar(255) NOT NULL);
+--
+-- Create model Day_of_weeks
+--
+CREATE TABLE "intodayer2_app_day_of_weeks" ("id" integer NOT NULL PRIMARY KEY AU
+TOINCREMENT, "_def" varchar(50) NOT NULL);
+--
+-- Create model Faculties
+--
+CREATE TABLE "intodayer2_app_faculties" ("id" integer NOT NULL PRIMARY KEY AUTOI
+NCREMENT, "name" varchar(255) NOT NULL);
+--
+-- Create model Groups
+--
+CREATE TABLE "intodayer2_app_groups" ("id" integer NOT NULL PRIMARY KEY AUTOINCR
+EMENT, "name" varchar(255) NOT NULL, "full_def" varchar(255) NOT NULL, "fclt_id_
+id" integer NOT NULL REFERENCES "intodayer2_app_faculties" ("id"));
+--
+-- Create model MyUser
+--
+CREATE TABLE "intodayer2_app_myuser" ("id" integer NOT NULL PRIMARY KEY AUTOINCR
+EMENT, "phone" varchar(12) NOT NULL);
+--
+-- Create model SCHEDULES
+--
+CREATE TABLE "intodayer2_app_schedules" ("id" integer NOT NULL PRIMARY KEY AUTOI
+NCREMENT, "parity" decimal NOT NULL, "time_of" time NOT NULL, "place" varchar(50
+) NOT NULL, "start_week" varchar(255) NOT NULL, "end_week" varchar(255) NOT NULL
+, "priority_YN" varchar(1) NOT NULL, "comment" varchar(255) NOT NULL, "cthd_id_i
+d" integer NOT NULL REFERENCES "intodayer2_app_cathedras" ("id"), "dfwk_id_id" i
+nteger NOT NULL REFERENCES "intodayer2_app_day_of_weeks" ("id"), "grp_id_id" int
+eger NOT NULL REFERENCES "intodayer2_app_groups" ("id"));
+--
+-- Create model Students
+--
+CREATE TABLE "intodayer2_app_students" ("id" integer NOT NULL PRIMARY KEY AUTOIN
+CREMENT, "admission_year" varchar(4) NOT NULL, "cthd_id_id" integer NOT NULL REF
+ERENCES "intodayer2_app_cathedras" ("id"), "fclt_id_id" integer NOT NULL REFEREN
+CES "intodayer2_app_faculties" ("id"), "grp_id_id" integer NOT NULL REFERENCES "
+intodayer2_app_groups" ("id"));
+--
+-- Create model Subjects
+--
+CREATE TABLE "intodayer2_app_subjects" ("id" integer NOT NULL PRIMARY KEY AUTOIN
+CREMENT, "name" varchar(50) NOT NULL);
+--
+-- Create model Teachers
+--
+CREATE TABLE "intodayer2_app_teachers" ("id" integer NOT NULL PRIMARY KEY AUTOIN
+CREMENT, "name_short" varchar(255) NOT NULL, "name_full" varchar(255) NOT NULL);
+
+--
+-- Create model Universities
+--
+CREATE TABLE "intodayer2_app_universities" ("id" integer NOT NULL PRIMARY KEY AU
+TOINCREMENT, "name" varchar(255) NOT NULL);
+--
+-- Add field unvr_id to students
+--
+ALTER TABLE "intodayer2_app_students" RENAME TO "intodayer2_app_students__old";
+CREATE TABLE "intodayer2_app_students" ("id" integer NOT NULL PRIMARY KEY AUTOIN
+CREMENT, "admission_year" varchar(4) NOT NULL, "cthd_id_id" integer NOT NULL REF
+ERENCES "intodayer2_app_cathedras" ("id"), "fclt_id_id" integer NOT NULL REFEREN
+CES "intodayer2_app_faculties" ("id"), "grp_id_id" integer NOT NULL REFERENCES "
+intodayer2_app_groups" ("id"), "unvr_id_id" integer NOT NULL REFERENCES "intoday
+er2_app_universities" ("id"));
+INSERT INTO "intodayer2_app_students" ("unvr_id_id", "grp_id_id", "cthd_id_id",
+"admission_year", "fclt_id_id", "id") SELECT NULL, "grp_id_id", "cthd_id_id", "a
+dmission_year", "fclt_id_id", "id" FROM "intodayer2_app_students__old";
+DROP TABLE "intodayer2_app_students__old";
+CREATE INDEX "intodayer2_app_groups_01df18c0" ON "intodayer2_app_groups" ("fclt_
+id_id");
+CREATE INDEX "intodayer2_app_schedules_2c53e4ff" ON "intodayer2_app_schedules" (
+"cthd_id_id");
+CREATE INDEX "intodayer2_app_schedules_24b193e9" ON "intodayer2_app_schedules" (
+"dfwk_id_id");
+CREATE INDEX "intodayer2_app_schedules_0b2841ca" ON "intodayer2_app_schedules" (
+"grp_id_id");
+CREATE INDEX "intodayer2_app_students_2c53e4ff" ON "intodayer2_app_students" ("c
+thd_id_id");
+CREATE INDEX "intodayer2_app_students_01df18c0" ON "intodayer2_app_students" ("f
+clt_id_id");
+CREATE INDEX "intodayer2_app_students_0b2841ca" ON "intodayer2_app_students" ("g
+rp_id_id");
+CREATE INDEX "intodayer2_app_students_39d89b72" ON "intodayer2_app_students" ("u
+nvr_id_id");
+--
+-- Add field subj_id to schedules
+--
+ALTER TABLE "intodayer2_app_schedules" RENAME TO "intodayer2_app_schedules__old"
+;
+CREATE TABLE "intodayer2_app_schedules" ("id" integer NOT NULL PRIMARY KEY AUTOI
+NCREMENT, "parity" decimal NOT NULL, "time_of" time NOT NULL, "place" varchar(50
+) NOT NULL, "start_week" varchar(255) NOT NULL, "end_week" varchar(255) NOT NULL
+, "priority_YN" varchar(1) NOT NULL, "comment" varchar(255) NOT NULL, "cthd_id_i
+d" integer NOT NULL REFERENCES "intodayer2_app_cathedras" ("id"), "dfwk_id_id" i
+nteger NOT NULL REFERENCES "intodayer2_app_day_of_weeks" ("id"), "grp_id_id" int
+eger NOT NULL REFERENCES "intodayer2_app_groups" ("id"), "subj_id_id" integer NO
+T NULL REFERENCES "intodayer2_app_subjects" ("id"));
+INSERT INTO "intodayer2_app_schedules" ("parity", "subj_id_id", "comment", "dfwk
+_id_id", "place", "end_week", "grp_id_id", "cthd_id_id", "start_week", "time_of"
+, "priority_YN", "id") SELECT "parity", NULL, "comment", "dfwk_id_id", "place",
+"end_week", "grp_id_id", "cthd_id_id", "start_week", "time_of", "priority_YN", "
+id" FROM "intodayer2_app_schedules__old";
+DROP TABLE "intodayer2_app_schedules__old";
+CREATE INDEX "intodayer2_app_schedules_2c53e4ff" ON "intodayer2_app_schedules" (
+"cthd_id_id");
+CREATE INDEX "intodayer2_app_schedules_24b193e9" ON "intodayer2_app_schedules" (
+"dfwk_id_id");
+CREATE INDEX "intodayer2_app_schedules_0b2841ca" ON "intodayer2_app_schedules" (
+"grp_id_id");
+CREATE INDEX "intodayer2_app_schedules_5e0c940f" ON "intodayer2_app_schedules" (
+"subj_id_id");
+--
+-- Add field tchr_id to schedules
+--
+ALTER TABLE "intodayer2_app_schedules" RENAME TO "intodayer2_app_schedules__old"
+;
+CREATE TABLE "intodayer2_app_schedules" ("id" integer NOT NULL PRIMARY KEY AUTOI
+NCREMENT, "parity" decimal NOT NULL, "time_of" time NOT NULL, "place" varchar(50
+) NOT NULL, "start_week" varchar(255) NOT NULL, "end_week" varchar(255) NOT NULL
+, "priority_YN" varchar(1) NOT NULL, "comment" varchar(255) NOT NULL, "cthd_id_i
+d" integer NOT NULL REFERENCES "intodayer2_app_cathedras" ("id"), "dfwk_id_id" i
+nteger NOT NULL REFERENCES "intodayer2_app_day_of_weeks" ("id"), "grp_id_id" int
+eger NOT NULL REFERENCES "intodayer2_app_groups" ("id"), "subj_id_id" integer NO
+T NULL REFERENCES "intodayer2_app_subjects" ("id"), "tchr_id_id" integer NOT NUL
+L REFERENCES "intodayer2_app_teachers" ("id"));
+INSERT INTO "intodayer2_app_schedules" ("parity", "subj_id_id", "comment", "dfwk
+_id_id", "tchr_id_id", "place", "end_week", "grp_id_id", "cthd_id_id", "start_we
+ek", "time_of", "priority_YN", "id") SELECT "parity", "subj_id_id", "comment", "
+dfwk_id_id", NULL, "place", "end_week", "grp_id_id", "cthd_id_id", "start_week",
+ "time_of", "priority_YN", "id" FROM "intodayer2_app_schedules__old";
+DROP TABLE "intodayer2_app_schedules__old";
+CREATE INDEX "intodayer2_app_schedules_2c53e4ff" ON "intodayer2_app_schedules" (
+"cthd_id_id");
+CREATE INDEX "intodayer2_app_schedules_24b193e9" ON "intodayer2_app_schedules" (
+"dfwk_id_id");
+CREATE INDEX "intodayer2_app_schedules_0b2841ca" ON "intodayer2_app_schedules" (
+"grp_id_id");
+CREATE INDEX "intodayer2_app_schedules_5e0c940f" ON "intodayer2_app_schedules" (
+"subj_id_id");
+CREATE INDEX "intodayer2_app_schedules_e4733c9c" ON "intodayer2_app_schedules" (
+"tchr_id_id");
+--
+-- Add field student_id to myuser
+--
+ALTER TABLE "intodayer2_app_myuser" RENAME TO "intodayer2_app_myuser__old";
+CREATE TABLE "intodayer2_app_myuser" ("id" integer NOT NULL PRIMARY KEY AUTOINCR
+EMENT, "phone" varchar(12) NOT NULL, "student_id_id" integer NOT NULL REFERENCES
+ "intodayer2_app_students" ("id"));
+INSERT INTO "intodayer2_app_myuser" ("phone", "student_id_id", "id") SELECT "pho
+ne", NULL, "id" FROM "intodayer2_app_myuser__old";
+DROP TABLE "intodayer2_app_myuser__old";
+CREATE INDEX "intodayer2_app_myuser_e462bf81" ON "intodayer2_app_myuser" ("stude
+nt_id_id");
+--
+-- Add field user to myuser
+--
+ALTER TABLE "intodayer2_app_myuser" RENAME TO "intodayer2_app_myuser__old";
+CREATE TABLE "intodayer2_app_myuser" ("id" integer NOT NULL PRIMARY KEY AUTOINCR
+EMENT, "phone" varchar(12) NOT NULL, "student_id_id" integer NOT NULL REFERENCES
+ "intodayer2_app_students" ("id"), "user_id" integer NOT NULL UNIQUE REFERENCES
+"auth_user" ("id"));
+INSERT INTO "intodayer2_app_myuser" ("user_id", "phone", "student_id_id", "id")
+SELECT NULL, "phone", "student_id_id", "id" FROM "intodayer2_app_myuser__old";
+DROP TABLE "intodayer2_app_myuser__old";
+CREATE INDEX "intodayer2_app_myuser_e462bf81" ON "intodayer2_app_myuser" ("stude
+nt_id_id");
+--
+-- Add field unvr_id to faculties
+--
+ALTER TABLE "intodayer2_app_faculties" RENAME TO "intodayer2_app_faculties__old"
+;
+CREATE TABLE "intodayer2_app_faculties" ("id" integer NOT NULL PRIMARY KEY AUTOI
+NCREMENT, "name" varchar(255) NOT NULL, "unvr_id_id" integer NOT NULL REFERENCES
+ "intodayer2_app_universities" ("id"));
+INSERT INTO "intodayer2_app_faculties" ("unvr_id_id", "name", "id") SELECT NULL,
+ "name", "id" FROM "intodayer2_app_faculties__old";
+DROP TABLE "intodayer2_app_faculties__old";
+CREATE INDEX "intodayer2_app_faculties_39d89b72" ON "intodayer2_app_faculties" (
+"unvr_id_id");
+--
+-- Add field fclt_id to cathedras
+--
+ALTER TABLE "intodayer2_app_cathedras" RENAME TO "intodayer2_app_cathedras__old"
+;
+CREATE TABLE "intodayer2_app_cathedras" ("id" integer NOT NULL PRIMARY KEY AUTOI
+NCREMENT, "name" varchar(255) NOT NULL, "fclt_id_id" integer NOT NULL REFERENCES
+ "intodayer2_app_faculties" ("id"));
+INSERT INTO "intodayer2_app_cathedras" ("name", "fclt_id_id", "id") SELECT "name
+", NULL, "id" FROM "intodayer2_app_cathedras__old";
+DROP TABLE "intodayer2_app_cathedras__old";
+CREATE INDEX "intodayer2_app_cathedras_01df18c0" ON "intodayer2_app_cathedras" (
+"fclt_id_id");
+COMMIT;
+-----------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------
+ALTER TABLE "intodayer2_app_subjects" RENAME TO "intodayer2_app_subjects__old";
+CREATE TABLE "intodayer2_app_subjects" ("id" integer NOT NULL PRIMARY KEY AUTOIN
+CREMENT, "name" varchar(100) NOT NULL);
+INSERT INTO "intodayer2_app_subjects" ("name", "id") SELECT "name", "id" FROM "i
+ntodayer2_app_subjects__old";
+DROP TABLE "intodayer2_app_subjects__old";
+COMMIT;

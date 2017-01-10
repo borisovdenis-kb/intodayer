@@ -1,0 +1,88 @@
+{% load staticfiles %}
+<html>
+<head>
+    <title>Three pachans Web Site</title>
+    <meta http-equiv="Content-type" content="text/html" charset="UTF-8">
+<!--
+    <link rel="stylesheet" type="text/css" href="../static/css/fonts.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/general_style.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/welcome-auth-reg_style.css">
+    <script type="text/javascript" src="../test/library/jquery-3.1.1.js"></script>
+    <script type="text/javascript" src="../test/library/jquery.animate-colors.js"></script>
+-->
+    <link rel="stylesheet" type="text/css" href={% static "css/fonts.css"%}>
+    <link rel="stylesheet" type="text/css" href={% static "css/general_style.css"%}>
+    <link rel="stylesheet" type="text/css" href={% static "css/welcome-auth-reg_style.css"%}>
+    <script type="text/javascript" src={% static "library/jquery-3.1.1.js"%}></script>
+    <script type="text/javascript" src={% static "library/jquery.animate-colors.js"%}></script>
+
+</head>
+<body>
+<div class="top-block">
+    <div class="top">
+        <div class="logo"><a href="/">IntoDayer</a></div>
+        <div id="sing_up-top"><a href="/registration">Sign up</a></div>
+        <div id="login-top"><a href="/login">Log In</a></div>
+    </div>
+</div>
+
+</body>
+
+<div class="page">
+    <!--панель регистрации-->
+    <form action="" method="post">
+        <div class="title-sign">Sing Up to Intodayer</div>
+        {{ form.as_p }}
+        <input type="submit" value="create an account">
+    </form>
+    <!--
+    <div class="reg">
+        <form action="" autocomplete="on" methon="post">
+            <ul>
+                <div class="title-sign">Sing Up to Intodayer</div>
+                <li>
+                    <span class="form-text">Пожалуйте, заполните все обязательные поля *</span>
+                    <input id="firstname" type="text" placeholder="Имя" required="required">
+                </li>
+                <li>
+                    <input id="family" type="text" placeholder="Фамилия" required="required">
+                </li>
+                <li>
+                    <span class="form-text">Придумайте хороший пароль от 8 символов</span>
+                    <input id="new_pass" type="password" placeholder="Пароль" required="required">
+                    <input id="re_pass" type="password" placeholder="Повторите пароль" required="required">
+                </li>
+                <li class="outline-checkbox">
+                    <div class="check-content">
+                        <input id="get-sms_checkbox" type="checkbox">
+                        <label for="get-sms_checkbox"></label>
+                        <label for="get-sms_checkbox"><span></span>Хочу получать смс рассылку об изменении в расписании</label>
+
+                    </div>
+                    <div class="phone-content">
+                        <input id="phone" type="text" placeholder="Номер телефона" required="required">
+                    </div>
+                </li>
+                <li>
+                    <span class="form-text">Нажимая на кнопку "Регистрация" вы соглашаетесь с политикой<br>
+                            использования сервиса "Intodayer".</span>
+                    <ul class="buttons-panel">
+                            <button class="back" type="button"><a href="/">Назад</a></button>
+                            <button id="submit-reg" type="submit">Регистрация</button>
+                    </ul>
+                </li>
+            </ul>
+        </form>
+    </div>
+    -->
+    <h3>Стать участником Intodayer. Получай удобные уведомления. Будь в курсе событий.</h3>
+
+</div>
+<!--
+<script type="text/javascript" src="../static/scripts/set-screen-size.js"></script>
+<script type="text/javascript" src="../static/scripts/script_reg.js"></script>
+-->
+<script type="text/javascript" src={%static "scripts/set-screen-size.js"%}></script>
+<script type="text/javascript" src={%static "scripts/script_reg.js"%}></script>
+
+</html>

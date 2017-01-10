@@ -1,0 +1,3 @@
+Аналог python manage.py sqlall
+-
+python manage.py sqlmigrate myapp 0001_initial

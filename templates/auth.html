@@ -1,32 +1,62 @@
 {% load staticfiles %}
-<!DOCTYPE html>
 <html>
 <head>
-    <title>Auth</title>
-    <link rel="stylesheet" type="text/css" href={% static 'css/pachanz_style.css' %}>
+    <title>Three pachans Web Site</title>
+    <meta http-equiv="Content-type" content="text/html" charset="UTF-8">
+<!--
+    <link rel="stylesheet" type="text/css" href="../test/style/fonts.css">
+    <link rel="stylesheet" type="text/css" href="../test/style/general_style.css">
+    <link rel="stylesheet" type="text/css" href="../test/style/welcome-auth-reg_style.css">
+    <script type="text/javascript" src="../test/library/jquery-3.1.1.js"></script>
+    <script type="text/javascript" src="../test/library/jquery.animate-colors.js"></script>
+-->
+    <link rel="stylesheet" type="text/css" href={% static "css/fonts.css"%}>
+    <link rel="stylesheet" type="text/css" href={% static "css/general_style.css"%}>
+    <link rel="stylesheet" type="text/css" href={% static "css/welcome-auth-reg_style.css"%}>
+    <script type="text/javascript" src={% static "library/jquery-3.1.1.js"%}></script>
+    <script type="text/javascript" src={% static "library/jquery.animate-colors.js"%}></script>
+
 </head>
 <body>
-   <center>
-    <div class="TP">
-        <b>ThreePachan</b>
+<div class="top-block">
+    <div class="top">
+        <div class="logo"><a href="/">IntoDayer</a></div>
+        <div id="sing_up-top"><a href="/registration">Sign up</a></div>
+        <div id="login-top"><a href="/login">Log In</a></div>
     </div>
-    <div class="Z">
-        <b>Z</b>
-    </div>
-        <div class="form">
-            <!--<h1 id="title">Please log in</h1>-->
-            <div class="auth">
-                <form action="/login/" method="POST">
-                    {% csrf_token %}
-                    <div class="fields">
-                        <input type="text" name="username" placeholder="Username"><br/>
-                        <input type="password" name="password" placeholder="Password"><br/>
-                    </div>
-                    <input class="enter" type="submit" value="Enter">
-                    <a href="/registration">Registration</a>
-                </form>
-            </div>
-        </div>
-    </center>
+</div>
+
 </body>
+
+<div class="page">
+    <!--панель авторазации-->
+    <div class="auth">
+        <form action="" method="post">
+            <ul>
+                <div class="title-sign">Sign In to Intodayer</div>
+                <li id="name">
+                    <input type="text" placeholder="Login" name='username'>
+                </li>
+                <li id="password">
+                    <input type="password" placeholder="Password" name='password'>
+                </li>
+                <ul class="buttons-panel">
+                    <button class="back" type="button"><a href="/">Назад</a></button>
+                    <button id="submit-auth" type="submit">Войти</button>
+                </ul>
+                <div class="forgot"><a href="#">Не можете войти?</a></div>
+            </ul>
+        </form>
+    </div>
+
+    <h3>Всё самое важное о Вашем расписании и ничего больше.</h3>
+
+</div>
+<!--
+<script type="text/javascript" src="../test/scripts/set-screen-size.js"></script>
+<script type="text/javascript" src="../test/scripts/script_auth.js"></script>
+-->
+<script type="text/javascript" src={%static "scripts/set-screen-size.js"%}></script>
+<script type="text/javascript" src={%static "scripts/script_auth.js"%}></script>
+
 </html>
