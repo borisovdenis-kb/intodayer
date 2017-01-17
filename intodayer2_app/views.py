@@ -18,19 +18,21 @@ def welcome_view(request):
 
 def registration_view(request):
     if request.method == 'POST':
-        #form = UserCreationForm(request.POST)
-        email = EmailForm(request.POST)
-        if email.is_valid():
-            email.save()
+        form = UserCreationForm(request.POST)
+        #email = EmailForm(request.POST)
+        if form.is_valid():
+            form.save()
             print('Yes!')
             return HttpResponseRedirect('/login')
         else:
-            print(email.error_messages)
+            print(request.POST)
+            print(form.errors)
+            return HttpResponseRedirect('/login')
     else:
         print('No!')
-        email = EmailForm()
+        form = UserCreationForm()
 
-    context = {'email': email}
+    context = {'email': form}
     return render_to_response('registration.html', context)
 
 '''
@@ -186,8 +188,8 @@ def add_schedules_view(request):
             #                           ЗАНОСИМ ДАННЫЕ БАЗУ                           #
             ###########################################################################
 
-            count_tchr_id = len(Teachers.objects.all())  # этот говно код здесь
-            count_subj_id = len(Subjects.objects.all())  # потому что в БД походу
+            count_tchr_id = len(Teachers.objects.all())   # этот говно код
+            count_subj_id = len(Subjects.objects.all())   # потому что в БД походу
             count_schld_id = len(Schedules.objects.all()) # не автоинкрементные поля :(
 
             new_teacher = Teachers(tchr_id = count_tchr_id + 1,

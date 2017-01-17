@@ -24,18 +24,20 @@ function checkbox_Action() {
 
 var main_time = 150;
 
-// эта функция не нужна, можно удалять!
-/*$('.back').click(function () {
+$('.back').click(function () {
     window.location.href = "welcome.html";
-});*/
+});
 
 $('#get-sms_checkbox').click(checkbox_Action);
 
 
 $(document).ready(function () {
-    var totalHeight = $('.reg').css('height').slice(0,-2) +  $('h3').css('margin-top').slice(0,-2) + $('h3').css('height').slice(0,-2);
-    $('body').css({'min-height': totalHeight});
-    $('.reg').delay(100).fadeIn(300, function () {
+    // чтобы размер страницы и поле прокрутки определились до появления (работы эффектов)
+    var totalHeight = +$('.reg').css('height').slice(0,-2) +
+        +$('h3').css('margin-top').slice(0,-2) + +$('h3').css('margin-top').slice(0,-2) +
+        +$('h3').css('margin-bottom').slice(0,-2) + +$('h3').css('height').slice(0,-2);
+    $('body').css({'height': totalHeight});
+    $('.reg').delay(50).fadeIn(200, function () {
         $('h3').fadeTo(main_time * 2, 1);
     });
 });
