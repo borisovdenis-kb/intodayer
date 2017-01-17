@@ -27,7 +27,7 @@ def registration_view(request):
         print('No!')
         form = CustomUserCreationForm()
 
-    context = {'email': form}
+    context = {'form': form}
     return render_to_response('reg.html', context)
 
 '''
