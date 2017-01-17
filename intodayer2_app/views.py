@@ -23,17 +23,12 @@ def registration_view(request):
             form.save()
             print('Yes!')
             return HttpResponseRedirect('/login')
-        else:
-            print(request.POST)
-            print(form.errors)
-            form.u
-            return HttpResponseRedirect('/login')
     else:
         print('No!')
         form = CustomUserCreationForm()
 
     context = {'email': form}
-    return render_to_response('registration.html', context)
+    return render_to_response('reg.html', context)
 
 '''
 def registration_view(request):

@@ -42,14 +42,11 @@
                 <li>
                     <span class="form-text">Пожалуйте, заполните все обязательные поля *</span>
                     {{ form.username }}
-                    <input id="firstname" type="text" placeholder="Имя" required="required">
                 </li>
                 <li>
                     <span class="form-text">Придумайте хороший пароль от 8 символов</span>
                     {{ form.password1 }}
                     {{ form.password2 }}
-                    <input id="new_pass" type="password" placeholder="Пароль" required="required">
-                    <input id="re_pass" type="password" placeholder="Повторите пароль" required="required">
                 </li>
                 <li class="outline-checkbox">
                     <div class="check-content">
@@ -59,7 +56,7 @@
 
                     </div>
                     <div class="phone-content">
-                        <input id="phone" type="text" placeholder="Номер телефона" required="required">
+                        {{ form.phone }}
                     </div>
                 </li>
                 <li>
