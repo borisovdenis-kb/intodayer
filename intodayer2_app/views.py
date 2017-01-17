@@ -22,14 +22,15 @@ def registration_view(request):
         email = EmailForm(request.POST)
         if email.is_valid():
             email.save()
-        return HttpResponseRedirect('/login')
+            print('Yes!')
+            return HttpResponseRedirect('/login')
+        else:
+            print(email.error_messages)
     else:
-        form = UserCreationForm()
+        print('No!')
         email = EmailForm()
 
-    context = {'form' : form,
-               'email' : email
-    }
+    context = {'email': email}
     return render_to_response('registration.html', context)
 
 '''
