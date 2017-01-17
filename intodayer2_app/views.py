@@ -21,10 +21,8 @@ def registration_view(request):
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            print('Yes!')
             return HttpResponseRedirect('/login')
     else:
-        print('No!')
         form = CustomUserCreationForm()
 
     context = {'form': form}

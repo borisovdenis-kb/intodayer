@@ -364,6 +364,7 @@ input[type="checkbox"] {
     border-radius: 5px;
     background-color: #ffffff;
     margin-left: 20px;
+    background-image: url('/static/css/images/галочка.jpg');
 }
 
 /*то, что скрыто вначале*/
