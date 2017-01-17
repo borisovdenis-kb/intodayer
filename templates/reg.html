@@ -35,20 +35,19 @@
         {{ form.as_p }}
         <input type="submit" value="create an account">
     </form>
-    <!--
     <div class="reg">
         <form action="" autocomplete="on" methon="post">
             <ul>
                 <div class="title-sign">Sing Up to Intodayer</div>
                 <li>
                     <span class="form-text">Пожалуйте, заполните все обязательные поля *</span>
+                    {{ form.username }}
                     <input id="firstname" type="text" placeholder="Имя" required="required">
                 </li>
                 <li>
-                    <input id="family" type="text" placeholder="Фамилия" required="required">
-                </li>
-                <li>
                     <span class="form-text">Придумайте хороший пароль от 8 символов</span>
+                    {{ form.password1 }}
+                    {{ form.password2 }}
                     <input id="new_pass" type="password" placeholder="Пароль" required="required">
                     <input id="re_pass" type="password" placeholder="Повторите пароль" required="required">
                 </li>
@@ -74,7 +73,6 @@
             </ul>
         </form>
     </div>
-    -->
     <h3>Стать участником Intodayer. Получай удобные уведомления. Будь в курсе событий.</h3>
 
 </div>

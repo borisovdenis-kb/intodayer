@@ -4,7 +4,7 @@ from django.shortcuts import render_to_response
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import auth
 from django.contrib.auth.forms import UserCreationForm
-from intodayer2_app.forms import EmailForm
+from intodayer2_app.forms import CustomUserCreationForm
 from intodayer2_app.send_sms import *
 from intodayer2_app.models import *
 
@@ -18,8 +18,7 @@ def welcome_view(request):
 
 def registration_view(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        #email = EmailForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             form.save()
             print('Yes!')
@@ -27,10 +26,11 @@ def registration_view(request):
         else:
             print(request.POST)
             print(form.errors)
+            form.u
             return HttpResponseRedirect('/login')
     else:
         print('No!')
-        form = UserCreationForm()
+        form = CustomUserCreationForm()
 
     context = {'email': form}
     return render_to_response('registration.html', context)
