@@ -33,19 +33,6 @@ def registration_view(request):
     context = {'form': form}
     return render_to_response('reg.html', context)
 
-'''
-def registration_view(request):
-    if request.user.is_authenticated():
-        return HttpResponseRedirect('/home')
-    else:
-        if request.method == 'POST':
-            form = UserCreationForm(request.POST)
-            if form.is_valid():
-                new_user = form.save()
-                return HttpResponseRedirect('/login')
-        else:
-            form = UserCreationForm()
-        return render_to_response('reg.html')'''
 
 def home_view(request):
     """
