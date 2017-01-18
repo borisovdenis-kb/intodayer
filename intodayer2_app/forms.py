@@ -20,6 +20,6 @@ class CustomUserCreationForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('username', 'password1', 'password2', 'phone')
-        widgets = {'username': forms.TextInput(attrs={'placeholder': 'Имя',
+        widgets = {'username': forms.TextInput(attrs={'placeholder': 'Имя пользователя',
                                                       'id': 'username',
                                                       'required': 'required'})}

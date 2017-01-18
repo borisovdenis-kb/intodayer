@@ -20,7 +20,12 @@ def registration_view(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
+            # сохраняем usr_name и pswd в таблицу auth_user
             form.save()
+            # сохраняем phone и связь один к одному в таблицу custom_user
+            new_auth_user = User.objects.get(username=request.POST['username'])
+            new_custom_user = CustomUser(user_id=new_auth_user.id, phone=request.POST['phone'])
+            new_custom_user.save()
             return HttpResponseRedirect('/login')
     else:
         form = CustomUserCreationForm()

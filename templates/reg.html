@@ -31,20 +31,18 @@
 <div class="page">
     <!--панель регистрации-->
     <div class="reg">
-        <form action="" autocomplete="on" methon="post">
+        <form action="" autocomplete="on" method="post">
             <ul>
                 <div class="title-sign">Sing Up to Intodayer</div>
                 <li>
                     <span class="form-text">Пожалуйте, заполните все обязательные поля *</span>
                     {{ form.username }}
-                    <div id="circle_indicator1"></div>
                 </li>
                 <li>
                     <span class="form-text">Придумайте хороший пароль от 8 символов</span>
                     {{ form.password1 }}
-                    <div id="circle_indicator2"></div>
+                    <div id="circle_indicator1"></div>
                     {{ form.password2 }}
-                    <div id="circle_indicator3"></div>
                 </li>
                 <li class="outline-checkbox">
                     <div class="check-content">
@@ -62,7 +60,7 @@
                             использования сервиса "Intodayer".</span>
                     <ul class="buttons-panel">
                             <button class="back" type="button">Назад</button>
-                            <button id="submit-reg" type="submit">Регистрация</button>
+                            <input id="submit-reg" type="submit" value="Sign In">
                     </ul>
                 </li>
             </ul>
