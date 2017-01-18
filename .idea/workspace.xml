@@ -1,93 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b87d29bf-9f52-4f1a-b8b7-7a445802d676" name="Default" comment="Оказывается, что в PyCharm тоже есть гит)">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/static/css/images/intodayer_tst.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test Intodayer/.idea/modules.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test Intodayer/.idea/test.iml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test Intodayer/.idea/workspace.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test Intodayer/add_schedules.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test Intodayer/auth.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test Intodayer/debug.log" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test Intodayer/fonts/SegoeUI.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test Intodayer/fonts/SegoeUIBold/SegoeUIBold.eot" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test Intodayer/fonts/SegoeUIBold/SegoeUIBold.ttf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test Intodayer/fonts/SegoeUIBold/SegoeUIBold.woff" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test Intodayer/fonts/SegoeUIItalic/SegoeUIItalic.eot" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test Intodayer/fonts/SegoeUIItalic/SegoeUIItalic.ttf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test Intodayer/fonts/SegoeUIItalic/SegoeUIItalic.woff" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test Intodayer/fonts/SegoeUILight/SegoeUILight.eot" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test Intodayer/fonts/SegoeUILight/SegoeUILight.ttf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test Intodayer/fonts/SegoeUILight/SegoeUILight.woff" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test Intodayer/fonts/SegoeUIRegular/SegoeUIRegular.eot" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test Intodayer/fonts/SegoeUIRegular/SegoeUIRegular.ttf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test Intodayer/fonts/SegoeUIRegular/SegoeUIRegular.woff" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test Intodayer/fonts/SegoeUISemiBold/SegoeUISemiBold.eot" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test Intodayer/fonts/SegoeUISemiBold/SegoeUISemiBold.ttf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test Intodayer/fonts/SegoeUISemiBold/SegoeUISemiBold.woff" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test Intodayer/home.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test Intodayer/images/ava.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test Intodayer/images/putin.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test Intodayer/library/jquery-3.1.1.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test Intodayer/library/jquery.animate-colors.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test Intodayer/library/jquery.easing.compatibility.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test Intodayer/reg.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test Intodayer/scripts/script_add_schedules.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test Intodayer/scripts/script_auth.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test Intodayer/scripts/script_home.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test Intodayer/scripts/script_reg.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test Intodayer/scripts/script_welcome.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test Intodayer/scripts/set-screen-size.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test Intodayer/style/add_schedules_style.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test Intodayer/style/fonts.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test Intodayer/style/general_style.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test Intodayer/style/home_style.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test Intodayer/style/welcome-auth-reg_style.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test Intodayer/welcome.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test/.idea/modules.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test/.idea/test.iml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test/.idea/workspace.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test/auth.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test/fonts/SegoeUI.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test/fonts/SegoeUIBold/SegoeUIBold.eot" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test/fonts/SegoeUIBold/SegoeUIBold.ttf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test/fonts/SegoeUIBold/SegoeUIBold.woff" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test/fonts/SegoeUIItalic/SegoeUIItalic.eot" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test/fonts/SegoeUIItalic/SegoeUIItalic.ttf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test/fonts/SegoeUIItalic/SegoeUIItalic.woff" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test/fonts/SegoeUILight/SegoeUILight.eot" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test/fonts/SegoeUILight/SegoeUILight.ttf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test/fonts/SegoeUILight/SegoeUILight.woff" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test/fonts/SegoeUIRegular/SegoeUIRegular.eot" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test/fonts/SegoeUIRegular/SegoeUIRegular.ttf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test/fonts/SegoeUIRegular/SegoeUIRegular.woff" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test/fonts/SegoeUISemiBold/SegoeUISemiBold.eot" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test/fonts/SegoeUISemiBold/SegoeUISemiBold.ttf" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test/fonts/SegoeUISemiBold/SegoeUISemiBold.woff" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test/home.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test/images/ava.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test/images/putin.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test/library/jquery-3.1.1.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test/library/jquery.animate-colors.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test/library/jquery.easing.compatibility.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test/reg.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test/scripts/script_auth.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test/scripts/script_home.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test/scripts/script_reg.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test/scripts/script_welcome.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test/scripts/set-screen-size.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test/style/fonts.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test/style/general_style.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test/style/home_style.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test/style/welcome-auth-reg_style.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/test/welcome.html" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/css/images/галочка2.jpg" afterPath="$PROJECT_DIR$/static/css/images/галочка2.jpg" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/intodayer2_app/forms.py" afterPath="$PROJECT_DIR$/intodayer2_app/forms.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/intodayer2_app/views.py" afterPath="$PROJECT_DIR$/intodayer2_app/views.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/css/welcome-auth-reg_style.css" afterPath="$PROJECT_DIR$/static/css/welcome-auth-reg_style.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/reg.html" afterPath="$PROJECT_DIR$/templates/reg.html" />
-    </list>
+    <list default="true" id="b87d29bf-9f52-4f1a-b8b7-7a445802d676" name="Default" comment="Оказывается, что в PyCharm тоже есть гит)" />
     <ignored path="intodayer2.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path=".idea/dataSources.local.xml" />
@@ -121,8 +35,8 @@
       <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/intodayer2_app/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="324">
-              <caret line="24" column="73" selection-start-line="24" selection-start-column="73" selection-end-line="24" selection-end-column="73" />
+            <state relative-caret-position="432">
+              <caret line="28" column="49" selection-start-line="28" selection-start-column="49" selection-end-line="28" selection-end-column="49" />
               <folding>
                 <element signature="e#0#54#0" expanded="true" />
               </folding>
@@ -668,7 +582,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-9" y="-9" width="1938" height="1050" extended-state="7" />
+    <frame x="-9" y="-9" width="1938" height="1050" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2274678" sideWeight="0.67074525" order="0" side_tool="false" content_ui="combo" />
@@ -1071,8 +985,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/intodayer2_app/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="324">
-          <caret line="24" column="73" selection-start-line="24" selection-start-column="73" selection-end-line="24" selection-end-column="73" />
+        <state relative-caret-position="432">
+          <caret line="28" column="49" selection-start-line="28" selection-start-column="49" selection-end-line="28" selection-end-column="49" />
           <folding>
             <element signature="e#0#54#0" expanded="true" />
           </folding>
