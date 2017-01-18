@@ -20,9 +20,9 @@
 <body>
 <div class="top-block">
     <div class="top">
-        <div class="logo"><a href="/">IntoDayer</a></div>
-        <div id="sing_up-top"><a href="/registration">Sign up</a></div>
-        <div id="login-top"><a href="/login">Log In</a></div>
+        <div class="logo"><a href="welcome.html">IntoDayer</a></div>
+        <div id="sing_up-top"><a href="reg.html">Sign up</a></div>
+        <div id="login-top"><a href="auth.html">Log In</a></div>
     </div>
 </div>
 
@@ -30,27 +30,19 @@
 
 <div class="page">
     <!--панель регистрации-->
-    <form action="" method="post">
-        <div class="title-sign">Sing Up to Intodayer</div>
-        {{ form.as_p }}
-        <input type="submit" value="create an account">
-    </form>
-    <!--
     <div class="reg">
-        <form action="" autocomplete="on" methon="post">
+        <form action="" autocomplete="on" method="post">
             <ul>
                 <div class="title-sign">Sing Up to Intodayer</div>
                 <li>
                     <span class="form-text">Пожалуйте, заполните все обязательные поля *</span>
-                    <input id="firstname" type="text" placeholder="Имя" required="required">
-                </li>
-                <li>
-                    <input id="family" type="text" placeholder="Фамилия" required="required">
+                    {{ form.username }}
                 </li>
                 <li>
                     <span class="form-text">Придумайте хороший пароль от 8 символов</span>
-                    <input id="new_pass" type="password" placeholder="Пароль" required="required">
-                    <input id="re_pass" type="password" placeholder="Повторите пароль" required="required">
+                    {{ form.password1 }}
+                    <div id="circle_indicator1"></div>
+                    {{ form.password2 }}
                 </li>
                 <li class="outline-checkbox">
                     <div class="check-content">
@@ -60,27 +52,25 @@
 
                     </div>
                     <div class="phone-content">
-                        <input id="phone" type="text" placeholder="Номер телефона" required="required">
+                        {{ form.phone }}
                     </div>
                 </li>
                 <li>
                     <span class="form-text">Нажимая на кнопку "Регистрация" вы соглашаетесь с политикой<br>
                             использования сервиса "Intodayer".</span>
                     <ul class="buttons-panel">
-                            <button class="back" type="button"><a href="/">Назад</a></button>
-                            <button id="submit-reg" type="submit">Регистрация</button>
+                            <button class="back" type="button">Назад</button>
+                            <input id="submit-reg" type="submit" value="Sign In">
                     </ul>
                 </li>
             </ul>
         </form>
     </div>
-    -->
     <h3>Стать участником Intodayer. Получай удобные уведомления. Будь в курсе событий.</h3>
-
 </div>
 <!--
-<script type="text/javascript" src="../static/scripts/set-screen-size.js"></script>
-<script type="text/javascript" src="../static/scripts/script_reg.js"></script>
+<script type="text/javascript" src="scripts/set-screen-size.js"></script>
+<script type="text/javascript" src="scripts/script_reg.js"></script>
 -->
 <script type="text/javascript" src={%static "scripts/set-screen-size.js"%}></script>
 <script type="text/javascript" src={%static "scripts/script_reg.js"%}></script>

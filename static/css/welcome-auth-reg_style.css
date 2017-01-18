@@ -392,6 +392,12 @@ h3{
 }
 /*то, что скрыто вначале*/
 
+#circle_indicator1 {
+    height: 20px;
+    width: 20px;
+    background-color: #fa1919;
+}
+
 
 @media only screen {
     input {

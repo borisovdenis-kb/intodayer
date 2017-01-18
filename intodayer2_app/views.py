@@ -4,7 +4,7 @@ from django.shortcuts import render_to_response
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import auth
 from django.contrib.auth.forms import UserCreationForm
-from intodayer2_app.forms import EmailForm
+from intodayer2_app.forms import CustomUserCreationForm
 from intodayer2_app.send_sms import *
 from intodayer2_app.models import *
 
@@ -18,36 +18,21 @@ def welcome_view(request):
 
 def registration_view(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        #email = EmailForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid():
+            # сохраняем usr_name и pswd в таблицу auth_user
             form.save()
-            print('Yes!')
-            return HttpResponseRedirect('/login')
-        else:
-            print(request.POST)
-            print(form.errors)
+            # сохраняем phone и связь один к одному в таблицу custom_user
+            new_auth_user = User.objects.get(username=request.POST['username'])
+            new_custom_user = CustomUser(user_id=new_auth_user.id, phone=request.POST['phone'])
+            new_custom_user.save()
             return HttpResponseRedirect('/login')
     else:
-        print('No!')
-        form = UserCreationForm()
+        form = CustomUserCreationForm()
 
-    context = {'email': form}
-    return render_to_response('registration.html', context)
+    context = {'form': form}
+    return render_to_response('reg.html', context)
 
-'''
-def registration_view(request):
-    if request.user.is_authenticated():
-        return HttpResponseRedirect('/home')
-    else:
-        if request.method == 'POST':
-            form = UserCreationForm(request.POST)
-            if form.is_valid():
-                new_user = form.save()
-                return HttpResponseRedirect('/login')
-        else:
-            form = UserCreationForm()
-        return render_to_response('reg.html')'''
 
 def home_view(request):
     """

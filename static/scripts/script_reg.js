@@ -24,9 +24,6 @@ function checkbox_Action() {
 
 var main_time = 150;
 
-$('.back').click(function () {
-    window.location.href = "welcome.html";
-});
 
 $('#get-sms_checkbox').click(checkbox_Action);
 
