@@ -17,7 +17,7 @@ $(document).ready( function(){
             secure_pattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])|(?=.*\d)(?=.*[а-я])(?=.*[А-Я])(?!.*\s).*$/;
             content = $('#password1').val();
 
-            /*if (event.keyCode == 8){ // нажата backspace
+            if (event.keyCode == 8){ // нажата backspace
                 if (width_size >= 299 && is_correct == 1){
                     width_size -= raise;
                     $('#circle_indicator1').animate({width: width_size + 'px'}, 40);
@@ -44,7 +44,8 @@ $(document).ready( function(){
                     width_size += 18;
                     $('#circle_indicator1').animate({width: width_size + 'px'}, 40);
                 }
-            }*/
+            }
+
             $('#pswdContent').text(content + '|' + width_size + '|' + raise);
 
             // $('#circle_indicator1').animate({width: '10px', height: '38px'}, 40);
@@ -60,16 +61,10 @@ $(document).ready( function(){
                 } else {
                     // $('#circle_indicator1').css('background-color', '#FFD600');
                     $('#circle_indicator1').animate({backgroundColor: '#FFD600'}, 40);
-                    width_size = 216;
-                    $('#circle_indicator1').animate({width: width_size + 'px'}, 200);
                 }
-            } else if (content.length = 0) {
-                $('#circle_indicator1').animate({opacity: '0'}, 1000);
             } else {
                 // $('#circle_indicator1').css('background-color', '#FF4233');
                 $('#circle_indicator1').animate({backgroundColor: '#FF4233'}, 40);
-                width_size = 144;
-                $('#circle_indicator1').animate({width: width_size + 'px'}, 200);
             }
         });
     });
