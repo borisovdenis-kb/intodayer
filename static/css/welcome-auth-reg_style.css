@@ -416,8 +416,8 @@ h3{
 #circle_indicator1 {
     display: block;
     position: relative;
-    height: 7px;
-    width: 18px;
+    height: 5px;
+    width: 0px;
     background-color: #ffffff;
     /*border: solid #f1f1f1 1px;*/
     border-bottom-right-radius: 4px;

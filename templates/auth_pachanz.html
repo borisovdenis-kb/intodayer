@@ -3,7 +3,7 @@
 <html>
 <head>
     <title>Auth</title>
-    <link rel="stylesheet" type="text/css" href={% static 'css/pachanz_style.css' %}>
+    <link rel="stylesheet" type="text/css" href='../static/css/pachanz_style.css'>
 </head>
 <body>
    <center>
@@ -17,7 +17,6 @@
             <!--<h1 id="title">Please log in</h1>-->
             <div class="auth">
                 <form action="/login/" method="POST">
-                    {% csrf_token %}
                     <div class="fields">
                         <input type="text" name="username" placeholder="Username"><br/>
                         <input type="password" name="password" placeholder="Password"><br/>
