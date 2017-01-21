@@ -43,36 +43,7 @@ $(document).ready( function(){
                         }
                     }
                 }
-
-                /*if (event.keyCode == 8) { // нажата backspace
-                    if (width_size >= 299 && is_correct == 1) {
-                        width_size -= raise;
-                    }
-
-                    if (content.length >= 16) {
-                        width_size -= 3;
-                        //$('#circle_indicator1').animate({width: width_size + 'px'}, 40);
-                    } else if (content.length >= 8 && content.length < 16) {
-                        width_size -= 9;
-                        //$('#circle_indicator1').animate({width: width_size + 'px'}, 40);
-                    } else if (content.length <= 8 && width_size > 0) {
-                        width_size -= 18;
-                        //$('#circle_indicator1').animate({width: width_size + 'px'}, 40);
-                    }
-                } else { // нажата любая другая клавиша
-                    if (width_size >= 300) {
-                        //$('#circle_indicator1').animate({width: width_size + 'px'}, 40);
-                    } else if (content.length >= 16) {
-                        width_size += 3;
-                        //$('#circle_indicator1').animate({width: width_size + 'px'}, 40);
-                    } else if (content.length > 8 && content.length < 16) {
-                        width_size += 9;
-                        //$('#circle_indicator1').animate({width: width_size + 'px'}, 40);
-                    } else {
-                        width_size += 18;
-                        //$('#circle_indicator1').animate({width: width_size + 'px'}, 40);
-                    }
-                }*/
+                
                 $('#circle_indicator1').animate({width: width_size + 'px'}, 40);
 
                 $('#pswdContent').text(content + '|' + width_size + '|' + raise + '|' + old_content);
