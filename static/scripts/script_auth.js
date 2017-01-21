@@ -2,10 +2,6 @@
 
 var main_time = 150;
 
-$('.back').click(function () {
-    window.location.href = "welcome.html";
-});
-
 $(document).ready(function () {
     $('.auth').delay(100).fadeIn(300, function () {
         $('h3').fadeTo(main_time * 2, 1);
