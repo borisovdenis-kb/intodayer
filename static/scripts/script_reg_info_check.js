@@ -18,6 +18,10 @@ $(document).ready( function(){
             content = $('#password1').val();
             len = content.length;
 
+            /*!!!! Есть косяк:
+            - весь алгоритм рпивязан к конкретным значениям. он
+              не универсален
+            */
             if (content != old_content) {
                 if (event.keyCode == 8) {
                     if (width_size >= 299 && is_correct == 1) {
@@ -33,20 +37,20 @@ $(document).ready( function(){
                         }
                     }
                 } else {
-                    for(var i=0; i < Math.abs(len - old_content.length); i++){
-                        if (width_size < 144){
+                    for (var i = 0; i < Math.abs(len - old_content.length); i++) {
+                        if (width_size < 144) {
                             width_size += 18;
-                        } else if (width_size >= 144 && width_size < 216){
+                        } else if (width_size >= 144 && width_size < 216) {
                             width_size += 9;
-                        } else if (width_size >= 216 && width_size < 300){
+                        } else if (width_size >= 216 && width_size < 300) {
                             width_size += 3;
                         }
                     }
                 }
-                
-                $('#circle_indicator1').animate({width: width_size + 'px'}, 40);
 
-                $('#pswdContent').text(content + '|' + width_size + '|' + raise + '|' + old_content);
+                if (!is_correct) {
+                    $('#circle_indicator1').animate({width: width_size + 'px'}, 40);
+                }
 
                 if (content.length >= 8) {
                     if (secure_pattern.test(content) == true) {
@@ -56,9 +60,11 @@ $(document).ready( function(){
                         $('#circle_indicator1').animate({backgroundColor: '#0DA559'}, 40);
                         $('#circle_indicator1').animate({width: width_size + 'px'}, 80);
                     } else {
+                        is_correct = 0;
                         $('#circle_indicator1').animate({backgroundColor: '#FFD600'}, 40);
                     }
                 } else {
+                    is_correct = 0;
                     $('#circle_indicator1').animate({backgroundColor: '#FF4233'}, 40);
                 }
 
