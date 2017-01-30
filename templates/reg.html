@@ -3,18 +3,18 @@
 <head>
     <title>Three pachans Web Site</title>
     <meta http-equiv="Content-type" content="text/html" charset="UTF-8">
-<!--
-    <link rel="stylesheet" type="text/css" href="../static/css/fonts.css">
-    <link rel="stylesheet" type="text/css" href="../static/css/general_style.css">
-    <link rel="stylesheet" type="text/css" href="../static/css/welcome-auth-reg_style.css">
-    <script type="text/javascript" src="../test/library/jquery-3.1.1.js"></script>
-    <script type="text/javascript" src="../test/library/jquery.animate-colors.js"></script>
--->
-    <link rel="stylesheet" type="text/css" href={% static "css/fonts.css"%}>
-    <link rel="stylesheet" type="text/css" href={% static "css/general_style.css"%}>
-    <link rel="stylesheet" type="text/css" href={% static "css/welcome-auth-reg_style.css"%}>
-    <script type="text/javascript" src={% static "library/jquery-3.1.1.js"%}></script>
-    <script type="text/javascript" src={% static "library/jquery.animate-colors.js"%}></script>
+    <!--
+        <link rel="stylesheet" type="text/css" href="../static/css/fonts.css">
+        <link rel="stylesheet" type="text/css" href="../static/css/general_style.css">
+        <link rel="stylesheet" type="text/css" href="../static/css/welcome-auth-reg_style.css">
+        <script type="text/javascript" src="../test/library/jquery-3.1.1.js"></script>
+        <script type="text/javascript" src="../test/library/jquery.animate-colors.js"></script>
+    -->
+    <link rel="stylesheet" type="text/css" href={% static "css/fonts.css" %}>
+    <link rel="stylesheet" type="text/css" href={% static "css/general_style.css" %}>
+    <link rel="stylesheet" type="text/css" href={% static "css/welcome-auth-reg_style.css" %}>
+    <script type="text/javascript" src={% static "library/jquery-3.1.1.js" %}></script>
+    <script type="text/javascript" src={% static "library/jquery.animate-colors.js" %}></script>
 
 </head>
 <body>
@@ -42,8 +42,10 @@
                     <span class="form-text">Придумайте хороший пароль от 8 символов</span>
                 </li>
                 <li class="pswd1">
-                    {{ form.password1 }}
-                    <div id="circle_indicator1"></div>
+                    <div class="kostil">
+                        {{ form.password1 }}
+                        <div id="circle_indicator1"></div>
+                    </div>
                 </li>
                 <li>
                     <p id="pswdContent"></p>
@@ -65,8 +67,8 @@
                     <span class="form-text">Нажимая на кнопку "Регистрация" вы соглашаетесь с политикой<br>
                             использования сервиса "Intodayer".</span>
                     <ul class="buttons-panel">
-                            <button class="back" type="button"><a href="/">Назад</a></button>
-                            <input id="submit-reg" type="submit" value="Sign In">
+                        <button class="back" type="button"><a href="/">Назад</a></button>
+                        <input id="submit-reg" type="submit" value="Sign In">
                     </ul>
                 </li>
             </ul>
@@ -78,8 +80,8 @@
 <script type="text/javascript" src="scripts/set-screen-size.js"></script>
 <script type="text/javascript" src="scripts/script_reg.js"></script>
 -->
-<script type="text/javascript" src={%static "scripts/set-screen-size.js"%}></script>
-<script type="text/javascript" src={%static "scripts/script_reg.js"%}></script>
-<script type="text/javascript" src={%static "scripts/script_reg_info_check.js"%}></script>
+<script type="text/javascript" src={% static "scripts/set-screen-size.js" %}></script>
+<script type="text/javascript" src={% static "scripts/script_reg.js" %}></script>
+<script type="text/javascript" src={% static "scripts/script_reg_info_check.js" %}></script>
 
 </html>
