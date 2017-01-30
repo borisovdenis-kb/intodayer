@@ -49,7 +49,7 @@ $(document).ready( function(){
                 }
 
                 if (!is_correct) {
-                    $('#circle_indicator1').animate({width: width_size + 'px'}, 40);
+                    $('#circle_indicator1').animate({width: width_size + '%'}, 40);
                 }
 
                 if (content.length >= 8) {

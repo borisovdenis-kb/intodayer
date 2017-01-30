@@ -155,7 +155,7 @@ input {
 }
 
 input.active {
-    background-color: #FFED94;
+    background-color: #f1ff9f;
 }
 
 
@@ -425,9 +425,9 @@ h3{
     float: left;
     margin-left: -304px;
     margin-top: 42px;
-    -webkit-box-shadow: 0px -10px 5px 0px rgba(0,0,0,0.75);
-    -moz-box-shadow: 0px -10px 5px 0px rgba(0,0,0,0.75);
-    box-shadow: 0px -10px 5px 0px rgba(0,0,0,0.75);
+    -webkit-box-shadow: 0px -2px 2px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px -2px 2px 0px rgba(0,0,0,0.75);
+    box-shadow: 0px -2px 2px 0px rgba(0,0,0,0.75);
     opacity: 0.9;
     /*float:left;*/
 }
