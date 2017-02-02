@@ -155,7 +155,7 @@ input {
 }
 
 input.active {
-    background-color: #f1ff9f;
+    background-color: rgba(255, 251, 177, 1);
 }
 
 /*.kostil {*/
