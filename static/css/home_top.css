@@ -24,259 +24,150 @@ button:focus {
 
 .top-block {
     border-bottom: 3px solid #8b1deb;
+    /*border-bottom: 3px solid royalblu*/
     background-color: rgba(242, 242, 242, 1);
+    min-width: 768px;
 
 }
 
 .top {
     display: block;
+    max-width: 1200px;
+    min-width: 768px;
     margin: auto;
-    width: 1024px;
+}
 
+.top-line {
+    box-shadow: inset 0px -45px 30px -50px rgba(0, 0, 0, 0.4);
+    height: 10px;
 }
 
 .top-menu {
-    margin-bottom: 15px;
-    background: rgba(250, 250, 250, 1);
-    box-shadow: inset 0px -45px 30px -50px rgba(0, 0, 0, 0.4);
+    height: 38px;
 
 }
 
 .top-menu ul {
-    display: flex;
-    width: 1024px;
-}
-.top-menu li{
-    width: 100%;
-}
-
-.top-menu a {
-    text-align: center;
-    color: black;
-    padding: 1em;
-    padding-left: 2em;
-    padding-right: 2em;
-    display: block;
-
-}
-
-.logo {
-    display: inline-block;
-    margin-left: 15px;
-    padding-top: 4px;
-    padding-bottom: 5px;
-    font-size: 24px;
-
-}
-
-.logo a {
-    font-family: 'Consolas', serif;
+    padding: 0;
+    height: 100%;
+    float: left;
 }
 
 .top-menu li {
-    transition: 0.3s ease;
-    /*width: 100%;*/
+    float: left;
+
 }
 
-.top-menu li:hover {
+.top-menu ul li a {
+    padding-top: 3px;
+    display: table-cell;
+    height: 35px;
+    vertical-align: middle;
+    font-size: 0.9em;
+    text-align: center;
+    color: black;
+    padding-left: 1.5em;
+    padding-right: 1.5em;
+}
+
+.logo {
+    float: left;
+    display: inline-block;
+    width: 186px;
+    padding-left: 15px;
+    font-size: 24px;
+}
+
+.top-menu ul li a:hover {
     background: white;
-}
-
-/*для javascript*/
-.select_menu {
-    background: white;
-}
-.leftShadow {
-    /*box-shadow: inset -5px 0px 5px -5px rgba(0, 0, 0, 0.5);*/
-    box-shadow: inset -15px 0px 36px -19px rgba(0, 0, 0, 0.5);
-
-}
-.rightShadow {
-    /*box-shadow: inset 5px 0px 5px -5px rgba(0, 0, 0, 0.5);*/
-    box-shadow: inset 15px 0px 36px -19px rgba(0, 0, 0, 0.5);
-}
-/*тени для бразуера Firefox 1+*/
-.leftShadowMoz{
-    box-shadow: inset -5px 0px 10px -5px rgba(0, 0, 0, 0.3);
-}
-.rightShadowMoz {
-    box-shadow: inset 5px 0px 10px -5px rgba(0, 0, 0, 0.3);
-}
-.menuShadowMoz{
-    box-shadow: inset 0px -5px 10px -5px rgba(0, 0, 0, 0.3);
-}
-/*для javascript*/
-
-.top-menu a:hover {
-    /*
-        background: rgba(139, 29, 235, 0.05);
-        box-shadow: inset 0px -1px 0px 0px gray;
-    */
-    background: white;
+    color: dodgerblue;
     transition: 0.3s ease;
 }
 
-.top-menu a:active {
+.top-menu ul li a:active {
     background: rgba(242, 242, 242, 1);
     transition: none;
     transition: 0.3s ease;
 }
 
-/*Базовая обертка*/
 .droplink {
-    position: relative;
     float: right;
-    font-size: 14px;
-    z-index: 1;
-}
-
-/*Стиль блока при наведении*/
-.droplink:hover {
-    transition: .1s linear;
-    background-color: #d3d3d3;
-
-}
-
-/*Заголовок в обычном состоянии*/
-.username {
-    float: left;
-}
-
-.droplink .username a {
-    text-align: center;
-    width: 80px;
-    display: block;
-    padding-top: 12px;
-    padding-bottom: 9px;
-    padding-left: 10px;
-    color: black;
-    text-decoration: none;
-}
-
-/*Скрываем список без наведения*/
-
-.droplink ul {
-    position: absolute;
-    list-style: none;
-    width: 110%;
-    border-radius: 4px;
-    transition: background .2s ease;
-    background: white;
-    box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.2);
-    margin-top: 20px;
-    left: -5px;
-
-}
-
-.droplink ul::after, .droplink ul::before {
-    content: '';
-    position: absolute;
-    background: white;
-    left: 30px;
-    bottom: 95px;
-    width: 15px;
-    height: 15px;
-    box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.2);
-    z-index: -1; /* Прячем за основным блоком */
-    transform: rotate(45deg); /* Поворачиваем на 45º */
-}
-
-.droplink ul::before {
-    z-index: 2; /* Накладываем поверх, чтобы скрыть следы тени */
-    box-shadow: none;
-}
-
-/*для javascript*/
-.username_color {
-    background-color: #d3d3d3;
-}
-
-.show_droplink {
-    left: -5px;
-}
-
-/*для javascript*/
-
-/*Стиль элемента списка*/
-.droplink li a {
-    position: relative;
-    z-index: 6;
-    text-align: left;
-    display: block;
-    color: black;
-    text-decoration: none;
-    font-size: 16px;
-    padding: 15px;
-    transition: .2s ease;
-}
-
-.dropmenu {
-    display: none;
-}
-
-.devide-line {
-    width: 100%;
-    padding: 2px;
-}
-
-.droplink li:first-child {
-    /*	border-top: 10px solid white;*/
-}
-
-.droplink li a:hover {
-    background: rgba(235, 235, 235, 1);
-}
-
-.droplink li a:active {
-    background: rgba(205, 205, 205, 1);
-}
-
-.up-arrow {
-    margin-right: 10px;
-    margin-left: 0px;
-    margin-top: 15px;
-    float: right;
-    display: inline-block;
-    border: 7px solid transparent;
-    border-top: 8px solid rgba(150, 150, 150, 1);
-}
-
-.droplink:active .up-arrow {
-    border-top-color: rgba(80, 80, 80, 1);
-}
-
-/*для javascript*/
-.unselect_up-arrow {
-    border-top-color: rgba(150, 150, 150, 1);
-}
-
-.select_up-arrow {
-    border-top-color: rgba(80, 80, 80, 1);
-}
-
-/*для javascript*/
-
-.mini-ava {
-    display: inline-block;
-    background-image: url('../images/ava.png');
+    max-width: 200px;
     margin-right: 12px;
-    margin-left: 4px;
-    margin-top: 3px;
+    transition: 0.3s;
+
+}
+
+.droplink a {
+    padding: 0 15px 0 10px;
+    display: table-cell;
+    height: 36px;
+    padding-top: 2px;
+    vertical-align: middle;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;
+}
+
+#profile_title {
+    float: right;
+}
+
+#ava_img_content {
+    /*float: right;*/
+    display: table-cell;
+    vertical-align: middle;
+    height: 38px;
+}
+
+#ava_img {
     width: 30px;
     height: 30px;
-    border-radius: 50%;
+    border-radius: 2px;
+    margin-right: 12px;
+    background-image: url("../images/putin.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
-/*то, что скрыто вначале*/
-.top-menu{
-    display: none;
+.droplink:hover {
+    background: rgba(200, 200, 200, 1);
+    cursor: pointer;
 }
-/*то, что скрыто вначале*/
 
+/*#jQuery ###########################################################*/
+/*#jQuery ###########################################################*/
+/*#jQuery ###########################################################*/
+.droplink_click {
+    background: white;
+    /*width: 150px;*/
+    font-size: 0.9em;
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid rgba(210, 210, 210, 1);
+    -webkit-box-shadow: 0px 2px 15px 0px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0px 2px 15px 0px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 2px 15px 0px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;
 
-	
-	
-	
-	
-	
-	
+}
+
+.droplink_click ul li {
+    line-height: 35px;
+    padding: 0 10px 0 10px;
+}
+
+.droplink_click ul li:hover {
+    background: rgba(220, 220, 220, 1);
+}
+
+.droplink_click ul li:active{
+    background: rgba(210, 210, 210, 1);
+}
+/*#jQuery ###########################################################*/
+/*#jQuery ###########################################################*/
+/*#jQuery ###########################################################*/

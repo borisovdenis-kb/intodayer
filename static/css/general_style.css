@@ -1,16 +1,16 @@
-/*общее для сайта intodayer =============================================================*/
-
-
 body {
     margin: 0 auto;
-    background-color: rgba(254, 254, 254, 1);
-    min-width: 1060px;
+    background: rgba(244, 243, 248, 1);
+    /*background: white;*/
+    min-width: 400px;
+
     font-family: Arial, SegoeUIRegular;
 }
 
 .logo a {
     font-family: SegoeUIRegular !important;
     /*font-weight: 300 !important;*/
+    color: black;
 }
 
 ul {
@@ -38,72 +38,6 @@ button:focus {
     outline: none;
 }
 
-.top-block {
-    border-bottom: 3px solid #8b1deb;
-    background-color: rgba(242, 242, 242, 1);
 
-}
 
-.top {
-    margin: auto;
-    width: 1024px;
-    height: 40px;
-}
 
-.logo{
-    display: inline-block;
-}
-
-.logo a {
-    font-family: 'Consolas', serif;
-    line-height: 38px;
-    padding-bottom: 2px;
-    display: block;
-    padding-left: 15px;
-    /*margin-top: 5px;*/
-    font-size: 24px;
-}
-
-.page {
-    clear: both;
-    background-color: rgba(255, 255, 255, 1);
-    margin: auto;
-    width: 1000px;
-    padding-left: 12px;
-    padding-right: 12px;
-}
-@media only screen{
-    .logo a {
-        font-family: SegoeUIRegular !important;
-    }
-    body {
-
-        font-family: Arial , SegoeUIRegular !important;
-    }
-}
-
-@media only screen
-and (min-device-width : 768px)
-and (max-device-width : 1024px) {
-    body {
-        min-width: 100%;
-        /*max-height: 120%;*/
-    }
-
-    .top {
-        max-width: 100%;
-    }
-
-    .page {
-        max-width: 97%;
-    }
-    .top-menu ul{
-        max-width: 100%;
-    }
-    .top-menu li{
-        max-width: 20%;
-    }
-    .droplink ul {
-        max-width: 99%;
-    }
-}
