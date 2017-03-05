@@ -35,52 +35,53 @@ def registration_view(request):
 
 
 def home_view(request):
-    """
-    Функция отображения главной страницы сайта
-    с расписанием на сегодня
-    """
-    if request.user.is_authenticated():
-        user = User.objects.get(username=request.user.username)
-        try:
-            std_id = user.customuser.stdt_stdt.stdt_id
-        except ObjectDoesNotExist:
-            context = {'table' : [],
-                       'username' : user.username
-            }
-        else:
-            student = Students.objects.get(stdt_id = std_id)
-            group = student.grp_grp_id
-            cathedra = student.cthd_cthd_id
-
-            # выбираем из тиблицы расписания все записи, "нужные" данному юзеру
-            # мы получили список, состоящий из строк расписания
-            # далее генерируем расписание на неделю, в зависимости от номера и четности недели
-            table = list(Schedules.objects.filter(grp_grp = group, cthd_cthd = cathedra).order_by('tms_tms'))
-
-            current_week = [[], [], [], [], [], [], []]
-
-            for row in table:
-                if row.dfwk_dfwk.name == 'Понедельник':
-                    current_week[0].append(row)
-                elif row.dfwk_dfwk.name == 'Вторник':
-                    current_week[1].append(row)
-                elif row.dfwk_dfwk.name == 'Среда':
-                    current_week[2].append(row)
-                elif row.dfwk_dfwk.name == 'Четверг':
-                    current_week[3].append(row)
-                elif row.dfwk_dfwk.name == 'Пятница':
-                    current_week[4].append(row)
-                elif row.dfwk_dfwk.name == 'Суббота':
-                    current_week[5].append(row)
-                elif row.dfwk_dfwk.name == 'Воскресенье':
-                    current_week[6].append(row)
-
-            context = {'table' : current_week,
-                       'username' : user.username
-            }
-        return render_to_response('home.html', context)
-    else:
-        return HttpResponseRedirect("/login")
+    # """
+    # Функция отображения главной страницы сайта
+    # с расписанием на сегодня
+    # """
+    # if request.user.is_authenticated():
+    #     user = User.objects.get(username=request.user.username)
+    #     try:
+    #         std_id = user.customuser.stdt_stdt.stdt_id
+    #     except ObjectDoesNotExist:
+    #         context = {'table' : [],
+    #                    'username' : user.username
+    #         }
+    #     else:
+    #         student = Students.objects.get(stdt_id = std_id)
+    #         group = student.grp_grp_id
+    #         cathedra = student.cthd_cthd_id
+    #
+    #         # выбираем из тиблицы расписания все записи, "нужные" данному юзеру
+    #         # мы получили список, состоящий из строк расписания
+    #         # далее генерируем расписание на неделю, в зависимости от номера и четности недели
+    #         table = list(Schedules.objects.filter(grp_grp = group, cthd_cthd = cathedra).order_by('tms_tms'))
+    #
+    #         current_week = [[], [], [], [], [], [], []]
+    #
+    #         for row in table:
+    #             if row.dfwk_dfwk.name == 'Понедельник':
+    #                 current_week[0].append(row)
+    #             elif row.dfwk_dfwk.name == 'Вторник':
+    #                 current_week[1].append(row)
+    #             elif row.dfwk_dfwk.name == 'Среда':
+    #                 current_week[2].append(row)
+    #             elif row.dfwk_dfwk.name == 'Четверг':
+    #                 current_week[3].append(row)
+    #             elif row.dfwk_dfwk.name == 'Пятница':
+    #                 current_week[4].append(row)
+    #             elif row.dfwk_dfwk.name == 'Суббота':
+    #                 current_week[5].append(row)
+    #             elif row.dfwk_dfwk.name == 'Воскресенье':
+    #                 current_week[6].append(row)
+    #
+    #         context = {'table' : current_week,
+    #                    'username' : user.username
+    #         }
+    #     return render_to_response('home.html', context)
+    # else:
+    #     return HttpResponseRedirect("/login")
+    return render_to_response('home.html')
 
 
 def login_view(request):
@@ -89,6 +90,7 @@ def login_view(request):
         password = request.POST['password']
 
         user = auth.authenticate(username=username, password=password)
+
         if user is not None:
             if user.is_active:
                 auth.login(request, user)

@@ -5,7 +5,6 @@ ul {
 
 a {
     text-decoration: none;
-    font-family: Arial, SegoeUIRegular;
     transition: .2s linear;
 }
 
@@ -72,10 +71,15 @@ button:focus {
 
 .logo {
     float: left;
-    display: inline-block;
-    width: 186px;
-    padding-left: 15px;
+    width: 184px;
+    padding-left: 17px;
     font-size: 24px;
+
+}
+.logo a{
+    display: table-cell;
+    height: 38px;
+    vertical-align: middle;
 }
 
 .top-menu ul li a:hover {
@@ -90,15 +94,18 @@ button:focus {
     transition: 0.3s ease;
 }
 
-.droplink {
+.droplist {
+    z-index: 100;
+    background-color: rgba(240, 240, 240, 1);
     float: right;
     max-width: 200px;
-    margin-right: 12px;
-    transition: 0.3s;
+    margin-right: 16px;
+    cursor: pointer;
 
 }
 
-.droplink a {
+
+.droplist a {
     padding: 0 15px 0 10px;
     display: table-cell;
     height: 36px;
@@ -124,27 +131,36 @@ button:focus {
     width: 30px;
     height: 30px;
     border-radius: 2px;
-    margin-right: 12px;
+    margin-right: 10px;
     background-image: url("../images/putin.jpg");
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
 }
 
-.droplink:hover {
-    background: rgba(200, 200, 200, 1);
-    cursor: pointer;
+#arrow_down_content {
+    height: 38px;
+    display: table-cell;
+    vertical-align: middle;
+    margin: 0;
+    padding: 0;
+
+}
+
+#arrow_down {
+    margin: 5px 8px 0 0;
+    border: 6px solid transparent;
+    border-top: 7px solid rgba(150, 150, 150, 1);
 }
 
 /*#jQuery ###########################################################*/
 /*#jQuery ###########################################################*/
 /*#jQuery ###########################################################*/
-.droplink_click {
+.droplist_click {
     background: white;
-    /*width: 150px;*/
     font-size: 0.9em;
     border-radius: 4px;
-    overflow: hidden;
+    position: absolute;
     border: 1px solid rgba(210, 210, 210, 1);
     -webkit-box-shadow: 0px 2px 15px 0px rgba(0, 0, 0, 0.2);
     -moz-box-shadow: 0px 2px 15px 0px rgba(0, 0, 0, 0.2);
@@ -153,21 +169,128 @@ button:focus {
     -moz-user-select: none;
     -khtml-user-select: none;
     user-select: none;
+    z-index: 1;
+    margin-top: -10px;
 
 }
 
-.droplink_click ul li {
-    line-height: 35px;
+.droplist_click_container{
+    cursor: default;
+    display: inline;
+    /*background: red;*/
+    margin-top: 10px;
+}
+
+.droplist_click {
+    position: relative;
+}
+
+
+.droplist_click ul li a{
+    display: block;
+    /*background: blue;*/
+    width: 100%;
     padding: 0 10px 0 10px;
 }
+.droplist_click ul li {
+    width: 110px;
+    line-height: 35px;
+    overflow: hidden;
+    border-bottom: 1px solid rgba(230,230,230,1);
+}
 
-.droplink_click ul li:hover {
+.droplist_click ul li:first-child {
+    height: 4px;
+    background: white;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    cursor: default;
+    border-bottom: none;
+}
+
+.droplist_click ul li:last-child {
+    height: 3px;
+    background: white;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    cursor: default;
+    border-bottom: none;
+}
+.droplist_click ul li:nth-child(4){
+    border-bottom: none;
+}
+
+.droplist_click ul li:first-child:hover, .droplist_click ul li:last-child:hover {
+    background: white;
+}
+
+.droplist_click ul li:first-child:active, .droplist_click ul li:last-child:active {
+    background: white;
+}
+
+.droplist_click ul li:hover {
+    background: rgba(230, 230, 230, 1);
+}
+
+.droplist_click ul li:active {
     background: rgba(220, 220, 220, 1);
 }
 
-.droplink_click ul li:active{
-    background: rgba(210, 210, 210, 1);
+
+.triangle {
+    display: inline-table;
+    position: relative;
+    width: 0;
+    height: 0;
+    bottom: 5px;
+    right: -79px;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 10px solid rgba(220, 220, 220, 1);
+    z-index: 3;
 }
+.triangle_bottom{
+    display: inline-table;
+    position: relative;
+    width: 0;
+    height: 0;
+    bottom: 4px;
+    right: -63px;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 10px solid white;
+    z-index: 3;
+}
+
+/*.droplist_click ul:after {*/
+    /*content: '';*/
+    /*position: absolute;*/
+    /*bottom: 111px;*/
+    /*right: 89px;*/
+    /*border: 8px solid transparent;*/
+    /*border-bottom: 9px solid white;*/
+    /*z-index: 12;*/
+    /*cursor: default;*/
+/*}*/
+
+/*.droplist_click ul:before {*/
+    /*content: '';*/
+    /*position: absolute;*/
+    /*bottom: 112px;*/
+    /*right: 89px;*/
+    /*border: 8px solid transparent;*/
+    /*cursor: default;*/
+    /*border-bottom: 8px solid rgba(180, 180, 180 , 1);*/
+    /*z-index: -10;*/
+    /*filter: blur(2px); !* Someday, sigh ... *!*/
+    /*-webkit-filter: blur(2px); !* Prefixed CSS3 blur filters *!*/
+    /*-moz-filter: blur(2px);*/
+    /*-o-filter: blur(2px);*/
+    /*-ms-filter: blur(2px);*/
+    /*filter: url(#blur); !* Firefox needs SVG *!*/
+    /*filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius='2'); !* IE lte 9 *!*/
+/*}*/
+
 /*#jQuery ###########################################################*/
 /*#jQuery ###########################################################*/
 /*#jQuery ###########################################################*/
