@@ -22,10 +22,11 @@ def registration_view(request):
         if form.is_valid():
             # сохраняем usr_name и pswd в таблицу auth_user
             form.save()
-            # сохраняем phone и связь один к одному в таблицу custom_user
-            new_auth_user = User.objects.get(username=request.POST['username'])
-            new_custom_user = CustomUser(user_id=new_auth_user.id, phone=request.POST['phone'])
-            new_custom_user.save()
+            # # сохраняем phone и связь один к одному в таблицу custom_user
+            # new_user = CustomUser.objects.get(username=request.POST['username'])
+            # new_user.phone = request.POST['phone']
+            # new_user.save()
+
             return HttpResponseRedirect('/login')
     else:
         form = CustomUserCreationForm()
@@ -172,37 +173,41 @@ def add_schedules_view(request):
             new_data = dict(request.POST) # получаем новые данные от клиента
 
             ###########################################################################
-            #                           ЗАНОСИМ ДАННЫЕ БАЗУ                           #
+            #                         ЗАНОСИМ ДАННЫЕ В БАЗУ                           #
             ###########################################################################
 
             count_tchr_id = len(Teachers.objects.all())   # этот говно код
             count_subj_id = len(Subjects.objects.all())   # потому что в БД походу
             count_schld_id = len(Schedules.objects.all()) # не автоинкрементные поля :(
 
-            new_teacher = Teachers(tchr_id = count_tchr_id + 1,
-                                   name_short = new_data['teacher'][0]
+            new_teacher = Teachers(
+                tchr_id = count_tchr_id + 1,
+                name_short = new_data['teacher'][0]
             )
             new_teacher.save()
 
-            new_subject = Subjects(subj_id = count_subj_id + 1,
-                                   name = new_data['subject'][0]
+            new_subject = Subjects(
+                subj_id = count_subj_id + 1,
+                name = new_data['subject'][0]
 
             )
             new_subject.save()
 
-            new_schld_row = Schedules(schld_id = count_schld_id + 1,
-                                      grp_grp_id = group,
-                                      cthd_cthd_id = cathedra,
-                                      dfwk_dfwk_id = new_data['dayofweek'][0],
-                                      subj_subj_id = new_subject.subj_id,
-                                      tchr_tchr_id = new_teacher.tchr_id,
-                                      tms_tms_id = new_data['time'][0],
-                                      parity = new_data['parity'][0],
-                                      place = new_data['place'][0],
-                                      start_week = new_data['startweek'][0],
-                                      end_week = new_data['endweek'][0]
+            new_schld_row = Schedules(
+                schld_id = count_schld_id + 1,
+                grp_grp_id = group,
+                cthd_cthd_id = cathedra,
+                dfwk_dfwk_id = new_data['dayofweek'][0],
+                subj_subj_id = new_subject.subj_id,
+                tchr_tchr_id = new_teacher.tchr_id,
+                tms_tms_id = new_data['time'][0],
+                parity = new_data['parity'][0],
+                place = new_data['place'][0],
+                start_week = new_data['startweek'][0],
+                end_week = new_data['endweek'][0]
             )
             new_schld_row.save()
+
             return HttpResponseRedirect('/add_schedules')
     else:
         return render_to_response('add_schedules.html', context)

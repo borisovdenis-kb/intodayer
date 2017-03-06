@@ -81,14 +81,20 @@ WSGI_APPLICATION = 'intodayer2.wsgi.application'
 
 DATABASES = {
     'default': {
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         # 'ENGINE': 'django.db.backends.oracle',
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        # 'NAME': db_config['NAME'],
-        # 'USER': db_config['USER'],
-        # 'PASSWORD': db_config['PASSWORD'],
-        # 'HOST': db_config['HOST'],
-        # 'PORT': db_config['PORT'],
+        # 'NAME': db_config_oracle['NAME'],
+        # 'USER': db_config_oracle['USER'],
+        # 'PASSWORD': db_config_oracle['PASSWORD'],
+        # 'HOST': db_config_oracle['HOST'],
+        # 'PORT': db_config_oracle['PORT'],
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': db_config_mysql['NAME'],
+        'USER': db_config_mysql['USER'],
+        'PASSWORD': db_config_mysql['PASSWORD'],
+        'HOST': db_config_mysql['HOST'],
+        'PORT': db_config_mysql['PORT'],
     }
 }
 
@@ -130,3 +136,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+AUTH_USER_MODEL = 'intodayer2_app.CustomUser'
