@@ -240,7 +240,6 @@ class CustomUser(AbstractUser):
 
     class Meta:
         managed = True
-        db_table = 'auth_user'
 
     def __str__(self):
         return '%s %s %s' % (
