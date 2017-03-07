@@ -66,6 +66,7 @@ class PlanListsAdmin(admin.ModelAdmin):
         'title',
         'description',
         'owner',
+        'start_date',
     )
 
 

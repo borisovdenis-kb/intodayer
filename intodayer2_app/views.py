@@ -7,6 +7,8 @@ from django.contrib.auth.forms import UserCreationForm
 from intodayer2_app.forms import CustomUserCreationForm
 from intodayer2_app.send_sms import *
 from intodayer2_app.models import *
+from datetime import *
+from django.utils import timezone
 
 
 def welcome_view(request):
@@ -47,10 +49,8 @@ def home_view(request):
             user_id=user.id, current_yn='y'
         )
 
-        plan_rows = {}
         context = {
             'username': user.username,
-            'plan_rows': plan_rows,
         }
 
         if plan_list:
@@ -58,14 +58,45 @@ def home_view(request):
             # --- название
             # --- описание
             # --- кол-во юзеров имеющих это расписание
+            # дальше собираем само рассписание на сегодня и на завтра
             plan = plan_list[0]
             context['plan_info'] = [plan.plan.title, plan.plan.description]
-            context['plan_info'] += [UserPlans.objects.filter(plan_id=plan.plan.id).count()]
 
-            plan_rows = PlanRows.get_rows_by_weekday(plan_id=plan.id)
+            count = UserPlans.objects.filter(plan_id=plan.plan.id).count()
 
-            context['plan_rows'] = plan_rows
+            context['plan_info'] += [members_amount_suffix(count)]
 
+            today = timezone.make_aware(datetime.now())
+            tomorrow = today + timedelta(1)
+            weekday = datetime.weekday(today)
+            start_date = plan.plan.start_date
+
+            context['today_weekday'] = weekday
+
+            # определяем номер текущей недели
+            current_week = weeks_from(start_date, today)
+
+            today_plan = PlanRows.objects.filter(
+                plan_id=plan.plan.id,
+                day_of_week=weekday + 1,
+                start_week__lte=current_week,
+                end_week__gte=current_week,
+            )
+            tomorow_plan = PlanRows.objects.filter(
+                plan_id=plan.plan.id,
+                day_of_week=weekday + 2,
+                start_week__lte=current_week,
+                end_week__gte=current_week,
+            )
+
+            # распределяем по дня недели
+            # days = get_rows_by_weekday(plan_rows)
+
+            context['today_plan'] = {'date': today.strftime("%A, %d. %B %Y"), 'plan_rows': today_plan}
+            context['tomorrow_plan'] = {'date': tomorrow.strftime("%A, %d. %B %Y"), 'plan_rows': tomorow_plan}
+
+            print(context)
+            
             return render_to_response('home.html', context)
         else:
             return render_to_response('home.html', context)
@@ -199,8 +230,6 @@ def add_schedules_view(request):
             return HttpResponseRedirect('/add_schedules')
     else:
         return render_to_response('add_schedules.html', context)
-
-
 
 
 def profile_settings(request):

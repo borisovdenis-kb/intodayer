@@ -211,6 +211,7 @@ class PlanLists(models.Model):
     """
     title = models.CharField(max_length=256)
     description = models.TextField(max_length=1000)
+    start_date = models.DateTimeField()
     owner = models.ForeignKey('CustomUser', models.DO_NOTHING)
 
     class Meta:
@@ -250,39 +251,77 @@ class CustomUser(AbstractUser):
 #                           ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИ                                   #
 ######################################################################################
 
-def get_rows_by_weekday(plan_id):
+def members_amount_suffix(n):
+    """
+        Функция определяет нужно окончание в слове участник
+        для заданного n
+        ____________________________________________________
+        :param n: целое число
+        :return res: строка
+    """
+    res = ''
+
+    if (n % 10) in [0, 5, 6, 7, 8, 9]:
+        res = '%s участников' % n
+    elif (n % 10) in [2, 3, 4]:
+        res = '%s участника' % n
+    else:
+        res = '%s участник' % n
+
+    return res
+
+
+def weeks_from(start, end):
+    """
+        Функция считает какая по счету неделя с опр даты
+        ________________________________________________
+        :param start: дата, от которой считаются недели
+        :param end: дата, до которой считаются недели
+        :return: weeks
+    """
+    days = end - start
+
+    if end.weekday() >= start.weekday():
+        return (days.days // 7) + 1
+    else:
+        return (days.days // 7) + 2
+
+
+def get_rows_by_weekday(rows):
     """
         Задача этой функции в том, чтобы распределить
         строки рассписания по дням недели, отсортировав
         их по времени
-        :param plan_id:
+        _______________________________________________
+        :param rows: строки рассписания, заранее выбранный из таблицы
         :return: days
     """
-    rows = PlanRows.objects.select_related().filter(plan_id=plan_id).order_by('time')
+    # rows = PlanRows.objects.select_related().filter(plan_id=plan_id).order_by('time')
 
-    days = {
-        'monday': [],
-        'tuesday': [],
-        'wednesday': [],
-        'thursday': [],
-        'friday': [],
-        'saturday': [],
-        'sunday': [],
-    }
+    # days = {
+    #     'monday': [],
+    #     'tuesday': [],
+    #     'wednesday': [],
+    #     'thursday': [],
+    #     'friday': [],
+    #     'saturday': [],
+    #     'sunday': [],
+    # }
+    days = [[i] for i in range(7)]
     for row in rows:
         if row.day_of_week.name == 'Понедельник':
-            days['monday'].append(row)
+            days[0].append(row)
         elif row.day_of_week.name == 'Вторник':
-            days['tuesday'].append(row)
+            days[1].append(row)
         elif row.day_of_week.name == 'Среда':
-            days['wednesday'].append(row)
+            days[2].append(row)
         elif row.day_of_week.name == 'Четверг':
-            days['thursday'].append(row)
+            days[3].append(row)
         elif row.day_of_week.name == 'Пятница':
-            days['friday'].append(row)
+            days[4].append(row)
         elif row.day_of_week.name == 'Суббота':
-            days['saturday'].append(row)
+            days[5].append(row)
         elif row.day_of_week.name == 'Воскресенье':
-            days['sunday'].append(row)
+            days[6].append(row)
 
     return days
