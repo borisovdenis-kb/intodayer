@@ -90,10 +90,7 @@ class Times(models.Model):
         db_table = 'times'
 
     def __str__(self):
-        return '%s %s' % (
-            self.plan.title,
-            self.hh24mm,
-        )
+        return str(self.hh24mm)
 
 
 class Invitations(models.Model):
@@ -158,7 +155,7 @@ class PlanRows(models.Model):
         db_table = 'plan_rows'
 
     def __str__(self):
-        return '%s %s' % (
+        return '%s' % (
             self.plan.title
         )
 
@@ -222,7 +219,7 @@ class PlanLists(models.Model):
 
     def __str__(self):
         return '%s %s' % (
-            self.name,
+            self.title,
             self.owner.username,
         )
 
@@ -247,3 +244,45 @@ class CustomUser(AbstractUser):
             self.last_name,
             self.username,
         )
+
+
+######################################################################################
+#                           ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИ                                   #
+######################################################################################
+
+def get_rows_by_weekday(plan_id):
+    """
+        Задача этой функции в том, чтобы распределить
+        строки рассписания по дням недели, отсортировав
+        их по времени
+        :param plan_id:
+        :return: days
+    """
+    rows = PlanRows.objects.select_related().filter(plan_id=plan_id).order_by('time')
+
+    days = {
+        'monday': [],
+        'tuesday': [],
+        'wednesday': [],
+        'thursday': [],
+        'friday': [],
+        'saturday': [],
+        'sunday': [],
+    }
+    for row in rows:
+        if row.day_of_week.name == 'Понедельник':
+            days['monday'].append(row)
+        elif row.day_of_week.name == 'Вторник':
+            days['tuesday'].append(row)
+        elif row.day_of_week.name == 'Среда':
+            days['wednesday'].append(row)
+        elif row.day_of_week.name == 'Четверг':
+            days['thursday'].append(row)
+        elif row.day_of_week.name == 'Пятница':
+            days['friday'].append(row)
+        elif row.day_of_week.name == 'Суббота':
+            days['saturday'].append(row)
+        elif row.day_of_week.name == 'Воскресенье':
+            days['sunday'].append(row)
+
+    return days

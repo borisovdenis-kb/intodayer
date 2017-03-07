@@ -83,7 +83,7 @@ function click_on_droplist(this_elem, event) {
 
         '<li><a href="#">Мой профиль</a></li>' +
         '<li><a href="#">О сервисе</a></li>' +
-        '<li><a href="#">Выйти</a></li>' +
+        '<li><a href="/logout">Выйти</a></li>' +
 
         '<li></li>' +
         '</ul>' +
