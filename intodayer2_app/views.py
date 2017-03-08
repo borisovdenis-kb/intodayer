@@ -63,40 +63,37 @@ def home_view(request):
             context['plan_info'] = [plan.plan.title, plan.plan.description]
 
             count = UserPlans.objects.filter(plan_id=plan.plan.id).count()
-
+            # добавляем кол-во участников
             context['plan_info'] += [members_amount_suffix(count)]
 
-            today = timezone.make_aware(datetime.now())
+            today = timezone.make_aware(datetime.now())   # опр сегодняшнюю дату
             tomorrow = today + timedelta(1)
             weekday = datetime.weekday(today)
-            start_date = plan.plan.start_date
+            start_date = plan.plan.start_date             # c какого числа действует расп.
 
             context['today_weekday'] = weekday
 
-            # определяем номер текущей недели
-            current_week = weeks_from(start_date, today)
+            current_week = weeks_from(start_date, today)  # определяем номер текущей недели
+            parity = current_week % 2                     # четность недели
 
-            today_plan = PlanRows.objects.filter(
+            today_plan = PlanRows.objects.select_related().filter(
                 plan_id=plan.plan.id,
                 day_of_week=weekday + 1,
                 start_week__lte=current_week,
                 end_week__gte=current_week,
+                parity=parity
             )
-            tomorow_plan = PlanRows.objects.filter(
+            tomorrow_plan = PlanRows.objects.select_related().filter(
                 plan_id=plan.plan.id,
                 day_of_week=weekday + 2,
                 start_week__lte=current_week,
                 end_week__gte=current_week,
+                parity=parity
             )
 
-            # распределяем по дня недели
-            # days = get_rows_by_weekday(plan_rows)
-
             context['today_plan'] = {'date': today.strftime("%A, %d. %B %Y"), 'plan_rows': today_plan}
-            context['tomorrow_plan'] = {'date': tomorrow.strftime("%A, %d. %B %Y"), 'plan_rows': tomorow_plan}
+            context['tomorrow_plan'] = {'date': tomorrow.strftime("%A, %d. %B %Y"), 'plan_rows': tomorrow_plan}
 
-            print(context)
-            
             return render_to_response('home.html', context)
         else:
             return render_to_response('home.html', context)
