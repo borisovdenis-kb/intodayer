@@ -30,182 +30,190 @@
 </head>
 
 <body>
-<div class="for_invitations">
-    <!--Сюда будут вставляться имеющиеся у данного юзера приглашения-->
-</div>
-{% block header %}
-    <div class="top-block">
-        <div class="top">
-            <div class="logo"><a href="/home">IntoDayer</a></div>
-            <div class="top-menu">
-                <ul>
-                    <!-- Не переименовывать классы и имена страниц! -->
-                    <li id="home"><a href="/home">Сегодня</a></li>
-                    <li id="table"><a href="/plan">Расписание</a></li>
-                    <li id="group"><a href="/home">Участники</a></li>
-                </ul>
-                <div class="droplist">
-                    <div style="float:right">
-                        <div id="arrow_down_content">
-                            <div id="arrow_down"></div>
+<div class="effect_blur">
+    <div class="for_invitations">
+        <!--Сюда будут вставляться имеющиеся у данного юзера приглашения-->
+    </div>
+
+    {% block header %}
+        <div class="top-block">
+            <div class="top">
+                <div class="logo"><a href="/home">IntoDayer</a></div>
+                <div class="top-menu">
+                    <ul>
+                        <!-- Не переименовывать классы и имена страниц! -->
+                        <li id="home"><a href="/home">Сегодня</a></li>
+                        <li id="table"><a href="/plan">Расписание</a></li>
+                        <li id="group"><a href="/home">Участники</a></li>
+                    </ul>
+                    <div class="droplist">
+                        <div style="float:right">
+                            <div id="arrow_down_content">
+                                <div id="arrow_down"></div>
+                            </div>
                         </div>
-                    </div>
-                    <div style="float:right;">
-                        <div id="ava_img_content">
-                            <div id="ava_img"></div>
+                        <div style="float:right;">
+                            <div id="ava_img_content">
+                                <div id="ava_img"></div>
+                            </div>
                         </div>
-                    </div>
-                    <div id="profile_title">
-                        <a>{{ username }}</a>
-                    </div>
+                        <div id="profile_title">
+                            <a>{{ username }}</a>
+                        </div>
 
 
+                    </div>
                 </div>
+
             </div>
 
         </div>
+    {% endblock %}
+    {#<div class="top-line"></div>#}
 
-    </div>
-{% endblock %}
-{#<div class="top-line"></div>#}
+    <div class="page">
+        <div class="content">
+            {% block left_content %}
+                <div class="left_content">
+                    <div class="ava_content">
+                    </div>
 
-<div class="page">
-    <div class="content">
-        {% block left_content %}
-            <div class="left_content">
-                <div class="ava_content">
-                </div>
-
-                {% if is_invitation != True %}
-                    <div class="plan_selector">
-                        <label id="plan_selector_title">Мои расписания</label>
-                        <ul>
-                            {% for plan in all_plans %}
+                    {% if is_invitation != True %}
+                        <div class="plan_selector">
+                            <label id="plan_selector_title">Мои расписания</label>
+                            <ul>
+                                {% for plan in all_plans %}
+                                    <li>
+                                        <a
+                                                {% if plan.current_yn == 'y' %}
+                                                    style="background-color: #000000; color: #ffffff"
+                                                {% endif %}
+                                        >
+                                            {{ plan.plan.title }}
+                                            <p>{{ plan.plan.id }}</p>
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="users_online">
+                            <label id="users_online_title">Online</label>
+                            <ul>
                                 <li>
-                                    <a
-                                            {% if plan.current_yn == 'y' %}
-                                                style="background-color: #000000; color: #ffffff"
-                                            {% endif %}
-                                    >
-                                        {{ plan.plan.title }}
-                                        <p>{{ plan.plan.id }}</p>
+                                    <a href="#">
+                                        <div class="user_image"></div>
+                                        <div class="user_name">User 1</div>
                                     </a>
                                 </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                    <div class="users_online">
-                        <label id="users_online_title">Online</label>
-                        <ul>
-                            <li>
-                                <a href="#">
-                                    <div class="user_image"></div>
-                                    <div class="user_name">User 1</div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <div class="user_image"></div>
-                                    <div class="user_name">User 1</div>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <div class="user_image"></div>
-                                    <div class="user_name">User 1</div>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                {% else %}
-                    {% block invitation %}{% endblock %}
-                {% endif %}
-            </div>
-
-        {% endblock %}
-
-        {% block right_content %}
-            <div class="right_content">
-                <div class="title_content">
-                    <div id="plan_title">{{ cur_plan_info.0 }}</div>
-                    <div id="count_title">{{ cur_plan_info.2 }}</div>
+                                <li>
+                                    <a href="#">
+                                        <div class="user_image"></div>
+                                        <div class="user_name">User 1</div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <div class="user_image"></div>
+                                        <div class="user_name">User 1</div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    {% else %}
+                        {% block invitation %}{% endblock %}
+                    {% endif %}
                 </div>
 
-                <!-- Сегодня -->
-                <div class="plan_content">
-                    <div class="plan_window">
-                        <div class="content_day_title">
-                            <div class="day_title">Сегодня</div>
-                            <div class="day_data">{{ today_plan.format_date }}</div>
-                            <a>{{ today_plan.date }}</a>
-                        </div>
-                        <div class="day_plan_content">
-                            <div class="str_plan">
-                                <ul class="str_title">
-                                    <li><a>Время</a></li>
-                                    <li><a>Предмет</a></li>
-                                    <li><a>Преподаватель</a></li>
-                                    <li><a>Аудитория</a></li>
+            {% endblock %}
 
-                                </ul>
-                            </div>
-                            {#                        а это уже в django шаблоны#}
-                            {% for row in today_plan.plan_rows %}
-                                <div class="str_plan">
-                                    <ul>
-                                        <li><a>{{ row.get_format_time }}</a></li>
-                                        <li><a>{{ row.subject.name }}</a></li>
-                                        <li><a>{{ row.teacher.name_short }}</a></li>
-                                        <li><a>{{ row.place.name }}</a></li>
-                                    </ul>
-                                    <a>{{ plan_id }}</a>
-                                </div>
-                            {% endfor %}
-                        </div>
+            {% block right_content %}
+                <div class="right_content">
+                    <div class="title_content">
+                        <div id="plan_title">{{ cur_plan_info.0 }}</div>
+                        <div id="count_title">{{ cur_plan_info.2 }}</div>
                     </div>
-                </div>
 
-
-                {#            {% if separator %}#}
-                {#                <div class="separator"></div>#}
-                {#            {% endif %}#}
-
-
-                <!-- Завтра -->
-                <div class="plan_content">
-                    <div class="plan_window">
-                        <div class="content_day_title">
-                            <div class="day_title">Завтра</div>
-                            <div class="day_data">{{ tomorrow_plan.format_date }}</div>
-                            <a>{{ tomorrow_plan.date }}</a>
-                        </div>
-                        <div class="day_plan_content">
-                            <div class="str_plan">
-                                <ul class="str_title">
-                                    <li><a>Время</a></li>
-                                    <li><a>Предмет</a></li>
-                                    <li><a>Преподаватель</a></li>
-                                    <li><a>Аудитория</a></li>
-
-                                </ul>
+                    <!-- Сегодня -->
+                    <div class="plan_content">
+                        <div class="plan_window">
+                            <div class="content_day_title">
+                                <div class="day_title">Сегодня</div>
+                                <div class="day_data">{{ today_plan.format_date }}</div>
+                                <a>{{ today_plan.date }}</a>
                             </div>
-                            {#                        а это уже в django шаблоны#}
-                            {% for row in tomorrow_plan.plan_rows %}
+                            <div class="day_plan_content">
                                 <div class="str_plan">
-                                    <ul>
-                                        <li><a>{{ row.get_format_time }}</a></li>
-                                        <li><a>{{ row.subject.name }}</a></li>
-                                        <li><a>{{ row.teacher.name_short }}</a></li>
-                                        <li><a>{{ row.place.name }}</a></li>
+                                    <ul class="str_title">
+                                        <li><a>Время</a></li>
+                                        <li><a>Предмет</a></li>
+                                        <li><a>Преподаватель</a></li>
+                                        <li><a>Аудитория</a></li>
+
                                     </ul>
                                 </div>
-                            {% endfor %}
+                                {#                        а это уже в django шаблоны#}
+                                {% for row in today_plan.plan_rows %}
+                                    <div class="str_plan">
+                                        <ul>
+                                            <li><a>{{ row.get_format_time }}</a></li>
+                                            <li><a>{{ row.subject.name }}</a></li>
+                                            <li><a>{{ row.teacher.name_short }}</a></li>
+                                            <li><a>{{ row.place.name }}</a></li>
+                                        </ul>
+                                        <a>{{ plan_id }}</a>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+
+                    {#            {% if separator %}#}
+                    {#                <div class="separator"></div>#}
+                    {#            {% endif %}#}
+
+
+                    <!-- Завтра -->
+                    <div class="plan_content">
+                        <div class="plan_window">
+                            <div class="content_day_title">
+                                <div class="day_title">Завтра</div>
+                                <div class="day_data">{{ tomorrow_plan.format_date }}</div>
+                                <a>{{ tomorrow_plan.date }}</a>
+                            </div>
+                            <div class="day_plan_content">
+                                <div class="str_plan">
+                                    <ul class="str_title">
+                                        <li><a>Время</a></li>
+                                        <li><a>Предмет</a></li>
+                                        <li><a>Преподаватель</a></li>
+                                        <li><a>Аудитория</a></li>
+
+                                    </ul>
+                                </div>
+                                {#                        а это уже в django шаблоны#}
+                                {% for row in tomorrow_plan.plan_rows %}
+                                    <div class="str_plan">
+                                        <ul>
+                                            <li><a>{{ row.get_format_time }}</a></li>
+                                            <li><a>{{ row.subject.name }}</a></li>
+                                            <li><a>{{ row.teacher.name_short }}</a></li>
+                                            <li><a>{{ row.place.name }}</a></li>
+                                        </ul>
+                                    </div>
+                                {% endfor %}
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        {% endblock %}
+            {% endblock %}
+        </div>
     </div>
+</div>
+
+<div class="perform_confirmation">
+    <p>Расписание добавлено</p>
+    <a href="/home">oк</a>
 </div>
 </body>
 

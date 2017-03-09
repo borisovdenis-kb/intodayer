@@ -72,6 +72,17 @@ def confirm_invitation_ajax(request):
         inv.confirmed_yn = 'y' if request.GET['decision'] == '1' else 'n'
         inv.save()
 
+        if inv.confirmed_yn == 'y':
+            # добавляем расписание и удаляем приглашение
+            new = UserPlans(
+                user_id=user.id,
+                plan_id=request.GET['plan_id'],
+                current_yn='n'
+            )
+            new.save()
+
+        inv.delete()
+
         response = HttpResponse()
         response['Content-Type'] = 'text/javascript'
         response.write(json.dumps([{'success': 1}]))

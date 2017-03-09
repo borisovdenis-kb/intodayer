@@ -35,12 +35,13 @@ $(document).ready( function() {
     });
 
     $('.accept').click(function () {
-        var array = location.href.split('/')
+        var array = location.href.split('/');
 
         $.ajax({
             url: '/confirm_invitation',
             data: {'decision': 1, 'plan_id': array[array.length - 1]},
             success: function (msg) {
+                blurElement('.effect_blur', 4);
                 $('.perform_confirmation p').text('Расписание добавлено');
                 $('.perform_confirmation').fadeIn(800);
                 $('.perform_confirmation a').delay(1100).fadeIn(0);
@@ -50,12 +51,13 @@ $(document).ready( function() {
     });
 
     $('.reject').click(function () {
-        var array = location.href.split('/')
+        var array = location.href.split('/');
 
         $.ajax({
             url: '/confirm_invitation',
             data: {'decision': 0, 'plan_id': array[array.length - 1]},
             success: function (msg) {
+                blurElement('.effect_blur', 4);
                 $('.perform_confirmation p').text('Приглашение отклонено');
                 $('.perform_confirmation').fadeIn(800);
                 $('.perform_confirmation a').delay(1100).fadeIn(0);
@@ -65,6 +67,21 @@ $(document).ready( function() {
     });
     
 });
+
+function blurElement(element, size) {
+    var filterVal = 'blur(' + size + 'px)';
+    $(element).css({
+        'filter': filterVal,
+        'webkitFilter': filterVal,
+        'mozFilter': filterVal,
+        'oFilter': filterVal,
+        'msFilter': filterVal,
+        'transition': 'all 0.2s ease-out',
+        '-webkit-transition': 'all 0.2s ease-out',
+        '-moz-transition': 'all 0.2s ease-out',
+        '-o-transition': 'all 0.2s ease-out'
+    });
+}
 
 function show_invitations() {
     $('.for_invitations').load('/get_invitations', function () {
