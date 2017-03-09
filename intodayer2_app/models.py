@@ -154,6 +154,10 @@ class PlanRows(models.Model):
         managed = True
         db_table = 'plan_rows'
 
+    def get_format_time(self):
+        t = self.time.hh24mm
+        return t.strftime('%H:%M')
+
     def __str__(self):
         return '%s' % (
             self.plan.title

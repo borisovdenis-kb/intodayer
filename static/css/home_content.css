@@ -167,6 +167,10 @@ label {
     border-bottom: 1px solid rgba(210, 210, 210, 1);
 }
 
+.content_day_title a {
+    display: none;
+}
+
 .day_title{
     padding: 5px 10px 5px 20px;
 }

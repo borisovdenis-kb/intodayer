@@ -67,9 +67,12 @@ def home_view(request):
             context['plan_info'] += [members_amount_suffix(count)]
 
             today = timezone.make_aware(datetime.now())   # опр сегодняшнюю дату
-            tomorrow = today + timedelta(1)
+            tomorrow = today + timedelta(1)               # завтрашняя дата
             weekday = datetime.weekday(today)
             start_date = plan.plan.start_date             # c какого числа действует расп.
+
+            format1 = '%Y %m %d'
+            format2 = '%A, %d. %B %Y'
 
             context['today_weekday'] = weekday
 
@@ -91,8 +94,16 @@ def home_view(request):
                 parity=parity
             )
 
-            context['today_plan'] = {'date': today.strftime("%A, %d. %B %Y"), 'plan_rows': today_plan}
-            context['tomorrow_plan'] = {'date': tomorrow.strftime("%A, %d. %B %Y"), 'plan_rows': tomorrow_plan}
+            context['today_plan'] = {
+                'date': today.strftime(format1),
+                'format_date': today.strftime(format2),
+                'plan_rows': today_plan,
+            }
+            context['tomorrow_plan'] = {
+                'date': tomorrow.strftime(format1),
+                'format_date': tomorrow.strftime(format2),
+                'plan_rows': tomorrow_plan
+            }
 
             return render_to_response('home.html', context)
         else:
