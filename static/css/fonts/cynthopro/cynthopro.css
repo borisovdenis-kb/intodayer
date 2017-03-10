@@ -1,0 +1,12 @@
+@font-face {
+    font-family: 'Cyntho Pro';
+    src: local('CynthoPro-Italic'), url('Cynthopro-italic.woff2') format('woff2'), url('Cynthopro-italic.woff') format('woff'), url('Cynthopro-italic.ttf') format('truetype');
+    font-weight: 400;
+    font-style: italic;
+}
+@font-face {
+    font-family: 'Cyntho Pro';
+    src: local('CynthoPro-Regular'), url('Cynthopro-regular.woff2') format('woff2'), url('Cynthopro-regular.woff') format('woff'), url('Cynthopro-regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}

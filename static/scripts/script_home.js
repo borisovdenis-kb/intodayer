@@ -1,205 +1,134 @@
-
-
-// установка теней меню
-
-$(document).ready(function(){
-    var selectedMenu;
-var selectedDay;
-
-var leftShadow = 'leftShadow';
-var rightShadow = 'rightShadow';
-
-// Firefox 1.0+
-var isFirefox = typeof InstallTrigger !== 'undefined';
-if (isFirefox){
-	leftShadow = 'leftShadowMoz';
-	rightShadow = 'rightShadowMoz';
-	$('.top-menu').addClass('menuShadowMoz');
-	// $('a').css({'font': 'times'});
-}
-
-//Меню
-selectedMenu = document.getElementById("home");
-setCurrentMenu(selectedMenu);
-
-//Дни недели
-selectedDay = document.querySelectorAll('.days')[0];
-selectedDay.classList.add('days_select');
-
-function setCurrentMenu(objElem) {
-	var prev = objElem.previousSibling.previousSibling;
-	var next = objElem.nextSibling.nextSibling;
-	if ($(prev).is('LI')) {
-		$(prev).addClass(leftShadow);
-		$(objElem).addClass('select_menu');
-	}
-	if ($(next).is('LI')) {
-		$(next).addClass(rightShadow);
-		$(objElem).addClass('select_menu');
-	}
-	selectedMenu = objElem;
-}
-
-//Обработка нажатий на меню
-function setDefaultMenu() {
-	"use strict";
-	var next = selectedMenu.nextSibling.nextSibling;
-	var prev = selectedMenu.previousSibling.previousSibling;
-	$(selectedMenu).removeClass('select_menu');
-	$(next).removeClass(rightShadow + ' ' + leftShadow);
-	$(prev).removeClass(rightShadow + ' ' + leftShadow);
-}
-
-function setMenu(event) {
-	"use strict";
-	var objElem = event.target.parentElement;
-	if(!$(objElem).is('LI')){
-		return false;
-	}
-	setDefaultMenu(objElem);
-	setCurrentMenu(objElem);
-}
-
-var menuElem = document.getElementById("menu");
-menuElem.addEventListener('click', setMenu);
-
-//Отключает работу ссылок <a></a> в выборе дней
-var elemsA = document.querySelectorAll('.days');
-for (var i = 0; i < elemsA.length; i++) {
-	elemsA[i].onclick = function () {
-		"use strict";
-		return false;
-	};
-}
-
-//Отключает работу ссылок <a></a> в главном меню для тестового режима
-//===============================================
-var elemsMenu = document.getElementById("menu");
-elemsMenu = elemsMenu.getElementsByTagName("LI");
-for (var i = 0; i < elemsMenu.length; i++) {
-	elemsMenu[i].onclick = function () {
-		"use strict";
-		return false;
-	};
-}
-//===============================================
-
-
-//Открытие и закрытие меню профиля в шапке
-var droplink = document.getElementsByClassName('droplink')[0];
-var ul_menu = droplink.getElementsByTagName("UL")[0];
-var arrow = droplink.getElementsByClassName("up-arrow")[0];
-var openFlag = false;
-var timeMenuEffect = 150;
-
-droplink.addEventListener("click", openMenu);
-document.body.addEventListener("click", closeMenu);
-
-function openMenu(event) {
-	"use strict";
-	if (openFlag === false) {
-		arrow.classList.add('select_up-arrow');
-		droplink.classList.add('username_color');
-
-		$(ul_menu).animate({
-			'margin-top': '10px'
-		}, timeMenuEffect);
-		$('.dropmenu').fadeIn(timeMenuEffect);
-		openFlag = true;
-
-//	закрыть если нажимаем на username
-	} else if (!ul_menu.contains(event.target)) {
-		closeDroplist();
-	}
-}
-
-function closeMenu(event) {
-	"use strict";
-	if (openFlag && !droplink.contains(event.target)) {
-		closeDroplist();
-	}
-}
-
-function closeDroplist() { //устанавливает свойста для закрытия droplist
-	"use strict";
-	openFlag = false;
-	$('.dropmenu').fadeOut(timeMenuEffect);
-	$(ul_menu).animate({
-		'margin-top': '20px'
-	}, timeMenuEffect);
-	if (arrow.classList.contains("select_up-arrow")) {
-		arrow.classList.remove("select_up-arrow");
-	}
-	if (droplink.classList.contains("username_color")) {
-		droplink.classList.remove("username_color");
-	}
-}
-//Открытие и закрытие меню профиля в шапке
-
-
-//появление таблицы и страницы ============================
-var main_time = 300;
-var heightTable = $('.table-container').height();
-// $('#hideme>td').fadeTo("slow", 0.0);
-$('.table-container').css({'height':heightTable});
-$('tr').hide();
-
-//Обратотка нажаний на вывод таблиц
-var daysElem = document.getElementsByClassName("week")[0];
-daysElem.addEventListener('click', setDay);
-
-function setDay(event) {
-	"use strict";
-	// var eventObj = event || window.event;
-	var objElem = event.target.parentElement;
-	var prevSelect = selectedDay;
-
-	if (objElem && objElem.tagName === "LI") {
-		if (prevSelect.classList.contains('days_select')) {
-			prevSelect.classList.remove('days_select');
-		}
-		objElem.classList.add('days_select');
-		selectedDay = objElem;
-		$('tr').clearQueue();
-		hideTable(40,400);
-
-		//		тут нужно подгружать таблицу из БД
-
-
-
-
-
-		//
-
-		showTable(40,400);
-	}
-}
-
-
-$(document).ready(function () {
-	$('.top-menu').slideDown(main_time*2);
-	$('.page').fadeTo(main_time*2,1, function () {
-		showTable(40,400);
-	});
-});
-
-function showTable(interval, time){
-	"use strict";
-	$('.table-container').slideDown(main_time,function() {
-		$('tr').each(function (i) {
-			$(this).delay((i++) * interval).fadeTo(time, 1);
-		});
-	});
-}
-
-function hideTable(interval, time){
-	"use strict";
-	$('tr').each(function(i) {
-		$(this).delay((i++) * interval).fadeTo(time,0);
-	});
-}
-//появление таблицы и страницы ============================
-// $(window).resize(function() {
-// 	$('.top-menu li').css({'width':'100%'});
+// $(document).ready(function () {
+//      $('body').append(
+//         '<div class="triangle">');
 // });
+//
+// var $triangle = $('triangle');
+// function set_postition_triangle(){
+//    
+// }
+
+//############################################################################## отвечает за выпадающий список
+var $droplist = $('.droplist');
+var FLAG_DROPLIST = false;
+
+// сохранять положение выпадающего списка
+$(window).on('resize', set_place_droplist_click);
+
+function set_place_droplist_click() {
+    if (FLAG_DROPLIST == true) {
+        $('.droplist_click_container').css({
+            'top': $droplist.offset().top + 30, 'left': $droplist.offset().left - 23
+        }, 100);
+    }
+}
+
+$droplist.on('click', function (e) {
+    $(window).bind('resize', set_place_droplist_click);
+    click_on_droplist($(this), e);
 });
+$droplist.mouseover(function () {
+    if (FLAG_DROPLIST == false) {
+        $(this).animate({'background-color': 'rgba(210,210,210, 1)'}, 200);
+    }
+});
+$droplist.mouseleave(function () {
+    if (FLAG_DROPLIST == false) {
+        $(this).animate({'background-color': 'rgba(240,240,240,1)'}, 200);
+    }
+});
+$(window).on('click', function (event) {
+    if ($('.droplist_click_container').length != 0) {
+        hide_droplist(event);
+    }
+});
+
+
+// скрытие выпадающего списка
+function hide_droplist(event, hide) {
+    if (!event.target.closest('.droplist') && !event.target.closest('.droplist_click_container') || hide == true) {
+        var $this_droplist_click = $('.droplist_click_container');
+        $this_droplist_click.fadeOut(200);
+        $this_droplist_click.animate({
+            top: $this_droplist_click.offset().top + 20,
+            left: $this_droplist_click.offset().left - 5
+        }, 200, function () {
+            $this_droplist_click.remove();
+        });
+        $this_droplist_click.dequeue();
+        $('.droplist').animate({'background-color': 'rgba(240,240,240,1)'}, 100);
+        $('#arrow_down').animate({'border-top-color': 'rgba(150, 150, 150, 1)'}, 100);
+        FLAG_DROPLIST = false;
+    }
+
+}
+
+// появление выпадающего списка
+function click_on_droplist(this_elem, event) {
+    if (FLAG_DROPLIST == true) {
+        hide_droplist(event, true);
+        return false;
+    }
+    this_elem.css({'background-color': 'rgba(200,200,200,1)'});
+    $('#arrow_down').animate({'border-top-color': 'rgba(255, 255, 255, 1)'}, 100);
+    FLAG_DROPLIST = true;
+
+    $('body').append(
+        '<div class="droplist_click_container" style="opacity: 0;">' +
+        '<div class="triangle"></div>' +
+        '<div class="triangle_bottom"></div>' +
+        '<div class="droplist_click">' +
+        '<ul style="display: none">' +
+        '<li></li>' +
+
+        '<li><a href="#">Мой профиль</a></li>' +
+        '<li><a href="#">О сервисе</a></li>' +
+        '<li><a href="/logout">Выйти</a></li>' +
+
+        '<li></li>' +
+        '</ul>' +
+        '</div>' +
+        '</div>'
+    );
+
+    var $droplist_click = $('.droplist_click_container');
+
+    $droplist_click.css({
+        'position': 'absolute', 'top': this_elem.offset().top, 'left': this_elem.offset().left + 80,
+    });
+
+    //делаем анимацию на разные объекты, чтобы псевдо-стрелка корректо появлялась
+    $('.droplist_click_container ul').fadeIn(200);
+    $('.droplist_click_container li').animate({
+        'width': 162
+    }, 300);
+    $('.droplist_click_container').animate({
+        top: this_elem.offset().top + 30,
+        left: this_elem.offset().left - 23,
+        opacity: 1
+    }, 300);
+
+}
+//############################################################################## отвечает за выпадающий список
+
+
+//############################################################################## отвечает за оптимизацию шрифта
+$(window).on("resize", function () {
+    normalize_font();
+});
+
+function normalize_font() {
+    // var $objects = $('.str_plan ul li');
+    // $objects.each(function () {
+    //     var $this_text_block = $(this, 'p');
+    //
+    //     $this_text_block.wrapInner('<div class="fake"/>')
+    //         .each(function (i, el) {
+    //             if ($('.fake', el).height() > $(el).height()) {
+    //                 $(el).css('background', 'black');
+    //             } else {
+    //                 // $(el).after('Контент нормально помещается в блоке');
+    //             }
+    //         });
+    // });
+}

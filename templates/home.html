@@ -2,20 +2,26 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <title>{% block title %}Three pachans Web Site{% endblock %}</title>
+    <title>{% block title %}Three pachans Web Site
+    {% endblock %}
+    </title>
     <meta http-equiv="Content-type" content="text/html" charset="UTF-8">
-<!--
-    <link rel="stylesheet" type="text/css" href="style/home_content.css">
-    <link rel="stylesheet" type="text/css" href="style/home_top.css">
-    <link rel="stylesheet" type="text/css" href="style/fonts.css">
-    <script type="text/javascript" src="library/jquery-3.1.1.js"></script>
--->
-    <link rel="stylesheet" type="text/css" href={% static "css/home_content.css"%}>
-    <link rel="stylesheet" type="text/css" href={% static "css/home_top.css"%}>
-    <link rel="stylesheet" type="text/css" href={% static "css/fonts.css"%}>
-    <!--Добавление в наследующие шаблоны новых стилей-->
-    {% block styles %}{%  endblock %}
+    <link rel="stylesheet" type="text/css" href={% static "css/general_style.css" %}>
+    <link rel="stylesheet" type="text/css" href={% static "css/home_content.css" %}>
+    <link rel="stylesheet" type="text/css" href={% static "css/home_top.css" %}>
+    <link rel="stylesheet" type="text/css" href={% static "css/fonts_optimizate.css" %}>
     <script type="text/javascript" src={% static "library/jquery-3.1.1.js" %}></script>
+    <script type="text/javascript" src={% static "library/jquery.animate-colors.js" %}></script>
+
+    {#Импорт шрифтов для всего сайта#}
+    <link rel="stylesheet" href={% static 'css/fonts/cynthopro/cynthopro.css' %}>
+    <link rel="stylesheet" href={% static 'css/fonts/firasans/firasans.css' %}>
+    <link rel="stylesheet" href={% static 'css/fonts/ptsans/ptsans.css' %}>
+    <link rel="stylesheet" href={% static 'css/fonts/SegoeUI/SegoeUI.css' %}>
+    {#Импорт шрифтов#}
+
+    <!--Добавление в наследующие шаблоны новых стилей-->
+    {% block styles %}{% endblock %}
     <!--Добавление в наследующие шаблоны новых скриптов-->
     {% block scripts_top %}{% endblock %}
 </head>
@@ -24,91 +30,154 @@
 <div class="top-block">
     <div class="top">
         <div class="logo"><a href="/home">IntoDayer</a></div>
-        <div class="droplink">
-            <div class="username"><a href="#">{{ username }}</a></div>
-            <div class="up-arrow"></div>
-            <div class="mini-ava"></div>
-            <div class="dropmenu">
-                <ul>
-                    <div class="devide-line"></div>
-                    <li><a href="/add_schedules">Add Schedules</a></li>
-                    <li><a href="/profile_settings">My Profile</a></li>
-                    <li><a href="/logout">Logout</a></li>
-                    <div class="devide-line"></div>
-                </ul>
+        <div class="top-menu">
+            <ul>
+                <!-- Не переименовывать классы и имена страниц! -->
+                <li id="home"><a href="home.html">Сегодня</a></li>
+                <li id="table"><a href="home.html">Расписание</a></li>
+                <li id="group"><a href="home.html">Участники</a></li>
+            </ul>
+            <div class="droplist">
+                <div style="float:right">
+                    <div id="arrow_down_content">
+                        <div id="arrow_down"></div>
+                    </div>
+                </div>
+                <div style="float:right;">
+                    <div id="ava_img_content">
+                        <div id="ava_img"></div>
+                    </div>
+                </div>
+                <div id="profile_title">
+                    <a>{{ username }}</a>
+                </div>
+
+
             </div>
         </div>
+
     </div>
+
 </div>
-<div class="top-menu">
-    <ul id="menu">
-        <!-- Не переименовывать классы и имена страниц! -->
-        <li id="home"><a href="home.html">Сегодня</a></li>
-        <li id="table"><a href="home.html">Расписание</a></li>
-        <li id="events"><a href="home.html">События</a></li>
-        <li id="group"><a href="home.html">Моя группа</a></li>
-        <li id="about"><a href="home.html">О сервисе</a></li>
-    </ul>
-</div>
+
+{#<div class="top-line"></div>#}
 
 
 <div class="page">
     <div class="content">
         {% block content %}
-        <div class="content-top">
-            <div class="avatar-block">
-                <div class="avatar"></div>
+            <div class="left_content">
+                <div class="ava_content">
+                </div>
+                <div class="plan_selector">
+                    <label id="plan_selector_title">Мои расписания</label>
+                    <ul>
+                        <li><a href="#">Plan 1</a></li>
+                        <li><a href="#">Plan 2</a></li>
+                        <li><a href="#">Plan 3</a></li>
+                    </ul>
+                </div>
+                <div class="users_online">
+                    <label id="users_online_title">Online</label>
+                    <ul>
+                        <li>
+                            <a href="#">
+                                <div class="user_image"></div>
+                                <div class="user_name">User 1</div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <div class="user_image"></div>
+                                <div class="user_name">User 1</div>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <div class="user_image"></div>
+                                <div class="user_name">User 1</div>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+
             </div>
-            <div class="title-content">
-                <h1>Копьютерная безопасность 2012</h1>
-                <h2>Тыр-тыр: череда-черёд</h2>
-            </div>
-        </div>
-        <ul class="week">
-            <li class="days"><a href="home.html">Пн.</a></li>
-            <li class="days"><a href="home.html">Вт.</a></li>
-            <li class="days"><a href="home.html">Ср.</a></li>
-            <li class="days"><a href="home.html">Чт.</a></li>
-            <li class="days"><a href="home.html">Пт.</a></li>
-            <li class="days"><a href="home.html">Сб.</a></li>
-            <li class="days"><a href="home.html">Вс.</a></li>
-            <li class="days"><a href="home.html">Неделя</a></li>
-            <div class="week-name">Неделя 2 из 18 (08.12.16 - 15.12.16)</div>
-        </ul>
-        <!--Генерация рассписания для данного пользователя-->
-        {% if table %}
-            {% for day in table %}
-                {% if day %}
-                    <p>{{ day.0.dfwk_dfwk.name }}</p>
-                    <div class="table-container">
-                        <table>
-                            <tr class="tableTop">
-                                <th>Время</th>
-                                <th>Предмет</th>
-                                <th>Аудитория</th>
-                                <th>Преподаватель</th>
-                            </tr>
-                            {% for row in day %}
-                                <tr>
-                                    <td>{{ row.tms_tms }}</td>
-                                    <td>{{ row.subj_subj.name }}</td>
-                                    <td>{{ row.place }}</td>
-                                    <td>{{ row.tchr_tchr.name_short }}</td>
-                                </tr>
+            <div class="right_content">
+                <div class="title_content">
+                    <div id="plan_title">{{ plan_info.0 }}</div>
+                    <div id="count_title">{{ plan_info.2 }}</div>
+                </div>
+
+                <div class="plan_content">
+                    <div class="plan_window">
+                        <div class="content_day_title">
+                            <div class="day_title">Сегодня</div>
+                            <div class="day_data">{{ today_plan.date }}</div>
+                        </div>
+                        <div class="day_plan_content">
+                            <div class="str_plan">
+                                <ul class="str_title">
+                                    <li><a>Время</a></li>
+                                    <li><a>Предмет</a></li>
+                                    <li><a>Преподаватель</a></li>
+                                    <li><a>Аудитория</a></li>
+
+                                </ul>
+                            </div>
+                            {#                        а это уже в django шаблоны#}
+                            {% for row in today_plan.plan_rows %}
+                                <div class="str_plan">
+                                    <ul>
+                                        <li><a>{{ row.time.hh24mm }}</a></li>
+                                        <li><a>{{ row.subject.name }}</a></li>
+                                        <li><a>{{ row.teacher.name_short }}</a></li>
+                                        <li><a>{{ row.place.name }}</a></li>
+                                    </ul>
+                                </div>
                             {% endfor %}
-                        </table>
+                        </div>
                     </div>
-                {% endif %}
-            {% endfor %}
-        {% endif %}
+                </div>
+
+            <div class="plan_content">
+                <div class="plan_window">
+                    <div class="content_day_title">
+                        <div class="day_title">Завтра</div>
+                        <div class="day_data">{{ tomorrow_plan.date }}</div>
+                    </div>
+                    <div class="day_plan_content">
+                        <div class="str_plan">
+                            <ul class="str_title">
+                                <li><a>Время</a></li>
+                                <li><a>Предмет</a></li>
+                                <li><a>Преподаватель</a></li>
+                                <li><a>Аудитория</a></li>
+
+                            </ul>
+                        </div>
+                        {#                        а это уже в django шаблоны#}
+                        {% for row in tomorrow_plan.plan_rows %}
+                            <div class="str_plan">
+                                <ul>
+                                    <li><a>{{ row.time.hh24mm }}</a></li>
+                                    <li><a>{{ row.subject.name }}</a></li>
+                                    <li><a>{{ row.teacher.name_short }}</a></li>
+                                    <li><a>{{ row.place.name }}</a></li>
+                                </ul>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                </div>
+            </div>
+        {% endblock %}
+
+
     </div>
-{% endblock %}
-</div>
 
 </body>
-<!--<script type="text/javascript" src="scripts/script_home.js"></script>-->
-<script type="text/javascript" src={% static "scripts/script_home.js"%}></script>
-
-<!--Добавление в наследующие шаблоны новых скриптов-->
-{% block scripts_bottom %}{% endblock %}
+{% block scripts_bottom %}
+    <script type="text/javascript" src={% static "scripts/script_home.js" %}></script>
+{% endblock %}
 </html>

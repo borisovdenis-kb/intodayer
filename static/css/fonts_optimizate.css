@@ -1,0 +1,88 @@
+@media all{
+    body {
+        font-family: "PT Sans" !important;
+    }
+
+    a {
+        font-family: "Cyntho Pro" !important;
+    }
+
+    .top a {
+        font-family: "PT Sans" !important;
+    }
+
+    .top ul {
+        font-size: 18px;
+    }
+
+    .logo a {
+        font-family: "Cyntho Pro" !important;
+    }
+
+    .plan_selector label, .users_online label {
+        font-family: "PT Sans" !important;
+        font-size: 1.1em;
+    }
+
+    .droplist a {
+        font-family: "Fira Sans" !important;
+        font-size: 0.8em;
+    }
+
+    .day_title {
+        font-size: 1.5em;
+    }
+
+    .str_plan ul li a {
+        /*font-size: 1vw;*/
+        /*min-font-size: 0.6vw;*/
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*все, что написали выше, дублируем сюда, для Firefox*/
+@-moz-document url-prefix() {
+    body {
+        font-family: "PT Sans" !important;
+    }
+
+    a {
+        font-family: "Cyntho Pro" !important;
+    }
+
+    .top a {
+        font-family: "PT Sans" !important;
+    }
+    .top ul {
+        font-size: 18px;
+    }
+    .logo a {
+        font-family: "Cyntho Pro" !important;
+    }
+
+    .plan_selector label, .users_online label {
+        font-family: "PT Sans" !important;
+        font-size: 1.1em;
+    }
+
+    .droplist a {
+        font-family: "Fira Sans" !important;
+        font-size: 0.8em;
+    }
+}

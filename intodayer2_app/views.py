@@ -7,6 +7,8 @@ from django.contrib.auth.forms import UserCreationForm
 from intodayer2_app.forms import CustomUserCreationForm
 from intodayer2_app.send_sms import *
 from intodayer2_app.models import *
+from datetime import *
+from django.utils import timezone
 
 
 def welcome_view(request):
@@ -22,10 +24,11 @@ def registration_view(request):
         if form.is_valid():
             # сохраняем usr_name и pswd в таблицу auth_user
             form.save()
-            # сохраняем phone и связь один к одному в таблицу custom_user
-            new_auth_user = User.objects.get(username=request.POST['username'])
-            new_custom_user = CustomUser(user_id=new_auth_user.id, phone=request.POST['phone'])
-            new_custom_user.save()
+            # # сохраняем phone и связь один к одному в таблицу custom_user
+            # new_user = CustomUser.objects.get(username=request.POST['username'])
+            # new_user.phone = request.POST['phone']
+            # new_user.save()
+
             return HttpResponseRedirect('/login')
     else:
         form = CustomUserCreationForm()
@@ -36,49 +39,64 @@ def registration_view(request):
 
 def home_view(request):
     """
-    Функция отображения главной страницы сайта
-    с расписанием на сегодня
+        Функция отображения главной страницы сайта
+        с расписанием на сегодня
     """
     if request.user.is_authenticated():
-        user = User.objects.get(username=request.user.username)
-        try:
-            std_id = user.customuser.stdt_stdt.stdt_id
-        except ObjectDoesNotExist:
-            context = {'table' : [],
-                       'username' : user.username
-            }
+        user = CustomUser.objects.get(username=request.user.username)
+        # выбираем текущее расписание юзера
+        plan_list = UserPlans.objects.select_related().filter(
+            user_id=user.id, current_yn='y'
+        )
+
+        context = {
+            'username': user.username,
+        }
+
+        if plan_list:
+            # собираем инфу о рассписании:
+            # --- название
+            # --- описание
+            # --- кол-во юзеров имеющих это расписание
+            # дальше собираем само рассписание на сегодня и на завтра
+            plan = plan_list[0]
+            context['plan_info'] = [plan.plan.title, plan.plan.description]
+
+            count = UserPlans.objects.filter(plan_id=plan.plan.id).count()
+            # добавляем кол-во участников
+            context['plan_info'] += [members_amount_suffix(count)]
+
+            today = timezone.make_aware(datetime.now())   # опр сегодняшнюю дату
+            tomorrow = today + timedelta(1)
+            weekday = datetime.weekday(today)
+            start_date = plan.plan.start_date             # c какого числа действует расп.
+
+            context['today_weekday'] = weekday
+
+            current_week = weeks_from(start_date, today)  # определяем номер текущей недели
+            parity = current_week % 2                     # четность недели
+
+            today_plan = PlanRows.objects.select_related().filter(
+                plan_id=plan.plan.id,
+                day_of_week=weekday + 1,
+                start_week__lte=current_week,
+                end_week__gte=current_week,
+                parity=parity
+            )
+            tomorrow_plan = PlanRows.objects.select_related().filter(
+                plan_id=plan.plan.id,
+                day_of_week=weekday + 2,
+                start_week__lte=current_week,
+                end_week__gte=current_week,
+                parity=parity
+            )
+
+            context['today_plan'] = {'date': today.strftime("%A, %d. %B %Y"), 'plan_rows': today_plan}
+            context['tomorrow_plan'] = {'date': tomorrow.strftime("%A, %d. %B %Y"), 'plan_rows': tomorrow_plan}
+
+            return render_to_response('home.html', context)
         else:
-            student = Students.objects.get(stdt_id = std_id)
-            group = student.grp_grp_id
-            cathedra = student.cthd_cthd_id
-
-            # выбираем из тиблицы расписания все записи, "нужные" данному юзеру
-            # мы получили список, состоящий из строк расписания
-            # далее генерируем расписание на неделю, в зависимости от номера и четности недели
-            table = list(Schedules.objects.filter(grp_grp = group, cthd_cthd = cathedra).order_by('tms_tms'))
-
-            current_week = [[], [], [], [], [], [], []]
-
-            for row in table:
-                if row.dfwk_dfwk.name == 'Понедельник':
-                    current_week[0].append(row)
-                elif row.dfwk_dfwk.name == 'Вторник':
-                    current_week[1].append(row)
-                elif row.dfwk_dfwk.name == 'Среда':
-                    current_week[2].append(row)
-                elif row.dfwk_dfwk.name == 'Четверг':
-                    current_week[3].append(row)
-                elif row.dfwk_dfwk.name == 'Пятница':
-                    current_week[4].append(row)
-                elif row.dfwk_dfwk.name == 'Суббота':
-                    current_week[5].append(row)
-                elif row.dfwk_dfwk.name == 'Воскресенье':
-                    current_week[6].append(row)
-
-            context = {'table' : current_week,
-                       'username' : user.username
-            }
-        return render_to_response('home.html', context)
+            return render_to_response('home.html', context)
     else:
         return HttpResponseRedirect("/login")
 
@@ -89,6 +107,7 @@ def login_view(request):
         password = request.POST['password']
 
         user = auth.authenticate(username=username, password=password)
+
         if user is not None:
             if user.is_active:
                 auth.login(request, user)
@@ -170,42 +189,44 @@ def add_schedules_view(request):
             new_data = dict(request.POST) # получаем новые данные от клиента
 
             ###########################################################################
-            #                           ЗАНОСИМ ДАННЫЕ БАЗУ                           #
+            #                         ЗАНОСИМ ДАННЫЕ В БАЗУ                           #
             ###########################################################################
 
             count_tchr_id = len(Teachers.objects.all())   # этот говно код
             count_subj_id = len(Subjects.objects.all())   # потому что в БД походу
             count_schld_id = len(Schedules.objects.all()) # не автоинкрементные поля :(
 
-            new_teacher = Teachers(tchr_id = count_tchr_id + 1,
-                                   name_short = new_data['teacher'][0]
+            new_teacher = Teachers(
+                tchr_id = count_tchr_id + 1,
+                name_short = new_data['teacher'][0]
             )
             new_teacher.save()
 
-            new_subject = Subjects(subj_id = count_subj_id + 1,
-                                   name = new_data['subject'][0]
+            new_subject = Subjects(
+                subj_id = count_subj_id + 1,
+                name = new_data['subject'][0]
 
             )
             new_subject.save()
 
-            new_schld_row = Schedules(schld_id = count_schld_id + 1,
-                                      grp_grp_id = group,
-                                      cthd_cthd_id = cathedra,
-                                      dfwk_dfwk_id = new_data['dayofweek'][0],
-                                      subj_subj_id = new_subject.subj_id,
-                                      tchr_tchr_id = new_teacher.tchr_id,
-                                      tms_tms_id = new_data['time'][0],
-                                      parity = new_data['parity'][0],
-                                      place = new_data['place'][0],
-                                      start_week = new_data['startweek'][0],
-                                      end_week = new_data['endweek'][0]
+            new_schld_row = Schedules(
+                schld_id = count_schld_id + 1,
+                grp_grp_id = group,
+                cthd_cthd_id = cathedra,
+                dfwk_dfwk_id = new_data['dayofweek'][0],
+                subj_subj_id = new_subject.subj_id,
+                tchr_tchr_id = new_teacher.tchr_id,
+                tms_tms_id = new_data['time'][0],
+                parity = new_data['parity'][0],
+                place = new_data['place'][0],
+                start_week = new_data['startweek'][0],
+                end_week = new_data['endweek'][0]
             )
             new_schld_row.save()
+
             return HttpResponseRedirect('/add_schedules')
     else:
         return render_to_response('add_schedules.html', context)
-
-
 
 
 def profile_settings(request):

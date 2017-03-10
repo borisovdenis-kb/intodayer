@@ -1,184 +1,258 @@
-/*работа шрифта для Mozilla Firefox*/
-@-moz-document url-prefix() {
-    a, table {
-        font-family: "SegoeUIRegular" !important;
-        font-weight: 300 !important;
-    }
-    .logo a{
-        font-family: "Consolas" !important;
-        /*font-weight: 300 !important;*/
-    }
-    .username a{
-        font-family: "Arial" !important;
-    }
-}
-
-.table-container{
-    display: none;
-}
-
-body {
-    margin: 0 auto;
-    background-color: rgba(254, 254, 254, 1);
-    min-width: 1024px;
-    min-height: 1024px;
-    font-family: Arial, SegoeUIRegular;
-}
-
-ul {
-    list-style: none;
-    margin: 0;
-    padding-left: 0;
-}
-
-a {
-    text-decoration: none;
-    color: black;
-    /*убираем подчеркивание текста ссылок*/
-}
-
-.left {
-    height: 100%;
-    width: 100%;
-    background: black;
-}
 
 .page {
-    background-color: rgba(255, 255, 255, 1);
-    margin: auto;
-    width: 1024px;
+    clear: both;
 }
 
 .content {
     margin: auto;
+    background: rgba(244, 243, 248, 1);
+    width: 100%;
+    max-width: 1200px;
+    min-width: 768px;
 }
 
-.content-top {
-    margin: auto;
-    margin-bottom: 15px;
+.content, .left_content, .right_content {
+    height: 1000px;
+    margin-top: 10px;
+}
+
+.left_content {
+    font-size: 0.9em;
+    /*padding-top: 10px;*/
+    width: 200px;
+    float: left;
+    background: rgba(244, 243, 248, 1);
+    /*background: white;*/
+}
+
+.right_content {
+    margin-left: 0px;
+    float: left;
+    width: calc(100% - 200px);
+}
+
+.ava_content {
+    height: 170px;
+    width: 170px;
+    background: blue;
+    margin: 0px 0px 0px 15px;
+    background-image: url("../images/putin.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 4px;
+}
+
+.plan_selector, .users_online {
+    width: 170px;
+    margin: 15px 0px 0px 15px;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.plan_selector ul li {
+    border: 1px solid rgba(220, 220, 220, 1);
+    border-radius: 4px;
+}
+
+.plan_selector ul li:first-child {
+    margin-top: 0px;
+}
+
+.plan_selector ul li {
+    margin-top: 5px;
+    overflow: hidden;
+}
+
+.plan_selector ul li a {
+    display: block;
+    padding: 10px 0px 10px 10px;
+    line-height: 20px;
+    width: 160px;
+}
+
+.users_online ul li:first-child {
+    margin-top: 0px;
+}
+
+.users_online ul li {
+    font-weight: normal;
+    margin-top: 10px;
+    height: 30px;
+    width: 100%;
+}
+
+.user_name {
+    display: table-cell;
+    vertical-align: middle;
+    padding-left: 10px;
+    height: 30px;
+}
+
+label {
+    display: block;
+    margin: 10px 0px 15px 10px;
+}
+
+#users_online_title {
+    padding-top: 10px;
+    border-top: 1px solid rgba(210, 210, 210, 1);
+}
+
+.users_online ul li:first-child {
+    margin-top: 15px;
+}
+
+.users_online ul li:last-child {
+    margin-bottom: 10px;
+}
+
+.user_image {
+    margin-left: 10px;
+    float: left;
+    height: 30px;
+    width: 30px;
+    border-radius: 4px;
+    background-image: url("../images/putin.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+
+.plan_window:first-child{
+    margin-top: 0px;
+}
+.plan_window:last-child{
+    margin-bottom: 50px;
+}
+
+.plan_window{
+    margin-top: 10px;
+    background: white;
+    padding: 10px 20px 20px 20px;
+    border: 1px solid rgba(230, 230, 230, 1);
+    border-radius: 4px;
+}
+
+.title_content {
+    border-radius: 4px;
+    background: white;
+    padding: 10px 20px 10px 20px;
+    margin-right: 15px;
+    font-size: 1.5em;
+    /*background: gray;*/
+    text-align: center;
+    border: 1px solid rgba(230, 230, 230, 1);
+    /*border-bottom: 1px solid rgba(220,220,220,1);*/
+}
+
+#count_title {
+    margin-top: 5px;
+    font-size: 0.6em;
+    color: gray;
+}
+
+.plan_content {
+    margin: 10px 15px 0 0;
+    overflow: hidden;
+}
+
+.content_day_title{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    border-bottom: 1px solid rgba(210, 210, 210, 1);
+}
+
+.day_title{
+    padding: 5px 10px 5px 20px;
+}
+.day_data{
+    padding: 5px 10px 15px 10px;
+}
+
+.day_plan_content:first-child{
+    margin-top: 0;
+}
+.day_plan_content{
+    margin-top: 20px;
+    padding: 15px 10px 15px 10px;
+}
+
+.str_plan:first-child{
+}
+.str_plan:nth-child(2){
+    margin: 10px 0 0 0;
+}
+
+
+
+.str_plan{
+    margin-top: 1px;
+    display: table;
+    vertical-align: middle;
+    display: block;
+    width: 100%;
+    border-radius: 4px;
+}
+
+
+
+.str_plan ul{
     display: flex;
     align-items: center;
-    border-radius: 4px;
-    border: 1px solid #dbdbdb;
-}
-
-.avatar-block {
-    margin-left: 10px;
-    margin-bottom: 10px;
-    margin-top: 10px;
-    overflow: hidden;
-    width: 150px;
-    height: 150px;
-    border: 1px solid #dbdbdb;
-    border-radius: 4px;
-}
-
-.avatar {
-    background-image: url('../images/putin.jpg');
-    background-size: contain;
-    background-position: center;
-    width: 100%;
-    height: 100%;
-
-}
-
-.table-container {
-    clear: both;
-    padding: 0;
-    margin: 0;
-    border: 1px solid #dbdbdb;
-    border-radius: 4px;
-}
-
-table {
-    margin: auto;
-    font-family: arial, sans-serif;
-    border-radius: 4px;
-    width: 100%;
-    transition: 1s ease all;
-}
-
-.tableTop, th {
-    padding: 8px;
-    padding-left:10px;
-    text-align: left;
-    background: #0da059;
-}
-
-td {
-    text-align: left;
-    padding: 8px;
-    padding-left:10px;
-    height: 40px;
-}
-
-tr:nth-child(even) {
-    background-color: #eaeaea;
-}
-
-.title-content {
-    flex: 1 1 auto;
     text-align: center;
-    font-size: 1.5em;
+    width: 100%;
 }
 
-h1 {
-    margin: 0;
-    font-size: 1em;
 
+
+.str_plan ul li:first-child{
+    width: 10%;
 }
-
-h2 {
-    margin: 20px;
-}
-
-.days:first-child {
-    margin-left: 20px;
-    margin-bottom: 20px;
-}
-
-.days {
-    box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.1) inset;
-    display: block;
+.str_plan ul li{
+    text-align: center;
+    vertical-align: middle;
+    width: 30%;
+    padding-bottom: 3px;
+    min-height: 20px;
+    max-height: 200px;
     float: left;
-    overflow: hidden;
-    text-align: center;
-    background-color: rgba(230, 230, 230, 1);
-    border-radius: 20px;
-    margin-right: 10px;
-    transition: .2s all ease;
+    content: "";
+
+
 }
 
-/*для javascript*/
-.days_select {
-    background: #0da059;
-    box-shadow: none;
+.str_plan ul li a{
+    display: flex;
+    overflow: auto;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+    width: calc(100% - 15px);
+    min-height: 40px;
+    max-height: 200px;
+    padding: 3px 3px 3px 3px;
+    /*border: 1px solid rgba(230, 230, 230, 1);*/
+    /*font-size: 1vw;*/
 }
 
-/*для javascript*/
-
-.days a {
-    display: block;
-    padding-left: 20px;
-    padding-right: 20px;
-    line-height: 35px;
+.str_title li a{
+    /*background: #51c666;*/
+    border: 1px solid rgba(81, 198, 102, 0.8);
+}
+.str_title{
+    border-radius: 4px;
+    /*background: #487F77;*/
 }
 
-.week-name {
-    float: right;
-    line-height: 35px;
-    margin-right: 10px;
+.str_plan:nth-child(2n){
+    background: rgba(240,240,245,1);
 }
-	
 
-
-
-
-
-
-
-
-
-
-
-
+.str_plan:first-child{
+    background: white;
+}

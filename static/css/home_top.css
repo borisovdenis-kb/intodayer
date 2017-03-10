@@ -5,7 +5,6 @@ ul {
 
 a {
     text-decoration: none;
-    font-family: Arial, SegoeUIRegular;
     transition: .2s linear;
 }
 
@@ -24,259 +23,274 @@ button:focus {
 
 .top-block {
     border-bottom: 3px solid #8b1deb;
+    /*border-bottom: 3px solid royalblu*/
     background-color: rgba(242, 242, 242, 1);
+    min-width: 768px;
 
 }
 
 .top {
     display: block;
+    max-width: 1200px;
+    min-width: 768px;
     margin: auto;
-    width: 1024px;
+}
 
+.top-line {
+    box-shadow: inset 0px -45px 30px -50px rgba(0, 0, 0, 0.4);
+    height: 10px;
 }
 
 .top-menu {
-    margin-bottom: 15px;
-    background: rgba(250, 250, 250, 1);
-    box-shadow: inset 0px -45px 30px -50px rgba(0, 0, 0, 0.4);
+    height: 38px;
 
 }
 
 .top-menu ul {
-    display: flex;
-    width: 1024px;
-}
-.top-menu li{
-    width: 100%;
-}
-
-.top-menu a {
-    text-align: center;
-    color: black;
-    padding: 1em;
-    padding-left: 2em;
-    padding-right: 2em;
-    display: block;
-
-}
-
-.logo {
-    display: inline-block;
-    margin-left: 15px;
-    padding-top: 4px;
-    padding-bottom: 5px;
-    font-size: 24px;
-
-}
-
-.logo a {
-    font-family: 'Consolas', serif;
+    padding: 0;
+    height: 100%;
+    float: left;
 }
 
 .top-menu li {
-    transition: 0.3s ease;
-    /*width: 100%;*/
+    float: left;
+
 }
 
-.top-menu li:hover {
+.top-menu ul li a {
+    padding-top: 3px;
+    display: table-cell;
+    height: 35px;
+    vertical-align: middle;
+    font-size: 0.9em;
+    text-align: center;
+    color: black;
+    padding-left: 1.5em;
+    padding-right: 1.5em;
+}
+
+.logo {
+    float: left;
+    width: 184px;
+    padding-left: 17px;
+    font-size: 24px;
+
+}
+.logo a{
+    display: table-cell;
+    height: 38px;
+    vertical-align: middle;
+}
+
+.top-menu ul li a:hover {
     background: white;
-}
-
-/*для javascript*/
-.select_menu {
-    background: white;
-}
-.leftShadow {
-    /*box-shadow: inset -5px 0px 5px -5px rgba(0, 0, 0, 0.5);*/
-    box-shadow: inset -15px 0px 36px -19px rgba(0, 0, 0, 0.5);
-
-}
-.rightShadow {
-    /*box-shadow: inset 5px 0px 5px -5px rgba(0, 0, 0, 0.5);*/
-    box-shadow: inset 15px 0px 36px -19px rgba(0, 0, 0, 0.5);
-}
-/*тени для бразуера Firefox 1+*/
-.leftShadowMoz{
-    box-shadow: inset -5px 0px 10px -5px rgba(0, 0, 0, 0.3);
-}
-.rightShadowMoz {
-    box-shadow: inset 5px 0px 10px -5px rgba(0, 0, 0, 0.3);
-}
-.menuShadowMoz{
-    box-shadow: inset 0px -5px 10px -5px rgba(0, 0, 0, 0.3);
-}
-/*для javascript*/
-
-.top-menu a:hover {
-    /*
-        background: rgba(139, 29, 235, 0.05);
-        box-shadow: inset 0px -1px 0px 0px gray;
-    */
-    background: white;
+    color: dodgerblue;
     transition: 0.3s ease;
 }
 
-.top-menu a:active {
+.top-menu ul li a:active {
     background: rgba(242, 242, 242, 1);
     transition: none;
     transition: 0.3s ease;
 }
 
-/*Базовая обертка*/
-.droplink {
-    position: relative;
+.droplist {
+    z-index: 100;
+    background-color: rgba(240, 240, 240, 1);
     float: right;
-    font-size: 14px;
-    z-index: 1;
-}
-
-/*Стиль блока при наведении*/
-.droplink:hover {
-    transition: .1s linear;
-    background-color: #d3d3d3;
+    max-width: 200px;
+    margin-right: 16px;
+    cursor: pointer;
 
 }
 
-/*Заголовок в обычном состоянии*/
-.username {
-    float: left;
+
+.droplist a {
+    padding: 0 15px 0 10px;
+    display: table-cell;
+    height: 36px;
+    padding-top: 2px;
+    vertical-align: middle;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;
 }
 
-.droplink .username a {
-    text-align: center;
-    width: 80px;
-    display: block;
-    padding-top: 12px;
-    padding-bottom: 9px;
-    padding-left: 10px;
-    color: black;
-    text-decoration: none;
-}
-
-/*Скрываем список без наведения*/
-
-.droplink ul {
-    position: absolute;
-    list-style: none;
-    width: 110%;
-    border-radius: 4px;
-    transition: background .2s ease;
-    background: white;
-    box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.2);
-    margin-top: 20px;
-    left: -5px;
-
-}
-
-.droplink ul::after, .droplink ul::before {
-    content: '';
-    position: absolute;
-    background: white;
-    left: 30px;
-    bottom: 95px;
-    width: 15px;
-    height: 15px;
-    box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.2);
-    z-index: -1; /* Прячем за основным блоком */
-    transform: rotate(45deg); /* Поворачиваем на 45º */
-}
-
-.droplink ul::before {
-    z-index: 2; /* Накладываем поверх, чтобы скрыть следы тени */
-    box-shadow: none;
-}
-
-/*для javascript*/
-.username_color {
-    background-color: #d3d3d3;
-}
-
-.show_droplink {
-    left: -5px;
-}
-
-/*для javascript*/
-
-/*Стиль элемента списка*/
-.droplink li a {
-    position: relative;
-    z-index: 6;
-    text-align: left;
-    display: block;
-    color: black;
-    text-decoration: none;
-    font-size: 16px;
-    padding: 15px;
-    transition: .2s ease;
-}
-
-.dropmenu {
-    display: none;
-}
-
-.devide-line {
-    width: 100%;
-    padding: 2px;
-}
-
-.droplink li:first-child {
-    /*	border-top: 10px solid white;*/
-}
-
-.droplink li a:hover {
-    background: rgba(235, 235, 235, 1);
-}
-
-.droplink li a:active {
-    background: rgba(205, 205, 205, 1);
-}
-
-.up-arrow {
-    margin-right: 10px;
-    margin-left: 0px;
-    margin-top: 15px;
+#profile_title {
     float: right;
-    display: inline-block;
-    border: 7px solid transparent;
-    border-top: 8px solid rgba(150, 150, 150, 1);
 }
 
-.droplink:active .up-arrow {
-    border-top-color: rgba(80, 80, 80, 1);
+#ava_img_content {
+    /*float: right;*/
+    display: table-cell;
+    vertical-align: middle;
+    height: 38px;
 }
 
-/*для javascript*/
-.unselect_up-arrow {
-    border-top-color: rgba(150, 150, 150, 1);
-}
-
-.select_up-arrow {
-    border-top-color: rgba(80, 80, 80, 1);
-}
-
-/*для javascript*/
-
-.mini-ava {
-    display: inline-block;
-    background-image: url('../images/ava.png');
-    margin-right: 12px;
-    margin-left: 4px;
-    margin-top: 3px;
+#ava_img {
     width: 30px;
     height: 30px;
-    border-radius: 50%;
+    border-radius: 2px;
+    margin-right: 10px;
+    background-image: url("../images/putin.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
-/*то, что скрыто вначале*/
-.top-menu{
-    display: none;
+#arrow_down_content {
+    height: 38px;
+    display: table-cell;
+    vertical-align: middle;
+    margin: 0;
+    padding: 0;
+
 }
-/*то, что скрыто вначале*/
+
+#arrow_down {
+    margin: 5px 8px 0 0;
+    border: 6px solid transparent;
+    border-top: 7px solid rgba(150, 150, 150, 1);
+}
+
+/*#jQuery ###########################################################*/
+/*#jQuery ###########################################################*/
+/*#jQuery ###########################################################*/
+.droplist_click {
+    background: white;
+    font-size: 0.9em;
+    border-radius: 4px;
+    position: absolute;
+    border: 1px solid rgba(210, 210, 210, 1);
+    -webkit-box-shadow: 0px 2px 15px 0px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0px 2px 15px 0px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 2px 15px 0px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;
+    z-index: 1;
+    margin-top: -10px;
+
+}
+
+.droplist_click_container{
+    cursor: default;
+    display: inline;
+    /*background: red;*/
+    margin-top: 10px;
+}
+
+.droplist_click {
+    position: relative;
+}
 
 
-	
-	
-	
-	
-	
-	
+.droplist_click ul li a{
+    display: block;
+    /*background: blue;*/
+    width: 100%;
+    padding: 0 10px 0 10px;
+}
+.droplist_click ul li {
+    width: 110px;
+    line-height: 35px;
+    overflow: hidden;
+    border-bottom: 1px solid rgba(230,230,230,1);
+}
+
+.droplist_click ul li:first-child {
+    height: 4px;
+    background: white;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    cursor: default;
+    border-bottom: none;
+}
+
+.droplist_click ul li:last-child {
+    height: 3px;
+    background: white;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    cursor: default;
+    border-bottom: none;
+}
+.droplist_click ul li:nth-child(4){
+    border-bottom: none;
+}
+
+.droplist_click ul li:first-child:hover, .droplist_click ul li:last-child:hover {
+    background: white;
+}
+
+.droplist_click ul li:first-child:active, .droplist_click ul li:last-child:active {
+    background: white;
+}
+
+.droplist_click ul li:hover {
+    background: rgba(230, 230, 230, 1);
+}
+
+.droplist_click ul li:active {
+    background: rgba(220, 220, 220, 1);
+}
+
+
+.triangle {
+    display: inline-table;
+    position: relative;
+    width: 0;
+    height: 0;
+    bottom: 5px;
+    right: -79px;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 10px solid rgba(220, 220, 220, 1);
+    z-index: 3;
+}
+.triangle_bottom{
+    display: inline-table;
+    position: relative;
+    width: 0;
+    height: 0;
+    bottom: 4px;
+    right: -63px;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 10px solid white;
+    z-index: 3;
+}
+
+/*.droplist_click ul:after {*/
+    /*content: '';*/
+    /*position: absolute;*/
+    /*bottom: 111px;*/
+    /*right: 89px;*/
+    /*border: 8px solid transparent;*/
+    /*border-bottom: 9px solid white;*/
+    /*z-index: 12;*/
+    /*cursor: default;*/
+/*}*/
+
+/*.droplist_click ul:before {*/
+    /*content: '';*/
+    /*position: absolute;*/
+    /*bottom: 112px;*/
+    /*right: 89px;*/
+    /*border: 8px solid transparent;*/
+    /*cursor: default;*/
+    /*border-bottom: 8px solid rgba(180, 180, 180 , 1);*/
+    /*z-index: -10;*/
+    /*filter: blur(2px); !* Someday, sigh ... *!*/
+    /*-webkit-filter: blur(2px); !* Prefixed CSS3 blur filters *!*/
+    /*-moz-filter: blur(2px);*/
+    /*-o-filter: blur(2px);*/
+    /*-ms-filter: blur(2px);*/
+    /*filter: url(#blur); !* Firefox needs SVG *!*/
+    /*filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius='2'); !* IE lte 9 *!*/
+/*}*/
+
+/*#jQuery ###########################################################*/
+/*#jQuery ###########################################################*/
+/*#jQuery ###########################################################*/
