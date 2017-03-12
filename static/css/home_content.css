@@ -192,8 +192,6 @@ label {
     margin: 10px 0 0 0;
 }
 
-
-
 .str_plan{
     margin-top: 1px;
     display: table;
@@ -203,7 +201,9 @@ label {
     border-radius: 4px;
 }
 
-
+.str_plan:hover{
+    cursor: pointer;
+}
 
 .str_plan ul{
     display: flex;
@@ -259,4 +259,10 @@ label {
 
 .str_plan:first-child{
     background: white;
+}
+
+.separator {
+    width: 200px;
+    height: 1px;
+    background-color: red;
 }

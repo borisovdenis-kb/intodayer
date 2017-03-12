@@ -60,39 +60,40 @@ def home_view(request):
             # --- кол-во юзеров имеющих это расписание
             # дальше собираем само рассписание на сегодня и на завтра
             plan = plan_list[0]
-            context['plan_info'] = [plan.plan.title, plan.plan.description]
-
             count = UserPlans.objects.filter(plan_id=plan.plan.id).count()
-            # добавляем кол-во участников
-            context['plan_info'] += [members_amount_suffix(count)]
 
             today = timezone.make_aware(datetime.now())   # опр сегодняшнюю дату
             tomorrow = today + timedelta(1)               # завтрашняя дата
-            weekday = datetime.weekday(today)
+            td_weekday = datetime.weekday(today)          # день недели сегодня
+            tm_weekday = datetime.weekday(tomorrow)       # день дедели завтра
             start_date = plan.plan.start_date             # c какого числа действует расп.
+            cur_week1 = weeks_from(start_date, today)     # определяем номер текущей недели
+            cur_week2 = weeks_from(start_date, tomorrow)
+            td_parity, tm_parity = cur_week1 % 2, cur_week2 % 2  # четность недели
 
             format1 = '%Y %m %d'
             format2 = '%A, %d. %B %Y'
 
-            context['today_weekday'] = weekday
-
-            current_week = weeks_from(start_date, today)  # определяем номер текущей недели
-            parity = current_week % 2                     # четность недели
-
             today_plan = PlanRows.objects.select_related().filter(
                 plan_id=plan.plan.id,
-                day_of_week=weekday + 1,
-                start_week__lte=current_week,
-                end_week__gte=current_week,
-                parity=parity
+                day_of_week=td_weekday + 1,
+                start_week__lte=cur_week1,
+                end_week__gte=cur_week1,
+                parity=td_parity
             )
             tomorrow_plan = PlanRows.objects.select_related().filter(
                 plan_id=plan.plan.id,
-                day_of_week=weekday + 2,
-                start_week__lte=current_week,
-                end_week__gte=current_week,
-                parity=parity
+                day_of_week=tm_weekday + 2,
+                start_week__lte=cur_week1,
+                end_week__gte=cur_week1,
+                parity=tm_parity
             )
+
+            context['plan_info'] = [plan.plan.title, plan.plan.description]
+            # добавляем кол-во участников
+            context['plan_info'] += [members_amount_suffix(count)]
+            # разделитель между неделями
+            context['separator'] = True if cur_week1 != cur_week2 else False
 
             context['today_plan'] = {
                 'date': today.strftime(format1),
