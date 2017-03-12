@@ -12,7 +12,7 @@
 }
 
 .content, .left_content, .right_content {
-    height: 1000px;
+
     margin-top: 10px;
 }
 
@@ -21,8 +21,7 @@
     /*padding-top: 10px;*/
     width: 200px;
     float: left;
-    background: rgba(244, 243, 248, 1);
-    /*background: white;*/
+    /*background: rgba(244, 243, 248, 1);*/
 }
 
 .right_content {
@@ -34,13 +33,13 @@
 .ava_content {
     height: 170px;
     width: 170px;
-    background: blue;
     margin: 0px 0px 0px 15px;
     background-image: url("../images/putin.jpg");
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
     border-radius: 4px;
+    /*border: 1px solid rgba(230, 230, 230, 0.0);*/
 }
 
 .plan_selector, .users_online {
@@ -123,12 +122,10 @@ label {
 .plan_window:first-child{
     margin-top: 0px;
 }
-.plan_window:last-child{
-    margin-bottom: 50px;
-}
+
 
 .plan_window{
-    margin-top: 10px;
+    margin: 10px 0 0px 0;
     background: white;
     padding: 10px 20px 20px 20px;
     border: 1px solid rgba(230, 230, 230, 1);
@@ -183,7 +180,7 @@ label {
 }
 .day_plan_content{
     margin-top: 20px;
-    padding: 15px 10px 15px 10px;
+    padding: 15px 10px 1px 10px;
 }
 
 .str_plan:first-child{

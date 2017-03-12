@@ -57,7 +57,7 @@ def home_view(request):
             # собираем инфу о рассписании:
             # --- название
             # --- описание
-            # --- кол-во юзеров имеющих это расписание
+            # --- кол-во юзер овимеющих это расписание
             # дальше собираем само рассписание на сегодня и на завтра
             plan = plan_list[0]
             count = UserPlans.objects.filter(plan_id=plan.plan.id).count()
@@ -256,3 +256,24 @@ def profile_settings(request):
             return render_to_response('myprofile.html', {})
     else:
         return render_to_response('myprofile.html', {})
+
+
+def plan_view(request):
+    """
+    Функция, которая выводит таблицу редактирования текущего (выбранного) расписания.
+    На странице имеем доступ для всех дней недели и для всего расписания (всех диапазонов) в целом.
+    Поэтому, функция выводит всю информацию расписания на весь год, разбитых по дням недели.
+    """
+    if request.user.is_authenticated():
+        user = CustomUser.objects.get(username=request.user.username)
+        context = {
+            'username': user.username,
+        }
+        # выбираем текущее расписание юзера
+        plan_list = UserPlans.objects.select_related().filter(
+            user_id=user.id, current_yn='y'
+        )
+        return render_to_response('plan.html', context)
+
+    else:
+        return HttpResponseRedirect("/login", {})
