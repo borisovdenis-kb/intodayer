@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
+from intodayer2_app.models import CustomUser
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -18,7 +18,7 @@ class CustomUserCreationForm(UserCreationForm):
                                                                   'required': 'required'}))
 
     class Meta:
-        model = User
+        model = CustomUser
         fields = ('username', 'password1', 'password2', 'phone')
         widgets = {'username': forms.TextInput(attrs={'placeholder': 'Имя пользователя',
                                                       'id': 'username',
