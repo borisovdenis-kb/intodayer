@@ -1,6 +1,8 @@
 from django.db import models
 # from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser
+from datetime import *
+from django.utils import timezone
 
 
 class DaysOfWeek(models.Model):
@@ -289,6 +291,70 @@ def weeks_from(start, end):
         return (days.days // 7) + 1
     else:
         return (days.days // 7) + 2
+
+
+def get_today_tomorrow_plans(user_id, plan_id):
+    """
+        Функция делает выборку строк расписания
+        на сегодняшний и на завтрашний день,
+        учитывая номер недели, четность недели и т.д.
+        _____________________________________________
+        :param user_id:
+        :param plan_id:
+        :return:
+    """
+    context = {}
+
+    cur_plan = UserPlans.objects.select_related().filter(user_id=user_id, plan_id=plan_id)[0]
+
+    count = UserPlans.objects.filter(plan_id=cur_plan.plan.id).count()
+
+    today = timezone.make_aware(datetime.now())   # опр сегодняшнюю дату
+    tomorrow = today + timedelta(1)               # завтрашняя дата
+    td_weekday = datetime.weekday(today)          # день недели сегодня
+    tm_weekday = datetime.weekday(tomorrow)       # день дедели завтра
+    start_date = cur_plan.plan.start_date             # c какого числа действует расп.
+    cur_week1 = weeks_from(start_date, today)     # определяем номер текущей недели
+    cur_week2 = weeks_from(start_date, tomorrow)
+    td_parity, tm_parity = cur_week1 % 2, cur_week2 % 2  # четность недели
+
+    format1 = '%Y %m %d'
+    format2 = '%A, %d. %B %Y'
+
+    today_plan = PlanRows.objects.select_related().filter(
+        plan_id=cur_plan.plan.id,
+        day_of_week=td_weekday + 1,
+        start_week__lte=cur_week1,
+        end_week__gte=cur_week1,
+        parity=td_parity
+    )
+    tomorrow_plan = PlanRows.objects.select_related().filter(
+        plan_id=cur_plan.plan.id,
+        day_of_week=tm_weekday + 2,
+        start_week__lte=cur_week1,
+        end_week__gte=cur_week1,
+        parity=tm_parity
+    )
+
+    context['today_plan'] = {
+        'date': today.strftime(format1),
+        'format_date': today.strftime(format2),
+        'plan_rows': today_plan,
+    }
+    context['tomorrow_plan'] = {
+        'date': tomorrow.strftime(format1),
+        'format_date': tomorrow.strftime(format2),
+        'plan_rows': tomorrow_plan
+    }
+
+    # инфа о текущем расписании
+    context['cur_plan_info'] = [cur_plan.plan.title, cur_plan.plan.description]
+    # добавляем кол-во участников
+    context['cur_plan_info'] += [members_amount_suffix(count)]
+    # разделитель между неделями
+    context['separator'] = True if cur_week1 != cur_week2 else False
+
+    return context
 
 
 def get_rows_by_weekday(rows):

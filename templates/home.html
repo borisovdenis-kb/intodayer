@@ -72,9 +72,14 @@
                 <div class="plan_selector">
                     <label id="plan_selector_title">Мои расписания</label>
                     <ul>
-                        <li><a href="#">Plan 1</a></li>
-                        <li><a href="#">Plan 2</a></li>
-                        <li><a href="#">Plan 3</a></li>
+                        {% for plan in all_plans %}
+                            <li>
+                                <a>
+                                    {{ plan.plan.title }}
+                                    <p>{{ plan.plan.id }}</p>
+                                </a>
+                            </li>
+                        {% endfor %}
                     </ul>
                 </div>
                 <div class="users_online">
@@ -102,11 +107,12 @@
                 </div>
             </div>
         {% endblock %}
+
         {% block right_content %}
             <div class="right_content">
                 <div class="title_content">
-                    <div id="plan_title">{{ plan_info.0 }}</div>
-                    <div id="count_title">{{ plan_info.2 }}</div>
+                    <div id="plan_title">{{ cur_plan_info.0 }}</div>
+                    <div id="count_title">{{ cur_plan_info.2 }}</div>
                 </div>
 
                 <!-- Сегодня -->
@@ -136,6 +142,7 @@
                                         <li><a>{{ row.teacher.name_short }}</a></li>
                                         <li><a>{{ row.place.name }}</a></li>
                                     </ul>
+                                    <a>{{ plan_id }}</a>
                                 </div>
                             {% endfor %}
                         </div>

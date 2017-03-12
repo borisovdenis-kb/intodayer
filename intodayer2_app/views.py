@@ -11,6 +11,25 @@ from datetime import *
 from django.utils import timezone
 
 
+###################################################################################
+#                          ОБРАБОТКА AJAX ЗАПРОСОВ                                #
+###################################################################################
+
+
+def switch_plan_home_ajax(request):
+    if request.is_ajax():
+        user = CustomUser.objects.get(username=request.user.username)
+        context = get_today_tomorrow_plans(user.id, plan_id=request.POST['plan_id'])
+
+        return render_to_response('today_tomorrow.html', context)
+
+
+
+###################################################################################
+#                         ОБРАБОТКА ОБЫЧНЫХ ЗАПРОСОВ                              #
+###################################################################################
+
+
 def welcome_view(request):
     if request.user.is_authenticated():
         return HttpResponseRedirect("/home")
@@ -44,67 +63,71 @@ def home_view(request):
     """
     if request.user.is_authenticated():
         user = CustomUser.objects.get(username=request.user.username)
+
+        context = {'username': user.username}
+
+        all_plans = UserPlans.objects.select_related().filter(user_id=user.id)
+
         # выбираем текущее расписание юзера
-        plan_list = UserPlans.objects.select_related().filter(
-            user_id=user.id, current_yn='y'
-        )
+        try:
+            cur_plan = UserPlans.objects.select_related().filter(user_id=user.id, current_yn='y')[0]
+        except IndexError:
+            return render_to_response('home.html', context)
 
-        context = {
-            'username': user.username,
-        }
+        if all_plans:
+            context_td_tm = get_today_tomorrow_plans(user.id, cur_plan.plan.id)
 
-        if plan_list:
-            # собираем инфу о рассписании:
-            # --- название
-            # --- описание
-            # --- кол-во юзер овимеющих это расписание
-            # дальше собираем само рассписание на сегодня и на завтра
-            plan = plan_list[0]
-            count = UserPlans.objects.filter(plan_id=plan.plan.id).count()
+            # # собираем инфу о текущем рассписании:
+            # # --- название
+            # # --- описание
+            # # --- кол-во юзеров, имеющих это расписание
+            # # дальше собираем само рассписание на сегодня и на завтра
+            # count = UserPlans.objects.filter(plan_id=cur_plan.plan.id).count()
+            #
+            # today = timezone.make_aware(datetime.now())   # опр сегодняшнюю дату
+            # tomorrow = today + timedelta(1)               # завтрашняя дата
+            # td_weekday = datetime.weekday(today)          # день недели сегодня
+            # tm_weekday = datetime.weekday(tomorrow)       # день дедели завтра
+            # start_date = cur_plan.plan.start_date             # c какого числа действует расп.
+            # cur_week1 = weeks_from(start_date, today)     # определяем номер текущей недели
+            # cur_week2 = weeks_from(start_date, tomorrow)
+            # td_parity, tm_parity = cur_week1 % 2, cur_week2 % 2  # четность недели
+            #
+            # format1 = '%Y %m %d'
+            # format2 = '%A, %d. %B %Y'
+            #
+            # today_plan = PlanRows.objects.select_related().filter(
+            #     plan_id=cur_plan.plan.id,
+            #     day_of_week=td_weekday + 1,
+            #     start_week__lte=cur_week1,
+            #     end_week__gte=cur_week1,
+            #     parity=td_parity
+            # )
+            # tomorrow_plan = PlanRows.objects.select_related().filter(
+            #     plan_id=cur_plan.plan.id,
+            #     day_of_week=tm_weekday + 2,
+            #     start_week__lte=cur_week1,
+            #     end_week__gte=cur_week1,
+            #     parity=tm_parity
+            # )
+            #
+            # context['today_plan'] = {
+            #     'date': today.strftime(format1),
+            #     'format_date': today.strftime(format2),
+            #     'plan_rows': today_plan,
+            # }
+            # context['tomorrow_plan'] = {
+            #     'date': tomorrow.strftime(format1),
+            #     'format_date': tomorrow.strftime(format2),
+            #     'plan_rows': tomorrow_plan
+            # }
 
-            today = timezone.make_aware(datetime.now())   # опр сегодняшнюю дату
-            tomorrow = today + timedelta(1)               # завтрашняя дата
-            td_weekday = datetime.weekday(today)          # день недели сегодня
-            tm_weekday = datetime.weekday(tomorrow)       # день дедели завтра
-            start_date = plan.plan.start_date             # c какого числа действует расп.
-            cur_week1 = weeks_from(start_date, today)     # определяем номер текущей недели
-            cur_week2 = weeks_from(start_date, tomorrow)
-            td_parity, tm_parity = cur_week1 % 2, cur_week2 % 2  # четность недели
+            print(all_plans)
 
-            format1 = '%Y %m %d'
-            format2 = '%A, %d. %B %Y'
+            context['all_plans'] = all_plans
 
-            today_plan = PlanRows.objects.select_related().filter(
-                plan_id=plan.plan.id,
-                day_of_week=td_weekday + 1,
-                start_week__lte=cur_week1,
-                end_week__gte=cur_week1,
-                parity=td_parity
-            )
-            tomorrow_plan = PlanRows.objects.select_related().filter(
-                plan_id=plan.plan.id,
-                day_of_week=tm_weekday + 2,
-                start_week__lte=cur_week1,
-                end_week__gte=cur_week1,
-                parity=tm_parity
-            )
-
-            context['plan_info'] = [plan.plan.title, plan.plan.description]
-            # добавляем кол-во участников
-            context['plan_info'] += [members_amount_suffix(count)]
-            # разделитель между неделями
-            context['separator'] = True if cur_week1 != cur_week2 else False
-
-            context['today_plan'] = {
-                'date': today.strftime(format1),
-                'format_date': today.strftime(format2),
-                'plan_rows': today_plan,
-            }
-            context['tomorrow_plan'] = {
-                'date': tomorrow.strftime(format1),
-                'format_date': tomorrow.strftime(format2),
-                'plan_rows': tomorrow_plan
-            }
+            # объединяем контексты
+            context.update(context_td_tm)
 
             return render_to_response('home.html', context)
         else:

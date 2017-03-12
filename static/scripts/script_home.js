@@ -8,7 +8,14 @@
 //    
 // }
 
+$(document).ready( function () {
+   $('.plan_selector ul li a').click( function () {
 
+       var data = {plan_id: $(this).find('p').text()};
+
+      $('.right_content').load('/home/switch_plan', data);
+   });
+});
 
 //############################################################################## отвечает за оптимизацию шрифта
 $(window).on("resize", function () {

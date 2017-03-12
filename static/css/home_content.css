@@ -70,6 +70,10 @@
     width: 160px;
 }
 
+.plan_selector ul li a p {
+    display: none;
+}
+
 .users_online ul li:first-child {
     margin-top: 0px;
 }
@@ -198,7 +202,8 @@ label {
     border-radius: 4px;
 }
 
-.str_plan:hover{
+
+.str_plan, .plan_selector:hover{
     cursor: pointer;
 }
 
