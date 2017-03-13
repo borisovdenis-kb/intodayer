@@ -1,3 +1,7 @@
+from datetime import *
+from django.utils import timezone
+from intodayer2_app.models import *
+
 
 ######################################################################################
 #             В ЭТОМ МОДУЛЕ БУДУТ ХРАНИТЬСЯ ВСЯКИЕ ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ           #
