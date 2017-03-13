@@ -154,6 +154,9 @@ label {
     margin: 10px 15px 0 0;
     overflow: hidden;
 }
+.plan_content:last-child{
+    margin-bottom: 50px;
+}
 
 .content_day_title{
     display: flex;
@@ -172,14 +175,14 @@ label {
     padding: 5px 10px 5px 20px;
 }
 .day_data{
-    padding: 5px 10px 15px 10px;
+    padding: 0px 10px 15px 10px;
 }
 
 .day_plan_content:first-child{
     margin-top: 0;
 }
 .day_plan_content{
-    margin-top: 20px;
+    margin-top: 5px;
     padding: 15px 10px 1px 10px;
 }
 
@@ -212,18 +215,39 @@ label {
 
 
 .str_plan ul li:first-child{
-    width: 10%;
+    width: 20%;
+    justify-content: flex-start;
+    padding-right: 0px;
+    padding-left: 0px;
+
 }
+.str_plan ul li:last-child{
+    width: 20%;
+    justify-content: flex-end;
+    padding-right: 0px;
+    padding-left: 0px;
+    border-right: none;
+}
+.str_plan ul li a:first-child{
+    padding-left: 7px;
+
+}
+
 .str_plan ul li{
+    display: flex;
+    justify-content: space-around;
     text-align: center;
     vertical-align: middle;
     width: 30%;
     padding-bottom: 3px;
+    padding-right: 2px;
+    padding-left: 2px;
     min-height: 20px;
     max-height: 200px;
     float: left;
     content: "";
-
+    /*border-right: 1px solid white;*/
+    border-right: 1px solid rgba(230,230,230,1);
 
 }
 
@@ -233,18 +257,30 @@ label {
     justify-content: center;
     align-items: center;
     border-radius: 4px;
-    width: calc(100% - 15px);
-    min-height: 40px;
+    width: calc(100% - 12px);
+    min-height: 30px;
     max-height: 200px;
     padding: 3px 3px 3px 3px;
     /*border: 1px solid rgba(230, 230, 230, 1);*/
     /*font-size: 1vw;*/
 }
 
-.str_title li a{
-    /*background: #51c666;*/
-    border: 1px solid rgba(81, 198, 102, 0.8);
+.str_title:first-child li {
+    border-right: 1px solid rgba(91, 178, 102, 0.4);
 }
+.str_title:first-child li a{
+    padding-bottom: 1px;
+}
+
+.str_title {
+    background: rgba(103, 198, 97, 0.9);
+}
+
+.str_title li a{
+    /*background: rgba(81, 198, 102, 0.8);*/
+    /*border: 1px solid rgba(81, 198, 102, 0.8);*/
+}
+
 .str_title{
     border-radius: 4px;
     /*background: #487F77;*/

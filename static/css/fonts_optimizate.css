@@ -33,7 +33,11 @@
         font-size: 1.5em;
     }
 
+    .str_title:first-child li a{
+        /*font-size: 1em;*/
+    }
     .str_plan ul li a {
+        font-size: 0.95em;
         /*font-size: 1vw;*/
         /*min-font-size: 0.6vw;*/
     }
