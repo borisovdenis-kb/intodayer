@@ -9,6 +9,7 @@ from intodayer2_app.send_sms import *
 from intodayer2_app.models import *
 from datetime import *
 from django.utils import timezone
+from intodayer2_app.utils import *
 
 
 ###################################################################################
@@ -82,55 +83,7 @@ def home_view(request):
         if all_plans:
             context_td_tm = get_today_tomorrow_plans(user.id, cur_plan.plan.id)
 
-            # # собираем инфу о текущем рассписании:
-            # # --- название
-            # # --- описание
-            # # --- кол-во юзеров, имеющих это расписание
-            # # дальше собираем само рассписание на сегодня и на завтра
-            # count = UserPlans.objects.filter(plan_id=cur_plan.plan.id).count()
-            #
-            # today = timezone.make_aware(datetime.now())   # опр сегодняшнюю дату
-            # tomorrow = today + timedelta(1)               # завтрашняя дата
-            # td_weekday = datetime.weekday(today)          # день недели сегодня
-            # tm_weekday = datetime.weekday(tomorrow)       # день дедели завтра
-            # start_date = cur_plan.plan.start_date             # c какого числа действует расп.
-            # cur_week1 = weeks_from(start_date, today)     # определяем номер текущей недели
-            # cur_week2 = weeks_from(start_date, tomorrow)
-            # td_parity, tm_parity = cur_week1 % 2, cur_week2 % 2  # четность недели
-            #
-            # format1 = '%Y %m %d'
-            # format2 = '%A, %d. %B %Y'
-            #
-            # today_plan = PlanRows.objects.select_related().filter(
-            #     plan_id=cur_plan.plan.id,
-            #     day_of_week=td_weekday + 1,
-            #     start_week__lte=cur_week1,
-            #     end_week__gte=cur_week1,
-            #     parity=td_parity
-            # )
-            # tomorrow_plan = PlanRows.objects.select_related().filter(
-            #     plan_id=cur_plan.plan.id,
-            #     day_of_week=tm_weekday + 2,
-            #     start_week__lte=cur_week1,
-            #     end_week__gte=cur_week1,
-            #     parity=tm_parity
-            # )
-            #
-            # context['today_plan'] = {
-            #     'date': today.strftime(format1),
-            #     'format_date': today.strftime(format2),
-            #     'plan_rows': today_plan,
-            # }
-            # context['tomorrow_plan'] = {
-            #     'date': tomorrow.strftime(format1),
-            #     'format_date': tomorrow.strftime(format2),
-            #     'plan_rows': tomorrow_plan
-            # }
-
-            print(all_plans)
-
             context['all_plans'] = all_plans
-
             # объединяем контексты
             context.update(context_td_tm)
 
