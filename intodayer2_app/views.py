@@ -17,12 +17,17 @@ from django.utils import timezone
 
 
 def switch_plan_home_ajax(request):
+    """
+        Функция для переключения между расписаниями
+        ___________________________________________________
+        :param request:
+        :return: отрендеренную html разметку опр расписания
+    """
     if request.is_ajax():
         user = CustomUser.objects.get(username=request.user.username)
         context = get_today_tomorrow_plans(user.id, plan_id=request.POST['plan_id'])
 
         return render_to_response('today_tomorrow.html', context)
-
 
 
 ###################################################################################
