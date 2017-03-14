@@ -1,0 +1,20 @@
+{% for inv in invitations %}
+    <div class="invitation">
+        <div class="message_wrap">
+            <div class="message">
+                Пользователь
+                {% if inv.from_user.first_name and inv.from_user.last_name %}
+                    {{ inv.from_user.first_name }} {{ inv.from_user.last_name }}
+                {% else %}
+                    {{  inv.from_user.username }}
+                {% endif %}
+                хочет поделиться с Вами расписанием.
+            </div>
+            <div class="message_sep"></div>
+            <div class="show_plan">Посмотреть</div>
+        </div>
+        <div class="fua_wrap">
+            <div class="from_user_avatar"></div>
+        </div>
+    </div>
+{% endfor %}

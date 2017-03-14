@@ -12,6 +12,7 @@
     <link rel="stylesheet" type="text/css" href={% static "css/fonts_optimizate.css" %}>
     <script type="text/javascript" src={% static "library/jquery-3.1.1.js" %}></script>
     <script type="text/javascript" src={% static "library/jquery.animate-colors.js" %}></script>
+    <script type="text/javascript" src={% static "scripts/base_script.js" %}></script>
 
     {#Импорт шрифтов для всего сайта#}
     <link rel="stylesheet" href={% static 'css/fonts/cynthopro/cynthopro.css' %}>
@@ -27,6 +28,9 @@
 </head>
 
 <body>
+    <div class="for_invitations">
+        <!--Сюда будут вставляться имеющиеся у данного юзера приглашения-->
+    </div>
 {% block header %}
     <div class="top-block">
         <div class="top">
@@ -74,7 +78,11 @@
                     <ul>
                         {% for plan in all_plans %}
                             <li>
-                                <a>
+                                <a
+                                        {% if plan.current_yn == 'y' %}
+                                            style="background-color: #000000; color: #ffffff"
+                                        {% endif %}
+                                >
                                     {{ plan.plan.title }}
                                     <p>{{ plan.plan.id }}</p>
                                 </a>

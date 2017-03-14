@@ -26,9 +26,29 @@ def switch_plan_home_ajax(request):
     """
     if request.is_ajax():
         user = CustomUser.objects.get(username=request.user.username)
+        # get_today_tomorrow_plans возвращает словарь
         context = get_today_tomorrow_plans(user.id, plan_id=request.POST['plan_id'])
 
         return render_to_response('today_tomorrow.html', context)
+
+
+def get_invitations_ajax(request):
+    """
+        Функция должна вернуть html разметку с имеющимися
+        у данного пользователся приглашениями.
+        _________________________________________________
+        :param request:
+        :return: html разметка с приглашениями
+    """
+    if request.is_ajax():
+        user = CustomUser.objects.get(username=request.user.username)
+        invitations = Invitations.objects.select_related().filter()
+        context = {
+            'invitations': invitations,
+            'user': user
+        }
+
+        return render_to_response('invitations.html', context)
 
 
 ###################################################################################
