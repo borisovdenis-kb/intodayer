@@ -28,9 +28,9 @@
 </head>
 
 <body>
-    <div class="for_invitations">
-        <!--Сюда будут вставляться имеющиеся у данного юзера приглашения-->
-    </div>
+<div class="for_invitations">
+    <!--Сюда будут вставляться имеющиеся у данного юзера приглашения-->
+</div>
 {% block header %}
     <div class="top-block">
         <div class="top">
@@ -73,47 +73,51 @@
             <div class="left_content">
                 <div class="ava_content">
                 </div>
-                <div class="plan_selector">
-                    <label id="plan_selector_title">Мои расписания</label>
-                    <ul>
-                        {% for plan in all_plans %}
+
+                {% if is_invitation != True %}
+                    <div class="plan_selector">
+                        <label id="plan_selector_title">Мои расписания</label>
+                        <ul>
+                            {% for plan in all_plans %}
+                                <li>
+                                    <a
+                                            {% if plan.current_yn == 'y' %}
+                                                style="background-color: #000000; color: #ffffff"
+                                            {% endif %}
+                                    >
+                                        {{ plan.plan.title }}
+                                        <p>{{ plan.plan.id }}</p>
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="users_online">
+                        <label id="users_online_title">Online</label>
+                        <ul>
                             <li>
-                                <a
-                                        {% if plan.current_yn == 'y' %}
-                                            style="background-color: #000000; color: #ffffff"
-                                        {% endif %}
-                                >
-                                    {{ plan.plan.title }}
-                                    <p>{{ plan.plan.id }}</p>
+                                <a href="#">
+                                    <div class="user_image"></div>
+                                    <div class="user_name">User 1</div>
                                 </a>
                             </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-                <div class="users_online">
-                    <label id="users_online_title">Online</label>
-                    <ul>
-                        <li>
-                            <a href="#">
-                                <div class="user_image"></div>
-                                <div class="user_name">User 1</div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <div class="user_image"></div>
-                                <div class="user_name">User 1</div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <div class="user_image"></div>
-                                <div class="user_name">User 1</div>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+                            <li>
+                                <a href="#">
+                                    <div class="user_image"></div>
+                                    <div class="user_name">User 1</div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <div class="user_image"></div>
+                                    <div class="user_name">User 1</div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                {% endif %}
             </div>
+
         {% endblock %}
 
         {% block right_content %}

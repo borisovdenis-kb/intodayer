@@ -1,0 +1,68 @@
+.day_title {
+    padding: 5px 10px 10px 20px;
+}
+
+.str_plan ul li:nth-child(1) {
+    width: 15%;
+}
+
+.str_plan ul li:nth-child(2) {
+    width: 15%;
+}
+
+.str_plan ul li:last-child {
+    width: 20%;
+}
+
+.str_plan ul li {
+    width: 30%;
+}
+
+.str_plan ul li a {
+    min-height: 15px;
+    padding-bottom: 0px;
+}
+
+.str_plan:nth-child(2) {
+    margin: 5px 0 0 0;
+}
+
+
+.plus_button_form{
+    margin: auto;
+    /*padding: 3px 0 3px 0px;*/
+    /*border: 1px solid rgba(81, 198, 102, 1);*/
+    /*background: rgba(81, 198, 102, 0.5);*/
+    width: 25px;
+    height: 25px;
+    border-radius: 100%;
+    transition: 0.3s;
+    padding: 0 0 0 0;
+}
+
+.plus_button {
+    margin: auto;
+    transition: 0.1s;
+    /*background: rgba(81, 198, 102, 1);*/
+    height: 100%;
+    background-image: url("../images/add.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    opacity: 0.5;
+    cursor: pointer;
+}
+
+
+.str_plan.str_plus{;
+    margin-top: 5px;
+    cursor: default;
+    background: white;
+}
+
+.plus_button_form:hover .plus_button{
+    opacity: 1;
+}
+.plus_button_form:active .plus_button{
+    opacity: 0.7;
+}

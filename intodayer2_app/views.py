@@ -10,7 +10,7 @@ from intodayer2_app.models import *
 from datetime import *
 from django.utils import timezone
 from intodayer2_app.utils import *
-
+from intodayer2_app.api import *
 
 ###################################################################################
 #                          ОБРАБОТКА AJAX ЗАПРОСОВ                                #
@@ -160,18 +160,18 @@ def add_schedules_view(request):
         try:
             std_id = user.customuser.stdt_stdt.stdt_id
         except ObjectDoesNotExist:
-            context = {'table' : [],
-                       'username' : user.username
-            }
+            context = {'table': [],
+                       'username': user.username
+                       }
         else:
-            student = Students.objects.get(stdt_id = std_id)
+            student = Students.objects.get(stdt_id=std_id)
             group = student.grp_grp_id
             cathedra = student.cthd_cthd_id
 
             # выбираем из тиблицы расписания все записи, "нужные" данному юзеру
             # мы получили список, состоящий из строк расписания
             # далее генерируем расписание на неделю, в зависимости от номера и четности недели
-            table = list(Schedules.objects.filter(grp_grp = group, cthd_cthd = cathedra).order_by('tms_tms'))
+            table = list(Schedules.objects.filter(grp_grp=group, cthd_cthd=cathedra).order_by('tms_tms'))
             current_week = [[], [], [], [], [], [], []]
 
             for row in table:
@@ -190,54 +190,54 @@ def add_schedules_view(request):
                 elif row.dfwk_dfwk.name == 'Воскресенье':
                     current_week[6].append(row)
 
-            context = {'table' : current_week,
-                       'username' : user.username
-            }
+            context = {'table': current_week,
+                       'username': user.username
+                       }
     else:
         return HttpResponseRedirect('/login')
 
     if request.method == 'POST':
-            print('0')
-            print(request.POST)
-            new_data = dict(request.POST) # получаем новые данные от клиента
+        print('0')
+        print(request.POST)
+        new_data = dict(request.POST)  # получаем новые данные от клиента
 
-            ###########################################################################
-            #                         ЗАНОСИМ ДАННЫЕ В БАЗУ                           #
-            ###########################################################################
+        ###########################################################################
+        #                         ЗАНОСИМ ДАННЫЕ В БАЗУ                           #
+        ###########################################################################
 
-            count_tchr_id = len(Teachers.objects.all())   # этот говно код
-            count_subj_id = len(Subjects.objects.all())   # потому что в БД походу
-            count_schld_id = len(Schedules.objects.all()) # не автоинкрементные поля :(
+        count_tchr_id = len(Teachers.objects.all())  # этот говно код
+        count_subj_id = len(Subjects.objects.all())  # потому что в БД походу
+        count_schld_id = len(Schedules.objects.all())  # не автоинкрементные поля :(
 
-            new_teacher = Teachers(
-                tchr_id = count_tchr_id + 1,
-                name_short = new_data['teacher'][0]
-            )
-            new_teacher.save()
+        new_teacher = Teachers(
+            tchr_id=count_tchr_id + 1,
+            name_short=new_data['teacher'][0]
+        )
+        new_teacher.save()
 
-            new_subject = Subjects(
-                subj_id = count_subj_id + 1,
-                name = new_data['subject'][0]
+        new_subject = Subjects(
+            subj_id=count_subj_id + 1,
+            name=new_data['subject'][0]
 
-            )
-            new_subject.save()
+        )
+        new_subject.save()
 
-            new_schld_row = Schedules(
-                schld_id = count_schld_id + 1,
-                grp_grp_id = group,
-                cthd_cthd_id = cathedra,
-                dfwk_dfwk_id = new_data['dayofweek'][0],
-                subj_subj_id = new_subject.subj_id,
-                tchr_tchr_id = new_teacher.tchr_id,
-                tms_tms_id = new_data['time'][0],
-                parity = new_data['parity'][0],
-                place = new_data['place'][0],
-                start_week = new_data['startweek'][0],
-                end_week = new_data['endweek'][0]
-            )
-            new_schld_row.save()
+        new_schld_row = Schedules(
+            schld_id=count_schld_id + 1,
+            grp_grp_id=group,
+            cthd_cthd_id=cathedra,
+            dfwk_dfwk_id=new_data['dayofweek'][0],
+            subj_subj_id=new_subject.subj_id,
+            tchr_tchr_id=new_teacher.tchr_id,
+            tms_tms_id=new_data['time'][0],
+            parity=new_data['parity'][0],
+            place=new_data['place'][0],
+            start_week=new_data['startweek'][0],
+            end_week=new_data['endweek'][0]
+        )
+        new_schld_row.save()
 
-            return HttpResponseRedirect('/add_schedules')
+        return HttpResponseRedirect('/add_schedules')
     else:
         return render_to_response('add_schedules.html', context)
 
@@ -259,7 +259,7 @@ def profile_settings(request):
         return render_to_response('myprofile.html', {})
 
 
-def plan_view(request):
+def plan_view(request, plan_id=0):
     """
     Функция, которая выводит таблицу редактирования текущего (выбранного) расписания.
     На странице имеем доступ для всех дней недели и для всего расписания (всех диапазонов) в целом.
@@ -274,7 +274,39 @@ def plan_view(request):
         plan_list = UserPlans.objects.select_related().filter(
             user_id=user.id, current_yn='y'
         )
+        plan = plan_list[0]
+        all_plans = UserPlans.objects.select_related().filter(user_id=user.id)
+        count = all_plans.count()
+        # все расписания
+        context['all_plans'] = all_plans
+        # имя описание плана
+        context['plan_info'] = [plan.plan.title, plan.plan.description]
+        # количество участников
+        context['plan_info'] += [members_amount_suffix(count)]
+
+        if plan_id == 0:
+            plan_rows = PlanRows.objects.select_related().filter(
+                plan_id=plan.plan.id,
+            ).order_by('start_week')
+        else:
+            if Invitations.objects.filter(to_user=user.id, plan_id=plan_id):
+                context['is_invitation'] = True
+                plan_rows = PlanRows.objects.select_related().filter(
+                    plan_id=plan_id,
+                ).order_by('start_week')
+            else:
+                return render_to_response("ops_page.html")
+
+        day_of_weeks = DaysOfWeek.objects.all()
+
+        context['day_of_weeks'] = day_of_weeks
+        context['plan_rows'] = plan_rows
+
         return render_to_response('plan.html', context)
 
     else:
         return HttpResponseRedirect("/login", {})
+
+
+def sort_by_start_date(row):
+    return row.start_week

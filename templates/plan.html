@@ -7,12 +7,60 @@
 
 
 {% block scripts_bottom %}
-    <script type="text/javascript" src={% static "scripts/sctipt_plan.js" %}></script>
+    <script type="text/javascript" src={% static "scripts/script_plan.js" %}></script>
 {% endblock %}
 
 
+
 {% block right_content %}
+    <div class="right_content">
+        <div class="title_content">
+            <div id="plan_title">{{ plan_info.0 }}</div>
+            <div id="count_title">{{ plan_info.2 }}</div>
+        </div>
 
+        <!-- Вывод всех дней недели -->
+        <!-- и информации о расписании, относящейся к каждому дню -->
+        {% for day in day_of_weeks %}
+            <div class="plan_content">
+                <div class="plan_window">
+                    <div class="content_day_title">
+                        <div class="day_title">{{ day.name }}</div>
+                    </div>
+                    <div class="day_plan_content">
+                        <div class="str_plan">
+                            <ul class="str_title">
+                                <li class="weeks"><a>Недели</a></li>
+                                <li class="time"><a>Время</a></li>
+                                <li class="subject"><a>Предмет</a></li>
+                                <li class="teacher"><a>Преподаватель</a></li>
+                                <li class="place"><a>Аудитория</a></li>
+                            </ul>
+                        </div>
 
-
+                        {% for row in plan_rows %}
+                            {% if row.day_of_week.id == day.id %}
+                                <div class="str_plan">
+                                    <ul>
+                                        <li><a>{{ row.start_week }}-{{ row.end_week }}</a></li>
+                                        <li><a>{{ row.get_format_time }}</a></li>
+                                        <li><a>{{ row.subject.name }}</a></li>
+                                        <li><a>{{ row.teacher.name_short }}</a></li>
+                                        <li><a>{{ row.place.name }}</a></li>
+                                    </ul>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        {% if is_invitation != True %}
+                            <div class="str_plan str_plus">
+                                <div class="plus_button_form">
+                                    <div class="plus_button"></div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}
