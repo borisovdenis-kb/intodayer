@@ -10,6 +10,11 @@
     <script type="text/javascript" src={% static "scripts/script_plan.js" %}></script>
 {% endblock %}
 
+
+
+
+
+
 {% block right_content %}
     <div class="right_content">
         <div class="title_content">
@@ -49,11 +54,13 @@
                                 </div>
                             {% endif %}
                         {% endfor %}
-                        <div class="str_plan str_plus">
-                            <div class="plus_button_form">
-                                <div class="plus_button"></div>
+                        {% if is_invitation != True %}
+                            <div class="str_plan str_plus">
+                                <div class="plus_button_form">
+                                    <div class="plus_button"></div>
+                                </div>
                             </div>
-                        </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>

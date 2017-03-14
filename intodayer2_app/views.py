@@ -259,7 +259,7 @@ def profile_settings(request):
         return render_to_response('myprofile.html', {})
 
 
-def plan_view(request):
+def plan_view(request, plan_id=0):
     """
     Функция, которая выводит таблицу редактирования текущего (выбранного) расписания.
     На странице имеем доступ для всех дней недели и для всего расписания (всех диапазонов) в целом.
@@ -281,12 +281,20 @@ def plan_view(request):
         # количество участников
         context['plan_info'] += [members_amount_suffix(count)]
 
-        plan_rows = PlanRows.objects.select_related().filter(
+        if plan_id == 0:
+            plan_rows = PlanRows.objects.select_related().filter(
                 plan_id=plan.plan.id,
             ).order_by('start_week')
+        else:
+            if Invitations.objects.filter(to_user=user.id, plan_id=plan_id):
+                context['is_invitation'] = True
+                plan_rows = PlanRows.objects.select_related().filter(
+                    plan_id=plan_id,
+                ).order_by('start_week')
+            else:
+                return render_to_response("ops_page.html")
 
         day_of_weeks = DaysOfWeek.objects.all()
-        # print(day_of_weeks[0])
 
         context['day_of_weeks'] = day_of_weeks
         context['plan_rows'] = plan_rows

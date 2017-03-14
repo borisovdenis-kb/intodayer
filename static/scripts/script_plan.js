@@ -3,8 +3,10 @@
  */
 
 $(document).ready(function () {
+    setTimeout(function () {
+        delete_empty_days();
+    },100);
 
-    delete_empty_days();
 
 
 });
@@ -19,7 +21,7 @@ $('.plus_button_form').click(function () {
 function delete_empty_days() {
     var $days_content = $('.plan_content');
     $days_content.each(function () {
-        var $str_plans = $(this).find('.str_plan');
+        var $str_plans = $(this).find('.str_plan ul');
         if ($str_plans.length == 1) {
             $(this).remove();
         }
@@ -41,7 +43,7 @@ function add_plan_str($this_button) {
         '</ul>' +
         '</div>');
 
-    
+
     var $plus_button = $this_block.find('.str_plus');
     $plus_button.fadeOut(0);
     $this_block.append($new_div);

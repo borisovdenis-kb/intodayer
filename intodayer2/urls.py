@@ -27,5 +27,6 @@ urlpatterns = [
     url(r'^profile/$', views.profile_settings),
     url(r'^add_schedules/$', views.add_schedules_view),
     url(r'^plan/$', views.plan_view),
+    url(r'^plan/invitation/(\d+)$', views.plan_view),
     # url(r'^add_plans/$', views.add_plans_view),
 ]
