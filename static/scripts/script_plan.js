@@ -41,6 +41,7 @@ function add_plan_str($this_button) {
         '</ul>' +
         '</div>');
 
+    
     var $plus_button = $this_block.find('.str_plus');
     $plus_button.fadeOut(0);
     $this_block.append($new_div);
