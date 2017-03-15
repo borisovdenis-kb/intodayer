@@ -22,9 +22,12 @@ $(document).ready( function() {
             url: '/confirm_invitation',
             data: {'decision': 1, 'plan_id': array[array.length - 1]},
             success: function (msg) {
-                alert(msg);
+                $('.perform_confirmation p').text('Расписание добавлено');
+                $('.perform_confirmation').fadeIn(1000);
+                $('.perform_confirmation a').delay(1100).fadeIn(0);
+                // $('.perform_confirmation').animate({display: 'block'}, 300, 'easeInOutExpo');
             }
-        })
+        });
     });
 
     $('.reject').click(function () {
@@ -34,9 +37,12 @@ $(document).ready( function() {
             url: '/confirm_invitation',
             data: {'decision': 0, 'plan_id': array[array.length - 1]},
             success: function (msg) {
-                alert(msg);
+                $('.perform_confirmation p').text('Приглашение отклонено');
+                $('.perform_confirmation').fadeIn(1000);
+                $('.perform_confirmation a').delay(1100).fadeIn(0);
+                // $('.perform_confirmation').animate({display: 'block'}, 300, 'easeInOutExpo');
             }
-        })
+        });
     });
     
 });

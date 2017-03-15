@@ -28,6 +28,10 @@
 {% endblock %}
 
 {% block right_content %}
+    <div class="perform_confirmation">
+        <p>Расписание добавлено</p>
+        <a href="/home">oк</a>
+    </div>
     <div class="right_content">
         <div class="title_content">
             <div id="plan_title">{{ plan_info.0 }}</div>
@@ -77,8 +81,5 @@
                 </div>
             </div>
         {% endfor %}
-
-
-
     </div>
 {% endblock %}
