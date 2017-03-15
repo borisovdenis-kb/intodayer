@@ -1,3 +1,5 @@
+import json
+
 from  django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import *
 from django.shortcuts import render_to_response
@@ -49,6 +51,32 @@ def get_invitations_ajax(request):
         }
 
         return render_to_response('invitations.html', context)
+
+
+def confirm_invitation_ajax(request):
+    """
+        Функция реагирует на выбор пользовтеля:
+            принял приглашение - confirmed_yn = y
+            отклонить приглашение - confirmed_yn = n
+        Далее в БД должен сработать соотв. триггер.
+        ____________________________________________
+        :param request:
+        :return: ?
+    """
+    if request.is_ajax():
+        user = CustomUser.objects.get(username=request.user.username)
+        inv = Invitations.objects.get(to_user=user.id, plan_id=request.GET['plan_id'])
+
+        print(request.GET['decision'])
+
+        inv.confirmed_yn = 'y' if request.GET['decision'] == '1' else 'n'
+        inv.save()
+
+        response = HttpResponse()
+        response['Content-Type'] = 'text/javascript'
+        response.write(json.dumps([{'success': 1}]))
+
+        return response
 
 
 ###################################################################################
@@ -138,110 +166,6 @@ def logout_view(request):
     return HttpResponseRedirect("/")
 
 
-def add_schedules_view(request):
-    """
-    Функция отображения страницы добавления расписания. Если у
-    старосты уже имеется расписание, то на этой странице выводится
-    общее расписание, представляющее весь семестр. Если староста
-    хочет что-то изменить в нем, то с боку при наведении на конкретную
-    строку расписания будет появляться карандашек, подсказывающий
-    возможность изменения. При нажатии активируются поля ввода и староста
-    вносит свои именения. Появлется кнопка применить и все красиво.
-    Внизу при этом есть поля для добавления новых строк в расписание.
-    Как только староста добавит новую строку и нажмет submit, то страница
-    обновится (здесь предполагается AJAX) и новая добавленная строка будет
-    отображаться в верхней части страницы в расписании на семестр.
-    Если ниодной строчки в расписании еще не было создано, то будет выводиться
-    сообщения, "Создайте расписание".
-    """
-
-    if request.user.is_authenticated():
-        user = User.objects.get(username=request.user.username)
-        try:
-            std_id = user.customuser.stdt_stdt.stdt_id
-        except ObjectDoesNotExist:
-            context = {'table': [],
-                       'username': user.username
-                       }
-        else:
-            student = Students.objects.get(stdt_id=std_id)
-            group = student.grp_grp_id
-            cathedra = student.cthd_cthd_id
-
-            # выбираем из тиблицы расписания все записи, "нужные" данному юзеру
-            # мы получили список, состоящий из строк расписания
-            # далее генерируем расписание на неделю, в зависимости от номера и четности недели
-            table = list(Schedules.objects.filter(grp_grp=group, cthd_cthd=cathedra).order_by('tms_tms'))
-            current_week = [[], [], [], [], [], [], []]
-
-            for row in table:
-                if row.dfwk_dfwk.name == 'Понедельник':
-                    current_week[0].append(row)
-                elif row.dfwk_dfwk.name == 'Вторник':
-                    current_week[1].append(row)
-                elif row.dfwk_dfwk.name == 'Среда':
-                    current_week[2].append(row)
-                elif row.dfwk_dfwk.name == 'Четверг':
-                    current_week[3].append(row)
-                elif row.dfwk_dfwk.name == 'Пятница':
-                    current_week[4].append(row)
-                elif row.dfwk_dfwk.name == 'Суббота':
-                    current_week[5].append(row)
-                elif row.dfwk_dfwk.name == 'Воскресенье':
-                    current_week[6].append(row)
-
-            context = {'table': current_week,
-                       'username': user.username
-                       }
-    else:
-        return HttpResponseRedirect('/login')
-
-    if request.method == 'POST':
-        print('0')
-        print(request.POST)
-        new_data = dict(request.POST)  # получаем новые данные от клиента
-
-        ###########################################################################
-        #                         ЗАНОСИМ ДАННЫЕ В БАЗУ                           #
-        ###########################################################################
-
-        count_tchr_id = len(Teachers.objects.all())  # этот говно код
-        count_subj_id = len(Subjects.objects.all())  # потому что в БД походу
-        count_schld_id = len(Schedules.objects.all())  # не автоинкрементные поля :(
-
-        new_teacher = Teachers(
-            tchr_id=count_tchr_id + 1,
-            name_short=new_data['teacher'][0]
-        )
-        new_teacher.save()
-
-        new_subject = Subjects(
-            subj_id=count_subj_id + 1,
-            name=new_data['subject'][0]
-
-        )
-        new_subject.save()
-
-        new_schld_row = Schedules(
-            schld_id=count_schld_id + 1,
-            grp_grp_id=group,
-            cthd_cthd_id=cathedra,
-            dfwk_dfwk_id=new_data['dayofweek'][0],
-            subj_subj_id=new_subject.subj_id,
-            tchr_tchr_id=new_teacher.tchr_id,
-            tms_tms_id=new_data['time'][0],
-            parity=new_data['parity'][0],
-            place=new_data['place'][0],
-            start_week=new_data['startweek'][0],
-            end_week=new_data['endweek'][0]
-        )
-        new_schld_row.save()
-
-        return HttpResponseRedirect('/add_schedules')
-    else:
-        return render_to_response('add_schedules.html', context)
-
-
 def profile_settings(request):
     if request.user.is_authenticated():
         if request.method == 'POST':
@@ -289,8 +213,10 @@ def plan_view(request, plan_id=0):
                 plan_id=plan.plan.id,
             ).order_by('start_week')
         else:
-            if Invitations.objects.filter(to_user=user.id, plan_id=plan_id):
+            inv = Invitations.objects.filter(to_user=user.id, plan_id=plan_id)
+            if inv:
                 context['is_invitation'] = True
+                context['invitation'] = inv[0]
                 plan_rows = PlanRows.objects.select_related().filter(
                     plan_id=plan_id,
                 ).order_by('start_week')

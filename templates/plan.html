@@ -10,7 +10,22 @@
     <script type="text/javascript" src={% static "scripts/script_plan.js" %}></script>
 {% endblock %}
 
+{% block invitation %}
+    <div class="inv_description">
+        <div class="comment_from_user">
+            {{ invitation.comment }}
+        </div>
+    </div>
 
+    <div class="confirmation">
+        <div class="accept">
+            Принять
+        </div>
+        <div class="reject">
+            Оклонить
+        </div>
+    </div>
+{% endblock %}
 
 {% block right_content %}
     <div class="right_content">
@@ -62,5 +77,8 @@
                 </div>
             </div>
         {% endfor %}
+
+
+
     </div>
 {% endblock %}

@@ -1,9 +1,44 @@
-/**
- * Created by Борисов on 14.03.2017.
- */
 
 $(document).ready( function() {
-    show_invitations();
+    if (location.href.indexOf('invitation') < 0){
+        show_invitations();
+    }
+
+    var confpos = $('.confirmation').offset().top;
+
+    $(window).on('scroll', function() {
+        if ($(window).scrollTop() > confpos) {
+            // alert('yes');
+            $('.confirmation').css({'position': 'fixed', 'top': '0px'});
+        } else {
+            $('.confirmation').css({'position': 'relative'});
+        }
+    });
+
+    $('.accept').click(function () {
+        var array = location.href.split('/')
+
+        $.ajax({
+            url: '/confirm_invitation',
+            data: {'decision': 1, 'plan_id': array[array.length - 1]},
+            success: function (msg) {
+                alert(msg);
+            }
+        })
+    });
+
+    $('.reject').click(function () {
+        var array = location.href.split('/')
+
+        $.ajax({
+            url: '/confirm_invitation',
+            data: {'decision': 0, 'plan_id': array[array.length - 1]},
+            success: function (msg) {
+                alert(msg);
+            }
+        })
+    });
+    
 });
 
 function show_invitations() {

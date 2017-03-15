@@ -25,10 +25,10 @@ urlpatterns = [
     url(r'^logout/$', views.logout_view),
     url(r'^registration/$', views.registration_view),
     url(r'^profile/$', views.profile_settings),
-    url(r'^add_schedules/$', views.add_schedules_view),
     url(r'^plan/$', views.plan_view),
     url(r'^home/switch_plan', views.switch_plan_home_ajax),
     url(r'^get_invitations', views.get_invitations_ajax),
     url(r'^plan/invitation/(\d+)$', views.plan_view),
+    url(r'^confirm_invitation', views.confirm_invitation_ajax)
     # url(r'^add_plans/$', views.add_plans_view),
 ]
