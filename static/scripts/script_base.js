@@ -15,6 +15,25 @@ $(document).ready( function() {
         }
     });
 
+    var curtxt_accept = $('.accept').text();
+    var curtxt_reject = $('.reject').text();
+
+    $('.accept').hover(function() {
+        $(this).text('');
+        $(this).addClass('accept_img');
+    }, function() {
+        $(this).text(curtxt_accept);
+        $(this).removeClass('accept_img');
+    });
+
+    $('.reject').hover(function() {
+        $(this).text('');
+        $(this).addClass('reject_img');
+    }, function() {
+        $(this).text(curtxt_reject);
+        $(this).removeClass('reject_img');
+    });
+
     $('.accept').click(function () {
         var array = location.href.split('/')
 
@@ -23,7 +42,7 @@ $(document).ready( function() {
             data: {'decision': 1, 'plan_id': array[array.length - 1]},
             success: function (msg) {
                 $('.perform_confirmation p').text('Расписание добавлено');
-                $('.perform_confirmation').fadeIn(1000);
+                $('.perform_confirmation').fadeIn(800);
                 $('.perform_confirmation a').delay(1100).fadeIn(0);
                 // $('.perform_confirmation').animate({display: 'block'}, 300, 'easeInOutExpo');
             }
@@ -38,7 +57,7 @@ $(document).ready( function() {
             data: {'decision': 0, 'plan_id': array[array.length - 1]},
             success: function (msg) {
                 $('.perform_confirmation p').text('Приглашение отклонено');
-                $('.perform_confirmation').fadeIn(1000);
+                $('.perform_confirmation').fadeIn(800);
                 $('.perform_confirmation a').delay(1100).fadeIn(0);
                 // $('.perform_confirmation').animate({display: 'block'}, 300, 'easeInOutExpo');
             }

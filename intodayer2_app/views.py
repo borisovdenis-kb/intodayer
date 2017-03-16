@@ -194,21 +194,17 @@ def plan_view(request, plan_id=0):
         context = {
             'username': user.username,
         }
-        # выбираем текущее расписание юзера
-        plan_list = UserPlans.objects.select_related().filter(
-            user_id=user.id, current_yn='y'
-        )
-        plan = plan_list[0]
+
         all_plans = UserPlans.objects.select_related().filter(user_id=user.id)
         count = all_plans.count()
-        # все расписания
-        context['all_plans'] = all_plans
-        # имя описание плана
-        context['plan_info'] = [plan.plan.title, plan.plan.description]
-        # количество участников
-        context['plan_info'] += [members_amount_suffix(count)]
 
         if plan_id == 0:
+            # выбираем текущее расписание юзера
+            plan_list = UserPlans.objects.select_related().filter(
+                user_id=user.id, current_yn='y'
+            )
+            plan = plan_list[0]
+
             plan_rows = PlanRows.objects.select_related().filter(
                 plan_id=plan.plan.id,
             ).order_by('start_week')
@@ -217,11 +213,24 @@ def plan_view(request, plan_id=0):
             if inv:
                 context['is_invitation'] = True
                 context['invitation'] = inv[0]
+
+                plan_list = UserPlans.objects.select_related().filter(
+                    user_id=user.id, plan_id=plan_id
+                )
+                plan = plan_list[0]
+
                 plan_rows = PlanRows.objects.select_related().filter(
                     plan_id=plan_id,
                 ).order_by('start_week')
             else:
                 return render_to_response("ops_page.html")
+
+        # все расписания
+        context['all_plans'] = all_plans
+        # имя описание плана
+        context['plan_info'] = [plan.plan.title, plan.plan.description]
+        # количество участников
+        context['plan_info'] += [members_amount_suffix(count)]
 
         day_of_weeks = DaysOfWeek.objects.all()
 
