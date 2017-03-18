@@ -34,13 +34,48 @@
     height: 170px;
     width: 170px;
     margin: 0px 0px 0px 15px;
-    background-image: url("../images/putin.jpg");
+    /*background-image: url("../images/putin.jpg");*/
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
     border-radius: 4px;
-    /*border: 1px solid rgba(230, 230, 230, 0.0);*/
+    overflow: hidden;
+    /*border: 1px solid rgba(230, 230, 230, 1);*/
+    transition: 0.2s;
 }
+
+.ava_cover {
+    position: absolute;
+    margin: 0px 0px 0px 15px;
+    background-color: #ffffff;
+    opacity: 0;
+}
+
+.ava_cover_text {
+    display: flex;
+    /*justify-content: center;*/
+    align-items: center;
+}
+
+.ava_cover, .ava_cover_text {
+    width: 170px;
+    height: 170px;
+    border-radius: 4px;
+}
+
+.ava_cover_text p {
+    margin-left: 37px;
+}
+
+.ava_content, .ava_cover, .ava_cover_text, :hover{
+    cursor: default;
+}
+
+.ava_cover_text p:hover {
+    cursor: pointer;
+    color: #8b1deb;
+}
+
 
 .plan_selector, .users_online {
     width: 170px;

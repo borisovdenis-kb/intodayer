@@ -2,9 +2,11 @@
 $(document).ready( function() {
     if (location.href.indexOf('invitation') < 0){
         show_invitations();
+    } else {
+        var confpos = $('.confirmation').offset().top;
     }
 
-    var confpos = $('.confirmation').offset().top;
+
 
     $(window).on('scroll', function() {
         if ($(window).scrollTop() > confpos) {
@@ -65,7 +67,21 @@ $(document).ready( function() {
             }
         });
     });
-    
+
+    // $('.ava_content').hover(function() {
+    //     $('.ava_cover').css({'display': 'block'});
+    // }, function () {
+    //     // $('.ava_cover').css({'display': 'none'});
+    // });
+
+    $('.ava_cover').hover(function() {
+        $('.ava_cover').animate({opacity: '0.8'}, 500);
+        // $('.ava_content').addClass('add_blur');
+    }, function() {
+        $('.ava_cover').animate({opacity: '0'}, 500);
+        // $('.ava_content').removeClass('add_blur');
+    })
+
 });
 
 function blurElement(element, size) {

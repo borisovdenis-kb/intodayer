@@ -75,8 +75,15 @@
         <div class="content">
             {% block left_content %}
                 <div class="left_content">
-                    <div class="ava_content">
+                    <div class="ava_cover">
+                        <div class="ava_cover_text">
+                            <p>Загрузить фото</p>
+                        </div>
                     </div>
+                    
+                    <div class="ava_content" style="background-image: url(/static/images/putin.jpg);">
+                    </div>
+
 
                     {% if is_invitation != True %}
                         <div class="plan_selector">
