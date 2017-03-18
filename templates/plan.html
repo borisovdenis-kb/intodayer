@@ -12,9 +12,6 @@
 
 
 
-
-
-
 {% block right_content %}
     <div class="right_content">
         <div class="title_content">
@@ -43,13 +40,13 @@
 
                         {% for row in plan_rows %}
                             {% if row.day_of_week.id == day.id %}
-                                <div class="str_plan">
+                                <div class="str_plan change">
                                     <ul>
                                         <li><a>{{ row.start_week }}-{{ row.end_week }}</a></li>
                                         <li><a>{{ row.get_format_time }}</a></li>
                                         <li><a>{{ row.subject.name }}</a></li>
                                         <li><a>{{ row.teacher.name_short }}</a></li>
-                                        <li><a>{{ row.place.name }}</a></li>
+                                        <li class="last"><a>{{ row.place.name }}</a></li>
                                     </ul>
                                 </div>
                             {% endif %}

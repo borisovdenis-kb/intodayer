@@ -8,7 +8,20 @@
 //    
 // }
 
+$(document).ready( function () {
+   $('.plan_selector ul li a').click( function () {
+       
+       jQuery.each($('.plan_selector ul li a'), function() {
+          $(this).css({'background-color': 'rgb(244, 243, 248)', 'color' : '#000000'})
+       });
 
+       $(this).css({'background-color': '#000000', 'color' : '#FFFFFF'})
+
+       var data = {plan_id: $(this).find('p').text()};
+
+      $('.right_content').load('/home/switch_plan', data);
+   });
+});
 
 //############################################################################## отвечает за оптимизацию шрифта
 $(window).on("resize", function () {

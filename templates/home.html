@@ -12,6 +12,7 @@
     <link rel="stylesheet" type="text/css" href={% static "css/fonts_optimizate.css" %}>
     <script type="text/javascript" src={% static "library/jquery-3.1.1.js" %}></script>
     <script type="text/javascript" src={% static "library/jquery.animate-colors.js" %}></script>
+    <script type="text/javascript" src={% static "scripts/script_base.js" %}></script>
 
     {#Импорт шрифтов для всего сайта#}
     <link rel="stylesheet" href={% static 'css/fonts/cynthopro/cynthopro.css' %}>
@@ -27,6 +28,9 @@
 </head>
 
 <body>
+<div class="for_invitations">
+    <!--Сюда будут вставляться имеющиеся у данного юзера приглашения-->
+</div>
 {% block header %}
     <div class="top-block">
         <div class="top">
@@ -69,13 +73,23 @@
             <div class="left_content">
                 <div class="ava_content">
                 </div>
+
                 {% if is_invitation != True %}
                     <div class="plan_selector">
                         <label id="plan_selector_title">Мои расписания</label>
                         <ul>
-                            <li><a href="#">Plan 1</a></li>
-                            <li><a href="#">Plan 2</a></li>
-                            <li><a href="#">Plan 3</a></li>
+                            {% for plan in all_plans %}
+                                <li>
+                                    <a
+                                            {% if plan.current_yn == 'y' %}
+                                                style="background-color: #000000; color: #ffffff"
+                                            {% endif %}
+                                    >
+                                        {{ plan.plan.title }}
+                                        <p>{{ plan.plan.id }}</p>
+                                    </a>
+                                </li>
+                            {% endfor %}
                         </ul>
                     </div>
                     <div class="users_online">
@@ -103,12 +117,14 @@
                     </div>
                 {% endif %}
             </div>
+
         {% endblock %}
+
         {% block right_content %}
             <div class="right_content">
                 <div class="title_content">
-                    <div id="plan_title">{{ plan_info.0 }}</div>
-                    <div id="count_title">{{ plan_info.2 }}</div>
+                    <div id="plan_title">{{ cur_plan_info.0 }}</div>
+                    <div id="count_title">{{ cur_plan_info.2 }}</div>
                 </div>
 
                 <!-- Сегодня -->
@@ -138,6 +154,7 @@
                                         <li><a>{{ row.teacher.name_short }}</a></li>
                                         <li><a>{{ row.place.name }}</a></li>
                                     </ul>
+                                    <a>{{ plan_id }}</a>
                                 </div>
                             {% endfor %}
                         </div>

@@ -1,3 +1,7 @@
+body {
+    overflow-y: scroll;
+}
+
 .day_title {
     padding: 5px 10px 10px 20px;
 }
@@ -18,7 +22,7 @@
     width: 30%;
 }
 
-.str_plan ul li a {
+.str_plan ul li a, .str_plan ul li input{
     min-height: 15px;
     padding-bottom: 0px;
 }
@@ -45,7 +49,7 @@
     transition: 0.1s;
     /*background: rgba(81, 198, 102, 1);*/
     height: 100%;
-    background-image: url("../images/add.png");
+    background-image: url("../images/plus_1.png");
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -55,9 +59,12 @@
 
 
 .str_plan.str_plus{;
-    margin-top: 5px;
+    margin-top: 15px;
     cursor: default;
     background: white;
+}
+.str_title{
+    cursor: default;
 }
 
 .plus_button_form:hover .plus_button{
