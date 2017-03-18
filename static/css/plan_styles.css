@@ -30,6 +30,9 @@ body {
 .str_plan:nth-child(2) {
     margin: 5px 0 0 0;
 }
+/*.change ul:last-child{*/
+    /*margin-bottom: 9px;*/
+/*}*/
 
 
 .plus_button_form{
@@ -59,9 +62,11 @@ body {
 
 
 .str_plan.str_plus{;
-    margin-top: 15px;
+    margin-top: 6px;
     cursor: default;
     background: white;
+    /*background: rgba(144, 238, 144, 0.96);*/
+    /*border: 2px solid rgba(3, 96, 255, 0.5);*/
 }
 .str_title{
     cursor: default;

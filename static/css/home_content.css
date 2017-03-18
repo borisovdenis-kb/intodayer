@@ -208,11 +208,15 @@ label {
     margin-top: 3px;
     width: 100%;
     border-radius: 4px;
-    /*box-shadow: 0px 0px 0px 3px rgba(0,0,0,0.75);*/
+    border: 2px solid rgba(3, 96, 255, 0.0);
+}
+
+.str_title {
+    /*border: 2px solid rgba(3, 96, 255, 1);*/
 }
 
 .str_plan, .plan_selector:hover {
-    cursor: pointer;
+    cursor: default;
 }
 
 .str_plan ul {
@@ -224,12 +228,17 @@ label {
 
 .str_plan ul li:first-child {
     width: 20%;
+    padding-right: 0px;
+    padding-left: 0px;
 
 }
 
 .str_plan ul li:last-child {
     width: 20%;
     border-right: none;
+    padding-right: 0px;
+    padding-left: 0px;
+    padding-left: 0px;
 }
 
 .str_plan ul li a:first-child {
@@ -292,7 +301,7 @@ label {
     transition: 0.1s all;
 }
 
-.str_plan ul li input:focus{
+.str_plan ul li input:focus {
     border: none;
     outline: none;
     padding-right: 12px;
@@ -322,12 +331,53 @@ label {
     /*background: rgba(240, 240, 245, 1);*/
 }
 
-.str_plan:first-child {
-    background: white;
-}
+/*.str_plan:first-child {*/
+/*!*background: white;*!*/
+/*}*/
+/*.str_plan.change:hover{*/
+/*background: gray;*/
+/*transition: 0.3s;*/
+/*}*/
 
 .separator {
     width: 200px;
     height: 1px;
     background-color: red;
+}
+
+/*меню, при нажатии на правую кнопку мыши на строке расписания*/
+.drop_menu li {
+    min-width: 150px;
+    line-height: 35px;
+    padding: 0px 20px 0px 15px;
+    cursor: pointer;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;
+
+}
+
+.drop_menu li:first-child{
+    /*border-radius: 0 4px 0 0;*/
+    padding-top: 1px;
+}
+.drop_menu li:last-child{
+    padding-bottom: 2px;
+    border-radius: 0 0 4px 4px;
+}
+
+.drop_menu li:hover{
+    background: black;
+    color: white;
+}
+
+.drop_menu {
+    background: white;
+    border-radius: 0 0 4px 4px;
+    border: 1px solid rgba(128, 128, 128, 0.30);
+    overflow: hidden;
+    -webkit-box-shadow: 0px 2px 15px 0px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0px 2px 15px 0px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 2px 15px 0px rgba(0, 0, 0, 0.2);
+
 }
