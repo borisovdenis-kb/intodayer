@@ -238,7 +238,7 @@ class CustomUser(AbstractUser):
         --- Номер телефона
         --- Аватар
     """
-    avatar = models.ImageField(upload_to='avatar/', blank=True, max_length=1000)
+    avatar = models.ImageField(upload_to='/users_avatars', blank=True, max_length=1000)
     # телефон хранится в формате +7*********
     phone = models.CharField(max_length=12, blank=True)
 

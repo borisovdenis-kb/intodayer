@@ -201,7 +201,7 @@ button:focus {
     background-image: url('../images/reject.png');
 }
 
-.perform_confirmation {
+.cover_all {
     display: none;
     position: fixed;
     z-index: 10200;
@@ -213,20 +213,105 @@ button:focus {
     opacity: 0.8;
 }
 
-.perform_confirmation p {
+.cover_all p {
     color: #000000;
     text-align: center;
     font-size: 100px;
     /*text-shadow: 0px 2px 2px rgba(0, 0, 0, 0.2);*/
 }
 
-.perform_confirmation a {
+.cover_all a {
     display: none;
     margin-left: 49%;
     color: #8b1deb;
     text-align: center;
     font-size: 50px;
     /*text-shadow: 0px 2px 2px rgba(0, 0, 0, 0.2);*/
+}
+
+.choose_avatar_wrap {
+    display: none;
+    position: absolute;
+    width: 500px;
+    height: 230px;
+    margin-left: 520px;
+    margin-top: 170px;
+    /*background-color: #3E403D;*/
+    z-index: 10201;
+    -webkit-box-shadow: 0px 0px 10px 1px rgba(0,0,0,0.2);
+    -moz-box-shadow: 0px 0px 10px 1px rgba(0,0,0,0.2);
+    box-shadow: 0px 0px 10px 1px rgba(0,0,0,0.2);
+}
+
+.choose_avatar {
+    display: none;
+    width: 500px;
+    height: 165px;
+    /*margin-left: 520px;*/
+    /*margin-top: 170px;*/
+    /*background-color: #ffffff;*/
+    background: rgb(244, 243, 248);
+}
+
+.choose_avatar_header {
+    /*position: absolute;*/
+    display: inline-flex;
+    width: 500px;
+    height: 30px;
+    /*padding-left: 5px;*/
+    /*margin-left: 520px;*/
+    /*margin-top: 170px;*/
+    background-color: #8b1deb;
+    color: #ffffff;
+    font-family: "Cyntho Pro" !important;
+    /*background: rgb(244, 243, 248);*/
+    /*z-index: 10202;*/
+}
+
+.choose_avatar_footer {
+    /*position: absolute;*/
+    width: 490px;
+    height: 25px;
+    padding: 5px;
+    /*margin-left: 520px;*/
+    border-bottom-right-radius: 4px;
+    border-bottom-left-radius: 4px;
+    background-color: #ffffff;
+    color: #000000;
+    font-family: "Cyntho Pro" !important;
+    /*background: rgb(244, 243, 248);*/
+    /*z-index: 10202;*/
+}
+
+.close {
+    float: right;
+    width: 30px;
+    height: 30px;
+    margin-left: 265px;
+    /*background-color: red;*/
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: right;
+    background-image: url('../images/reject.png');
+}
+
+.choose_avatar_text, .choose_avatar_header, .close{
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+
+.close:hover {
+    cursor: pointer;
+}
+
+.choose_avatar_text {
+    width: 200px;
+    height: 25px;
+    margin-left: 5px;
+    margin-top: 4px;
 }
 
 /*.effect_blur {*/

@@ -23,3 +23,7 @@ class CustomUserCreationForm(UserCreationForm):
         widgets = {'username': forms.TextInput(attrs={'placeholder': 'Имя пользователя',
                                                       'id': 'username',
                                                       'required': 'required'})}
+
+
+class UserAvatarForm(forms.Form):
+    image_file = forms.ImageField(label='')

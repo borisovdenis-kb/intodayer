@@ -80,7 +80,7 @@
                             <p>Загрузить фото</p>
                         </div>
                     </div>
-                    
+
                     <div class="ava_content" style="background-image: url(/static/images/putin.jpg);">
                     </div>
 
@@ -218,10 +218,32 @@
     </div>
 </div>
 
-<div class="perform_confirmation">
-    <p>Расписание добавлено</p>
+<div class="cover_all">
+    <p></p>
     <a href="/home">oк</a>
 </div>
+
+<div class="choose_avatar_wrap">
+    <div class="choose_avatar_header">
+        <div class="choose_avatar_text">
+            Загрузка аватарки
+        </div>
+
+        <div class="close"></div>
+    </div>
+
+    <div class="choose_avatar">
+        <form action="" method="post" enctype="multipart/form-data" id="send_avatar">
+            {{ image_form.as_p }}
+        </form>
+    </div>
+
+    <div class="choose_avatar_footer">
+        Изображение можно загузить в формате jpg, png или gif
+    </div>
+</div>
+
+
 </body>
 
 {#должен быть на всех страницах#}

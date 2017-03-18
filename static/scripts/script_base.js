@@ -44,9 +44,9 @@ $(document).ready( function() {
             data: {'decision': 1, 'plan_id': array[array.length - 1]},
             success: function (msg) {
                 blurElement('.effect_blur', 4);
-                $('.perform_confirmation p').text('Расписание добавлено');
-                $('.perform_confirmation').fadeIn(800);
-                $('.perform_confirmation a').delay(1100).fadeIn(0);
+                $('.cover_all p').text('Расписание добавлено');
+                $('.cover_all').fadeIn(800);
+                $('.cover_all a').delay(1100).fadeIn(0);
                 // $('.perform_confirmation').animate({display: 'block'}, 300, 'easeInOutExpo');
             }
         });
@@ -60,12 +60,25 @@ $(document).ready( function() {
             data: {'decision': 0, 'plan_id': array[array.length - 1]},
             success: function (msg) {
                 blurElement('.effect_blur', 4);
-                $('.perform_confirmation p').text('Приглашение отклонено');
-                $('.perform_confirmation').fadeIn(800);
-                $('.perform_confirmation a').delay(1100).fadeIn(0);
+                $('.cover_all p').text('Приглашение отклонено');
+                $('.cover_all').fadeIn(800);
+                $('.cover_all a').delay(1100).fadeIn(0);
                 // $('.perform_confirmation').animate({display: 'block'}, 300, 'easeInOutExpo');
             }
         });
+    });
+    
+    $('.ava_cover_text p').click(function () {
+        blurElement('.effect_blur', 4);
+        $('.cover_all').fadeIn(800);
+        $('.choose_avatar_wrap').fadeIn();
+        $('.choose_avatar').slideToggle(800, 'easeOutBounce');
+    });
+
+    $('.close').click(function() {
+        blurElement('.effect_blur', 0);
+        $('.choose_avatar').slideToggle(800, 'easeOutBounce');
+        $('.cover_all').delay(100).fadeOut(800);
     });
 
     // $('.ava_content').hover(function() {
@@ -74,15 +87,32 @@ $(document).ready( function() {
     //     // $('.ava_cover').css({'display': 'none'});
     // });
 
-    $('.ava_cover').hover(function() {
-        $('.ava_cover').animate({opacity: '0.8'}, 500);
-        // $('.ava_content').addClass('add_blur');
-    }, function() {
-        $('.ava_cover').animate({opacity: '0'}, 500);
-        // $('.ava_content').removeClass('add_blur');
-    })
+    // $('.ava_cover').hover(function() {
+    //     $('.ava_cover').animate({opacity: '0.8'}, 500);
+    //     // $('.ava_content').addClass('add_blur');
+    // }, function() {
+    //     $('.ava_cover').animate({opacity: '0'}, 500);
+    //     // $('.ava_content').removeClass('add_blur');
+    // })
 
 });
+
+function sendImageToServerAjax(element){
+
+    var data = $(element).serialize();
+
+    $.ajax({
+        url : '/upload_user_avatar',
+        type : 'POST',
+        processData: false,
+        contentType: false,
+        cache:false,
+        data : data,
+        success : function (msg){
+            alert('Success');
+        }
+    });
+}
 
 function blurElement(element, size) {
     var filterVal = 'blur(' + size + 'px)';

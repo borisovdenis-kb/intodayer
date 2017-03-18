@@ -49,6 +49,11 @@
     margin: 0px 0px 0px 15px;
     background-color: #ffffff;
     opacity: 0;
+    transition: 0.3s;
+}
+
+.ava_cover:hover{
+    opacity: 0.8;
 }
 
 .ava_cover_text {

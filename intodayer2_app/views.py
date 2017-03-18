@@ -6,7 +6,7 @@ from django.shortcuts import render_to_response
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import auth
 from django.contrib.auth.forms import UserCreationForm
-from intodayer2_app.forms import CustomUserCreationForm
+from intodayer2_app.forms import *
 from intodayer2_app.send_sms import *
 from intodayer2_app.models import *
 from datetime import *
@@ -22,7 +22,6 @@ from intodayer2_app.api import *
 def switch_plan_home_ajax(request):
     """
         Функция для переключения между расписаниями
-        ___________________________________________________
         :param request:
         :return: отрендеренную html разметку опр расписания
     """
@@ -38,7 +37,6 @@ def get_invitations_ajax(request):
     """
         Функция должна вернуть html разметку с имеющимися
         у данного пользователся приглашениями.
-        _________________________________________________
         :param request:
         :return: html разметка с приглашениями
     """
@@ -59,7 +57,6 @@ def confirm_invitation_ajax(request):
             принял приглашение - confirmed_yn = y
             отклонить приглашение - confirmed_yn = n
         Далее в БД должен сработать соотв. триггер.
-        ____________________________________________
         :param request:
         :return: ?
     """
@@ -88,6 +85,29 @@ def confirm_invitation_ajax(request):
         response.write(json.dumps([{'success': 1}]))
 
         return response
+
+
+def save_user_avatar_ajax(request):
+    """
+        Функция сохраняет загруженную пользователем аватарку
+        :param request:
+        :return:
+    """
+    if request.is_ajax():
+        form = UserAvatarForm(request.POST, request.FILES)
+        response = HttpResponse()
+        response['Content-Type'] = 'text/javascript'
+
+        if form.is_valid():
+            user = CustomUser(username=request.user.username)
+            user.avatar = request.FILES['image_file']
+            user.save()
+
+            response.write(json.dumps([{'success': 1}]))
+
+            return response
+        else:
+            response.write(json.dumps([{'success': 0}]))
 
 
 ###################################################################################
@@ -140,10 +160,11 @@ def home_view(request):
             return render_to_response('home.html', context)
 
         if all_plans:
-            context_td_tm = get_today_tomorrow_plans(user.id, cur_plan.plan.id)
-
+            context['image_form'] = UserAvatarForm
             context['all_plans'] = all_plans
+
             # объединяем контексты
+            context_td_tm = get_today_tomorrow_plans(user.id, cur_plan.plan.id)
             context.update(context_td_tm)
 
             return render_to_response('home.html', context)

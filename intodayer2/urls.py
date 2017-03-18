@@ -16,6 +16,9 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from intodayer2_app import views
+from django.conf import settings
+from django.conf.urls.static import static
+
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -29,6 +32,10 @@ urlpatterns = [
     url(r'^home/switch_plan', views.switch_plan_home_ajax),
     url(r'^get_invitations', views.get_invitations_ajax),
     url(r'^plan/invitation/(\d+)$', views.plan_view),
-    url(r'^confirm_invitation', views.confirm_invitation_ajax)
+    url(r'^confirm_invitation', views.confirm_invitation_ajax),
+    url(r'^upload_user_avatar$', views.save_user_avatar_ajax)
     # url(r'^add_plans/$', views.add_plans_view),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
