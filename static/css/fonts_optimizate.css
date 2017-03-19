@@ -38,7 +38,7 @@
     }
     .str_plan ul li a, .str_plan ul li input{
         font-family: "Cyntho Pro" !important;
-        font-size: 0.95em;
+        font-size: 16px;
         /*font-size: 1vw;*/
         /*min-font-size: 0.6vw;*/
     }

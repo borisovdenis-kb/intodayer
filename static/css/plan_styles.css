@@ -48,9 +48,7 @@ body {
 }
 
 .plus_button {
-    margin: auto;
     transition: 0.1s;
-    /*background: rgba(81, 198, 102, 1);*/
     height: 100%;
     background-image: url("../images/plus_1.png");
     background-position: center;
@@ -60,9 +58,12 @@ body {
     cursor: pointer;
 }
 
+/*анимируем этот параметр*/
+.str_plus{
+    margin-top: 10px;
+}
 
 .str_plan.str_plus{;
-    margin-top: 6px;
     cursor: default;
     background: white;
     /*background: rgba(144, 238, 144, 0.96);*/

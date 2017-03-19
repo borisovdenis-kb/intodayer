@@ -28,141 +28,148 @@ function delete_empty_days() {
 }
 
 var $str_height = $('.str_plan li a').first().outerHeight() + 4;
+
+var NEW_STR_PLAN_HTML = '' +
+    '<div class="str_fade">' +
+    '<div class="str_plan change" style="opacity: 0; display:none;">' +
+    '<ul>' +
+    '<li><input placeholder="Недели" class="weeks"></li>' +
+    '<li><input placeholder="Время" class="time"></li>' +
+    '<li><input placeholder="Предмет" class="subject"></li>' +
+    '<li><input placeholder="Преподователь" class="teacher"></li>' +
+    // не забыть поставить class=last, чтобы потом распознать
+    '<li class="last"><input placeholder="Аудитория" class="place"></li>' +
+    '</ul>' +
+    '</div>' +
+    '</div>';
+
+function append_new_str_animation($new_div, $insert_after_this) {
+    $new_div.insertAfter($insert_after_this);
+    $new_div.slideToggle(200);
+    $new_div.fadeTo(200, 1);
+}
+
 function add_plan_str($this_button) {
+
     var $this_block = $($this_button).closest('.day_plan_content');
-    var $new_div = $('<div class="str_plan change" style="opacity:0">' +
-        '<ul>' +
-        '<li><a></a></li>' +
-        '<li><a></a></li>' +
-        '<li><a></a></li>' +
-        '<li><a></a></li>' +
-        // не забыть поставить class=last, чтобы потом распознать
-        '<li class="last"><a></a></li>' +
-        '</ul>' +
-        '</div>');
 
-
+    // когда плюс исчезает, высота окна не меняется и не дёргается
+    // var $this_window = $this_block.parent();
+    // var $window_height = $this_window.height();
+    // $this_window.css({'min-height': $window_height})
+    var $new_div = $(NEW_STR_PLAN_HTML).find('.str_plan.change');
     var $plus_button = $this_block.find('.str_plus');
-    $plus_button.fadeOut(0);
-    $this_block.append($new_div);
-    $new_div.fadeTo(300, 1);
-    $new_div.slideDown(200);
+
+    // сам плюс погасает
+    $plus_button.fadeTo(1, 0);
+    // сначала блок погасшего плюса немного подтягивается вверх панель дня
+    $plus_button.animate({'margin-top': '0px'}, 100, function () {
+        // затем погасает
+        // затем опять разворачивает панель
+        $plus_button.animate({'margin-top': '10px'}, 100);
+    });
     setTimeout(function () {
-        $this_block.append($plus_button.slideDown(150));
+        // и потом плюс появляется визуально
+        $plus_button.fadeTo(200, 1);
     }, 150);
+    setTimeout(function () {
+        var insert_after_this = $this_block.find('.str_plan.change').last();
+        if (insert_after_this.hasClass('change')) {
+            append_new_str_animation($new_div, insert_after_this);
+        }
+        //если нет ни одной строчки в расписании, то вставляем после заголовка
+        else {
+            insert_after_this = $this_block.find('.str_title');
+            append_new_str_animation($new_div, insert_after_this);
+        }
+    }, 200);
 
+    set_new_listeners($new_div);
 
-    // навешиваем обработчик на новую строку расписания (для наведения)
     // делаем правильный цвет следующей строчки
     setTimeout(function () {
-        // var $elements = $new_div.find('ul li a');
-        $new_div.find('ul li a').on('click', function () {
-            edit_field($(this));
-        });
-        $new_div.mouseover(function () {
-            set_current_str($(this));
-        });
-        $new_div.mouseout(function () {
-            set_default_str($(this));
-        });
-        $new_div.on('mousedown', function (event) {
-            if (event.button == 0 || event.button == 2 || event.button == 1) {
-                select_str($(this));
-            }
-        });
-        $('.str_plan.change').contextmenu(function (event) {
-            if ((event.button == 2 || event.button == 1) && $(event.target).get(0).tagName.toUpperCase() != 'INPUT') {
-                right_click_on_str(event);
-            }
-        });
         set_color_str();
-    }, 100);
+    }, 500);
     blur_select_str();
 }
+
+
+function set_new_listeners($new_div) {
+    // ###########################################################################################
+
+    //               Обработчики событый для новых добавленных строк расписания
+
+    // ###########################################################################################
+    $new_div.find('ul li a').on('click', function () {
+        edit_field($(this));
+    });
+    // отвечает за выделение строки при наведении
+    $new_div.hover(function () {
+        set_current_str($(this));
+    }, function () {
+        set_default_str($(this));
+    });
+
+    // $new_div.mouseover(function () {
+    //     set_current_str($(this));
+    // });
+    // $new_div.mouseout(function () {
+    //     set_default_str($(this));
+    // });
+    // при нажатии на строку, она выделяется
+    $new_div.find('ul li input').on('mousedown', function (event) {
+        if (event.button == 0 || event.button == 2 || event.button == 1) {
+            select_str($(this).parent().parent().parent());
+        }
+    });
+    $new_div.on('mousedown', function (event) {
+        if (event.button == 0 || event.button == 2 || event.button == 1) {
+            select_str($(this));
+        }
+    });
+    $new_div.contextmenu(function (event) {
+        if ((event.button == 2 || event.button == 1) && $(event.target).get(0).tagName.toUpperCase() != 'INPUT') {
+            right_click_on_str(event);
+        }
+    });
+
+    $new_div.find('ul li input').contextmenu(function () {
+        return false;
+    });
+    $new_div.find('ul li input').bind('mousedown contexmenu', function (e) {
+        if (e.which == 1) {
+            edit_field($(this));
+        }
+        else {
+            right_click_on_str(e);
+            return false;
+        }
+    });
+
+}
+
+// ###########################################################################################
+
+//                                  Обработчики событый
+
+// ###########################################################################################
 
 //Редактирование расписания
 $('.str_plan.change ul li a').bind('click', function () {
     edit_field($(this));
-    selected_str = $(this).parent().parent().parent();
-    set_current_str(selected_str);
 });
 
-// устанавливает фокус на поле и его функционал для редактирования (при нажатии на него)
-// поля a заменяются на input
-function edit_field($field) {
-    $('.str_plan.change ul li a').unbind('click');
-    var value = $field.html();
-    var $ul_parent = $field.parent().parent();
-
-    $ul_parent.css('height', $ul_parent.height());
-    $field.replaceWith('<input class="this_edit" placeholder="Пусто">');
-    var $input = $('.this_edit');
-    $input.removeClass('this_edit');
-    $input.attr("value", value);
-    $input.focus();
-    //поместить курсор в конец поля input
-    var inputVal = $input.val();
-    $input.val('').focus().val(inputVal);
-    $input.on('focusout', function () {
-        set_edited_field($(this));
-    });
-    $input.on('keypress', function (e) {
-        set_next_field($(this), e);
-    });
-    $input.animate({scrollLeft: $input.width() * 2});
-}
-
-// устанавливает поле после редактирования (при снятии фокуса)
-// поля input заменяются на a
-function set_edited_field($input) {
-    var old_value = $input.attr('value');
-    var $ul_parent = $input.parent().parent();
-
-    $ul_parent.css('height', 'auto');
-
-    $input.replaceWith('<a class="this_edited"></a>');
-    var $field = $('.this_edited');
-    $field.removeClass('this_edited');
-    if ($input.val() != '') {
-        $field.text($input.val());
+//Если мы нажимает на строку прямо над input, то мы нажимаем на сам input,поэтому событие ставим на него
+$('.str_plan.change ul li input').contextmenu(function (event) {
+    if ((event.button == 2 || event.button == 1) && $(event.target).get(0).tagName.toUpperCase() != 'INPUT') {
+        right_click_on_str(event);
     }
-    else {
-        $field.text(old_value);
-    }
-    $('.str_plan.change ul li a').on('click', function () {
-        edit_field($(this));
-    });
-}
+});
 
-// при нажатии на enter поле меняется на следующие в текущей строке
-function set_next_field($this_field, e) {
-    if (e.which != 13) {
-        return;
-    }
-    else {
-        if ($this_field.parent().hasClass('last')) {
-            $this_field.blur();
-        }
-        else {
-            var $next_elem = $this_field.parent().next().find('a');
-            $this_field.blur();
-            edit_field($next_elem);
-        }
-
-    }
-}
-
-// устанвалвает цвет для нечётных строк таблицы расписания
-function set_color_str() {
-    $('.plan_content').each(function () {
-        $(this).find('.str_plan.change').each(function (i) {
-            if (i % 2 == 0) {
-                $(this).css({'background-color': 'rgba(240, 240, 245, 1)'})
-            }
-        });
-    });
-
-}
+//При нажатии на input не показывать стандартное контекстное меню
+$('.str_plan.change ul li input').find('ul li input').contextmenu(function () {
+    return false;
+});
 
 // отвечает за выделение строки при наведении
 $('.str_plan.change').hover(function () {
@@ -178,14 +185,144 @@ $('.str_plan.change').on('mousedown', function (event) {
     }
 });
 
+// если мы нажимаем не на строки расписания и не на поля ввода, то снимаем выделение с активных
 $(window).on('mousedown', function (event) {
     if (event.button == 0 || event.button == 2 || event.button == 1) {
         var tag_name = $(event.target).get(0).tagName.toUpperCase();
-        if (tag_name != 'A' && tag_name != 'LI') {
+        if (tag_name != 'A' && tag_name != 'LI' && tag_name != 'INPUT') {
             blur_select_str();
         }
     }
 });
+
+
+//выпадающий список фукционала для строки. открывается при нажатии на правую кнопку мыши на строке
+$('.str_plan.change').contextmenu(function (event) {
+    //если нажата правая клавиша
+    // alert($(event.target).get(0).tagName);
+    if ((event.button == 2 || event.button == 1) && $(event.target).get(0).tagName.toUpperCase() != 'INPUT') {
+        right_click_on_str(event);
+    }
+});
+
+// при изменении размеров окна скрывать контекстное меню
+$(window).on('resize', function () {
+    $('.drop_menu').fadeOut(100);
+});
+
+// если мышь нажата не на самом контекстном меню, то скрываем его
+$(window).on('mousedown', function (event) {
+    var $target = $(event.target);
+    // последнее условие здесь отвечает за клик по скроллбару
+    if ((event.button == 0 || event.button == 1 || event.button == 2) && !(event.target === $('html')[0] && event.clientX >= document.documentElement.offsetWidth)) {
+        if (!$target.hasClass('str_plan.change') && !$target.is('.drop_menu li')) {
+            $('.drop_menu').remove();
+        }
+    }
+});
+
+
+// ###########################################################################################
+
+//                                          Функции
+
+// ###########################################################################################
+
+
+// устанавливает фокус на поле и его функционал для редактирования (при нажатии на него)
+// поля a заменяются на input
+function edit_field($field) {
+    var value = $field.html();
+    var $ul_parent = $field.parent().parent();
+
+    $ul_parent.css('height', $ul_parent.height());
+
+    var $input;
+    var $temp_field = $field;
+
+    if ($field.get(0).tagName != 'INPUT') {
+        $field.replaceWith('<input class="this_edit">');
+        $input = $('.this_edit');
+        $input.removeClass('this_edit');
+        $input.addClass($temp_field.attr('class'));
+        $input.attr('placeholder', set_true_placeholder($temp_field));
+    }
+    else {
+        $input = $field;
+    }
+
+    $input.attr("value", value);
+    $input.focus();
+    //поместить курсор в конец поля input
+    var inputVal = $input.val();
+    $input.val('').focus().val(inputVal);
+
+    $input.on('focusout', function () {
+        set_edited_field($(this));
+    });
+    $input.on('keypress', function (e) {
+        set_next_field($(this), e);
+    });
+
+    $input.animate({scrollLeft: $input.width() * 2});
+    $input.unbind('contextmenu mousedown');
+}
+
+// устанавливает поле после редактирования (при снятии фокуса)
+// поля input заменяются на a
+function set_edited_field($input) {
+    // var old_value = $input.attr('value');
+    var $ul_parent = $input.parent().parent();
+
+    $ul_parent.css('height', 'auto');
+    var temp_input = $input;
+
+    if ($input.val() != '') {
+        $input.replaceWith('<a class="this_edited"></a>');
+        var $field = $('.this_edited');
+        $field.removeClass('this_edited');
+        $field.addClass(temp_input.attr('class'));
+    }
+
+    if ($input.val() != '') {
+        $field.text($input.val());
+    }
+
+    $('.str_plan.change ul li a').on('click', function () {
+        edit_field($(this));
+    });
+
+    set_new_listeners($input.parent().parent().parent());
+}
+
+// при нажатии на enter поле меняется на следующие в текущей строке
+// если следующее поле это <a> или <input> то меняем
+function set_next_field($this_field, e) {
+    var $next_elem;
+    if (e.which != 13) {
+        return;
+    }
+    else {
+        $next_elem = $this_field.parent().next('li');
+        if ($next_elem.get(0) == undefined) {
+            $this_field.blur();
+            return;
+        }
+        else {
+            $this_field.blur();
+            if ($next_elem.find('a').get(0) != undefined) {
+                edit_field($next_elem.find('a'));
+                return;
+            }
+            if ($next_elem.find('input').get(0) != undefined) {
+                edit_field($next_elem.find('input'));
+                return;
+            }
+
+        }
+    }
+}
+
 
 var selected_str;
 // если нет выбранной строки, то выделяется её и запоминмает в selected_str
@@ -212,12 +349,10 @@ function blur_select_str() {
     }
     selected_str = NaN;
 }
-// проверить ещё после нажатия на plus!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
 
 //устанавливает выделение для строки, если не установлено
 function set_current_str($this_str) {
-    if ($this_str.hasClass('selected_str')) {
+    if ($this_str.hasClass('selected_str') || $this_str.hasClass('animation')) {
         return false;
     }
     $this_str.css({'border': '2px solid rgba(3, 96, 255, 0.3)'});
@@ -225,48 +360,128 @@ function set_current_str($this_str) {
 
 //снимает выделение со строки, если  установлено
 function set_default_str($this_str) {
-    if ($this_str.hasClass('selected_str')) {
+    if ($this_str.hasClass('selected_str') || $this_str.hasClass('animation')) {
         return false;
     }
     $this_str.css({'border': '2px solid rgba(3, 96, 255, 0.0)'});
 }
 
 
-//выпадающий список фукционала для строки. открывается при нажатии на правую кнопку мыши на строке
-$('.str_plan.change').contextmenu(function (event) {
-    //если нажата правая клавиша
-    // alert($(event.target).get(0).tagName);
-    if ((event.button == 2 || event.button == 1) && $(event.target).get(0).tagName.toUpperCase() != 'INPUT') {
-        right_click_on_str(event);
-    }
-});
-
 // обрабатывает правый клик мыши по строке с расписанием
 function right_click_on_str(e) {
     e.preventDefault();
     $('.drop_menu').remove();
-    $('body').append('<div class="drop_menu" style="display:none">' +
-        '<ul>' +
-        '<li>Копировать содержимое</li>' +
-        '<li>Дублировать</li>' +
-        '<li>Удалить </li>' +
-        '</ul>' +
-        '</div>');
-    var $elem = $('.drop_menu').last();
-    setTimeout(function () {
-        $elem.css({'position': 'absolute', 'top': e.pageY + 5, 'left': e.pageX + 1}).fadeIn(100);
-    }, 10);
+    if ($('.selected_str').length > 0) {
+        $('body').append('<div class="drop_menu" style="display:none">' +
+            '<ul>' +
+            '<li class="copy_str">Копировать содержимое</li>' +
+            '<li class="clone_str">Дублировать</li>' +
+            '<li class="delete_str">Удалить </li>' +
+            '</ul>' +
+            '</div>');
+
+        if ($('.selected_str').find('ul li a').length == 0){
+            $('.clone_str').remove();
+            $('.copy_str').remove();
+        }
+
+        var $elem = $('.drop_menu').last();
+        setTimeout(function () {
+            $elem.css({'position': 'absolute', 'top': e.pageY + 5, 'left': e.pageX + 1}).fadeIn(100);
+        }, 10);
+
+        // вешаем обработчики для нового div блока
+        $('.delete_str').on('click', function () {
+            delete_str($('.selected_str').first());
+        });
+        $('.clone_str').on('click', function () {
+            clone_str($('.selected_str').first());
+        });
+    }
 }
 
-$(window).on('resize', function () {
-    $('.drop_menu').fadeOut(100);
-});
 
-$(window).on('mousedown', function (event) {
-    var $target = $(event.target);
-    if (event.button == 0 || event.button == 1) {
-        if (!$target.hasClass('str_plan.change') && !$target.is('.drop_menu li')) {
-            $('.drop_menu').remove();
-        }
-    }
-});
+function delete_str($this_str) {
+    blur_select_str();
+    $this_str.css({'border': '2px solid #FF6161'});
+    $this_str.fadeTo(200, 0, function () {
+        $this_str.slideUp(200, function () {
+            $this_str.remove();
+        });
+    });
+    $('.drop_menu').remove();
+    setTimeout(function () {
+        set_color_str();
+    }, 500);
+
+}
+function clone_str($this_str) {
+    blur_select_str();
+    var $new_div = $(NEW_STR_PLAN_HTML).find('.str_plan.change');
+
+    $this_str.css({'border': '2px solid rgba(139, 29, 235, 0.6)'});
+    $this_str.addClass('animation');
+    $new_div.css({'border': '2px solid rgba(103, 198, 97, 0.9)'});
+    $new_div.addClass('animation');
+    setTimeout(function () {
+        $this_str.animate({'border-color': 'rgba(103, 198, 97, 0.0)'}, function () {
+            $this_str.removeClass('animation');
+        });
+        $new_div.animate({'border-color': 'rgba(139, 29, 235, 0.0)'}, function () {
+            $new_div.removeClass('animation');
+        });
+    }, 1000);
+
+    // alert($this_str.find('.weeks').text());
+    append_new_str_animation($new_div, $this_str);
+    $new_div.find('.weeks').attr('value', $this_str.find('.weeks').text());
+    $new_div.find('.time').attr('value', $this_str.find('.time').text());
+    $new_div.find('.subject').attr('value', $this_str.find('.subject').text());
+    $new_div.find('.teacher').attr('value', $this_str.find('.teacher').text());
+    $new_div.find('.place').attr('value', $this_str.find('.place').text());
+    // преобразовываем поля input в a для всех новых полей
+    var $new_inputs = $new_div.find('ul li input');
+    $new_inputs.each(function () {
+        set_edited_field($(this));
+    });
+    // вешаем обработчики на все новые поля
+    set_new_listeners($new_div);
+    $('.drop_menu').remove();
+    // модернизируем цвет строк
+    setTimeout(function () {
+        set_color_str();
+    }, 500);
+}
+
+// устанвалвает цвет для нечётных строк таблицы расписания
+function set_color_str() {
+    var i;
+    $('.plan_content').each(function () {
+        i = 0;
+        $(this).find('.str_plan.change').each(function () {
+            if (i % 2 == 0) {
+                // alert("fds");
+                $(this).animate({'background-color': 'rgba(240, 240, 245, 1)'})
+            }
+            else {
+                $(this).animate({'background-color': 'rgba(255, 255, 255, 1)'}, 50)
+            }
+            i += 1;
+        });
+    });
+}
+
+// устанавливает правильный placeholder
+function set_true_placeholder($this_field) {
+    if ($this_field.hasClass('weeks'))
+        return 'Недели';
+    if ($this_field.hasClass('time'))
+        return 'Время';
+    if ($this_field.hasClass('subject'))
+        return 'Предмет';
+    if ($this_field.hasClass('teacher'))
+        return 'Преподаватель';
+    if ($this_field.hasClass('place'))
+        return 'Аудитория';
+    return "Пусто";
+}
