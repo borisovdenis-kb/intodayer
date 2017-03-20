@@ -15,6 +15,7 @@
     <script type="text/javascript" src={% static "scripts/script_base.js" %}></script>
     <script type="text/javascript" src={% static "library/jquery.easing.1.3.js" %}></script>
     <script type="text/javascript" src={% static "library/jquery.transform2d.js" %}></script>
+    <script type="text/javascript" src={% static "library/lib_for_send_file_ajax.js" %}></script>
 
     {#Импорт шрифтов для всего сайта#}
     <link rel="stylesheet" href={% static 'css/fonts/cynthopro/cynthopro.css' %}>
@@ -53,12 +54,12 @@
                             </div>
                         </div>
                         <div style="float:right;">
-                            <div id="ava_img_content">
-                                <div id="ava_img"></div>
+                            <div id="user_ava_thumbnail_content">
+                                <div id="user_ava_thumbnail" style="background-image: url({{ user.image_url }})"></div>
                             </div>
                         </div>
                         <div id="profile_title">
-                            <a>{{ username }}</a>
+                            <a>{{ user.get_name.0}}</a>
                         </div>
 
 
@@ -75,32 +76,42 @@
         <div class="content">
             {% block left_content %}
                 <div class="left_content">
+
                     <div class="ava_cover">
                         <div class="ava_cover_text">
                             <p>Загрузить фото</p>
                         </div>
                     </div>
-
-                    <div class="ava_content" style="background-image: url(/static/images/putin.jpg);">
+                    <div class="ava_content" style="background-image: url({{ cur_plan.plan.image_url }});">
+                        <p style="display: none">{{ cur_plan.plan.id }}</p>
                     </div>
-
 
                     {% if is_invitation != True %}
                         <div class="plan_selector">
                             <label id="plan_selector_title">Мои расписания</label>
                             <ul>
-                                {% for plan in all_plans %}
-                                    <li>
-                                        <a
-                                                {% if plan.current_yn == 'y' %}
-                                                    style="background-color: #000000; color: #ffffff"
-                                                {% endif %}
-                                        >
-                                            {{ plan.plan.title }}
+                                {% if all_plans|length > 1 %}
+                                    {% for plan in all_plans %}
+                                        <li>
+                                            <a
+                                                    {% if plan.current_yn == 'y' %}
+                                                        style="background-color: #000000; color: #ffffff"
+                                                    {% endif %}
+                                            >
+                                                {{ plan.plan.title }}
+
+                                            </a>
                                             <p>{{ plan.plan.id }}</p>
+                                        </li>
+                                    {% endfor %}
+                                {% else %}
+                                    <li>
+                                        <a style="background-color: #000000; color: #ffffff">
+                                            {{ all_plans.0.plan.title }}
                                         </a>
+                                        <p>{{ all_plans.0.plan.id }}</p>
                                     </li>
-                                {% endfor %}
+                                {% endif %}
                             </ul>
                         </div>
                         <div class="users_online">
@@ -233,13 +244,20 @@
     </div>
 
     <div class="choose_avatar">
-        <form action="" method="post" enctype="multipart/form-data" id="send_avatar">
+
+        <div class="choose_button">
+            Загрузить
+        </div>
+
+        <form action="" method="post" enctype="multipart/form-data" id="send_avatar_form">
             {{ image_form.as_p }}
+{#            <button id="send_button">Загрузить файл</button>#}
         </form>
+
     </div>
 
     <div class="choose_avatar_footer">
-        Изображение можно загузить в формате jpg, png или gif
+        Изображение можно загузить в формате jpg, png или gif.
     </div>
 </div>
 

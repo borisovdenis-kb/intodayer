@@ -17,9 +17,14 @@ $(document).ready( function () {
 
        $(this).css({'background-color': '#000000', 'color' : '#FFFFFF'})
 
-       var data = {plan_id: $(this).find('p').text()};
+       var data = {plan_id: $(this).siblings('p').text(), user_id: 0};
 
-      $('.right_content').load('/home/switch_plan', data);
+       $('.right_content').load('/home/switch_plan', data);
+
+       $.getJSON('/get_avatar', data, function (msg) {
+           $('.ava_content').css({'background-image': 'url(' + msg.url + ')'})
+       });
+       
    });
 });
 

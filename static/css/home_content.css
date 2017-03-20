@@ -110,7 +110,7 @@
     width: 160px;
 }
 
-.plan_selector ul li a p {
+.plan_selector ul li p {
     display: none;
 }
 
@@ -156,7 +156,6 @@ label {
     height: 30px;
     width: 30px;
     border-radius: 4px;
-    background-image: url("../images/putin.jpg");
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;

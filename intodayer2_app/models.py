@@ -1,8 +1,12 @@
+import os
+
 from django.db import models
 # from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser
 from datetime import *
 from django.utils import timezone
+
+from intodayer2 import settings
 
 
 class DaysOfWeek(models.Model):
@@ -219,10 +223,25 @@ class PlanLists(models.Model):
     description = models.TextField(max_length=1000)
     start_date = models.DateTimeField()
     owner = models.ForeignKey('CustomUser', models.DO_NOTHING)
+    avatar = models.ImageField(upload_to='plans_avatars/', blank=True, max_length=1000)
 
     class Meta:
         managed = True
         db_table = 'plan_lists'
+
+    def image_url(self):
+        """
+            Returns the URL of the image associated with this Object.
+            If an image hasn't been uploaded yet, it returns a stock image
+            :returns: str -- the image url
+        """
+        if self.avatar and hasattr(self.avatar, 'url'):
+            if os.path.exists(self.avatar.path):
+                return self.avatar.url
+            else:
+                return '/static/images/plan_avatar_default.jpg'
+        else:
+            return '/static/images/plan_avatar_default.jpg'
 
     def __str__(self):
         return '%s %s' % (
@@ -238,12 +257,40 @@ class CustomUser(AbstractUser):
         --- Номер телефона
         --- Аватар
     """
-    avatar = models.ImageField(upload_to='/users_avatars', blank=True, max_length=1000)
+    avatar = models.ImageField(upload_to='users_avatars/', blank=True, max_length=1000)
     # телефон хранится в формате +7*********
     phone = models.CharField(max_length=12, blank=True)
 
     class Meta:
         managed = True
+
+    def image_url(self):
+        """
+            Returns the URL of the image associated with this Object.
+            If an image hasn't been uploaded yet or dose not exist on server
+            it returns a stock image.
+            :returns: str -- the image url
+        """
+        if self.avatar and hasattr(self.avatar, 'url'):
+            if os.path.exists(self.avatar.path):
+                return self.avatar.url
+            else:
+                return '/static/images/user_avatar_default.png'
+        else:
+            return '/static/images/user_avatar_default.png'
+
+    def get_name(self):
+        """
+            Returns user's first name and last name if exist.
+            Else return username.
+            :return: str -- username (first_name + last_name or username)
+        """
+        if self.first_name and self.last_name:
+            res = [self.first_name, self.last_name]
+            return res
+        else:
+            res = [self.username]
+            return res
 
     def __str__(self):
         return '%s %s %s' % (

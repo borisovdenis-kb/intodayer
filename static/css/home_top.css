@@ -120,19 +120,18 @@ button:focus {
     float: right;
 }
 
-#ava_img_content {
+#user_ava_thumbnail_content {
     /*float: right;*/
     display: table-cell;
     vertical-align: middle;
     height: 38px;
 }
 
-#ava_img {
+#user_ava_thumbnail {
     width: 30px;
     height: 30px;
     border-radius: 2px;
     margin-right: 10px;
-    background-image: url("../images/putin.jpg");
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;

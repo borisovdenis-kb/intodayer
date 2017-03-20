@@ -1,5 +1,3 @@
-import json
-
 from  django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import *
 from django.shortcuts import render_to_response
@@ -13,6 +11,7 @@ from datetime import *
 from django.utils import timezone
 from intodayer2_app.utils import *
 from intodayer2_app.api import *
+import json
 
 ###################################################################################
 #                          ОБРАБОТКА AJAX ЗАПРОСОВ                                #
@@ -62,7 +61,7 @@ def confirm_invitation_ajax(request):
     """
     if request.is_ajax():
         user = CustomUser.objects.get(username=request.user.username)
-        inv = Invitations.objects.get(to_user=user.id, plan_id=request.GET['plan_id'])
+        inv = Invitations.objects.select_related().get(to_user=user.id, plan_id=request.GET['plan_id'])
 
         print(request.GET['decision'])
 
@@ -94,7 +93,7 @@ def save_user_avatar_ajax(request):
         :return:
     """
     if request.is_ajax():
-        form = UserAvatarForm(request.POST, request.FILES)
+        form = SetAvatarForm(request.POST, request.FILES)
         response = HttpResponse()
         response['Content-Type'] = 'text/javascript'
 
@@ -104,10 +103,67 @@ def save_user_avatar_ajax(request):
             user.save()
 
             response.write(json.dumps([{'success': 1}]))
-
-            return response
         else:
             response.write(json.dumps([{'success': 0}]))
+
+        return response
+
+
+def save_plan_avatar_ajax(request, plan_id):
+    """
+        Функция сохраняет загруженную пользователем аватарку
+        :param plan_id:
+        :param request:
+        :return:
+    """
+    if request.is_ajax():
+        # form = SetAvatarForm(request.POST, request.FILES)
+        response = HttpResponse()
+        response['Content-Type'] = 'text/javascript'
+
+        user = CustomUser.objects.get(username=request.user.username)
+        plan = PlanLists.objects.get(id=plan_id, owner=user.id)
+
+        if plan:
+            plan.avatar = request.FILES['avatar']
+            plan.save()
+
+            response.write(json.dumps([{'success': 1}]))
+        else:
+            response.write(json.dumps([{'success': 0}]))
+
+        # if form.is_valid():
+        #
+        #     print('paodfkjlsjfds')
+        #     if plan_list:
+        #         plan = plan_list[0]
+        #         plan.avatar = request.FILES['image_file']
+        #         plan.save()
+        #
+        #         response.write(json.dumps([{'success': 1}]))
+        # else:
+        #     print('f')
+        #     response.write(json.dumps([{'success': 0}]))
+
+        return response
+
+
+def get_avatar_ajax(request):
+    if request.is_ajax():
+        response = HttpResponse()
+        response['Content-Type'] = 'text/javascript'
+
+        if request.GET['user_id'] != '0':
+            # если хотим получить аватарку пользователя
+            avatar_url = CustomUser.objects.get(id=request.GET['user_id']).avatar.url
+            response.write(json.dumps({'url': avatar_url}))
+
+        elif request.GET['plan_id'] != '0':
+            # если хотим получить аватарку расписания
+            avatar_url = PlanLists.objects.get(id=request.GET['plan_id']).avatar.url
+            response.write(json.dumps({'url': avatar_url}))
+
+        return response
 
 
 ###################################################################################
@@ -149,7 +205,7 @@ def home_view(request):
     if request.user.is_authenticated():
         user = CustomUser.objects.get(username=request.user.username)
 
-        context = {'username': user.username}
+        context = {'user': user}
 
         all_plans = UserPlans.objects.select_related().filter(user_id=user.id)
 
@@ -157,11 +213,12 @@ def home_view(request):
         try:
             cur_plan = UserPlans.objects.select_related().filter(user_id=user.id, current_yn='y')[0]
         except IndexError:
-            return render_to_response('home.html', context)
+            cur_plan = all_plans[0]
 
         if all_plans:
-            context['image_form'] = UserAvatarForm
+            context['image_form'] = SetAvatarForm
             context['all_plans'] = all_plans
+            context['cur_plan'] = cur_plan
 
             # объединяем контексты
             context_td_tm = get_today_tomorrow_plans(user.id, cur_plan.plan.id)
@@ -217,9 +274,9 @@ def profile_settings(request):
 
 def plan_view(request, plan_id=0):
     """
-    Функция, которая выводит таблицу редактирования текущего (выбранного) расписания.
-    На странице имеем доступ для всех дней недели и для всего расписания (всех диапазонов) в целом.
-    Поэтому, функция выводит всю информацию расписания на весь год, разбитых по дням недели.
+        Функция, которая выводит таблицу редактирования текущего (выбранного) расписания.
+        На странице имеем доступ для всех дней недели и для всего расписания (всех диапазонов) в целом.
+        Поэтому, функция выводит всю информацию расписания на весь год, разбитых по дням недели.
     """
     if request.user.is_authenticated():
         user = CustomUser.objects.get(username=request.user.username)
@@ -229,6 +286,11 @@ def plan_view(request, plan_id=0):
 
         all_plans = UserPlans.objects.select_related().filter(user_id=user.id)
         count = all_plans.count()
+
+        try:
+            cur_plan = UserPlans.objects.select_related().filter(user_id=user.id, current_yn='y')[0]
+        except IndexError:
+            cur_plan = all_plans[0]
 
         if plan_id == 0:
             # выбираем текущее расписание юзера
@@ -259,6 +321,7 @@ def plan_view(request, plan_id=0):
 
         # все расписания
         context['all_plans'] = all_plans
+        context['cur_plan'] = cur_plan
         # имя описание плана
         context['plan_info'] = [plan.plan.title, plan.plan.description]
         # количество участников

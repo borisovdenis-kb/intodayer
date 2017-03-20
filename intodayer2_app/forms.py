@@ -25,5 +25,5 @@ class CustomUserCreationForm(UserCreationForm):
                                                       'required': 'required'})}
 
 
-class UserAvatarForm(forms.Form):
+class SetAvatarForm(forms.Form):
     image_file = forms.ImageField(label='')

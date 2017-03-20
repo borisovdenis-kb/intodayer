@@ -3,11 +3,8 @@
         <div class="message_wrap">
             <div class="message">
                 Пользователь
-                {% if inv.from_user.first_name and inv.from_user.last_name %}
-                    {{ inv.from_user.first_name }} {{ inv.from_user.last_name }}
-                {% else %}
-                    {{  inv.from_user.username }}
-                {% endif %}
+                {{  inv.from_user.get_name.0 }}
+                {{  inv.from_user.get_name.1.0 }}.
                 хочет поделиться с Вами расписанием.
             </div>
             <div class="message_sep"></div>

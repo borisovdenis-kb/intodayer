@@ -33,7 +33,9 @@ urlpatterns = [
     url(r'^get_invitations', views.get_invitations_ajax),
     url(r'^plan/invitation/(\d+)$', views.plan_view),
     url(r'^confirm_invitation', views.confirm_invitation_ajax),
-    url(r'^upload_user_avatar$', views.save_user_avatar_ajax)
+    url(r'^upload_user_avatar$', views.save_user_avatar_ajax),
+    url(r'^upload_plan_avatar/(\d+)$', views.save_plan_avatar_ajax),
+    url(r'^get_avatar', views.get_avatar_ajax)
     # url(r'^add_plans/$', views.add_plans_view),
 ]
 

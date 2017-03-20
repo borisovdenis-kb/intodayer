@@ -245,6 +245,8 @@ button:focus {
 
 .choose_avatar {
     display: none;
+    align-items: center;
+    justify-content: center;
     width: 500px;
     height: 165px;
     /*margin-left: 520px;*/
@@ -312,6 +314,45 @@ button:focus {
     height: 25px;
     margin-left: 5px;
     margin-top: 4px;
+}
+
+.choose_button {
+    width: 100px;
+    margin-left: auto;
+    margin-right: auto;
+    /*margin-top: 80px;*/
+    /*height: 30px;*/
+    padding: 5px;
+    /*background-color: #eb6b66;*/
+    color: #000000;
+    border: solid 1px rgba(220, 220, 220, 1);;
+    border-radius: 4px;
+}
+
+.choose_button:hover{
+    cursor: pointer;
+}
+
+#send_avatar_form {
+    /*display: none;*/
+}
+
+#id_image_file {
+    width: 200px;
+    height: 15px;
+}
+
+#send_button {
+    width: 100px;
+    margin-left: auto;
+    margin-right: auto;
+    /*margin-top: 80px;*/
+    /*height: 30px;*/
+    padding: 5px;
+    /*background-color: #eb6b66;*/
+    color: #000000;
+    border: solid 1px rgba(220, 220, 220, 1);;
+    border-radius: 4px;
 }
 
 /*.effect_blur {*/
