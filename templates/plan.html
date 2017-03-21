@@ -16,7 +16,6 @@
             {{ invitation.comment }}
         </div>
     </div>
-
     <div class="confirmation">
         <div class="accept">
             Принять
@@ -26,6 +25,7 @@
         </div>
     </div>
 {% endblock %}
+
 
 {% block right_content %}
 {#    <div class="perform_confirmation">#}
@@ -48,26 +48,28 @@
                         <div class="day_title">{{ day.name }}</div>
                     </div>
                     <div class="day_plan_content">
-                        <div class="str_plan">
-                            <ul class="str_title">
-                                <li class="weeks"><a>Недели</a></li>
-                                <li class="time"><a>Время</a></li>
-                                <li class="subject"><a>Предмет</a></li>
-                                <li class="teacher"><a>Преподаватель</a></li>
-                                <li class="place"><a>Аудитория</a></li>
+                        <div class="str_plan str_title">
+                            <ul>
+                                <li><a>Недели</a></li>
+                                <li><a>Время</a></li>
+                                <li><a>Предмет</a></li>
+                                <li><a>Преподаватель</a></li>
+                                <li><a>Аудитория</a></li>
                             </ul>
                         </div>
 
                         {% for row in plan_rows %}
                             {% if row.day_of_week.id == day.id %}
-                                <div class="str_plan">
-                                    <ul>
-                                        <li><a>{{ row.start_week }}-{{ row.end_week }}</a></li>
-                                        <li><a>{{ row.get_format_time }}</a></li>
-                                        <li><a>{{ row.subject.name }}</a></li>
-                                        <li><a>{{ row.teacher.name_short }}</a></li>
-                                        <li><a>{{ row.place.name }}</a></li>
-                                    </ul>
+                                <div class="str_fade">
+                                    <div class="str_plan change" id="{{ row.id }}">
+                                        <ul>
+                                            <li><a class="weeks">{{ row.start_week }}-{{ row.end_week }}</a></li>
+                                            <li><a class="time">{{ row.get_format_time }}</a></li>
+                                            <li><a class="subject">{{ row.subject.name }}</a></li>
+                                            <li><a class="teacher">{{ row.teacher.name_short }}</a></li>
+                                            <li class="last"><a class="place">{{ row.place.name }}</a></li>
+                                        </ul>
+                                    </div>
                                 </div>
                             {% endif %}
                         {% endfor %}

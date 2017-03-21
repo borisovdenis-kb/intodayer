@@ -94,10 +94,10 @@
                                     {% for plan in all_plans %}
                                         <li>
                                             <a
-                                                    {% if plan.current_yn == 'y' %}
-                                                        style="background-color: #000000; color: #ffffff"
-                                                    {% endif %}
-                                            >
+                                                   {% if plan.current_yn == 'y' %}
+                                                       style="background-color: #000000; color: #ffffff"
+                                                   {% endif %}
+                                           >
                                                 {{ plan.plan.title }}
 
                                             </a>

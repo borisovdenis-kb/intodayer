@@ -1,3 +1,7 @@
+body {
+    overflow-y: scroll;
+}
+
 .day_title {
     padding: 5px 10px 10px 20px;
 }
@@ -18,7 +22,7 @@
     width: 30%;
 }
 
-.str_plan ul li a {
+.str_plan ul li a, .str_plan ul li input{
     min-height: 15px;
     padding-bottom: 0px;
 }
@@ -26,6 +30,9 @@
 .str_plan:nth-child(2) {
     margin: 5px 0 0 0;
 }
+/*.change ul:last-child{*/
+    /*margin-bottom: 9px;*/
+/*}*/
 
 
 .plus_button_form{
@@ -41,11 +48,9 @@
 }
 
 .plus_button {
-    margin: auto;
     transition: 0.1s;
-    /*background: rgba(81, 198, 102, 1);*/
     height: 100%;
-    background-image: url("../images/add.png");
+    background-image: url("../images/plus_1.png");
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -53,11 +58,19 @@
     cursor: pointer;
 }
 
+/*анимируем этот параметр*/
+.str_plus{
+    margin-top: 10px;
+}
 
 .str_plan.str_plus{;
-    margin-top: 5px;
     cursor: default;
     background: white;
+    /*background: rgba(144, 238, 144, 0.96);*/
+    /*border: 2px solid rgba(3, 96, 255, 0.5);*/
+}
+.str_title{
+    cursor: default;
 }
 
 .plus_button_form:hover .plus_button{

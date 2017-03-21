@@ -36,8 +36,9 @@
     .str_title:first-child li a{
         /*font-size: 1em;*/
     }
-    .str_plan ul li a {
-        font-size: 0.95em;
+    .str_plan ul li a, .str_plan ul li input{
+        font-family: "Cyntho Pro" !important;
+        font-size: 16px;
         /*font-size: 1vw;*/
         /*min-font-size: 0.6vw;*/
     }

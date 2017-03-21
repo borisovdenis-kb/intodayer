@@ -24,7 +24,6 @@ $(document).ready( function () {
        $.getJSON('/get_avatar', data, function (msg) {
            $('.ava_content').css({'background-image': 'url(' + msg.url + ')'})
        });
-       
    });
 });
 

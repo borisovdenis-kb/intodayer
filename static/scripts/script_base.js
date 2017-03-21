@@ -1,6 +1,10 @@
-$(document).ready(function () {
+/**
+ * Created by Борисов on 14.03.2017.
+ */
+
+$(document).ready( function() {
     if (location.href.indexOf('invitation') < 0) {
-        show_invitations();
+    show_invitations();
     } else {
         var confpos = $('.confirmation').offset().top;
     }
@@ -90,7 +94,7 @@ $(document).ready(function () {
             '/upload_plan_avatar/' + $('.ava_content p').text(),
             '.ava_content'
         );
-    });
+});
 
     // $('.ava_content').hover(function() {
     //     $('.ava_cover').css({'display': 'block'});

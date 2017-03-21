@@ -35,9 +35,14 @@ urlpatterns = [
     url(r'^confirm_invitation', views.confirm_invitation_ajax),
     url(r'^upload_user_avatar$', views.save_user_avatar_ajax),
     url(r'^upload_plan_avatar/(\d+)$', views.save_plan_avatar_ajax),
-    url(r'^get_avatar', views.get_avatar_ajax)
+    url(r'^get_avatar', views.get_avatar_ajax),
     # url(r'^add_plans/$', views.add_plans_view),
+
+    # для ajax запросов
+    url(r'^plan/update_clone', views.plan_update_clone),
+    url(r'^plan/update_delete', views.plan_update_delete),
 ]
+
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

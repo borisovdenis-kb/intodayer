@@ -2,6 +2,8 @@ from  django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import *
 from django.shortcuts import render_to_response
 from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseBadRequest
+from django.http import HttpResponseNotAllowed
 from django.contrib import auth
 from django.contrib.auth.forms import UserCreationForm
 from intodayer2_app.forms import *
@@ -12,10 +14,79 @@ from django.utils import timezone
 from intodayer2_app.utils import *
 from intodayer2_app.api import *
 import json
+from django.db.utils import IntegrityError
+import datetime
 
 ###################################################################################
 #                          ОБРАБОТКА AJAX ЗАПРОСОВ                                #
 ###################################################################################
+
+def plan_update_delete(request):
+    if request.is_ajax():
+        user = CustomUser.objects.get(username=request.user.username)
+        plan_list = UserPlans.objects.select_related().get(user_id=user.id, current_yn='y')
+        data = request.POST
+        if 'delete_id_planRow' in data:
+            delete_id = data['delete_id_planRow']
+            # выбираем все строчки расписания именно данного пользователя
+            user_plan_rows = PlanRows.objects.select_related().filter(plan_id=plan_list.id)
+            user_plan_rows.get(id=delete_id).delete()
+        return HttpResponse('Успешно удалено!')
+    else:
+        return HttpResponseBadRequest()
+
+
+def plan_update_clone(request):
+    if request.is_ajax():
+        user = CustomUser.objects.get(username=request.user.username)
+        # выбираем текущее расписание юзера
+        plan_list = UserPlans.objects.select_related().get(user_id=user.id, current_yn='y')
+        data = request.POST
+
+        this_plan = plan_list.plan
+        day_of_week, place, parity, teacher, this_time, start_week, end_week, subject = \
+            None, None, None, None, None, None, None, None
+
+        if 'day_of_week' in data:
+            day_of_week = DaysOfWeek.objects.get(id=data['day_of_week'])
+
+        if 'place' in data:
+            place = Places(name=data['place'], plan=this_plan)
+            place.save()
+
+        if 'parity' in data:
+            parity = data['parity']
+
+        if 'teacher' in data:
+            teacher = Teachers(name_short=data['teacher'], plan=this_plan)
+            teacher.save()
+        if 'time' in data:
+            dt = datetime.datetime.strptime(data['time'], "%H:%M")
+            this_time = Times(hh24mm=dt, plan=this_plan)
+            this_time.save()
+
+        if 'start_week' in data:
+            start_week = data['start_week']
+
+        if 'end_week' in data:
+            end_week = data['end_week']
+
+        if 'subject' in data:
+            subject = Subjects(name=data['subject'], plan=this_plan)
+            subject.save()
+
+        # пока некоторые поля по умолчанию для теста
+        try:
+            new_row = PlanRows(plan=this_plan, place=place, parity=parity,
+                               teacher=teacher, time=this_time, start_week=start_week, end_week=end_week,
+                               subject=subject, day_of_week=day_of_week,
+                               comment="Пусто")
+            new_row.save()
+            return HttpResponse('Успешно продублировано!')
+        except IntegrityError:
+            return HttpResponseBadRequest()
+    else:
+        return HttpResponseBadRequest()
 
 
 def switch_plan_home_ajax(request):
@@ -205,7 +276,6 @@ def home_view(request):
     """
     if request.user.is_authenticated():
         user = CustomUser.objects.get(username=request.user.username)
-
         context = {'user': user}
 
         all_plans = UserPlans.objects.select_related().filter(user_id=user.id)
@@ -275,10 +345,10 @@ def profile_settings(request):
 
 def plan_view(request, plan_id=0):
     """
-        Функция, которая выводит таблицу редактирования текущего (выбранного) расписания.
-        На странице имеем доступ для всех дней недели и для всего расписания (всех диапазонов) в целом.
-        Поэтому, функция выводит всю информацию расписания на весь год, разбитых по дням недели.
-    """
+       Функция, которая выводит таблицу редактирования текущего (выбранного) расписания.
+       На странице имеем доступ для всех дней недели и для всего расписания (всех диапазонов) в целом.
+       Поэтому, функция выводит всю информацию расписания на весь год, разбитых по дням недели.
+   """
     if request.user.is_authenticated():
         user = CustomUser.objects.get(username=request.user.username)
         context = {

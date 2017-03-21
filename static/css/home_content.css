@@ -1,3 +1,6 @@
+body {
+    overflow-y: scroll;
+}
 
 .page {
     clear: both;
@@ -161,13 +164,11 @@ label {
     background-size: cover;
 }
 
-
-.plan_window:first-child{
+.plan_window:first-child {
     margin-top: 0px;
 }
 
-
-.plan_window{
+.plan_window {
     margin: 10px 0 0px 0;
     background: white;
     padding: 10px 20px 20px 20px;
@@ -197,11 +198,12 @@ label {
     margin: 10px 15px 0 0;
     overflow: hidden;
 }
-.plan_content:last-child{
+
+.plan_content:last-child {
     margin-bottom: 50px;
 }
 
-.content_day_title{
+.content_day_title {
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -214,105 +216,168 @@ label {
     display: none;
 }
 
-.day_title{
+.day_title {
     padding: 5px 10px 5px 20px;
 }
-.day_data{
+
+.day_data {
     padding: 0px 10px 15px 10px;
 }
 
-.day_plan_content:first-child{
+.day_plan_content:first-child {
     margin-top: 0;
 }
-.day_plan_content{
+
+.day_plan_content {
     margin-top: 5px;
     padding: 15px 10px 1px 10px;
 }
 
-.str_plan:first-child{
+.str_plan:first-child {
 }
-.str_plan:nth-child(2){
+
+.str_plan:nth-child(2) {
     margin: 10px 0 0 0;
 }
 
-.str_plan{
-    margin-top: 1px;
-    display: table;
-    vertical-align: middle;
-    display: block;
+.str_plan {
+    display: flex;
+    flex-direction: row; /*Пункты внутри контейнера будут располагаться горизонтально*/
+    align-items: stretch; /*Пункты внутри контейнер будут принимать всю его высоту*/
+    margin-top: 3px;
     width: 100%;
     border-radius: 4px;
+    border: 2px solid rgba(3, 96, 255, 0.0);
+    background: white;
 }
 
 
-.str_plan, .plan_selector:hover{
-    cursor: pointer;
+.str_title {
+    /*border: 2px solid rgba(3, 96, 255, 1);*/
 }
 
-.str_plan ul{
+.str_plan, .plan_selector:hover {
+    cursor: default;
+}
+
+.str_plan ul {
     display: flex;
-    align-items: center;
+    /*align-items: center;*/
     text-align: center;
     width: 100%;
 }
 
-
-
-.str_plan ul li:first-child{
+.str_plan ul li:first-child {
     width: 20%;
-    justify-content: flex-start;
     padding-right: 0px;
     padding-left: 0px;
 
 }
-.str_plan ul li:last-child{
+
+.str_plan ul li:last-child {
     width: 20%;
-    justify-content: flex-end;
-    padding-right: 0px;
-    padding-left: 0px;
     border-right: none;
+    padding-right: 0px;
+    padding-left: 0px;
+    padding-left: 0px;
 }
-.str_plan ul li a:first-child{
+
+.str_plan ul li a:first-child {
     padding-left: 7px;
 
 }
 
-.str_plan ul li{
+.str_plan ul li {
     display: flex;
-    justify-content: space-around;
-    text-align: center;
+    justify-content: center;
     vertical-align: middle;
     width: 30%;
-    padding-bottom: 3px;
     padding-right: 2px;
     padding-left: 2px;
-    min-height: 20px;
-    max-height: 200px;
+    height: 100%;
     float: left;
     content: "";
-    /*border-right: 1px solid white;*/
-    border-right: 1px solid rgba(230,230,230,1);
+    border-right: 1px solid rgba(230, 230, 230, 1);
 
 }
 
-.str_plan ul li a{
+/*отвечает за корректный перенос слов и букв в словах*/
+.str_plan ul li a {
+    /* These are technically the same, but use both */
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+
+    -ms-word-break: break-all;
+    /* This is the dangerous one in WebKit, as it breaks things wherever */
+    word-break: break-all;
+    /* Instead use this non-standard one: */
+    word-break: break-word;
+
+    /* Adds a hyphen where the word breaks, if supported (No Blink) */
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+
+}
+
+.str_plan ul li a, .str_plan ul li input {
     display: flex;
-    overflow: auto;
     justify-content: center;
     align-items: center;
+    overflow-wrap: normal;
+    word-wrap: normal;
+    outline: none;
     border-radius: 4px;
-    width: calc(100% - 12px);
+    width: 100%;
     min-height: 30px;
     max-height: 200px;
-    padding: 3px 3px 3px 3px;
+    padding: 3px 0px 3px 0px;
     /*border: 1px solid rgba(230, 230, 230, 1);*/
     /*font-size: 1vw;*/
+    border: none;
+    text-align: center;
+    background: none;
+    border: 3px solid rgba(100, 149, 237, 0.0);
+    transition: 0.1s all;
+    cursor: default;
+}
+
+.str_plan ul li input:focus {
+    border: none;
+    outline: none;
+    /*padding-right: 10px;*/
+    cursor: auto;
+    /*border: 2px solid rgba(0, 0, 0, 0.20);*/
+    /*border: 2px solid rgba(103, 198, 97, 0.6);*/
+    border: 2px solid rgba(139, 29, 235, 0.4);
+}
+
+::-webkit-input-placeholder {
+    text-align: center;
+    padding-left: 10px;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+    text-align: center;
+    padding-left: 10px;
+}
+
+::-moz-placeholder { /* Firefox 19+ */
+    text-align: center;
+    padding-left: 10px;
+}
+
+:-ms-input-placeholder {
+    text-align: center;
+    padding-left: 10px;
 }
 
 .str_title:first-child li {
     border-right: 1px solid rgba(91, 178, 102, 0.4);
 }
-.str_title:first-child li a{
+
+.str_title:first-child li a {
     padding-bottom: 1px;
 }
 
@@ -320,26 +385,56 @@ label {
     background: rgba(103, 198, 97, 0.9);
 }
 
-.str_title li a{
-    /*background: rgba(81, 198, 102, 0.8);*/
-    /*border: 1px solid rgba(81, 198, 102, 0.8);*/
-}
-
-.str_title{
+.str_title {
     border-radius: 4px;
-    /*background: #487F77;*/
 }
 
-.str_plan:nth-child(2n){
-    background: rgba(240,240,245,1);
-}
-
-.str_plan:first-child{
-    background: white;
-}
 
 .separator {
     width: 200px;
     height: 1px;
     background-color: red;
+}
+
+/*меню, при нажатии на правую кнопку мыши на строке расписания*/
+.drop_menu li {
+    min-width: 150px;
+    line-height: 35px;
+    padding: 0px 20px 0px 15px;
+    cursor: pointer;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;
+
+}
+
+.drop_menu li:first-child {
+    border-radius: 0px 0px 0 0;
+    padding-top: 1px;
+}
+
+.drop_menu li:last-child {
+    padding-bottom: 2px;
+    border-radius: 0 0 0px 0px;
+}
+
+.drop_menu li:hover {
+    background: black;
+    color: white;
+}
+
+.drop_menu li:active {
+    background: #3e1e7d;
+    color: white;
+}
+
+.drop_menu {
+    background: white;
+    border-radius: 0px 0px 0px 0px;
+    border: 1px solid rgba(128, 128, 128, 0.30);
+    overflow: hidden;
+    -webkit-box-shadow: 0px 2px 15px 0px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0px 2px 15px 0px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 2px 15px 0px rgba(0, 0, 0, 0.2);
+
 }
