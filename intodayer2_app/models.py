@@ -228,7 +228,7 @@ class PlanLists(models.Model):
         managed = True
         db_table = 'plan_lists'
 
-    def image_url(self):
+    def get_image_url(self):
         """
             Returns the URL of the image associated with this Object.
             If an image hasn't been uploaded yet, it returns a stock image
@@ -263,7 +263,7 @@ class CustomUser(AbstractUser):
     class Meta:
         managed = True
 
-    def image_url(self):
+    def get_image_url(self):
         """
             Returns the URL of the image associated with this Object.
             If an image hasn't been uploaded yet or dose not exist on server

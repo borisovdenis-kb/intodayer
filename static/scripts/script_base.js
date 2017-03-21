@@ -9,7 +9,6 @@ $(document).ready( function() {
         var confpos = $('.confirmation').offset().top;
     }
 
-
     $(window).on('scroll', function () {
         if ($(window).scrollTop() > confpos) {
             // alert('yes');
@@ -82,75 +81,78 @@ $(document).ready( function() {
         $('.choose_avatar').slideToggle(800, 'easeInOutBack');
         $('.choose_avatar_wrap').delay(400).fadeOut(500);
         $('.cover_all').delay(400).fadeOut(800);
+        $('.file_upload').css({'display': 'block'});
+        $('.send_button').css({'display': 'none'});
+        $('.choose_avatar_footer').text('Изображение можно загузить в формате jpg, png или gif.');
     });
 
-    // $('.choose_button').click(function() {
-    //     $('#send_button').trigger('click');
-    // });
 
-    $('.choose_button').click(function () {
+    $('.send_button').click(function () {
         sendFile(
             '#id_image_file',
             '/upload_plan_avatar/' + $('.ava_content p').text(),
             '.ava_content'
         );
-});
-
-    // $('.ava_content').hover(function() {
-    //     $('.ava_cover').css({'display': 'block'});
-    // }, function () {
-    //     // $('.ava_cover').css({'display': 'none'});
-    // });
-
-    // $('.ava_cover').hover(function() {
-    //     $('.ava_cover').animate({opacity: '0.8'}, 500);
-    //     // $('.ava_content').addClass('add_blur');
-    // }, function() {
-    //     $('.ava_cover').animate({opacity: '0'}, 500);
-    //     // $('.ava_content').removeClass('add_blur');
-    // })
+    });
 
 });
 
+function getFileName() {
+    /*
+     *  Функция выводит имя выбранного файла
+     *  Причем обрезая до 20 последних символов.
+     */
+    var fileName = document.getElementById('id_image_file').files[0].name;
+    var dots = '';
 
-// function sendFile(address, data) {
-//     $$f({
-//         formid: 'send_avatar_form', //id формы
-//         url: address,
-//         onstart: function () {
-//             $$('status', 'начинаю отправку файла');
-//         },
-//         onsend: function () {
-//             $$('status', $$('status').innerHTML + '<br />файл успешно загружен');
-//         }
-//     });
-// }
+    if (fileName.length > 30){
+        dots = '...';
+    }
+
+    $('.choose_avatar_footer').text('Выбранный файл: ' + dots + fileName.slice(-30));
+    $('.choose_avatar_footer').css({'color': '#000000'});
+    $('.file_upload').css({'display': 'none'});
+    $('.send_button').css({'display': 'block'});
+}
+
 
 function sendFile(element, address, update_avatar) {
     /*
+     *  Функция посылает на сервер выбранную пользователем аватарку.
+     *  Также не дает пользователю загружать НЕ изображения.
      *  element: id формы, с коротой приосходит отправка
      *  address: /upload_user_avatar или /upload_plan_avatar
      *  update_avatar: элемент, в котором нужно обновить background-image
      */
+    var allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+    var currentType = document.getElementById('id_image_file').files[0].type;
 
-    var data = new FormData;
-    var get_ava_data = {plan_id: $(update_avatar).find('p').text(), user_id: 0};
+    if (allowedTypes.indexOf(currentType) != -1) {
+        var data = new FormData;
+        var get_ava_data = {plan_id: $(update_avatar).find('p').text()};
 
-    data.append('avatar', $(element).prop('files')[0]);
+        data.append('avatar', $(element).prop('files')[0]);
 
-    $.ajax({
-        url: address,
-        data: data,
-        type: 'POST',
-        processData: false,
-        contentType: false,
-        success: function (msg) {
-            $.getJSON('/get_avatar', get_ava_data, function (msg) {
-                $(update_avatar).css({'background-image': 'url(' + msg.url + ')'})
-            });
+        $.ajax({
+            url: address,
+            data: data,
+            type: 'POST',
+            processData: false,
+            contentType: false,
+            success: function (msg) {
+                $.getJSON('/get_avatar', get_ava_data, function (msg) {
+                    $(update_avatar).css({'background-image': 'url(' + msg.url + ')'})
+                });
+                $('.close').trigger('click');
+            }
+        });
+    } else {
+        $('.file_upload').css({'display': 'block'});
+        $('.send_button').css({'display': 'none'});
+        $('.choose_avatar_footer').css({'color': '#FF6068'});
+        $('.choose_avatar_footer').text('Выбирите изображение!');
+    }
 
-        }
-    });
 }
 
 function blurElement(element, size) {
@@ -169,32 +171,5 @@ function blurElement(element, size) {
 }
 
 function show_invitations() {
-    $('.for_invitations').load('/get_invitations', function () {
-        // $('.from_user_avatar').hover( function() {
-        //
-        //     var parent = $(this).parent();
-        //     var wrap = $(this).siblings('.message_wrap');
-        //     var message = $(this).find('.message_wrap .message');
-        //
-        //     parent.css({
-        //         'background-color': '#ffffff',
-        //         'box-shadow': '0px 0px 10px 1px rgba(0,0,0,0.2)'
-        //     });
-        //     wrap.css({'display': 'block'});
-        //     message.css({'display': 'block'});
-        // }, function(){
-        //
-        //     var parent = $(this).parent();
-        //     var wrap = $(this).siblings('.message_wrap');
-        //     var message = $(this).find('.message_wrap .message');
-        //
-        //     parent.css({
-        //         'background-color': 'rgba(255, 255, 255, 0)',
-        //         'border': 'none',
-        //         'box-shadow': 'none'
-        //     });
-        //     wrap.css({'display': 'none'});
-        //     message.css({'display': 'none'});
-        // });
-    });
+    $('.for_invitations').load('/get_invitations');
 }

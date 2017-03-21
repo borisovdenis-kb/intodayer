@@ -10,6 +10,6 @@
             <div class="message_sep"></div>
             <div class="show_plan"><a href="\plan\invitation\{{ inv.plan_id }}">Посмотреть</a></div>
         </div>
-        <div class="from_user_avatar" style="background-image: url({{ inv.from_user.image_url }})"></div>
+        <div class="from_user_avatar" style="background-image: url({{ inv.from_user.get_image_url }})"></div>
     </div>
 {% endfor %}

@@ -1,3 +1,5 @@
+import random
+
 from  django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import *
 from django.shortcuts import render_to_response
@@ -20,6 +22,7 @@ import datetime
 ###################################################################################
 #                          ОБРАБОТКА AJAX ЗАПРОСОВ                                #
 ###################################################################################
+
 
 def plan_update_delete(request):
     if request.is_ajax():
@@ -222,18 +225,30 @@ def save_plan_avatar_ajax(request, plan_id):
 
 def get_avatar_ajax(request):
     if request.is_ajax():
+        user = CustomUser.objects.get(username=request.user.username)
+
         response = HttpResponse()
         response['Content-Type'] = 'text/javascript'
 
-        if request.GET['user_id'] != '0':
-            # если хотим получить аватарку пользователя
-            avatar_url = CustomUser.objects.get(id=request.GET['user_id']).avatar.url
-            response.write(json.dumps({'url': avatar_url}))
+        try:
+            if request.GET['user_id']:
+                response.write(json.dumps({'url': user.get_image_url()}))
+                return response
+        except KeyError:
+            pass
 
-        elif request.GET['plan_id'] != '0':
-            # если хотим получить аватарку расписания
-            avatar_url = PlanLists.objects.get(id=request.GET['plan_id']).avatar.url
-            response.write(json.dumps({'url': avatar_url}))
+        try:
+            if request.GET['plan_id']:
+                # если хотим получить аватарку расписания
+                plan = PlanLists.objects.get(id=request.GET['plan_id'])
+
+                response.write(json.dumps({
+                    'url': plan.get_image_url(),
+                    'isOwner': True if plan.owner == user else False
+                }))
+                return response
+        except KeyError:
+            pass
 
         return response
 
@@ -282,7 +297,7 @@ def home_view(request):
 
         # выбираем текущее расписание юзера
         try:
-            cur_plan = UserPlans.objects.select_related().filter(user_id=user.id, current_yn='y')[0]
+            cur_plan = UserPlans.objects.select_related().filter(user_id=user.id, always_yn='y')[0]
         except IndexError:
             cur_plan = all_plans[0]
 
@@ -411,3 +426,4 @@ def plan_view(request, plan_id=0):
 
 def sort_by_start_date(row):
     return row.start_week
+

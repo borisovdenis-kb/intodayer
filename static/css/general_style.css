@@ -235,7 +235,7 @@ button:focus {
     display: none;
     position: absolute;
     width: 500px;
-    height: 230px;
+    /*height: 230px;*/
     margin-left: 520px;
     margin-top: 170px;
     /*background-color: #3E403D;*/
@@ -275,7 +275,7 @@ button:focus {
 .choose_avatar_footer {
     /*position: absolute;*/
     width: 490px;
-    height: 25px;
+    height: 23px;
     padding: 5px;
     /*margin-left: 520px;*/
     border-bottom-right-radius: 4px;
@@ -318,20 +318,21 @@ button:focus {
     margin-top: 4px;
 }
 
-.choose_button {
-    width: 100px;
-    margin-left: auto;
-    margin-right: auto;
-    /*margin-top: 80px;*/
-    /*height: 30px;*/
-    padding: 5px;
-    /*background-color: #eb6b66;*/
-    color: #000000;
-    border: solid 1px rgba(220, 220, 220, 1);;
+.send_button {
+    display: none;
+    position: relative;
+    overflow: hidden;
+    width: 150px;
+    height: 30px;
+    padding-top: 10px;
     border-radius: 4px;
+    border: solid 1px rgba(220, 220, 220, 1);
+    color: #000000;
+    text-align: center;
+    vertical-align: middle;
 }
 
-.choose_button:hover{
+.send_button:hover{
     cursor: pointer;
 }
 
@@ -353,8 +354,46 @@ button:focus {
     padding: 5px;
     /*background-color: #eb6b66;*/
     color: #000000;
-    border: solid 1px rgba(220, 220, 220, 1);;
+    border: solid 1px rgba(220, 220, 220, 1);
     border-radius: 4px;
+}
+
+/*.file-upload input[type="file"]{*/
+    /*display: none;*/
+/*}*/
+
+.file_upload #id_image_file{
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    -moz-opacity: 0;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    font-size: 150px;
+    height: 30px;
+    z-index:20;
+}
+
+.file_upload{
+    position: relative;
+    overflow: hidden;
+    width: 150px;
+    height: 30px;
+    padding-top: 10px;
+    border-radius: 4px;
+    border: solid 1px rgba(220, 220, 220, 1);
+    color: #000000;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.file-upload, #id_image_file:hover {
+    cursor: pointer;
+}
+
+.file_info {
+    background-color: #eb6b66;
 }
 
 /*.effect_blur {*/

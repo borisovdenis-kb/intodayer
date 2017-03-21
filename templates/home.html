@@ -55,7 +55,7 @@
                         </div>
                         <div style="float:right;">
                             <div id="user_ava_thumbnail_content">
-                                <div id="user_ava_thumbnail" style="background-image: url({{ user.image_url }})"></div>
+                                <div id="user_ava_thumbnail" style="background-image: url({{ user.get_image_url }})"></div>
                             </div>
                         </div>
                         <div id="profile_title">
@@ -82,7 +82,8 @@
                             <p>Загрузить фото</p>
                         </div>
                     </div>
-                    <div class="ava_content" style="background-image: url({{ cur_plan.plan.image_url }});">
+
+                    <div class="ava_content" style="background-image: url({{ cur_plan.plan.get_image_url }});">
                         <p style="display: none">{{ cur_plan.plan.id }}</p>
                     </div>
 
@@ -94,7 +95,7 @@
                                     {% for plan in all_plans %}
                                         <li>
                                             <a
-                                                   {% if plan.current_yn == 'y' %}
+                                                   {% if plan.always_yn == 'y' %}
                                                        style="background-color: #000000; color: #ffffff"
                                                    {% endif %}
                                            >
@@ -245,13 +246,17 @@
 
     <div class="choose_avatar">
 
-        <div class="choose_button">
+        <div class="send_button">
             Загрузить
         </div>
 
         <form action="" method="post" enctype="multipart/form-data" id="send_avatar_form">
-            {{ image_form.as_p }}
-{#            <button id="send_button">Загрузить файл</button>#}
+            <div class="file_upload">
+                Выберите файл
+                <p><input id="id_image_file" name="image_file" type="file" onchange="getFileName();" required /></p>
+            </div>
+            <div class="file_info">
+            </div>
         </form>
 
     </div>
