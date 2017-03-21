@@ -8,27 +8,13 @@ $(document).ready(function () {
         set_color_str();
     }, 100);
 
-        //вешаем обработчики на все поля
+    //вешаем обработчики на все поля
     $('.str_plan.change').each(function () {
         set_new_listeners($(this));
     })
 
 
 });
-
-
-// удаляет пустные дни (дни в которых нет ничего ни разу за год)
-function delete_empty_days() {
-    var $days_content = $('.plan_content');
-    $days_content.each(function () {
-        var $str_plans = $(this).find('.str_plan ul');
-        if ($str_plans.length == 1) {
-            $(this).remove();
-        }
-    });
-}
-
-// var $str_height = $('.str_plan li a').first().outerHeight() + 4;
 
 var NEW_STR_PLAN_HTML = '' +
     '<div class="str_fade">' +
@@ -43,56 +29,6 @@ var NEW_STR_PLAN_HTML = '' +
     '</ul>' +
     '</div>' +
     '</div>';
-
-function append_new_str_animation($new_div, $insert_after_this) {
-    $new_div.insertAfter($insert_after_this);
-    $new_div.slideToggle(200);
-    $new_div.fadeTo(200, 1);
-}
-
-function add_plan_str($this_button) {
-
-    var $this_block = $($this_button).closest('.day_plan_content');
-
-    // когда плюс исчезает, высота окна не меняется и не дёргается
-    // var $this_window = $this_block.parent();
-    // var $window_height = $this_window.height();
-    // $this_window.css({'min-height': $window_height})
-    var $new_div = $(NEW_STR_PLAN_HTML).find('.str_plan.change');
-    var $plus_button = $this_block.find('.str_plus');
-
-    // сам плюс погасает
-    $plus_button.fadeTo(1, 0);
-    // сначала блок погасшего плюса немного подтягивается вверх панель дня
-    $plus_button.animate({'margin-top': '0px'}, 100, function () {
-        // затем погасает
-        // затем опять разворачивает панель
-        $plus_button.animate({'margin-top': '10px'}, 100);
-    });
-    setTimeout(function () {
-        // и потом плюс появляется визуально
-        $plus_button.fadeTo(200, 1);
-    }, 150);
-    setTimeout(function () {
-        var insert_after_this = $this_block.find('.str_plan.change').last();
-        if (insert_after_this.hasClass('change')) {
-            append_new_str_animation($new_div, insert_after_this);
-        }
-        //если нет ни одной строчки в расписании, то вставляем после заголовка
-        else {
-            insert_after_this = $this_block.find('.str_title');
-            append_new_str_animation($new_div, insert_after_this);
-        }
-    }, 200);
-
-    set_new_listeners($new_div);
-
-    // делаем правильный цвет следующей строчки
-    setTimeout(function () {
-        set_color_str();
-    }, 500);
-    blur_select_str();
-}
 
 
 function set_new_listeners($new_div) {
@@ -192,6 +128,63 @@ $(window).on('mousedown', function (event) {
 // ###########################################################################################
 
 
+// удаляет пустные дни (дни в которых нет ничего ни разу за год)
+function delete_empty_days() {
+    var $days_content = $('.plan_content');
+    $days_content.each(function () {
+        var $str_plans = $(this).find('.str_plan ul');
+        if ($str_plans.length == 1) {
+            $(this).remove();
+        }
+    });
+}
+
+
+function append_new_str_animation($new_div, $insert_after_this) {
+    $new_div.insertAfter($insert_after_this);
+    $new_div.slideToggle(200);
+    $new_div.fadeTo(200, 1);
+}
+
+function add_plan_str($this_button) {
+
+    var $this_block = $($this_button).closest('.day_plan_content');
+    var $new_div = $(NEW_STR_PLAN_HTML).find('.str_plan.change');
+    var $plus_button = $this_block.find('.str_plus');
+
+    // сам плюс погасает
+    $plus_button.fadeTo(1, 0);
+    // сначала блок погасшего плюса немного подтягивается вверх панель дня
+    $plus_button.animate({'margin-top': '0px'}, 100, function () {
+        // затем погасает
+        // затем опять разворачивает панель
+        $plus_button.animate({'margin-top': '10px'}, 100);
+    });
+    setTimeout(function () {
+        // и потом плюс появляется визуально
+        $plus_button.fadeTo(200, 1);
+    }, 150);
+    setTimeout(function () {
+        var insert_after_this = $this_block.find('.str_plan.change').last();
+        if (insert_after_this.hasClass('change')) {
+            append_new_str_animation($new_div, insert_after_this);
+        }
+        //если нет ни одной строчки в расписании, то вставляем после заголовка
+        else {
+            insert_after_this = $this_block.find('.str_title');
+            append_new_str_animation($new_div, insert_after_this);
+        }
+    }, 200);
+
+    set_new_listeners($new_div);
+
+    // делаем правильный цвет следующей строчки
+    setTimeout(function () {
+        set_color_str();
+    }, 500);
+    blur_select_str();
+}
+
 // устанавливает фокус на поле и его функционал для редактирования (при нажатии на него)
 // поля a заменяются на input
 function edit_field($field) {
@@ -285,7 +278,6 @@ function set_next_field($this_field, e) {
         }
     }
 }
-
 
 var selected_str;
 // если нет выбранной строки, то выделяется её и запоминмает в selected_str
@@ -466,7 +458,7 @@ function callback_clone(data, $this_str) {
         insert_after_this = $this_str;
     }
 
-    alert($this_str.attr('class'));
+    // alert($this_str.attr('class'));
     append_new_str_animation($new_div, insert_after_this);
     $new_div.find('.weeks').attr('value', data['weeks']);
     $new_div.find('.time').attr('value', data['time']);

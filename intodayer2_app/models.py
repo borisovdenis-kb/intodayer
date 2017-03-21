@@ -199,7 +199,7 @@ class UserPlans(models.Model):
     user = models.ForeignKey('CustomUser', models.DO_NOTHING)
     plan = models.ForeignKey('PlanLists', models.DO_NOTHING)
     current_yn = models.CharField(max_length=1, blank=False)
-    # always_yn = models.CharField(max_length=1, blank=False)
+    always_yn = models.CharField(max_length=1, blank=False)
 
     class Meta:
         managed = True
@@ -220,6 +220,7 @@ class PlanLists(models.Model):
     description = models.TextField(max_length=1000)
     start_date = models.DateTimeField()
     owner = models.ForeignKey('CustomUser', models.DO_NOTHING)
+
 
     class Meta:
         managed = True
