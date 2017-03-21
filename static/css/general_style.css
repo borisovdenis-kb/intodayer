@@ -79,13 +79,11 @@ button:focus {
     height: 60px;
     margin-top: 5px;
     margin-right: 5px;
-    background-image: url("../images/whiterussian.jpeg");
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: cover;
     border-radius: 2px;
-    background-color: #3E403D;
 }
 
 .from_user_avatar:hover{

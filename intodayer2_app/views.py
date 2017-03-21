@@ -125,6 +125,7 @@ def save_plan_avatar_ajax(request, plan_id):
         plan = PlanLists.objects.get(id=plan_id, owner=user.id)
 
         if plan:
+            # если пользователь имеет права редактирования
             plan.avatar = request.FILES['avatar']
             plan.save()
 
