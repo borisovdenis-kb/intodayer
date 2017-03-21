@@ -11,10 +11,59 @@ from datetime import *
 from django.utils import timezone
 from intodayer2_app.utils import *
 from intodayer2_app.api import *
+import datetime
 
 ###################################################################################
 #                          ОБРАБОТКА AJAX ЗАПРОСОВ                                #
 ###################################################################################
+
+
+def plan_update(request):
+    if request.is_ajax():
+        user = CustomUser.objects.get(username=request.user.username)
+        # выбираем текущее расписание юзера
+        plan_list = UserPlans.objects.select_related().get(user_id=user.id, current_yn='y')
+        data = request.POST
+
+        this_plan = plan_list.plan
+        day_of_week, place, parity, teacher, this_time, start_week, end_week, subject = \
+            None, None, None, None, None, None, None, None
+
+        if 'day_of_week' in data:
+            day_of_week = DaysOfWeek.objects.get(id=data['day_of_week'])
+
+        if 'place' in data:
+            place = Places(name=data['place'], plan=this_plan)
+            place.save()
+
+        if 'parity' in data:
+            parity = data['parity']
+
+        if 'teacher' in data:
+            teacher = Teachers(name_short=data['teacher'], plan=this_plan)
+            teacher.save()
+        if 'time' in data:
+            dt = datetime.datetime.strptime(data['time'], "%H:%M")
+            this_time = Times(hh24mm=dt, plan=this_plan)
+            this_time.save()
+
+        if 'start_week' in data:
+            start_week = data['start_week']
+
+        if 'end_week' in data:
+            end_week = data['end_week']
+
+        if 'subject' in data:
+            subject = Subjects(name=data['subject'], plan=this_plan)
+            subject.save()
+
+        # пока некоторые поля по умолчанию для теста
+        new_row = PlanRows(plan=this_plan, place=place, parity=parity,
+                           teacher=teacher, time=this_time, start_week=start_week, end_week=end_week, subject=subject,
+                           day_of_week=day_of_week,
+                           comment="Это пока тестовая запись!")
+        new_row.save()
+        return HttpResponse("plan.html")
 
 
 def switch_plan_home_ajax(request):

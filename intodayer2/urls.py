@@ -31,4 +31,5 @@ urlpatterns = [
     url(r'^get_invitations', views.get_invitations_ajax),
     url(r'^plan/invitation/(\d+)$', views.plan_view),
     # url(r'^add_plans/$', views.add_plans_view),
+    url(r'^plan/update', views.plan_update),
 ]

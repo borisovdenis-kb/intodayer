@@ -97,7 +97,7 @@ function add_plan_str($this_button) {
 function set_new_listeners($new_div) {
     // ###########################################################################################
 
-    //               Обработчики событый для новых добавленных строк расписания
+    //               Обработчики событый для новой добавленной строки расписания
 
     // ###########################################################################################
     $new_div.find('ul li a').on('click', function () {
@@ -383,6 +383,7 @@ function right_click_on_str(e) {
         if ($('.selected_str').find('ul li a').length == 0){
             $('.clone_str').remove();
             $('.copy_str').remove();
+            $('.delete_str').html('Удалить строку');
         }
 
         var $elem = $('.drop_menu').last();
@@ -413,12 +414,36 @@ function delete_str($this_str) {
     setTimeout(function () {
         set_color_str();
     }, 500);
-
 }
+
+// дублируем строку
+// работает с AJAX
 function clone_str($this_str) {
+    var weeks, start_week, end_week, parity, time, subject, teacher, place, day_of_week;
+
+    parity = 1; // временно
+    day_of_week = 1; //временно
+    weeks = $this_str.find('.weeks').text();
+    start_week = weeks.split('-')[0];
+    end_week = weeks.split('-')[1];
+    time = $this_str.find('.time').text();
+    subject = $this_str.find('.subject').text();
+    teacher = $this_str.find('.teacher').text();
+    place = $this_str.find('.place').text();
+    var data = {'weeks': weeks, 'start_week': start_week, 'end_week': end_week, 'time': time,
+        'subject': subject, 'teacher': teacher, 'place': place, 'parity': parity, 'day_of_week': day_of_week};
+    $.post('/plan/update', data, callback_clone(data, $this_str));
+}
+
+// $.ajaxError (function () {
+//      alert("ошибка!");
+//  });
+
+// визуально дублируем строку, если получен ответ от сервера
+function callback_clone(data, $this_str) {
+    alert("Успешно продублировано! Далее вы увидите анимацию дублирования.");
     blur_select_str();
     var $new_div = $(NEW_STR_PLAN_HTML).find('.str_plan.change');
-
     $this_str.css({'border': '2px solid rgba(139, 29, 235, 0.6)'});
     $this_str.addClass('animation');
     $new_div.css({'border': '2px solid rgba(103, 198, 97, 0.9)'});
@@ -432,13 +457,13 @@ function clone_str($this_str) {
         });
     }, 1000);
 
-    // alert($this_str.find('.weeks').text());
     append_new_str_animation($new_div, $this_str);
-    $new_div.find('.weeks').attr('value', $this_str.find('.weeks').text());
-    $new_div.find('.time').attr('value', $this_str.find('.time').text());
-    $new_div.find('.subject').attr('value', $this_str.find('.subject').text());
-    $new_div.find('.teacher').attr('value', $this_str.find('.teacher').text());
-    $new_div.find('.place').attr('value', $this_str.find('.place').text());
+    $new_div.find('.weeks').attr('value', data['weeks']);
+    $new_div.find('.time').attr('value', data['time']);
+    $new_div.find('.subject').attr('value', data['subject']);
+    $new_div.find('.teacher').attr('value', data['teacher']);
+    $new_div.find('.place').attr('value', data['place']);
+
     // преобразовываем поля input в a для всех новых полей
     var $new_inputs = $new_div.find('ul li input');
     $new_inputs.each(function () {
@@ -453,20 +478,17 @@ function clone_str($this_str) {
     }, 500);
 }
 
+
 // устанвалвает цвет для нечётных строк таблицы расписания
 function set_color_str() {
-    var i;
     $('.plan_content').each(function () {
-        i = 0;
-        $(this).find('.str_plan.change').each(function () {
+        $(this).find('.str_plan.change').each(function (i) {
             if (i % 2 == 0) {
-                // alert("fds");
                 $(this).animate({'background-color': 'rgba(240, 240, 245, 1)'})
             }
             else {
                 $(this).animate({'background-color': 'rgba(255, 255, 255, 1)'}, 50)
             }
-            i += 1;
         });
     });
 }
@@ -485,3 +507,5 @@ function set_true_placeholder($this_field) {
         return 'Аудитория';
     return "Пусто";
 }
+
+// доделать функцию при нажатии на кнопку
