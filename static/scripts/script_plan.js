@@ -4,7 +4,7 @@
 
 $(document).ready(function () {
     setTimeout(function () {
-        delete_empty_days();
+        // delete_empty_days();
         set_color_str();
     }, 100);
 
@@ -186,6 +186,7 @@ $('.str_plan.change').on('mousedown', function (event) {
 });
 
 // если мы нажимаем не на строки расписания и не на поля ввода, то снимаем выделение с активных
+// здесь же мы мы обновляем данные в БД
 $(window).on('mousedown', function (event) {
     if (event.button == 0 || event.button == 2 || event.button == 1) {
         var tag_name = $(event.target).get(0).tagName.toUpperCase();
@@ -369,6 +370,8 @@ function set_default_str($this_str) {
 
 // обрабатывает правый клик мыши по строке с расписанием
 function right_click_on_str(e) {
+    // $(e.target).css('background', "black");
+
     e.preventDefault();
     $('.drop_menu').remove();
     if ($('.selected_str').length > 0) {
@@ -380,7 +383,7 @@ function right_click_on_str(e) {
             '</ul>' +
             '</div>');
 
-        if ($('.selected_str').find('ul li a').length == 0){
+        if ($('.selected_str').find('ul li a').length == 0) {
             $('.clone_str').remove();
             $('.copy_str').remove();
             $('.delete_str').html('Удалить строку');
@@ -404,21 +407,46 @@ function right_click_on_str(e) {
 
 function delete_str($this_str) {
     blur_select_str();
+    $('.drop_menu').remove();
+    var delete_id_planRow = $this_str.attr('id');
+    var data = {'delete_id_planRow': delete_id_planRow};
+    // alert(delete_id_planRow);
+
+    $.ajax({
+        url: '/plan/update_delete',
+        success: function (response) {
+            // alert(response);
+            callback_delete($this_str);
+        },
+        method: 'POST',
+        data: data,
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert(textStatus + " " + errorThrown);
+        }
+    });
+
+
+}
+
+function callback_delete($this_str) {
     $this_str.css({'border': '2px solid #FF6161'});
     $this_str.fadeTo(200, 0, function () {
         $this_str.slideUp(200, function () {
             $this_str.remove();
         });
     });
-    $('.drop_menu').remove();
     setTimeout(function () {
         set_color_str();
     }, 500);
+
 }
 
 // дублируем строку
 // работает с AJAX
 function clone_str($this_str) {
+    blur_select_str();
+    $('.drop_menu').remove();
+
     var weeks, start_week, end_week, parity, time, subject, teacher, place, day_of_week;
 
     parity = 1; // временно
@@ -430,26 +458,36 @@ function clone_str($this_str) {
     subject = $this_str.find('.subject').text();
     teacher = $this_str.find('.teacher').text();
     place = $this_str.find('.place').text();
-    var data = {'weeks': weeks, 'start_week': start_week, 'end_week': end_week, 'time': time,
-        'subject': subject, 'teacher': teacher, 'place': place, 'parity': parity, 'day_of_week': day_of_week};
-    $.post('/plan/update', data, callback_clone(data, $this_str));
+    var data = {
+        'weeks': weeks, 'start_week': start_week, 'end_week': end_week, 'time': time,
+        'subject': subject, 'teacher': teacher, 'place': place, 'parity': parity, 'day_of_week': day_of_week
+    };
+    $.ajax({
+        url: '/plan/update_clone',
+        success: function (response) {
+            // alert(response);
+            callback_clone(data, $this_str);
+        },
+        method: 'POST',
+        data: data,
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert(textStatus + " " + errorThrown);
+        }
+    });
 }
-
-// $.ajaxError (function () {
-//      alert("ошибка!");
-//  });
 
 // визуально дублируем строку, если получен ответ от сервера
 function callback_clone(data, $this_str) {
-    alert("Успешно продублировано! Далее вы увидите анимацию дублирования.");
-    blur_select_str();
     var $new_div = $(NEW_STR_PLAN_HTML).find('.str_plan.change');
     $this_str.css({'border': '2px solid rgba(139, 29, 235, 0.6)'});
     $this_str.addClass('animation');
     $new_div.css({'border': '2px solid rgba(103, 198, 97, 0.9)'});
     $new_div.addClass('animation');
+    // чтобы анимация работала правильно для любой высоты блока
+    $new_div.css('height',  $this_str.height());
     setTimeout(function () {
         $this_str.animate({'border-color': 'rgba(103, 198, 97, 0.0)'}, function () {
+            $new_div.css('height', 'auto');
             $this_str.removeClass('animation');
         });
         $new_div.animate({'border-color': 'rgba(139, 29, 235, 0.0)'}, function () {
@@ -457,7 +495,17 @@ function callback_clone(data, $this_str) {
         });
     }, 1000);
 
-    append_new_str_animation($new_div, $this_str);
+    //чтобы вставка строки работала именно для самого внешнего класса строки
+    var insert_after_this;
+    if (!$this_str.hasClass('fade')){
+        insert_after_this = $this_str.parent();
+    }
+    else{
+        insert_after_this = $this_str;
+    }
+
+    alert($this_str.attr('class'));
+    append_new_str_animation($new_div, insert_after_this);
     $new_div.find('.weeks').attr('value', data['weeks']);
     $new_div.find('.time').attr('value', data['time']);
     $new_div.find('.subject').attr('value', data['subject']);
@@ -471,13 +519,17 @@ function callback_clone(data, $this_str) {
     });
     // вешаем обработчики на все новые поля
     set_new_listeners($new_div);
-    $('.drop_menu').remove();
+
     // модернизируем цвет строк
     setTimeout(function () {
         set_color_str();
     }, 500);
 }
 
+// добавляет новую строку в расписание
+function add_new_plan_row() {
+
+}
 
 // устанвалвает цвет для нечётных строк таблицы расписания
 function set_color_str() {

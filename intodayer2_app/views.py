@@ -2,6 +2,8 @@ from  django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import *
 from django.shortcuts import render_to_response
 from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseBadRequest
+from django.http import HttpResponseNotAllowed
 from django.contrib import auth
 from django.contrib.auth.forms import UserCreationForm
 from intodayer2_app.forms import CustomUserCreationForm
@@ -11,6 +13,7 @@ from datetime import *
 from django.utils import timezone
 from intodayer2_app.utils import *
 from intodayer2_app.api import *
+from django.db.utils import IntegrityError
 import datetime
 
 ###################################################################################
@@ -18,7 +21,22 @@ import datetime
 ###################################################################################
 
 
-def plan_update(request):
+def plan_update_delete(request):
+    if request.is_ajax():
+        user = CustomUser.objects.get(username=request.user.username)
+        plan_list = UserPlans.objects.select_related().get(user_id=user.id, current_yn='y')
+        data = request.POST
+        if 'delete_id_planRow' in data:
+            delete_id = data['delete_id_planRow']
+            # выбираем все строчки расписания именно данного пользователя
+            user_plan_rows = PlanRows.objects.select_related().filter(plan_id=plan_list.id)
+            user_plan_rows.get(id=delete_id).delete()
+        return HttpResponse('Успешно удалено!')
+    else:
+        return HttpResponseBadRequest()
+
+
+def plan_update_clone(request):
     if request.is_ajax():
         user = CustomUser.objects.get(username=request.user.username)
         # выбираем текущее расписание юзера
@@ -58,12 +76,18 @@ def plan_update(request):
             subject.save()
 
         # пока некоторые поля по умолчанию для теста
-        new_row = PlanRows(plan=this_plan, place=place, parity=parity,
-                           teacher=teacher, time=this_time, start_week=start_week, end_week=end_week, subject=subject,
-                           day_of_week=day_of_week,
-                           comment="Это пока тестовая запись!")
-        new_row.save()
-        return HttpResponse("plan.html")
+        try:
+            new_row = PlanRows(plan=this_plan, place=place, parity=parity,
+                               teacher=teacher, time=this_time, start_week=start_week, end_week=end_week,
+                               subject=subject, day_of_week=day_of_week,
+                               comment="Пусто")
+            new_row.save()
+            return HttpResponse('Успешно продублировано!')
+        except IntegrityError:
+            return HttpResponseBadRequest()
+    else:
+        return HttpResponseBadRequest()
+
 
 
 def switch_plan_home_ajax(request):

@@ -199,6 +199,7 @@ class UserPlans(models.Model):
     user = models.ForeignKey('CustomUser', models.DO_NOTHING)
     plan = models.ForeignKey('PlanLists', models.DO_NOTHING)
     current_yn = models.CharField(max_length=1, blank=False)
+    # always_yn = models.CharField(max_length=1, blank=False)
 
     class Meta:
         managed = True
