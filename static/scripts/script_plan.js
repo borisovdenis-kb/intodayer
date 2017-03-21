@@ -8,13 +8,14 @@ $(document).ready(function () {
         set_color_str();
     }, 100);
 
+        //вешаем обработчики на все поля
+    $('.str_plan.change').each(function () {
+        set_new_listeners($(this));
+    })
+
 
 });
 
-
-$('.plus_button_form').click(function () {
-    add_plan_str($(this));
-});
 
 // удаляет пустные дни (дни в которых нет ничего ни разу за год)
 function delete_empty_days() {
@@ -27,7 +28,7 @@ function delete_empty_days() {
     });
 }
 
-var $str_height = $('.str_plan li a').first().outerHeight() + 4;
+// var $str_height = $('.str_plan li a').first().outerHeight() + 4;
 
 var NEW_STR_PLAN_HTML = '' +
     '<div class="str_fade">' +
@@ -97,9 +98,10 @@ function add_plan_str($this_button) {
 function set_new_listeners($new_div) {
     // ###########################################################################################
 
-    //               Обработчики событый для новой добавленной строки расписания
+    //               Обработчики событый, применяемые к каждой строке расписания
 
     // ###########################################################################################
+    //редактировать поле при нажатии на него
     $new_div.find('ul li a').on('click', function () {
         edit_field($(this));
     });
@@ -110,29 +112,25 @@ function set_new_listeners($new_div) {
         set_default_str($(this));
     });
 
-    // $new_div.mouseover(function () {
-    //     set_current_str($(this));
-    // });
-    // $new_div.mouseout(function () {
-    //     set_default_str($(this));
-    // });
     // при нажатии на строку, она выделяется
     $new_div.find('ul li input').on('mousedown', function (event) {
         if (event.button == 0 || event.button == 2 || event.button == 1) {
             select_str($(this).parent().parent().parent());
         }
     });
+    // при нажатии на строку, она выделяется
     $new_div.on('mousedown', function (event) {
         if (event.button == 0 || event.button == 2 || event.button == 1) {
             select_str($(this));
         }
     });
+    //Если мы нажимает на строку прямо над input, то мы нажимаем на сам input,поэтому событие ставим на него
     $new_div.contextmenu(function (event) {
         if ((event.button == 2 || event.button == 1) && $(event.target).get(0).tagName.toUpperCase() != 'INPUT') {
             right_click_on_str(event);
         }
     });
-
+    //При нажатии на input не показывать стандартное контекстное меню
     $new_div.find('ul li input').contextmenu(function () {
         return false;
     });
@@ -154,35 +152,9 @@ function set_new_listeners($new_div) {
 
 // ###########################################################################################
 
-//Редактирование расписания
-$('.str_plan.change ul li a').bind('click', function () {
-    edit_field($(this));
-});
-
-//Если мы нажимает на строку прямо над input, то мы нажимаем на сам input,поэтому событие ставим на него
-$('.str_plan.change ul li input').contextmenu(function (event) {
-    if ((event.button == 2 || event.button == 1) && $(event.target).get(0).tagName.toUpperCase() != 'INPUT') {
-        right_click_on_str(event);
-    }
-});
-
-//При нажатии на input не показывать стандартное контекстное меню
-$('.str_plan.change ul li input').find('ul li input').contextmenu(function () {
-    return false;
-});
-
-// отвечает за выделение строки при наведении
-$('.str_plan.change').hover(function () {
-    set_current_str($(this));
-}, function () {
-    set_default_str($(this));
-});
-
-// при нажатии на строку, она выделяется
-$('.str_plan.change').on('mousedown', function (event) {
-    if (event.button == 0 || event.button == 2 || event.button == 1) {
-        select_str($(this));
-    }
+// устанавливаем обработчик при нажатии на плюс
+$('.plus_button_form').click(function () {
+    add_plan_str($(this));
 });
 
 // если мы нажимаем не на строки расписания и не на поля ввода, то снимаем выделение с активных
@@ -193,16 +165,6 @@ $(window).on('mousedown', function (event) {
         if (tag_name != 'A' && tag_name != 'LI' && tag_name != 'INPUT') {
             blur_select_str();
         }
-    }
-});
-
-
-//выпадающий список фукционала для строки. открывается при нажатии на правую кнопку мыши на строке
-$('.str_plan.change').contextmenu(function (event) {
-    //если нажата правая клавиша
-    // alert($(event.target).get(0).tagName);
-    if ((event.button == 2 || event.button == 1) && $(event.target).get(0).tagName.toUpperCase() != 'INPUT') {
-        right_click_on_str(event);
     }
 });
 
