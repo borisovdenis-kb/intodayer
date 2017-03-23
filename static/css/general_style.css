@@ -320,7 +320,7 @@ button:focus {
 
 .send_button {
     display: none;
-    position: relative;
+    /*position: relative;*/
     overflow: hidden;
     width: 150px;
     height: 30px;
@@ -332,8 +332,9 @@ button:focus {
     vertical-align: middle;
 }
 
-.send_button:hover{
+.send_button:hover {
     cursor: pointer;
+    color: #8b1deb;
 }
 
 #send_avatar_form {

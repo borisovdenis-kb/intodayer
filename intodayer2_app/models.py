@@ -3,8 +3,12 @@ from django.db import models
 # from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser
 from datetime import *
+from PIL import Image
+from datetime import *
 from django.utils import timezone
-from intodayer2 import settings
+
+
+_MAX_SIZE = 300
 
 
 class DaysOfWeek(models.Model):
@@ -271,7 +275,8 @@ class CustomUser(AbstractUser):
             :returns: str -- the image url
         """
         if self.avatar and hasattr(self.avatar, 'url'):
-            if os.path.exists(self.avatar.path):
+            exists = os.path.exists(self.avatar.path)
+            if exists:
                 return self.avatar.url
             else:
                 return '/static/images/user_avatar_default.png'

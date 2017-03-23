@@ -2,9 +2,9 @@
  * Created by Борисов on 14.03.2017.
  */
 
-$(document).ready( function() {
+$(document).ready(function () {
     if (location.href.indexOf('invitation') < 0) {
-    show_invitations();
+        show_invitations();
     } else {
         var confpos = $('.confirmation').offset().top;
     }
@@ -105,7 +105,7 @@ function getFileName() {
     var fileName = document.getElementById('id_image_file').files[0].name;
     var dots = '';
 
-    if (fileName.length > 30){
+    if (fileName.length > 30) {
         dots = '...';
     }
 
@@ -116,43 +116,65 @@ function getFileName() {
 }
 
 
-function sendFile(element, address, update_avatar) {
+function getFileSize(inputFileId) {
+    /*
+     *  Функция возвращает размер файла в байтах
+     *  inputFile: id элемента input
+     */
+    var fileInput = $(inputFileId)[0];
+
+    return fileInput.files[0].size;
+}
+
+function sendFile(form, address, update_avatar) {
     /*
      *  Функция посылает на сервер выбранную пользователем аватарку.
-     *  Также не дает пользователю загружать НЕ изображения.
-     *  element: id формы, с коротой приосходит отправка
+     *  Перед отправкой приозводит валидацию на тип и размер файла.
+     *  form: id формы, с коротой приосходит отправка
      *  address: /upload_user_avatar или /upload_plan_avatar
      *  update_avatar: элемент, в котором нужно обновить background-image
      */
     var allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
     var currentType = document.getElementById('id_image_file').files[0].type;
+    var maxFileSize = 2 * 1024 * 1024; // кол-во байт
 
+    // проверяем, что файл - изображение
     if (allowedTypes.indexOf(currentType) != -1) {
-        var data = new FormData;
-        var get_ava_data = {plan_id: $(update_avatar).find('p').text()};
+        // проверяем, что размер файла <= 2 Мб
+        if (getFileSize('#id_image_file') <= maxFileSize) {
+            var data = new FormData;
+            var get_ava_data = {plan_id: $(update_avatar).find('p').text()};
 
-        data.append('avatar', $(element).prop('files')[0]);
+            data.append('avatar', $(form).prop('files')[0]);
 
-        $.ajax({
-            url: address,
-            data: data,
-            type: 'POST',
-            processData: false,
-            contentType: false,
-            success: function (msg) {
-                $.getJSON('/get_avatar', get_ava_data, function (msg) {
-                    $(update_avatar).css({'background-image': 'url(' + msg.url + ')'})
-                });
-                $('.close').trigger('click');
-            }
-        });
+            $.ajax({
+                url: address,
+                data: data,
+                type: 'POST',
+                processData: false,
+                contentType: false,
+                success: function (msg) {
+                    $.getJSON('/get_avatar', get_ava_data, function (msg) {
+                        $(update_avatar).css({'background-image': 'url(' + msg.url + ')'})
+                    });
+                    $('.close').trigger('click');
+                    $('#send_avatar_form')[0].reset();
+                }
+            });
+        } else {
+            $('.file_upload').css({'display': 'block'});
+            $('.send_button').css({'display': 'none'});
+            $('.choose_avatar_footer').css({'color': '#FF6068'});
+            $('.choose_avatar_footer').text('Разрешено загружать файлы размером не больше 2 Мб!');
+            $('#send_avatar_form')[0].reset();
+        }
     } else {
         $('.file_upload').css({'display': 'block'});
         $('.send_button').css({'display': 'none'});
         $('.choose_avatar_footer').css({'color': '#FF6068'});
-        $('.choose_avatar_footer').text('Выбирите изображение!');
+        $('.choose_avatar_footer').text('Изображение можно загрузить в формате jpg, png или gif.');
+        $('#send_avatar_form')[0].reset();
     }
-
 }
 
 function blurElement(element, size) {
