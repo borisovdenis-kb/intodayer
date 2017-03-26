@@ -60,7 +60,6 @@
 
                         {% for row in plan_rows %}
                             {% if row.day_of_week.id == day.id %}
-                                <div class="str_fade">
                                     <div class="str_plan change" id="{{ row.id }}">
                                         <ul>
                                             <li><a class="weeks">{{ row.start_week }}-{{ row.end_week }}</a></li>
@@ -70,7 +69,6 @@
                                             <li class="last"><a class="place">{{ row.place.name }}</a></li>
                                         </ul>
                                     </div>
-                                </div>
                             {% endif %}
                         {% endfor %}
                         {% if is_invitation != True %}

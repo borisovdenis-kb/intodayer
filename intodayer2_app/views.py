@@ -19,12 +19,38 @@ import json
 from django.db.utils import IntegrityError
 import datetime
 
+CREATE = 'CREATE'
+UPDATE = 'UPDATE'
+
+
 ###################################################################################
 #                          ОБРАБОТКА AJAX ЗАПРОСОВ                                #
 ###################################################################################
 
 
-def plan_update_delete(request):
+def add_plan_row_ajax(request):
+    if request.is_ajax():
+        user = CustomUser.objects.get(username=request.user.username)
+        # выбираем текущее расписание юзера
+        plan_list = UserPlans.objects.select_related().get(user_id=user.id, current_yn='y')
+        data = request.POST
+        this_plan = plan_list.plan
+
+        if 'id' in data:
+            this_id = data['id']
+            if not this_id or this_id == 0 or 'add' in data:
+                return HttpResponse(
+                    {'message': "Успешно добавлено!", 'id': edit_plan_row(data, this_plan, this_id, CREATE)})
+            else:
+                return HttpResponse(
+                    {'message': "Успешно обновлено!", 'id': edit_plan_row(data, this_plan, this_id, UPDATE)})
+        else:
+            return HttpResponseBadRequest()
+    else:
+        return HttpResponseBadRequest()
+
+
+def plan_delete_ajax(request):
     if request.is_ajax():
         user = CustomUser.objects.get(username=request.user.username)
         plan_list = UserPlans.objects.select_related().get(user_id=user.id, current_yn='y')
@@ -39,56 +65,114 @@ def plan_update_delete(request):
         return HttpResponseBadRequest()
 
 
-def plan_update_clone(request):
+def plan_clone_ajax(request):
     if request.is_ajax():
         user = CustomUser.objects.get(username=request.user.username)
         # выбираем текущее расписание юзера
         plan_list = UserPlans.objects.select_related().get(user_id=user.id, current_yn='y')
         data = request.POST
-
         this_plan = plan_list.plan
-        day_of_week, place, parity, teacher, this_time, start_week, end_week, subject = \
-            None, None, None, None, None, None, None, None
+
+        if 'id' in data:
+            this_plan_row = PlanRows.objects.select_related().get(plan_id=this_plan.id, id=data['id'])
+            # просто дублируем запись в БД
+            this_plan_row.pk = None
+            this_plan_row.save()
+
+            return HttpResponse("Успешно продублировано!")
+
+        else:
+            HttpResponseBadRequest()
+
+    else:
+        return HttpResponseBadRequest()
+
+
+#
+
+# создаёт или обновляет строку расписания. Берёт данные из data
+# для того, чтобы строка сохранилась в базе, data должны быть переданы полностю для всех полей plan_row
+# если создаём новую запись, то фукнция возвращает id нового plan_row
+def edit_plan_row(data, this_plan, this_id, mode):
+    day_of_week, place, parity, teacher, this_time, start_week, end_week, subject = \
+        None, None, None, None, None, None, None, None
+
+    try:
+        # есть ли уже такой предмет в расписании
+        if 'subject' in data:
+            subjects_objects = Subjects.objects.select_related().filter(plan_id=this_plan, name=data['subject'])
+            if subjects_objects.count() == 0:
+                subject = Subjects(name=data['subject'], plan=this_plan)
+                subject.save()
+            else:
+                subject = subjects_objects[0]
+
+        # есть ли уже такой учитель в расписании
+        if 'teacher' in data:
+            teachers_objects = Teachers.objects.select_related().filter(plan_id=this_plan,
+                                                                        name_short=data['teacher'])
+            if teachers_objects.count() == 0:
+                teacher = Teachers(name_short=data['teacher'], plan=this_plan)
+                teacher.save()
+            else:
+                teacher = teachers_objects[0]
+
+        # есть ли уже такое время в расписании
+        if 'time' in data:
+            dt = datetime.datetime.strptime(data['time'], "%H:%M")
+            times_objects = Times.objects.select_related().filter(plan_id=this_plan, hh24mm=dt)
+            if times_objects.count() == 0:
+                this_time = Times(hh24mm=dt, plan=this_plan)
+                this_time.save()
+            else:
+                this_time = times_objects[0]
+
+        # есть ли уже такое место в расписании
+        if 'place' in data:
+            places_objects = Places.objects.select_related().filter(plan_id=this_plan, name=data['place'])
+            if places_objects.count() == 0:
+                place = Places(name=data['place'], plan=this_plan)
+                place.save()
+            else:
+                place = places_objects[0]
 
         if 'day_of_week' in data:
             day_of_week = DaysOfWeek.objects.get(id=data['day_of_week'])
-
-        if 'place' in data:
-            place = Places(name=data['place'], plan=this_plan)
-            place.save()
-
         if 'parity' in data:
             parity = data['parity']
-
-        if 'teacher' in data:
-            teacher = Teachers(name_short=data['teacher'], plan=this_plan)
-            teacher.save()
-        if 'time' in data:
-            dt = datetime.datetime.strptime(data['time'], "%H:%M")
-            this_time = Times(hh24mm=dt, plan=this_plan)
-            this_time.save()
-
         if 'start_week' in data:
             start_week = data['start_week']
-
         if 'end_week' in data:
             end_week = data['end_week']
 
-        if 'subject' in data:
-            subject = Subjects(name=data['subject'], plan=this_plan)
-            subject.save()
+        if mode == UPDATE:
+            PlanRows.objects.select_related().filter(plan_id=this_plan.id, id=this_id).update(start_week=start_week,
+                                                                                              end_week=end_week,
+                                                                                              parity=parity,
+                                                                                              day_of_week=day_of_week,
+                                                                                              subject=subject,
+                                                                                              teacher=teacher,
+                                                                                              time=this_time,
+                                                                                              place=place)
 
-        # пока некоторые поля по умолчанию для теста
-        try:
-            new_row = PlanRows(plan=this_plan, place=place, parity=parity,
-                               teacher=teacher, time=this_time, start_week=start_week, end_week=end_week,
-                               subject=subject, day_of_week=day_of_week,
-                               comment="Пусто")
-            new_row.save()
-            return HttpResponse('Успешно продублировано!')
-        except IntegrityError:
-            return HttpResponseBadRequest()
-    else:
+            return this_id
+
+        if mode == CREATE:
+
+            new_plan_row = PlanRows(start_week=start_week,
+                                    end_week=end_week,
+                                    parity=parity,
+                                    day_of_week=day_of_week,
+                                    subject=subject,
+                                    teacher=teacher,
+                                    time=this_time,
+                                    place=place,
+                                    plan=this_plan)
+            new_plan_row.save()
+            # возвращаем новое id, чтобы записать его в html
+            return new_plan_row.id
+
+    except IntegrityError:
         return HttpResponseBadRequest()
 
 
@@ -426,4 +510,3 @@ def plan_view(request, plan_id=0):
 
 def sort_by_start_date(row):
     return row.start_week
-
