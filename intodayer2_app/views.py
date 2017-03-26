@@ -191,34 +191,23 @@ def save_plan_avatar_ajax(request, plan_id):
         :return:
     """
     if request.is_ajax():
-        # form = SetAvatarForm(request.POST, request.FILES)
-        response = HttpResponse()
-        response['Content-Type'] = 'text/javascript'
-
         user = CustomUser.objects.get(username=request.user.username)
         plan = PlanLists.objects.get(id=plan_id, owner=user.id)
 
+        response = HttpResponse()
+        response['Content-Type'] = 'text/javascript'
+
         if plan:
             # если пользователь имеет права редактирования
+            # удаляем предыдущую аватарку
+            plan.avatar.delete()
+            # сохраняем новую
             plan.avatar = request.FILES['avatar']
             plan.save()
 
             response.write(json.dumps([{'success': 1}]))
         else:
             response.write(json.dumps([{'success': 0}]))
-
-        # if form.is_valid():
-        #
-        #     print('paodfkjlsjfds')
-        #     if plan_list:
-        #         plan = plan_list[0]
-        #         plan.avatar = request.FILES['image_file']
-        #         plan.save()
-        #
-        #         response.write(json.dumps([{'success': 1}]))
-        # else:
-        #     print('f')
-        #     response.write(json.dumps([{'success': 0}]))
 
         return response
 
