@@ -1,9 +1,20 @@
 from intodayer2_app.models import *
+from intodayer2_app.extra.utils import *
+from socket import *
 import json
 import os
 
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "intodayer2.settings")
+class SocketSend:
+    def __init__(self, data):
+        """
+        data: данные для рассылки в формате JSON
+        - имя отправителя
+        - список получателей
+        - от какого расписания идет рассылка
+        :param data:
+        """
+        self.data = data
 
 
 class MailingParamJson:
@@ -42,10 +53,28 @@ class MailingParamJson:
     def set_msg_text(self):
         self.message['text'] = self.msg_text
 
+    def set_plan_info(self):
+        """
+            Собирает информацию об расписания, от которого идет рассылка.
+            :return:
+        """
+        count = UserPlans.objects.select_related().filter(plan_id=self.plan_id).count()
+        plan = PlanLists.objects.get(id=self.plan_id)
+
+        self.message['plan_info'] = [plan.title, plan.description]
+        self.message['plan_info'] += [members_amount_suffix(count)]
+
     def get_mailing_param(self):
+        """
+        Функция собирает все данные вместе.
+        Все записывается в словарь message.
+        Затем возвращает объект в формате JSON.
+        :return: JSON string
+        """
         self.set_sender_name()
         self.set_recipients()
         self.set_msg_text()
+        self.set_plan_info()
 
         return json.dumps(self.message)
 
