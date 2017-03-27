@@ -36,6 +36,8 @@ var NEW_STR_PLAN_HTML = '' +
     '</div>';
 
 var timer_id;
+var thisInput;
+var timerInputId;
 
 function set_new_listeners($new_div) {
     // ###########################################################################################
@@ -96,7 +98,24 @@ function set_new_listeners($new_div) {
     $new_div.find('ul li input').on('focusout', function () {
         set_edited_field($(this));
     });
-    $new_div.find('ul li input').on('keypress', function (e) {
+
+    // var interavlId;
+    //
+    // $new_div.find('ul li input').on('focus', function(e) {
+    //     interavlId = setInterval(validateField($(this), e), 20);
+    // });
+    //
+    // $new_div.find('ul li input').on('blur', function() {
+    //     clearInterval(interavlId);
+    // });
+    $new_div.find('ul li input').on('input', function () {
+        thisInput = $(this);
+        timerInputId = setTimeout(function(){
+            validateField(thisInput);
+        }, 20);
+    });
+
+    $new_div.find('ul li input').keyup(function (e) {
         if (e.which == 13) {
             set_next_field($(this), e);
         }
@@ -513,7 +532,7 @@ function callback_clone(data, $this_str) {
                 $this_str.removeClass('animation');
             });
         }
-        else{
+        else {
             $this_str.removeClass('animation');
             $new_div.removeClass('animation');
         }
@@ -525,7 +544,7 @@ function callback_clone(data, $this_str) {
     $new_div.find('.subject').attr('value', data['subject']);
     $new_div.find('.teacher').attr('value', data['teacher']);
     $new_div.find('.place').attr('value', data['place']);
-    
+
     $new_div.attr('id', 0);
 
     // преобразовываем поля input в a для всех новых полей
@@ -615,8 +634,6 @@ function add_plan_str_ajax($selected_str) {
             });
         }
     }, 200);
-
-
 }
 
 // простая проверка, что поля строки не пустые
@@ -695,3 +712,89 @@ function set_true_placeholder($this_field) {
 }
 
 // доделать функцию при нажатии на кнопку
+
+function delExtraSymbols(field, n) {
+    /*
+     *  Функция укорачивает содержимое поля input
+     *  то длины n
+     */
+    while (field.val().length > n){
+        field.val(field.val().slice(0, -1));
+    }
+}
+
+function validateField(field) {
+    /*
+     *  Функция в зависимости от предназначения поля
+     *  будет осуществлять валидацию каждого введенного символа
+     */
+    var timePatt1 = /^(([0,1])|(2))$/;
+    var timePatt2 = /^(([0,1][0-9])|(2[0-3]))$/;
+    var timePatt3 = /^(([0,1][0-9])|(2[0-3])):$/;
+    var timePatt4 = /^(([0,1][0-9])|(2[0-3])):[0-5]$/;
+    var timePatt5 = /^(([0,1][0-9])|(2[0-3])):[0-5][0-9]$/;
+    var weekPatt1 = /^([1-9])$/;
+    var weekPatt2 = /^([1-9]-)|([1-4][0-9])|([5][0-6])$/;
+    var weekPatt3 = /^([1-9]-[1-9])|([1-4][0-9]-)|([5][0-6]-)$/;
+    var weekPatt4 = /^([1-9]-[1-4][0-9])|([1-4][0-9]-[1-9])|([5][0-6]-[1-9])|([1-9]-[5][0-6])$/;
+    var weekPatt5 = /^([1-4][0-9]-[1-4][0-9])|([5][0-6]-[1-4][0-9])|([1-4][0-9]-[5][0-6])|([5][0-6]-[5][0-6])$/;
+    var subjectPatt = /^[a-zA-Zа-яА-Я0-9 -]*$/;
+    var content = field.val();
+    var length = content.length;
+
+    if (field.hasClass('time')) {
+        if (length == 1) {
+            if (content.search(timePatt1) == -1) {
+                delExtraSymbols(field, 0);
+            }
+        } else if (length == 2) {
+            if (content.search(timePatt2) == -1) {
+                delExtraSymbols(field, 1);
+            }
+        } else if (length == 3) {
+            if (content.search(timePatt3) == -1) {
+                delExtraSymbols(field, 2);
+            }
+        } else if (length == 4) {
+            if (content.search(timePatt4) == -1) {
+                delExtraSymbols(field, 3);
+            }
+        } else if (length == 5) {
+            if (content.search(timePatt5) == -1) {
+                delExtraSymbols(field, 4);
+            }
+        } else if (length > 5) {
+            delExtraSymbols(field, 5);
+        }
+    }
+    if (field.hasClass('weeks')) {
+        if (length == 1) {
+            if (content.search(weekPatt1) == -1) {
+                delExtraSymbols(field, 0);
+            }
+        } else if (length == 2) {
+            if (content.search(weekPatt2) == -1) {
+                delExtraSymbols(field, 1);
+            }
+        } else if (length == 3) {
+            if (content.search(weekPatt3) == -1) {
+                delExtraSymbols(field, 2);
+            }
+        } else if (length == 4) {
+            if (content.search(weekPatt4) == -1) {
+                delExtraSymbols(field, 3);
+            }
+        } else if (length == 5) {
+            if (content.search(weekPatt5) == -1) {
+                delExtraSymbols(field, 4);
+            }
+        } else if (length > 5) {
+            delExtraSymbols(field, 5);
+        }
+    }
+    if (field.hasClass('subject')){
+        if (content.search(subjectPatt) == -1) {
+            delExtraSymbols(field, length-1);
+        }
+    }
+}
