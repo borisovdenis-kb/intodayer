@@ -263,6 +263,8 @@ class CustomUser(AbstractUser):
     avatar = models.ImageField(upload_to='users_avatars/', blank=True, max_length=1000)
     # телефон хранится в формате +7*********
     phone = models.CharField(max_length=12, blank=True)
+    # id чата с ботом в телеграме
+    chat_id = models.CharField(max_length=15, blank=True)
 
     class Meta:
         managed = True
@@ -287,6 +289,7 @@ class CustomUser(AbstractUser):
         """
             Returns user's first name and last name if exist.
             Else return username.
+            To construct name use ' '.join()
             :return: str -- username (first_name + last_name or username)
         """
         if self.first_name and self.last_name:

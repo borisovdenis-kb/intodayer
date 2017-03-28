@@ -1,23 +1,17 @@
-import random
+import datetime
+import json
 
-from  django.core.exceptions import ObjectDoesNotExist
+from django.contrib import auth
 from django.contrib.auth.models import *
-from django.shortcuts import render_to_response
+from django.db.utils import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.http import HttpResponseBadRequest
-from django.http import HttpResponseNotAllowed
-from django.contrib import auth
-from django.contrib.auth.forms import UserCreationForm
+from django.shortcuts import render_to_response
+
+from intodayer2_app.extra.utils import *
 from intodayer2_app.forms import *
 from intodayer2_app.send_sms import *
-from intodayer2_app.models import *
-from datetime import *
-from django.utils import timezone
-from intodayer2_app.utils import *
-from intodayer2_app.api import *
-import json
-from django.db.utils import IntegrityError
-import datetime
+
 
 ###################################################################################
 #                          ОБРАБОТКА AJAX ЗАПРОСОВ                                #
