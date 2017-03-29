@@ -1,14 +1,13 @@
 import datetime
 import json
 
-from django.contrib import auth
 from django.contrib.auth.models import *
 from django.db.utils import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.http import HttpResponseBadRequest
 from django.shortcuts import render_to_response
 
-from intodayer2_app.extra.utils import *
+from extra.utils import *
 from intodayer2_app.forms import *
 from intodayer2_app.send_sms import *
 

@@ -1,20 +1,6 @@
-from intodayer2_app.models import *
-from intodayer2_app.extra.utils import *
-from socket import *
 import json
-import os
-
-
-class SocketSend:
-    def __init__(self, data):
-        """
-        data: данные для рассылки в формате JSON
-        - имя отправителя
-        - список получателей
-        - от какого расписания идет рассылка
-        :param data:
-        """
-        self.data = data
+from extra.utils import *
+from extra.socket_client import *
 
 
 class MailingParamJson:
@@ -46,9 +32,15 @@ class MailingParamJson:
             Собирает телеграмовские chat_id получателей
             :return:
         """
+        self.message['recipients'] = []
         recp_list = list(UserPlans.objects.select_related().filter(plan_id=self.plan_id))
-        recp_list = [x.user.chat_id for x in recp_list if x.user.chat_id]
-        self.message['recipients'] = recp_list
+
+        for user in recp_list:
+            if user.user.chat_id:
+                self.message['recipients'].append({
+                    'chat_id': user.user.chat_id,
+                    'name': ' '.join(user.user.get_name())
+                })
 
     def set_msg_text(self):
         self.message['text'] = self.msg_text
@@ -61,24 +53,26 @@ class MailingParamJson:
         count = UserPlans.objects.select_related().filter(plan_id=self.plan_id).count()
         plan = PlanLists.objects.get(id=self.plan_id)
 
-        self.message['plan_info'] = [plan.title, plan.description]
-        self.message['plan_info'] += [members_amount_suffix(count)]
+        self.message['plan_info'] = {'title': plan.title, 'desc': plan.description}
+        self.message['plan_info'].update({'mem_count': members_amount_suffix(count)})
 
     def get_mailing_param(self):
         """
-        Функция собирает все данные вместе.
-        Все записывается в словарь message.
-        Затем возвращает объект в формате JSON.
-        :return: JSON string
+            Функция собирает все данные вместе.
+            Все записывается в словарь message.
+            Затем возвращает объект в формате JSON.
+            :return: JSON string
         """
         self.set_sender_name()
         self.set_recipients()
         self.set_msg_text()
         self.set_plan_info()
 
-        return json.dumps(self.message)
+        return json.dumps(self.message, ensure_ascii=False, indent=2)
 
 
 if __name__ == '__main__':
     tst = MailingParamJson(2, 2, 'Всем привет как дела ребята хы хы хы епты крым наш')
     print(tst.get_mailing_param())
+
+    send_json(tst)
