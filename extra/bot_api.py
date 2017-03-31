@@ -1,6 +1,6 @@
 import json
 from extra.utils import *
-from extra.socket_client import *
+from intodayer_bot.bot import do_mailing
 
 
 class MailingParamJson:
@@ -75,4 +75,4 @@ if __name__ == '__main__':
     tst = MailingParamJson(2, 2, 'Всем привет как дела ребята хы хы хы епты крым наш')
     print(tst.get_mailing_param())
 
-    send_json(tst)
+    do_mailing(tst.get_mailing_param())

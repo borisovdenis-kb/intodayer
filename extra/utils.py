@@ -117,18 +117,8 @@ def get_rows_by_weekday(rows):
         :param rows: строки рассписания, заранее выбранный из таблицы
         :return: days
     """
-    # rows = PlanRows.objects.select_related().filter(plan_id=plan_id).order_by('time')
-
-    # days = {
-    #     'monday': [],
-    #     'tuesday': [],
-    #     'wednesday': [],
-    #     'thursday': [],
-    #     'friday': [],
-    #     'saturday': [],
-    #     'sunday': [],
-    # }
     days = [[i] for i in range(7)]
+
     for row in rows:
         if row.day_of_week.name == 'Понедельник':
             days[0].append(row)
