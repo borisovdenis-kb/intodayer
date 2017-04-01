@@ -146,14 +146,16 @@ def edit_plan_row(data, this_plan, this_id, mode):
             end_week = data['end_week']
 
         if mode == UPDATE:
-            PlanRows.objects.select_related().filter(plan_id=this_plan.id, id=this_id).update(start_week=start_week,
-                                                                                              end_week=end_week,
-                                                                                              parity=parity,
-                                                                                              day_of_week=day_of_week,
-                                                                                              subject=subject,
-                                                                                              teacher=teacher,
-                                                                                              time=this_time,
-                                                                                              place=place)
+            PlanRows.objects.select_related().filter(plan_id=this_plan.id, id=this_id).update(
+                start_week=start_week,
+                end_week=end_week,
+                parity=parity,
+                day_of_week=day_of_week,
+                subject=subject,
+                teacher=teacher,
+                time=this_time,
+                place=place
+            )
 
             return this_id
 
