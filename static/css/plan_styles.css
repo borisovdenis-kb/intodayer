@@ -25,6 +25,8 @@ body {
 .str_plan ul li a, .str_plan ul li input{
     min-height: 15px;
     padding-bottom: 0px;
+    /* Это чтобы избежать мерцания, но тогда не красиво получается... =( */
+    text-align: left;
 }
 
 .str_plan:nth-child(2) {
@@ -60,6 +62,7 @@ body {
 
 /*анимируем этот параметр*/
 .str_plus{
+
     margin-top: 10px;
 }
 
