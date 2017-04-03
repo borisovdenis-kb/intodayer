@@ -55,7 +55,7 @@ body {
     transition: 0.3s;
 }
 
-.ava_cover:hover{
+.ava_cover:hover {
     opacity: 0.8;
 }
 
@@ -75,7 +75,7 @@ body {
     margin-left: 37px;
 }
 
-.ava_content, .ava_cover, .ava_cover_text, :hover{
+.ava_content, .ava_cover, .ava_cover_text, :hover {
     cursor: default;
 }
 
@@ -83,7 +83,6 @@ body {
     cursor: pointer;
     color: #8b1deb;
 }
-
 
 .plan_selector, .users_online {
     width: 170px;
@@ -233,9 +232,6 @@ label {
     padding: 15px 10px 1px 10px;
 }
 
-.str_plan:first-child {
-}
-
 .str_plan:nth-child(2) {
     margin: 10px 0 0 0;
 }
@@ -247,13 +243,7 @@ label {
     margin-top: 3px;
     width: 100%;
     border-radius: 4px;
-    border: 2px solid rgba(3, 96, 255, 0.0);
     background: white;
-}
-
-
-.str_title {
-    /*border: 2px solid rgba(3, 96, 255, 1);*/
 }
 
 .str_plan, .plan_selector:hover {
@@ -262,30 +252,24 @@ label {
 
 .str_plan ul {
     display: flex;
-    /*align-items: center;*/
     text-align: center;
+    border: 2px solid rgba(3, 96, 255, 0.0);
+    border-radius: 4px;
     width: 100%;
+    background-color: rgba(255,255,255,0);
 }
 
 .str_plan ul li:first-child {
     width: 20%;
-    padding-right: 0px;
-    padding-left: 0px;
-
+    padding-left: 0;
 }
 
 .str_plan ul li:last-child {
     width: 20%;
+    padding-right: 0;
     border-right: none;
-    padding-right: 0px;
-    padding-left: 0px;
-    padding-left: 0px;
 }
 
-.str_plan ul li a:first-child {
-    padding-left: 7px;
-
-}
 
 .str_plan ul li {
     display: flex;
@@ -355,22 +339,22 @@ label {
 
 ::-webkit-input-placeholder {
     text-align: center;
-    padding-left: 10px;
+    padding-left: 3px;
 }
 
 :-moz-placeholder { /* Firefox 18- */
     text-align: center;
-    padding-left: 10px;
+    padding-left: 3px;
 }
 
 ::-moz-placeholder { /* Firefox 19+ */
     text-align: center;
-    padding-left: 10px;
+    padding-left: 3px;
 }
 
 :-ms-input-placeholder {
     text-align: center;
-    padding-left: 10px;
+    padding-left: 3px;
 }
 
 .str_title:first-child li {
@@ -383,12 +367,8 @@ label {
 
 .str_title {
     background: rgba(103, 198, 97, 0.9);
-}
-
-.str_title {
     border-radius: 4px;
 }
-
 
 .separator {
     width: 200px;

@@ -233,10 +233,12 @@ button:focus {
 
 .choose_avatar_wrap {
     display: none;
-    position: absolute;
+    position: fixed;
+    top: 0;
     width: 500px;
+    margin-left: calc(50% - 250px);
     /*height: 230px;*/
-    margin-left: 520px;
+    /*margin-left: 520px;*/
     margin-top: 170px;
     /*background-color: #3E403D;*/
     z-index: 10201;

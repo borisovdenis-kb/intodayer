@@ -147,7 +147,7 @@ class PlanRows(models.Model):
         Таблица, в которой будет храниться основная информация
         необходимая для рассписания
     """
-    parity = models.BooleanField()
+    parity = models.IntegerField(models.DO_NOTHING)
     day_of_week = models.ForeignKey(DaysOfWeek, models.DO_NOTHING)
     time = models.ForeignKey(Times, models.DO_NOTHING)
     subject = models.ForeignKey(Subjects, models.DO_NOTHING)
