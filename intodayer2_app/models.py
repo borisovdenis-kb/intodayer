@@ -1,6 +1,5 @@
 import os
 from django.db import models
-# from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser
 from datetime import *
 from PIL import Image
@@ -33,7 +32,7 @@ class Places(models.Model):
         предлагать пользователю введенное до этого расположение аудитории.
     """
     name = models.CharField(max_length=100)
-    plan = models.ForeignKey('PlanLists', models.DO_NOTHING)
+    plan = models.ForeignKey('PlanLists', models.DO_NOTHING, blank=True)
 
     class Meta:
         managed = True
@@ -54,7 +53,7 @@ class Subjects(models.Model):
         предлагать пользователю введенное до этого название предмета.
     """
     name = models.CharField(max_length=100, blank=True, null=True)
-    plan = models.ForeignKey('PlanLists', models.DO_NOTHING)
+    plan = models.ForeignKey('PlanLists', models.DO_NOTHING, blank=True)
 
     class Meta:
         managed = True
@@ -73,7 +72,7 @@ class Teachers(models.Model):
     """
     name_short = models.CharField(max_length=255, blank=True, null=True)
     name_full = models.CharField(max_length=255, blank=True, null=True)
-    plan = models.ForeignKey('PlanLists', models.DO_NOTHING)
+    plan = models.ForeignKey('PlanLists', models.DO_NOTHING, blank=True)
 
     class Meta:
         managed = True
@@ -91,7 +90,7 @@ class Times(models.Model):
         предлагать пользователю введенное до этого время.
     """
     hh24mm = models.TimeField()
-    plan = models.ForeignKey('PlanLists', models.DO_NOTHING)
+    plan = models.ForeignKey('PlanLists', models.DO_NOTHING, blank=True)
 
     class Meta:
         managed = True
