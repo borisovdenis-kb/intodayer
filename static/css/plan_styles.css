@@ -160,7 +160,9 @@ body {
     /*background: rgb(237, 218, 255);*/
 }
 
-.tools_panel.right ul {
+.tools_panel.right {
+    display: flex;
+    float: left;
     justify-content: flex-end;
 }
 
@@ -168,7 +170,7 @@ body {
     padding-right: 10px;
 }
 
-.tools_panel.right ul li:last-child {
+.tools_panel.right:last-child {
     padding-right: 0;
     margin-right: 5px;
 }
@@ -200,6 +202,46 @@ body {
     border-radius: 3px;
     /*transition: none;*/
 }
+
+.share_button {
+    margin-right: 65px;
+    margin-bottom: 30px;
+}
+
+.share_button .first_layer {
+    position: absolute;
+    width: 60px;
+    height: 25px;
+    padding-top: 4px;
+    margin: 0 2px 0 2px;
+    background-color: #9dc8eb;
+    color: rgba(0, 0, 0, 0.2);
+    text-align: center;
+    font-weight: 700;
+    text-decoration: none;
+    border-radius: 3px;
+    transition: 0.2s linear;
+    user-select: none;
+}
+.share_button .second_layer {
+    position: absolute;
+    width: 60px;
+    height: 29px;
+    margin: 3px 2px 0 2px;
+    background-color: #7598ba;
+    color: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
+
+.share_button  .first_layer:hover{
+    cursor: pointer;
+}
+
+.share_button .first_layer:active{
+    margin-top: 2px;
+}
+
+
 
 /*.tools_panel ul li button:hover {*/
     /*background: none;*/

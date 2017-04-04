@@ -5,10 +5,14 @@
     <link rel="stylesheet" type="text/css" href={% static "css/plan_styles.css" %}>
 {% endblock %}
 
+{% block scripts_top %}
+    <script type="text/javascript" src={% static "library/html2canvas.js" %} ></script>
+{% endblock %}
 
 {% block scripts_bottom %}
     {#    <script type="text/javascript" src={% static "scripts/script_plan.js" %}></script>#}
     <script type="text/javascript" src={% static "scripts/script_plan_NEW.js" %}></script>
+    <script type="text/javascript" src={% static "scripts/script_mailing.js" %}></script>
 {% endblock %}
 
 {% block invitation %}
@@ -63,11 +67,10 @@
                             <div class="day_title">{{ day.name }}</div>
                         </div>
                         <div class="tools_panel right">
-                            <ul>
-                                <li>
-                                    <button>Share</button>
-                                </li>
-                            </ul>
+                            <div class=share_button>
+                                <div class="second_layer"></div>
+                                <div class="first_layer">Share</div>
+                            </div>
                         </div>
                     </div>
                     <div class="day_plan_content">
