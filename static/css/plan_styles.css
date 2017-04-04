@@ -201,10 +201,11 @@ body {
     /*transition: none;*/
 }
 
-/*.tools_panel ul li button:hover { background: rgb(53, 167, 110); }*/
+/*.tools_panel ul li button:hover {*/
+    /*background: none;*/
+/*}*/
 /*.tools_panel ul li button:active {*/
-    /*background: rgb(33, 147, 90);*/
-    /*box-shadow: none;*/
+    /*background: none;*/
 /*}*/
 
 

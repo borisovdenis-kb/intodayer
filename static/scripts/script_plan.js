@@ -299,7 +299,7 @@ function add_plan_str_ajax($selected_str) {
         if (validate_fields_has_changed($selected_str) && (validate_fields_not_empty($selected_str))) {
             // получаем данные всех полей из текущей строки
             // alert("SDf");
-            var data = GetFieldsInformation($selected_str);
+            var data = getFieldsInformation($selected_str);
             data['mode'] = 'add';
             $.ajax({
                 url: '/plan/add_plan_row',
