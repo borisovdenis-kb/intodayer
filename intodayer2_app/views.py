@@ -1,8 +1,11 @@
-import datetime
+from datetime import datetime as datetime_lib
 import json
+import requests
+from django.http import JsonResponse
 
 from django.contrib.auth.models import *
 from django.db.utils import IntegrityError
+
 from django.http import HttpResponse, HttpResponseRedirect
 from django.http import HttpResponseBadRequest
 from django.shortcuts import render_to_response
@@ -11,6 +14,7 @@ from extra.utils import *
 from intodayer2_app.forms import *
 from intodayer2_app.send_sms import *
 
+import extra.utils as utils
 
 CREATE = 'CREATE'
 UPDATE = 'UPDATE'
@@ -21,7 +25,7 @@ UPDATE = 'UPDATE'
 ###################################################################################
 
 
-def add_plan_row_ajax(request):
+def edit_plan_row_ajax(request):
     if request.is_ajax():
         user = CustomUser.objects.get(username=request.user.username)
         # выбираем текущее расписание юзера
@@ -31,12 +35,36 @@ def add_plan_row_ajax(request):
 
         if 'id' in data:
             this_id = data['id']
-            if not this_id or this_id == 0 or 'add' in data:
-                return HttpResponse(
-                    {'message': "Успешно добавлено!", 'id': edit_plan_row(data, this_plan, this_id, CREATE)})
+            response = HttpResponse()
+            response['Content-Type'] = 'text/javascript'
+
+            # если мы обновляем уже созданную строку то
+            if this_id != '0':
+                try:
+                    this_id = edit_plan_row(data, this_plan, this_id, UPDATE)
+                except ValueError:
+                    response = HttpResponse()
+                    response['Content-Type'] = 'text/javascript'
+                    response.write(json.dumps({"error": "error", 'id': this_id}))
+                    return response
+
+                response.write(
+                    json.dumps({'message': "Успешно обновлено!", 'id': this_id}))
+                return response
+
+            # если мы создаём совсем новую строку то
             else:
-                return HttpResponse(
-                    {'message': "Успешно обновлено!", 'id': edit_plan_row(data, this_plan, this_id, UPDATE)})
+                try:
+                    this_id = edit_plan_row(data, this_plan, this_id, CREATE)
+                except (IntegrityError, ValueError):
+                    response = HttpResponse()
+                    response['Content-Type'] = 'text/javascript'
+                    response.write(json.dumps({"error": "error", 'id':this_id}))
+                    return response
+
+                response.write(
+                    json.dumps({'message': "Успешно добавлено!", 'id': this_id}))
+                return response
         else:
             return HttpResponseBadRequest()
     else:
@@ -48,12 +76,15 @@ def plan_delete_ajax(request):
         user = CustomUser.objects.get(username=request.user.username)
         plan_list = UserPlans.objects.select_related().get(user_id=user.id, current_yn='y')
         data = request.POST
-        if 'delete_id_planRow' in data:
-            delete_id = data['delete_id_planRow']
+        print(data)
+        if 'id' in data:
+            delete_id = data['id']
             # выбираем все строчки расписания именно данного пользователя
-            user_plan_rows = PlanRows.objects.select_related().filter(plan_id=plan_list.id)
+            user_plan_rows = PlanRows.objects.filter(plan_id=plan_list.id)
             user_plan_rows.get(id=delete_id).delete()
-        return HttpResponse('Успешно удалено!')
+            return HttpResponse('Успешно удалено!')
+        else:
+            return HttpResponseBadRequest()
     else:
         return HttpResponseBadRequest()
 
@@ -67,12 +98,16 @@ def plan_clone_ajax(request):
         this_plan = plan_list.plan
 
         if 'id' in data:
-            this_plan_row = PlanRows.objects.select_related().get(plan_id=this_plan.id, id=data['id'])
+            this_plan_row = PlanRows.objects.get(plan_id=this_plan.id, id=data['id'])
             # просто дублируем запись в БД
             this_plan_row.pk = None
             this_plan_row.save()
 
-            return HttpResponse("Успешно продублировано!")
+            response = HttpResponse()
+            response['Content-Type'] = 'text/javascript'
+            response.write(json.dumps({'success': "Успешно продублировано!", 'id': this_plan_row.id}))
+
+            return response
 
         else:
             HttpResponseBadRequest()
@@ -90,85 +125,80 @@ def edit_plan_row(data, this_plan, this_id, mode):
     day_of_week, place, parity, teacher, this_time, start_week, end_week, subject = \
         None, None, None, None, None, None, None, None
 
-    try:
-        # есть ли уже такой предмет в расписании
-        if 'subject' in data:
-            subjects_objects = Subjects.objects.select_related().filter(plan_id=this_plan, name=data['subject'])
-            if subjects_objects.count() == 0:
-                subject = Subjects(name=data['subject'], plan=this_plan)
-                subject.save()
-            else:
-                subject = subjects_objects[0]
+    # есть ли уже такой предмет в расписании
+    if 'subject' in data:
+        subjects_objects = Subjects.objects.select_related().filter(plan_id=this_plan, name=data['subject'])
+        if subjects_objects.count() == 0:
+            subject = Subjects(name=data['subject'], plan=this_plan)
+            subject.save()
+        else:
+            subject = subjects_objects[0]
 
-        # есть ли уже такой учитель в расписании
-        if 'teacher' in data:
-            teachers_objects = Teachers.objects.select_related().filter(plan_id=this_plan,
-                                                                        name_short=data['teacher'])
-            if teachers_objects.count() == 0:
-                teacher = Teachers(name_short=data['teacher'], plan=this_plan)
-                teacher.save()
-            else:
-                teacher = teachers_objects[0]
+    # есть ли уже такой учитель в расписании
+    if 'teacher' in data:
+        teachers_objects = Teachers.objects.select_related().filter(plan_id=this_plan,
+                                                                    name_short=data['teacher'])
+        if teachers_objects.count() == 0:
+            teacher = Teachers(name_short=data['teacher'], plan=this_plan)
+            teacher.save()
+        else:
+            teacher = teachers_objects[0]
 
-        # есть ли уже такое время в расписании
-        if 'time' in data:
-            dt = datetime.datetime.strptime(data['time'], "%H:%M")
-            times_objects = Times.objects.select_related().filter(plan_id=this_plan, hh24mm=dt)
-            if times_objects.count() == 0:
-                this_time = Times(hh24mm=dt, plan=this_plan)
-                this_time.save()
-            else:
-                this_time = times_objects[0]
+    # есть ли уже такое время в расписании
+    if 'time' in data:
+        dt = datetime_lib.strptime(data['time'], "%H:%M")
+        times_objects = Times.objects.select_related().filter(plan_id=this_plan, hh24mm=dt)
+        if times_objects.count() == 0:
+            this_time = Times(hh24mm=dt, plan=this_plan)
+            this_time.save()
+        else:
+            this_time = times_objects[0]
 
-        # есть ли уже такое место в расписании
-        if 'place' in data:
-            places_objects = Places.objects.select_related().filter(plan_id=this_plan, name=data['place'])
-            if places_objects.count() == 0:
-                place = Places(name=data['place'], plan=this_plan)
-                place.save()
-            else:
-                place = places_objects[0]
+    # есть ли уже такое место в расписании
+    if 'place' in data:
+        places_objects = Places.objects.select_related().filter(plan_id=this_plan, name=data['place'])
+        if places_objects.count() == 0:
+            place = Places(name=data['place'], plan=this_plan)
+            place.save()
+        else:
+            place = places_objects[0]
 
-        if 'day_of_week' in data:
-            day_of_week = DaysOfWeek.objects.get(id=data['day_of_week'])
-        if 'parity' in data:
-            parity = data['parity']
-        if 'start_week' in data:
-            start_week = data['start_week']
-        if 'end_week' in data:
-            end_week = data['end_week']
+    if 'day_of_week' in data:
+        day_of_week = DaysOfWeek.objects.get(id=data['day_of_week'])
+    if 'parity' in data:
+        parity = data['parity']
+    if 'start_week' in data:
+        start_week = data['start_week']
+    if 'end_week' in data:
+        end_week = data['end_week']
 
-        if mode == UPDATE:
-            PlanRows.objects.select_related().filter(plan_id=this_plan.id, id=this_id).update(
-                start_week=start_week,
-                end_week=end_week,
-                parity=parity,
-                day_of_week=day_of_week,
-                subject=subject,
-                teacher=teacher,
-                time=this_time,
-                place=place
-            )
+    if mode == UPDATE:
+        PlanRows.objects.select_related().filter(plan_id=this_plan.id, id=this_id).update(
+            start_week=start_week,
+            end_week=end_week,
+            parity=parity,
+            day_of_week=day_of_week,
+            subject=subject,
+            teacher=teacher,
+            time=this_time,
+            place=place
+        )
+        # возвращаем то же самое id
+        return this_id
 
-            return this_id
-
-        if mode == CREATE:
-
-            new_plan_row = PlanRows(start_week=start_week,
-                                    end_week=end_week,
-                                    parity=parity,
-                                    day_of_week=day_of_week,
-                                    subject=subject,
-                                    teacher=teacher,
-                                    time=this_time,
-                                    place=place,
-                                    plan=this_plan)
-            new_plan_row.save()
-            # возвращаем новое id, чтобы записать его в html
-            return new_plan_row.id
-
-    except IntegrityError:
-        return HttpResponseBadRequest()
+    if mode == CREATE:
+        new_plan_row = PlanRows(start_week=start_week,
+                                end_week=end_week,
+                                parity=parity,
+                                day_of_week=day_of_week,
+                                subject=subject,
+                                teacher=teacher,
+                                time=this_time,
+                                place=place,
+                                plan=this_plan)
+        new_plan_row.save()
+        # возвращаем новое id, чтобы записать его в html
+        return new_plan_row.id
 
 
 def switch_plan_home_ajax(request):

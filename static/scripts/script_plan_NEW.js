@@ -68,7 +68,6 @@ $(window).on('mousedown', function (event) {
 });
 
 // обработчик для верхнего чекбокса, в заголовке каждого дня
-
 function setGeneralCheckBoxListeners($this_str) {
     var this_checkbox = $this_str.find('.general_checkbox');
     this_checkbox.attr('flag_active', 'false');
@@ -131,7 +130,6 @@ function setTopCheckBox($this_plan_content) {
     }
 }
 
-
 // обаботчики, которые устанавливаются единожды, при добавлении новой строки
 // нужно для того, чтобы, к примеру, не глючили чекбоксы
 function setNewListenersNewStr($new_div) {
@@ -186,33 +184,6 @@ function setNewListenersNewStr($new_div) {
         }, 500);
     });
 
-
-    //  //Если мы нажимает на строку прямо над input, то мы нажимаем на сам input,поэтому событие ставим на него
-    //  $new_div.on('contextmenu', function (event) {
-    //      if ((event.button == 2 || event.button == 1) && $(event.target).get(0).tagName.toUpperCase() != 'INPUT') {
-    //          rightClickOnStr(event);
-    //      }
-    //  });
-    //
-    //
-    //  //При нажатии на input не показывать стандартное контекстное меню
-    //  $new_inputs.on('contextmenu', function () {
-    //      return false;
-    //  });
-    //  //При нажатии правой кнопкой над input появлялось контекстное меню
-    //  $new_inputs.on('mousedown contexmenu', function (e) {
-    //      if (e.which == 1) {
-    //          editField($(this));
-    //      }
-    //      else {
-    //          rightClickOnStr(e);
-    //          return false;
-    //      }
-    //  });
-    //
-
-    //
-
     // при нажатии на enter меняет поле на следующее
     $new_inputs.on('keyup', function (e) {
         if (e.which == 13) {
@@ -232,7 +203,6 @@ function setNewListenersNewStr($new_div) {
     });
 }
 
-
 // устанавливаем появление и скрытие панели инструментов
 function setTools($this_plan) {
     var $buttons = $this_plan.find('.tools_panel button').slice(0, 2);
@@ -248,7 +218,6 @@ function setTools($this_plan) {
     }
 }
 
-
 // устанавливает стили кнопок при появлении
 // устанавливает обработчики событий для кнопок
 var time_animate = 100;
@@ -259,7 +228,6 @@ function setButtonToolsProperties($button) {
         'color': 'rgba(255,255,255,1)',
         'border-color': 'rgba(0,0,0,0.0)',
         'background-color': 'rgba(64,199,129,1)',
-        'box-shadow': '0 -3px rgb(53,167,110) inset'
     }, time_animate);
 
     $button.hover(function () {
@@ -308,22 +276,20 @@ function setDefaultButtonToolsProperties($button) {
 // div блок с классом .info_checkboxes содержит информацию
 // о количестве включённых чекбоксов в каждом дне
 // 3 разных if нужно чтобы не вешать обработчики лишний раз, если меню уже появилось
-var flag_status = false;
 function statusCheckboxes($this_plan) {
     var $info_checkboxes = $this_plan.find('.info_checkboxes');
-    if (+$info_checkboxes.attr('count') > 0 && !flag_status) {
-        flag_status = true;
+    if (+$info_checkboxes.attr('count') > 0 && $info_checkboxes.attr('flag_general_checkbox') == 'false') {
+        $info_checkboxes.attr('flag_general_checkbox', 'true');
         return 1;
     }
-    else if (flag_status == true && +$info_checkboxes.attr('count') > 0) {
+    else if ($info_checkboxes.attr('flag_general_checkbox') == 'true' && +$info_checkboxes.attr('count') > 0) {
         return 2;
     }
     else {
-        flag_status = false;
+        $info_checkboxes.attr('flag_general_checkbox', 'false');
         return 0;
     }
 }
-
 
 // работа чекбокса, который в заголовке (отвечает за все чекбоксы)
 function actionGeneralCheckBox($general_checkbox) {
@@ -481,6 +447,12 @@ function setSelectStr($str_plan) {
 function setDefaultStr($str_plan) {
     $str_plan.removeClass('selected_str');
     hoverDefaultStr($str_plan);
+    //при расфокусировке отправляем инфу в БД
+
+    var $old_str = $str_plan;
+    setTimeout(function () {
+        editStrPlan($str_plan);
+    }, 200);
 
 }
 
@@ -764,30 +736,16 @@ function unblockInputs($this_str) {
 }
 
 
-var $this_clone;
-function getAjaxActions($pressed_button) {
+function getAjaxActions($pressed_button, i) {
+    blurSelectStr();
     var $this_plan = $pressed_button.parents('.plan_window');
     var $checkboxes = $this_plan.find('.checkbox_container.marked.row');
+
     if ($pressed_button.hasClass('clone_row')) {
-        $checkboxes.each(function () {
-            var $this_str_clone = $(this).parents('.str_plan');
-            clone_str($this_str_clone);
-        });
-        setTimeout(function () {
-            setColorStr();
-        }, 700);
-        return;
+        clone_str($checkboxes);
     }
     if ($pressed_button.hasClass('delete_row')) {
-        $checkboxes.each(function () {
-            var $this_delete_str = $(this).parents('.str_plan');
-            //отправляет данные на сервер для этой строки
-            delete_str($this_delete_str);
-        });
-        setTimeout(function () {
-            setColorStr();
-        }, 700);
-        return;
+        delete_str($checkboxes);
     }
 
 }
@@ -795,29 +753,46 @@ function getAjaxActions($pressed_button) {
 
 // дублируем строку
 // работает с AJAX
-function clone_str($this_str) {
-    blurSelectStr();
-    // $('.drop_menu').remove();
-    // получаем данные всех полей из текущей строки
-    var data = GetFieldsInformation($this_str);
+function clone_str(checkboxes, i, n) {
+    if (!i) {
+        var i = 0;
+        var n = checkboxes.length;
+    }
 
-    $.ajax({
-        url: '/plan/update_clone',
-        success: function (response) {
-            callback_clone(data, $this_str);
-        },
-        method: 'POST',
-        data: data,
-        error: function (jqXHR, textStatus, errorThrown) {
-            alert('Ошибка! Продублированная запись не будет сохранена! (');
-            // alert(textStatus + " " + errorThrown);
+    // дублируем каждую следующую запись, только если успешно продублирована предыдущая
+    if (i != undefined && n != undefined && i < n) {
+        var $this_checkbox = $(checkboxes[i]);
+        var $this_str = $this_checkbox.parents('.str_plan');
+        // получаем данные всех полей из текущей строки
+        if ($this_str.attr('id') != undefined) {
+            var data = GetFieldsInformation($this_str);
+            $.ajax({
+                url: '/plan/update_clone',
+                success: function (response) {
+                    var response = JSON.parse(response);
+                    callback_clone(data, $this_str, response.id);
+                    clone_str(checkboxes, i + 1, n);
+                },
+                method: 'POST',
+                data: data,
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert('Ошибка! Продублированная запись не будет сохранена! (');
+                    return false;
+                }
+            });
         }
-    });
+        else {
+            delete_str(checkboxes, i, n)
+        }
+    }
+    else {
+        setColorStr();
+    }
 
 }
 
 // визуально дублируем строку, если получен ответ от сервера
-function callback_clone(data, $this_str) {
+function callback_clone(data, $this_str, new_id) {
     var $new_div = $(NEW_STR_PLAN_HTML).find('.str_plan.change');
 
     // чтобы анимация работала правильно для любой высоты блока
@@ -833,6 +808,8 @@ function callback_clone(data, $this_str) {
     $new_div.find('.teacher').attr('value', data['teacher']);
     $new_div.find('.place').attr('value', data['place']);
     $new_div.attr('id', 0);
+
+    $new_div.attr('id', new_id);
 
     // преобразовываем поля input в a для всех новых полей
     var $new_inputs = $new_div.find('ul li input');
@@ -850,27 +827,42 @@ function callback_clone(data, $this_str) {
 
 // удаляет строку с расписанием
 // работает с ajax
-function delete_str($this_str) {
-    blurSelectStr();
-    // $('.drop_menu').remove();
-    var delete_id_planRow = $this_str.attr('id');
-    var data = {'delete_id_planRow': delete_id_planRow};
-
-    $.ajax({
-        url: '/plan/update_delete',
-        success: function (response) {
-            // alert(response);
-            callback_delete($this_str);
-        },
-        method: 'POST',
-        data: data,
-        error: function (jqXHR, textStatus, errorThrown) {
-            alert('Ошибка! Запись не будет удалена! (');
-            // alert(textStatus + " " + errorThrown);
+function delete_str(checkboxes, i, n) {
+    if (!i) {
+        var i = 0;
+        var n = checkboxes.length;
+    }
+    // alert(i + " " + n);
+    // дублируем каждую следующую запись, только если успешно продублирована предыдущая
+    if (i != undefined && n != undefined && i < n) {
+        var $this_checkbox = $(checkboxes[i]);
+        var $this_str = $this_checkbox.parents('.str_plan');
+        // получаем данные всех полей из текущей строки
+        var data = {};
+        if ($this_str.attr('id') != undefined) {
+            data = {'id': $this_str.attr('id')};
+            $.ajax({
+                url: '/plan/update_delete',
+                success: function (response) {
+                    callback_delete($this_str);
+                    delete_str(checkboxes, i + 1, n);
+                },
+                method: 'POST',
+                data: data,
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert('Ошибка! Запись не будет удалена! (');
+                    return false;
+                }
+            });
         }
-    });
-
-
+        else {
+            callback_delete($this_str);
+            delete_str(checkboxes, i + 1, n);
+        }
+    }
+    else {
+        setColorStr();
+    }
 }
 
 // выполнение стилей и эффектов после успешного удаления строки с сервера
@@ -885,12 +877,45 @@ function callback_delete($this_str) {
             $this_str.remove();
         });
     });
-    // setTimeout(function () {
-    //     setColorStr();
-    // }, 700);
-    // setTimeout(function () {
-    //     setColorStr();
-    // }, 2000);
+}
+
+
+// добавляет новую строку в расписание
+// пока все поля не будут заполнены, строчка не добавится в БД
+function editStrPlan($selected_str) {
+    var data = GetFieldsInformation($selected_str);
+    $.ajax({
+        url: '/plan/edit_plan_row',
+        success: function (response) {
+            var response = JSON.parse(response);
+            if (response.error) {
+                callback_editStrPlan_error($selected_str, response.id);
+            }
+            else {
+                callback_editStrPlan($selected_str, response.id);
+            }
+        },
+        method: 'POST',
+        data: data,
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert('Ошибка! Новая запись не будет сохранена! Обновите страницу. (');
+        }
+    });
+}
+
+// общая валидация строки перед отправкой на сервер
+function mainValidationStr($this_str) {
+
+}
+
+
+function callback_editStrPlan($this_str, success_id) {
+    $this_str.find('ul').css('background', 'green');
+}
+
+function callback_editStrPlan_error($this_str, error_id) {
+    $this_str.find('ul').css('background', 'red');
+    // alert("Ошибка! в id = " + data['id'])
 }
 
 
@@ -901,19 +926,75 @@ function GetFieldsInformation($this_str) {
     if ($this_str.attr('id') != undefined) {
         id = $this_str.attr('id');
     }
-    parity = $this_str.find('.parity').text();
-    day_of_week = $this_plan.attr('day_num');
+    else {
+        id = 0;
+    }
+    parity = get_patiry_value($this_str.find('.parity').text());
+    day_of_week = get_day_num($this_plan.attr('day_num'));
     weeks = $this_str.find('.weeks').text();
     start_week = weeks.split('-')[0];
     end_week = weeks.split('-')[1];
     time = $this_str.find('.time').text();
     subject = $this_str.find('.subject').text();
+    if (subject == "") {
+        subject = "Неизвестный"
+    }
     teacher = $this_str.find('.teacher').text();
+    if (teacher == "") {
+        teacher = "Инкогнито"
+    }
     place = $this_str.find('.place').text();
+    if (place == "") {
+        place = "Волшебное"
+    }
 
     return {
-        'weeks': weeks, 'start_week': start_week, 'end_week': end_week, 'time': time,
-        'subject': subject, 'teacher': teacher, 'place': place, 'parity': parity, 'day_of_week': day_of_week, 'id': id
+        'weeks': weeks,
+        'start_week': start_week,
+        'end_week': end_week,
+        'time': time,
+        'subject': subject,
+        'teacher': teacher,
+        'place': place,
+        'parity': parity,
+        'day_of_week': day_of_week,
+        'id': id
     };
 
+}
+
+// возвращает номер дня, начиная с 0
+function get_day_num(name_day) {
+    var days = {
+        'Понедельник': 1,
+        'Вторник': 2,
+        'Среда': 3,
+        'Четверг': 4,
+        'Пятница': 5,
+        'Суббота': 6,
+        'Воскресенье': 7
+    };
+    if (days[name_day] != undefined) {
+        return days[name_day];
+    }
+    else {
+        return 0;
+    }
+}
+
+// возвращает значащий номер для чётности
+function get_patiry_value(value) {
+    var values_num = {
+        'Все': 0,
+        'Чётные': 1,
+        'Четные': 1,
+        'Нечётные': 2,
+        'Нечетные': 2
+    };
+    if (values_num[value] != undefined) {
+        return values_num[value];
+    }
+    else {
+        return 0;
+    }
 }

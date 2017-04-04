@@ -60,12 +60,12 @@ def get_today_tomorrow_plans(user_id, plan_id):
 
     count = UserPlans.objects.filter(plan_id=cur_plan.plan.id).count()
 
-    today = timezone.make_aware(datetime.now())   # опр сегодняшнюю дату
-    tomorrow = today + timedelta(1)               # завтрашняя дата
-    td_weekday = datetime.weekday(today)          # день недели сегодня
-    tm_weekday = datetime.weekday(tomorrow)       # день дедели завтра
-    start_date = cur_plan.plan.start_date             # c какого числа действует расп.
-    cur_week1 = weeks_from(start_date, today)     # определяем номер текущей недели
+    today = timezone.make_aware(datetime.now())  # опр сегодняшнюю дату
+    tomorrow = today + timedelta(1)  # завтрашняя дата
+    td_weekday = datetime.weekday(today)  # день недели сегодня
+    tm_weekday = datetime.weekday(tomorrow)  # день дедели завтра
+    start_date = cur_plan.plan.start_date  # c какого числа действует расп.
+    cur_week1 = weeks_from(start_date, today)  # определяем номер текущей недели
     cur_week2 = weeks_from(start_date, tomorrow)
     td_parity, tm_parity = cur_week1 % 2, cur_week2 % 2  # четность недели
 
@@ -136,3 +136,28 @@ def get_rows_by_weekday(rows):
             days[6].append(row)
 
     return days
+
+#
+# def get_day_name(num):
+#     days = {
+#         0: 'Понедельник',
+#         1: 'Вторник',
+#         2: 'Среда',
+#         3: 'Четверг',
+#         4: 'Пятница',
+#         5: 'Суббота',
+#         6: 'Воскресенье'}
+#     return days[num]
+#
+#
+# def get_day_num(name):
+#     days = {
+#         'Понедельник': 0,
+#         'Вторник': 1,
+#         'Среда': 2,
+#         'Четверг': 3,
+#         'Пятница': 4,
+#         'Суббота': 5,
+#         'Воскресенье': 6}
+#     return days[name]
+#
