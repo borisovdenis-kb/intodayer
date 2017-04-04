@@ -59,7 +59,7 @@ def edit_plan_row_ajax(request):
                 except (IntegrityError, ValueError):
                     response = HttpResponse()
                     response['Content-Type'] = 'text/javascript'
-                    response.write(json.dumps({"error": "error", 'id':this_id}))
+                    response.write(json.dumps({"error": "error", 'id': this_id}))
                     return response
 
                 response.write(

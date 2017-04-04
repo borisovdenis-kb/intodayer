@@ -911,6 +911,7 @@ function mainValidationStr($this_str) {
 
 function callback_editStrPlan($this_str, success_id) {
     $this_str.find('ul').css('background', 'green');
+    $this_str.attr('id', success_id);
 }
 
 function callback_editStrPlan_error($this_str, error_id) {
