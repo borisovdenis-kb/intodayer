@@ -404,11 +404,11 @@ function setCheckBox($checkbox_wrap, mode) {
 
 }
 
-function setBlurCheckbox($this_str) {
+function setBlurCheckbox($this_str, mode) {
     $this_str.find('.checkbox_container').each(function () {
         if ($(this).hasClass('marked')) {
             $(this).trigger('click');
-            setDefaultStr($this_str);
+            setDefaultStr($this_str, mode);
         }
     });
 
@@ -472,12 +472,15 @@ function setOldValues($str_plan) {
     }
 }
 
-function setDefaultStr($str_plan) {
+function setDefaultStr($str_plan, mode) {
     //при расфокусировке отправляем инфу в БД
     $str_plan.removeClass('selected_str');
     hoverDefaultStr($str_plan);
 
     setTimeout(function () {
+        if (mode == 'clone'){
+            return false;
+        }
         if (checkThatFieldIsChanged($str_plan)) {
             editStrPlan($str_plan);
         }
@@ -489,7 +492,7 @@ function checkThatFieldIsChanged($str_plan) {
     if (!FLAG_CLONE) {
         var new_data = getFieldsInformation($str_plan);
         for (var key in new_data) {
-            if (new_data[key] != $str_plan.attr(key + "_old") ) {
+            if (new_data[key] != $str_plan.attr(key + "_old")) {
                 // alert(new_data[key] + " - " + $str_plan.attr(key + "_old"));
                 return true;
             }
@@ -805,7 +808,7 @@ function getAjaxActions($pressed_button, i) {
 var FLAG_CLONE = false;
 function clone_str(checkboxes, i, n) {
 
-    if (!i) {
+    if (!n) {
         FLAG_CLONE = true;
         var i = 0;
         var n = checkboxes.length;
@@ -875,7 +878,7 @@ function callback_clone(data, $this_str, new_id) {
     setNewListenersNewStr($new_div);
     setNewListenersSpecial($new_div);
 
-    setBlurCheckbox($this_str);
+    setBlurCheckbox($this_str, 'clone');
     // check_field_exist($new_div);
 
 }
