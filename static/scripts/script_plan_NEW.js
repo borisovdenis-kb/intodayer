@@ -43,12 +43,11 @@ var NEW_STR_PLAN_HTML = '' +
     '<li><input placeholder="Преподователь" class="teacher"></li>' +
     // не забыть поставить class=last, чтобы потом распознать
     '<li><input placeholder="Место" class="place"></li>' +
-    '<li class="last"><input placeholder="Чётность" class="parity"></li>' +
+    '<li class="last"><a class="parity">Все</a></li>' +
     '</ul>' +
     '</div>' +
     '</div>';
 
-var timer_id;
 var thisInput;
 var timerInputId;
 
@@ -97,10 +96,6 @@ function setNewListenersEdit($new_div) {
     $new_a.on('click', function () {
         editField($(this));
     });
-    // $new_inputs.on('focus', function () {
-    //     $(this).parent().parent().parent().addClass('selected_str');
-    // });
-
 }
 
 
@@ -187,22 +182,11 @@ function setNewListenersNewStr($new_div) {
     });
 
     // при нажатии на enter меняет поле на следующее
-    $new_inputs.on('keyup', function (e) {
-        if (e.which == 13) {
-            setNextField($(this), e);
-        }
-        else {
-            var $this_str = $(this).parent().parent().parent();
-            clearTimeout(timer_id);
-            timer_id = setTimeout(function () {
-                if ($this_str.hasClass('warning_str')) {
-                    // alert("Sfd");
-                    // check_field_exist($this_str);
-                }
-            }, 300)
-
-        }
-    });
+    // $new_inputs.on('keyup', function (e) {
+    //     if (e.which == 13) {
+    //
+    //     }
+    // });
 }
 
 // устанавливаем появление и скрытие панели инструментов
@@ -400,8 +384,6 @@ function setCheckBox($checkbox_wrap, mode) {
         $this_checkbox.removeClass('marked');
         $this_checkbox.animate({'background-color': 'rgba(0,0,0,0)'}, 50);
     }
-    // alert($info_checkboxes.attr('count'));
-
 }
 
 function setBlurCheckbox($this_str, mode) {
@@ -434,7 +416,11 @@ function hoverSelectStr($this_str) {
     if ($this_str.hasClass('marked') || $this_str.hasClass('animation')) {
         return false;
     }
-    if ($this_str.hasClass('warning_str')){
+    if ($this_str.hasClass('clone_str')) {
+        $this_str.find('ul').css({'border': '2px solid rgba(3, 96, 255, 0.3)'});
+        return;
+    }
+    if ($this_str.hasClass('warning_str')) {
         $this_str.find('ul').css({'border': '2px solid #F37C7C'});
         return;
     }
@@ -447,7 +433,6 @@ function hoverDefaultStr($this_str) {
     }
     if ($this_str.hasClass('warning_str')) {
         $this_str.find('ul').css({
-            'background-color': '#FBB6B6',
             'border-color': 'rgba(103, 198, 97, 0.9)'
         });
     }
@@ -462,8 +447,39 @@ function setSelectStr($str_plan) {
     setOldValues($str_plan);
 }
 
+
+function setDefaultStr($str_plan, mode) {
+    //при расфокусировке отправляем инфу в БД
+    $str_plan.removeClass('selected_str');
+    hoverDefaultStr($str_plan);
+
+    setTimeout(function () {
+        if (mode == 'clone' || mode == 'delete') {
+            return false;
+        }
+        //***************************************************************************************
+        // Одна из важнейших строчек во всём коде
+        // именно тут данные отправляются на сервер для обновления или создания строки расписания
+        // 1. Если строка изменена при расфокусировки (изменено хотя бы одно поле), то
+        if (checkThatFieldIsChanged($str_plan)) {
+            // 2. Если строка проходит базовую валидацию, то отправляем данные на сервер
+            var errors = mainValidationStr($str_plan);
+            if (!isEmpty(errors)) {
+                callback_editStrPlan_error($str_plan);
+            }
+            // если нет ни одной ошибки, то всё успешно! )
+            else {
+                editStrPlan($str_plan);
+            }
+
+        }
+    }, 200);
+}
+
+
 //устанавливаем старые значения полей строки, до фокусировки
 //чтобы потом проверить, что строка была изменена => отправить на сервер
+//все старые значения записываются в виде атрибутов в строку с теми же названиями как у классов
 function setOldValues($str_plan) {
     var old_data = getFieldsInformation($str_plan);
     for (var key in old_data) {
@@ -472,37 +488,16 @@ function setOldValues($str_plan) {
     }
 }
 
-function setDefaultStr($str_plan, mode) {
-    //при расфокусировке отправляем инфу в БД
-    $str_plan.removeClass('selected_str');
-    hoverDefaultStr($str_plan);
-
-    setTimeout(function () {
-        if (mode == 'clone'){
-            return false;
-        }
-        if (checkThatFieldIsChanged($str_plan)) {
-            editStrPlan($str_plan);
-        }
-    }, 200);
-}
-
-// проверяет, что в текущей строке, с момента фокусировки было что-то изменено
+// проверяет, что в текущей строке, с момента фокусировки было ли что-то изменено
 function checkThatFieldIsChanged($str_plan) {
-    if (!FLAG_CLONE) {
-        var new_data = getFieldsInformation($str_plan);
-        for (var key in new_data) {
-            if (new_data[key] != $str_plan.attr(key + "_old")) {
-                // alert(new_data[key] + " - " + $str_plan.attr(key + "_old"));
-                return true;
-            }
-            $str_plan.removeAttr(key + "_old");
+    var new_data = getFieldsInformation($str_plan);
+    for (var key in new_data) {
+        if (new_data[key] != $str_plan.attr(key + "_old")) {
+            return true;
         }
-        return false;
+        $str_plan.removeAttr(key + "_old");
     }
-    else {
-        return false;
-    }
+    return false;
 }
 
 
@@ -519,14 +514,15 @@ function a_to_input($field) {
         $field.removeClass('this_edit');
         $field.addClass($temp_field.attr('class'));
         $field.attr('placeholder', setTruePlaceholder($temp_field));
+        $field.attr('old_value', $temp_field.text());
     }
-    else {
-        $field = input_to_a($field);
-    }
+    // else {
+    //     $field = input_to_a($field);
+    //     return;
+    // }
 
     $field.addClass('selected_field');
     $field.attr("value", value);
-    $field.attr("old_value", value);
     $field.focus();
     //поместить курсор в конец поля input
     var inputVal = $field.val();
@@ -550,13 +546,15 @@ function input_to_a($field) {
         $field.addClass(temp_input.attr('class'));
         $field.attr('old_value', old_value);
     }
-
-    if (temp_input.val() != old_value) {
-        $field.text(temp_input.val());
-    }
     else {
-        $field.text(old_value);
+        // если в поле было что-то введено, а потом поле очистили, то вернётся старое значение
+        $field.val(temp_input.attr('old_value'));
+        return $field;
     }
+    // на этой строчке важно обрезать часть строки до 100 символов
+    // именно эта строка отвечает за обновление полей при вводе
+    $field.text(temp_input.val().slice(0, 100));
+
 
     return $field;
 }
@@ -579,29 +577,40 @@ function setTruePlaceholder($this_field) {
 }
 
 
+var time_color = 200;
 // устанвалвает цвет для нечётных строк таблицы расписания
 function setColorStr($this_str) {
     if (!$this_str) {
         $('.plan_content').each(function () {
             $(this).find('.str_plan.change').each(function (i) {
+
                 if (i % 2 == 0) {
-                    $(this).animate({'background-color': 'rgba(240, 240, 245, 1)'});
-                    $(this).find('ul').animate({'background-color': 'rgba(240, 240, 245, 1)'});
+                    $(this).animate({'background-color': 'rgba(240, 240, 245, 1)'}, time_color);
+                    if ($(this).hasClass('warning_str') || $(this).hasClass('clone_str')) {
+                        return true;
+                    }
+                    $(this).find('ul').animate({'background-color': 'rgba(240, 240, 245, 1)'}, time_color);
                 }
                 else {
-                    $(this).animate({'background-color': 'rgba(255, 255, 255, 1)'}, 150);
-                    $(this).find('ul').animate({'background-color': 'rgba(255, 255, 255, 1)'}, 150);
-
+                    $(this).animate({'background-color': 'rgba(255, 255, 255, 1)'}, time_color);
+                    if ($(this).hasClass('warning_str') || $(this).hasClass('clone_str')) {
+                        return true;
+                    }
+                    $(this).find('ul').animate({'background-color': 'rgba(255, 255, 255, 1)'}, time_color);
                 }
             });
         });
     }
     // если передана одна строка, для которой нужно установить правильный цвет,
     else {
-
-        if ($this_str.hasClass('warning_str')){
+        if ($this_str.hasClass('warning_str')) {
             hoverSelectStr($this_str);
             $this_str.find('ul').css({'background-color': '#FBB6B6'});
+            return false;
+        }
+        if ($this_str.hasClass('clone_str')) {
+            hoverSelectStr($this_str);
+            $this_str.find('ul').css({'background-color': '#ABD6F2'});
             return false;
         }
         $this_str.find('ul').css({'background': $this_str.css('background')});
@@ -750,31 +759,6 @@ function validateField(field) {
     }
 }
 
-// при нажатии на enter поле меняется на следующие в текущей строке
-// если следующее поле это <a> или <input> то меняем
-function setNextField($this_field, e) {
-    var $next_elem;
-    var $this_str = $this_field.parent().parent().parent();
-    $next_elem = $this_field.parent().next('li');
-    if ($next_elem.get(0) == undefined) {
-        $this_field.blur();
-        setDefaultStr($this_str);
-        return;
-    }
-    else {
-        $this_field.blur();
-        if ($next_elem.find('a').get(0) != undefined) {
-            editField($next_elem.find('a'));
-            return;
-        }
-        if ($next_elem.find('input').get(0) != undefined) {
-            editField($next_elem.find('input'));
-            return;
-        }
-
-    }
-
-}
 
 function blockInputs($this_str) {
     $this_str.find('input').each(function () {
@@ -806,53 +790,34 @@ function getAjaxActions($pressed_button, i) {
 // дублируем строку
 // работает с AJAX
 var FLAG_CLONE = false;
-function clone_str(checkboxes, i, n) {
-
-    if (!n) {
-        FLAG_CLONE = true;
-        var i = 0;
-        var n = checkboxes.length;
-    }
-
-    // дублируем каждую следующую запись, только если успешно продублирована предыдущая
-    if (i != undefined && n != undefined && i < n) {
-        var $this_checkbox = $(checkboxes[i]);
-        var $this_str = $this_checkbox.parents('.str_plan');
-        // получаем данные всех полей из текущей строки
+function clone_str(checkboxes) {
+    var n = checkboxes.length;
+    checkboxes.each(function (i) {
+        var $this_str = $(this).parents('.str_plan');
         if ($this_str.attr('id') != undefined) {
             var data = getFieldsInformation($this_str);
-            $.ajax({
-                url: '/plan/update_clone',
-                success: function (response) {
-                    var response = JSON.parse(response);
-                    callback_clone(data, $this_str, response.id);
-                    clone_str(checkboxes, i + 1, n);
-                },
-                method: 'POST',
-                data: data,
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert('Ошибка! Продублированная запись не будет сохранена! (');
-                    return false;
-                }
-            });
+            callback_clone(data, $this_str, 0);
+
         }
         // если строка пустая (не сохранена в базе)
         else {
-            delete_str(checkboxes, i, n)
+            delete_str(checkboxes, i, n);
         }
-    }
-    // по оконачанию клонирования всех строк выполнить это
-    else {
-        FLAG_CLONE = false;
-        setColorStr();
-    }
-
+        // alert(n + " " + i);
+        if (n == i + 1) {
+            // alert("Sdf");
+            FLAG_CLONE = false;
+            setTimeout(function () {
+                setColorStr();
+            }, 500);
+            return false;
+        }
+    });
 }
 
 // визуально дублируем строку, если получен ответ от сервера
 function callback_clone(data, $this_str, new_id) {
     var $new_div = $(NEW_STR_PLAN_HTML).find('.str_plan.change');
-
     // чтобы анимация работала правильно для любой высоты блока
     $new_div.css('height', $this_str.height());
     $this_str.stop(true, true);
@@ -866,8 +831,11 @@ function callback_clone(data, $this_str, new_id) {
     $new_div.find('.teacher').attr('value', data['teacher']);
     $new_div.find('.place').attr('value', data['place']);
     $new_div.attr('id', 0);
-
     $new_div.attr('id', new_id);
+
+    if ($this_str.hasClass('clone_str')) {
+        $new_div.addClass('clone_str');
+    }
 
     // преобразовываем поля input в a для всех новых полей
     var $new_inputs = $new_div.find('ul li input');
@@ -879,6 +847,7 @@ function callback_clone(data, $this_str, new_id) {
     setNewListenersSpecial($new_div);
 
     setBlurCheckbox($this_str, 'clone');
+    callback_cloneErrorStr($new_div);
     // check_field_exist($new_div);
 
 }
@@ -898,7 +867,7 @@ function delete_str(checkboxes, i, n) {
         var $this_str = $this_checkbox.parents('.str_plan');
         // получаем данные всех полей из текущей строки
         var data = {};
-        if ($this_str.attr('id') != undefined) {
+        if ($this_str.attr('id') && $this_str.attr('id') != 0) {
             data = {'id': $this_str.attr('id')};
             $.ajax({
                 url: '/plan/update_delete',
@@ -921,11 +890,11 @@ function delete_str(checkboxes, i, n) {
     }
     // по оконачанию удаления всех строк выполнить это
     else {
-        // var $this_plan = checkboxes.first().find('.plan_content');
-        // $this_plan.find('.info_checkboxes').attr('tools_flag', 'false');
-        // setTools($this_plan);
         FLAG_DELETE = false;
-        setColorStr();
+        setTimeout(function () {
+            setColorStr();
+        }, 600);
+
     }
 }
 
@@ -936,7 +905,7 @@ function callback_delete($this_str) {
         'border': '2px solid #FF6161',
         'background': $this_str.css('background')
     });
-    setBlurCheckbox($this_str);
+    setBlurCheckbox($this_str, 'delete');
 
     $this_str.fadeTo(100, 0, function () {
         $this_str.slideToggle(200, function () {
@@ -957,6 +926,9 @@ function editStrPlan($selected_str) {
             if (response.error) {
                 callback_editStrPlan_error($selected_str, response);
             }
+            else if (response.clone_error) {
+                callback_cloneErrorStr($selected_str);
+            }
             else {
                 callback_editStrPlan($selected_str, response);
             }
@@ -970,12 +942,105 @@ function editStrPlan($selected_str) {
 }
 
 // общая валидация строки перед отправкой на сервер
+// нормы и стандарты полей валидации придуманы разработчиками Intodayer!
 function mainValidationStr($this_str) {
+    var data = getFieldsInformation($this_str);
+    var everything_flag = 'weeks' in data && 'time' in data && 'subject' in data
+        && 'teacher' in data && 'place' in data && 'parity' in data;
+
+    var errors = {};
+    if (everything_flag) {
+        var weeks = data['weeks'];
+        var time = data['time'];
+        var subject = data['subject'];
+        var teacher = data['teacher'];
+        var place = data['place'];
+
+        if (weeks == "") {
+            errors[weeks] = 'empty_value';
+        }
+        if (time == "") {
+            errors[time] = 'empty_value';
+        }
+        if (subject == "") {
+            errors[subject] = 'empty_value';
+        }
+        if (teacher == "") {
+            errors[teacher] = 'empty_value';
+        }
+        if (place == "") {
+            errors[place] = 'empty_value';
+        }
+
+        // Проверка корректности ввода дня недели
+        var reg_weeks = /^[0-9]{1,2}-[0-9]{1,2}$/;
+        if (reg_weeks.test(weeks)) {
+            weeks = weeks.split('-');
+            var start_week = weeks[0];
+            var end_week = weeks[1];
+            // alert(start_week + " " + end_week);
+            if (start_week > end_week && start_week <= 52 && end_week <= 52) {
+                errors['weeks'] = 'logical_error';
+            }
+        }
+        else {
+            errors['weeks'] = 'format_error';
+        }
+        // Проверка корректности ввода времени
+        var timePatt1 = /^(([0,1])|(2))$/;
+        var timePatt2 = /^(([0,1][0-9])|(2[0-3]))$/;
+        var timePatt3 = /^(([0,1][0-9])|(2[0-3])):$/;
+        var timePatt4 = /^(([0,1][0-9])|(2[0-3])):[0-5]$/;
+        var timePatt5 = /^(([0,1][0-9])|(2[0-3])):[0-5][0-9]$/;
+        if (!(timePatt1.test(time[0]) && timePatt2.test(time.slice(0, 2)) && timePatt3.test(time.slice(0, 3)) &&
+            timePatt4.test(time.slice(0, 4)) && timePatt5.test(time.slice(0, 5)))) {
+            errors['time'] = 'format_error';
+        }
+        // Проверка корректности ввода предмета
+
+        if (subject.length > 100) {
+            errors['subject'] = 'length_error';
+        }
+        // Проверка корректности ввода учителя
+
+        if (subject.length > 100) {
+            errors['teacher'] = 'length_error';
+        }
+        // Проверка корректности ввода места
+
+        if (subject.length > 100) {
+            errors['place'] = 'length_error';
+        }
+
+    }
+    else {
+        errors['error'] = 'error_exist';
+    }
+    // если есть ошибки то возвращаем их
+    if (errors != {}) {
+        return errors;
+    }
+    else {
+        return {};
+    }
+
 
 }
 
+
+function callback_cloneErrorStr($this_str, response) {
+    var $this_ul = $this_str.find('ul');
+    $this_str.removeClass('warning_str');
+    $this_str.addClass('clone_str');
+    $this_ul.animate({
+        'background-color': '#ABD6F2',
+    }, 300);
+}
+
+
 function callback_editStrPlan($this_str, response) {
     $this_str.removeClass('warning_str');
+    $this_str.removeClass('clone_str');
     var success_id = response.id;
     var $this_ul = $this_str.find('ul');
     $this_ul.clearQueue();
@@ -988,9 +1053,13 @@ function callback_editStrPlan($this_str, response) {
         setTimeout(function () {
             $this.animate({
                 'background-color': $this_str.css('background-color'),
-                'border-color': 'white'
+                'border-color': 'rgba(103, 198, 97, 0.0)'
             }, function () {
                 $this_str.removeClass('animation');
+                setTimeout(function () {
+                    setColorStr();
+                }, 200);
+
             });
         }, 1000);
     });
@@ -999,6 +1068,7 @@ function callback_editStrPlan($this_str, response) {
 
 function callback_editStrPlan_error($this_str, response) {
     $this_str.addClass('warning_str');
+    $this_str.removeClass('clone_str');
     var $this_ul = $this_str.find('ul');
     $this_ul.clearQueue();
     $this_ul.animate({
@@ -1043,9 +1113,6 @@ function getFieldsInformation($this_str) {
         subject = $this_str.find('.subject').val();
     }
 
-    if (subject == "") {
-        subject = "Неизвестный"
-    }
     if ($this_str.find('.teacher').get(0).tagName == 'A') {
         teacher = $this_str.find('.teacher').text();
     }
@@ -1053,19 +1120,11 @@ function getFieldsInformation($this_str) {
         teacher = $this_str.find('.teacher').val();
     }
 
-    if (teacher == "") {
-        teacher = "Инкогнито"
-    }
-
     if ($this_str.find('.place').get(0).tagName == 'A') {
         place = $this_str.find('.place').text();
     }
     else {
         place = $this_str.find('.place').val();
-    }
-
-    if (place == "") {
-        place = "Волшебное"
     }
 
     return {
@@ -1117,4 +1176,32 @@ function get_patiry_value(value) {
     else {
         return 0;
     }
+}
+
+// проверяет является ли пустым объект javascript
+var hasOwnProperty = Object.prototype.hasOwnProperty;
+
+function isEmpty(obj) {
+
+    // null and undefined are "empty"
+    if (obj == null) return true;
+
+    // Assume if it has a length property with a non-zero value
+    // that that property is correct.
+    if (obj.length > 0)    return false;
+    if (obj.length === 0)  return true;
+
+    // If it isn't an object at this point
+    // it is empty, but it can't be anything *but* empty
+    // Is it empty?  Depends on your application.
+    if (typeof obj !== "object") return true;
+
+    // Otherwise, does it have any properties of its own?
+    // Note that this doesn't handle
+    // toString and valueOf enumeration bugs in IE < 9
+    for (var key in obj) {
+        if (hasOwnProperty.call(obj, key)) return false;
+    }
+
+    return true;
 }

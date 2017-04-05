@@ -26,26 +26,34 @@ UPDATE = 'UPDATE'
 
 
 def edit_plan_row_ajax(request):
+    """
+    1. Главная фукнция создания и обновления расписания
+    2. Взависимости от поданой id фукнция определяет обновление или создание строки
+    3. Обрабатывает разные виды исключений, чтобы распознать действия в jquery
+    :param request:
+    :return:
+    """
     if request.is_ajax():
         user = CustomUser.objects.get(username=request.user.username)
         # выбираем текущее расписание юзера
         plan_list = UserPlans.objects.select_related().get(user_id=user.id, current_yn='y')
         data = request.POST
         this_plan = plan_list.plan
+        response = HttpResponse()
+        response['Content-Type'] = 'text/javascript'
 
         if 'id' in data:
             this_id = data['id']
-            response = HttpResponse()
-            response['Content-Type'] = 'text/javascript'
 
             # если мы обновляем уже созданную строку то
             if this_id != '0':
                 try:
                     this_id = edit_plan_row(data, this_plan, this_id, UPDATE)
-                except ValueError:
-                    response = HttpResponse()
-                    response['Content-Type'] = 'text/javascript'
+                except (IntegrityError, ValueError):
                     response.write(json.dumps({"error": "error", 'id': this_id}))
+                    return response
+                except CloneError:
+                    response.write(json.dumps({"clone_error": "clone_error", 'id': this_id}))
                     return response
 
                 response.write(
@@ -57,9 +65,10 @@ def edit_plan_row_ajax(request):
                 try:
                     this_id = edit_plan_row(data, this_plan, this_id, CREATE)
                 except (IntegrityError, ValueError):
-                    response = HttpResponse()
-                    response['Content-Type'] = 'text/javascript'
                     response.write(json.dumps({"error": "error", 'id': this_id}))
+                    return response
+                except CloneError:
+                    response.write(json.dumps({"clone_error": "clone_error", 'id': this_id}))
                     return response
 
                 response.write(
@@ -72,6 +81,10 @@ def edit_plan_row_ajax(request):
 
 
 def plan_delete_ajax(request):
+    """
+    1. Удаляет строку расписания из PlanRows
+    2. Ориентируется только по id и текущем выбранном расписании пользователя
+    """
     if request.is_ajax():
         user = CustomUser.objects.get(username=request.user.username)
         plan_list = UserPlans.objects.select_related().get(user_id=user.id, current_yn='y')
@@ -89,39 +102,20 @@ def plan_delete_ajax(request):
         return HttpResponseBadRequest()
 
 
-def plan_clone_ajax(request):
-    if request.is_ajax():
-        user = CustomUser.objects.get(username=request.user.username)
-        # выбираем текущее расписание юзера
-        plan_list = UserPlans.objects.select_related().get(user_id=user.id, current_yn='y')
-        data = request.POST
-        this_plan = plan_list.plan
-
-        if 'id' in data:
-            this_plan_row = PlanRows.objects.get(plan_id=this_plan.id, id=data['id'])
-            # просто дублируем запись в БД
-            this_plan_row.pk = None
-            this_plan_row.save()
-
-            response = HttpResponse()
-            response['Content-Type'] = 'text/javascript'
-            response.write(json.dumps({'success': "Успешно продублировано!", 'id': this_plan_row.id}))
-
-            return response
-
-        else:
-            HttpResponseBadRequest()
-
-    else:
-        return HttpResponseBadRequest()
+class CloneError(Exception):
+    """
+    Исключение для того, чтобы распознать, что пользователь пытается сохранить строку, которая уже существует
+    в точности в текущем дне и расписании
+    """
+    pass
 
 
-#
-
-# создаёт или обновляет строку расписания. Берёт данные из data
-# для того, чтобы строка сохранилась в базе, data должны быть переданы полностю для всех полей plan_row
-# если создаём новую запись, то фукнция возвращает id нового plan_row
 def edit_plan_row(data, this_plan, this_id, mode):
+    """
+     1. Создаёт или обновляет строку расписания, взависимости от поданой id
+     2. data должны быть переданы полностю для всех полей plan_row
+     3. Выдаёт собственные типы ошибок, чтобы распознать их в jquery
+    """
     day_of_week, place, parity, teacher, this_time, start_week, end_week, subject = \
         None, None, None, None, None, None, None, None
 
@@ -172,7 +166,22 @@ def edit_plan_row(data, this_plan, this_id, mode):
     if 'end_week' in data:
         end_week = data['end_week']
 
+    # если текущий режим работы фукнции это обновление строку
+    # в этом случае новая запись не создаётся
     if mode == UPDATE:
+        planrow_for_update = PlanRows.objects.select_related().filter(plan=this_plan,
+                                                            start_week=start_week,
+                                                            end_week=end_week,
+                                                            parity=parity,
+                                                            day_of_week=day_of_week,
+                                                            subject=subject,
+                                                            teacher=teacher,
+                                                            time=this_time,
+                                                            place=place)
+
+        if planrow_for_update.count() > 0:
+            raise CloneError(Exception)
+
         PlanRows.objects.select_related().filter(plan_id=this_plan.id, id=this_id).update(
             start_week=start_week,
             end_week=end_week,
@@ -186,7 +195,20 @@ def edit_plan_row(data, this_plan, this_id, mode):
         # возвращаем то же самое id
         return this_id
 
+    # если текущий режим работы фукнции это добавление новой строки
+    # в этом случае создаётся новый объект PlanRows
     if mode == CREATE:
+        if PlanRows.objects.select_related().filter(start_week=start_week,
+                                                    end_week=end_week,
+                                                    parity=parity,
+                                                    day_of_week=day_of_week,
+                                                    subject=subject,
+                                                    teacher=teacher,
+                                                    time=this_time,
+                                                    place=place,
+                                                    plan=this_plan):
+            raise CloneError(Exception)
+
         new_plan_row = PlanRows(start_week=start_week,
                                 end_week=end_week,
                                 parity=parity,
