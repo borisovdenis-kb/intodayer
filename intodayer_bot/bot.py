@@ -79,6 +79,10 @@ def do_mailing(data):
         for recp in data['recipients']:
             bot.send_message(recp['chat_id'], message_text)
 
+            if data['image']:
+                print('POPA')
+                bot.send_photo(recp['chat_id'], data['image'])
+
 
 if __name__ == '__main__':
    bot.polling(none_stop=True)

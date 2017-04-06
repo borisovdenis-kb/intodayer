@@ -2,19 +2,16 @@ from datetime import datetime as datetime_lib
 import json
 import requests
 from django.http import JsonResponse
-
 from django.contrib.auth.models import *
 from django.db.utils import IntegrityError
-
 from django.http import HttpResponse, HttpResponseRedirect
 from django.http import HttpResponseBadRequest
 from django.shortcuts import render_to_response
-
+from extra.bot_api import *
 from extra.utils import *
 from intodayer2_app.forms import *
 from intodayer2_app.send_sms import *
-
-import extra.utils as utils
+from intodayer_bot.bot import do_mailing
 
 CREATE = 'CREATE'
 UPDATE = 'UPDATE'
@@ -23,6 +20,31 @@ UPDATE = 'UPDATE'
 ###################################################################################
 #                          ОБРАБОТКА AJAX ЗАПРОСОВ                                #
 ###################################################################################
+
+
+def mailing_ajax(request):
+    """
+
+    :param request:
+    :return:
+    """
+    if request.is_ajax():
+        user = CustomUser.objects.get(username=request.user.username)
+        # получаем JSON для передачи боту
+        mailing = MailingParamJson(
+            user.id,
+            request.POST['plan_id'],
+            request.POST['image'],
+            'Всем привет как дела ребята хы хы хы епты крым наш'
+        )
+
+        do_mailing(mailing.get_mailing_param())
+
+        response = HttpResponse()
+        response['Content-Type'] = 'text/javascript'
+        response.write(json.dumps({'success': 1}))
+
+        return response
 
 
 def edit_plan_row_ajax(request):

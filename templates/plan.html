@@ -38,8 +38,10 @@
     {#        <a href="/home">oк</a>#}
     {#    </div>#}
 
+    <a id="btn-Convert-Html2Image" href="#">Download</a>
+
     <div class="right_content">
-        <div class="title_content">
+        <div class="title_content" plan_id={{ cur_plan.id }} >
             <div id="plan_title">{{ plan_info.0 }}</div>
             <div id="count_title">{{ plan_info.2 }}</div>
         </div>
@@ -67,11 +69,14 @@
                             <div class="day_title">{{ day.name }}</div>
                         </div>
                         <div class="tools_panel right">
+
                             <div class=share_button>
                                 <div class="second_layer"></div>
                                 <div class="first_layer">Share</div>
                             </div>
+
                         </div>
+
                     </div>
                     <div class="day_plan_content">
                         <div class="str_plan str_title">
@@ -128,5 +133,11 @@
                 </div>
             </div>
         {% endfor %}
+    </div>
+{% endblock %}
+
+{% block other %}
+    <div class="KLOSS">
+
     </div>
 {% endblock %}

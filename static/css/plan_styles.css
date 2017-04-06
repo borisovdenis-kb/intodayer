@@ -241,6 +241,19 @@ body {
     margin-top: 2px;
 }
 
+#btn-Convert-Html2Image {
+    width: 100px;
+    height: 1000px;
+    background-color: #eb6b66;
+}
+
+.KLOSS {
+    position: absolute;
+    width: 1000px;
+    height: auto;
+    margin: auto;
+    opacity: 0;
+}
 
 
 /*.tools_panel ul li button:hover {*/

@@ -1,10 +1,12 @@
 import json
+import base64
 from extra.utils import *
 from intodayer_bot.bot import do_mailing
+from PIL import Image
 
 
 class MailingParamJson:
-    def __init__(self, sender_id, plan_id, text):
+    def __init__(self, sender_id, plan_id, image, text):
         """
             message - словарь в который будет собираться
             вся необходимая боту информация для рассылки
@@ -13,6 +15,7 @@ class MailingParamJson:
         """
         self.message = {}
         self.msg_text = text
+        self.image = image
         self.plan_id = plan_id
         self.sender_id = sender_id
 
@@ -45,6 +48,15 @@ class MailingParamJson:
     def set_msg_text(self):
         self.message['text'] = self.msg_text
 
+    def set_msg_image(self):
+        file_name = "media/tmp/%s.png" % self.sender_id
+        imgdata = base64.b64decode(self.image.encode())
+
+        with open(file_name, "wb") as f:
+            f.write(imgdata)
+
+        self.message['image'] = self.image
+
     def set_plan_info(self):
         """
             Собирает информацию об расписания, от которого идет рассылка.
@@ -66,13 +78,14 @@ class MailingParamJson:
         self.set_sender_name()
         self.set_recipients()
         self.set_msg_text()
+        self.set_msg_image()
         self.set_plan_info()
 
         return json.dumps(self.message, ensure_ascii=False, indent=2)
 
 
 if __name__ == '__main__':
-    tst = MailingParamJson(2, 2, 'Всем привет как дела ребята хы хы хы епты крым наш')
+    tst = MailingParamJson(2, 2, 'f', 'Всем привет как дела ребята хы хы хы епты крым наш')
     print(tst.get_mailing_param())
 
     do_mailing(tst.get_mailing_param())
