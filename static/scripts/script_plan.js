@@ -9,7 +9,7 @@ var $SELECTED_STR;
 
 $(document).ready(function () {
     setTimeout(function () {
-        // delete_empty_days();
+        // deleteTopCheckboxInEmptyDays();
         setColorStr();
     }, 100);
 

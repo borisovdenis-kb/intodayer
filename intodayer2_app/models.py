@@ -157,6 +157,7 @@ class PlanRows(models.Model):
     end_week = models.IntegerField()
     comment = models.CharField(max_length=256)
     plan = models.ForeignKey('PlanLists', models.DO_NOTHING)
+    # subgroup = models.IntegerField(models.DO_NOTHING)
 
     class Meta:
         managed = True

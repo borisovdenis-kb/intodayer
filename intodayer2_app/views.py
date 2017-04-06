@@ -142,6 +142,7 @@ def edit_plan_row(data, this_plan, this_id, mode):
     if 'time' in data:
         dt = datetime_lib.strptime(data['time'], "%H:%M")
         times_objects = Times.objects.select_related().filter(plan_id=this_plan, hh24mm=dt)
+        times_objects = Times.objects.select_related().filter(plan_id=this_plan, hh24mm=dt)
         if times_objects.count() == 0:
             this_time = Times(hh24mm=dt, plan=this_plan)
             this_time.save()
@@ -169,17 +170,19 @@ def edit_plan_row(data, this_plan, this_id, mode):
     # если текущий режим работы фукнции это обновление строку
     # в этом случае новая запись не создаётся
     if mode == UPDATE:
-        planrow_for_update = PlanRows.objects.select_related().filter(plan=this_plan,
-                                                            start_week=start_week,
-                                                            end_week=end_week,
-                                                            parity=parity,
-                                                            day_of_week=day_of_week,
-                                                            subject=subject,
-                                                            teacher=teacher,
-                                                            time=this_time,
-                                                            place=place)
+        plan_row_exist_update = PlanRows.objects.select_related().filter(
+            plan=this_plan,
+            start_week=start_week,
+            end_week=end_week,
+            parity=parity,
+            day_of_week=day_of_week,
+            subject=subject,
+            teacher=teacher,
+            time=this_time,
+            place=place
+        )
 
-        if planrow_for_update.count() > 0:
+        if plan_row_exist_update:
             raise CloneError(Exception)
 
         PlanRows.objects.select_related().filter(plan_id=this_plan.id, id=this_id).update(
@@ -198,15 +201,19 @@ def edit_plan_row(data, this_plan, this_id, mode):
     # если текущий режим работы фукнции это добавление новой строки
     # в этом случае создаётся новый объект PlanRows
     if mode == CREATE:
-        if PlanRows.objects.select_related().filter(start_week=start_week,
-                                                    end_week=end_week,
-                                                    parity=parity,
-                                                    day_of_week=day_of_week,
-                                                    subject=subject,
-                                                    teacher=teacher,
-                                                    time=this_time,
-                                                    place=place,
-                                                    plan=this_plan):
+        plan_row_exist_create = PlanRows.objects.select_related().filter(
+            start_week=start_week,
+            end_week=end_week,
+            parity=parity,
+            day_of_week=day_of_week,
+            subject=subject,
+            teacher=teacher,
+            time=this_time,
+            place=place,
+            plan=this_plan
+        )
+
+        if plan_row_exist_create:
             raise CloneError(Exception)
 
         new_plan_row = PlanRows(start_week=start_week,

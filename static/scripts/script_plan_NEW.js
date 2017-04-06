@@ -9,9 +9,61 @@
 var $LAST_SELECTED_STR;
 
 function startBaseFunctions() {
-    // delete_empty_days();
+    deleteTopCheckboxInEmptyDays();
     setColorStr();
 }
+
+//цвет чётных строчек расписания
+var backgroundColorEvenStr = 'rgba(255, 255, 255, 1)';
+//цвет нечётный строчек расписания
+var backgroundColorOddStr = 'rgba(240, 240, 245, 1)';
+//цвет границ обычной строки при наведении мышки или выделении строки
+var borderColorSelectStr = 'rgba(3, 96, 255, 0.3)';
+//успешная отправка на сервер
+var backgroundSuccessSavedStr = '#CBF5BD';
+var borderColorSuccessSavedStr = 'rgba(103, 198, 97, 0.9)';
+//поле выделено галочкой
+var backgroundCheckedStr = 'rgba(237, 218, 255,1)';
+var borderColorCheckedStr = 'rgba(139, 29, 235, 0.5)';
+//поле с ошибкой отправки на сервер
+var backgroundErrorStr = '#FBB6B6';
+var borderColorErrorStr = '#F37C7C';
+//строка, которая клонирована и не существует на сервере
+//или строка которая, если была изменена, уже существует на сервере в текущем дне (в точности до всех полей)
+var backgroundCloneStr = '#ABD6F2';
+var borderColorStr = 'rgba(3, 96, 255, 0.3)';
+
+// переписать через Load
+var $NEW_STR_PLAN_HTML = $('' +
+    '<div class="str_fade">' +
+    '<div class="str_plan change" style="opacity: 0; display:none;">' +
+    '<div class="checkbox_wrap">' +
+    '<div class="checkbox_container row"></div>' +
+    '</div>' +
+    '<ul>' +
+    '<li><input  class="weeks"></li>' +
+    '<li><input class="time"></li>' +
+    '<li><input  class="subject"></li>' +
+    '<li><input class="teacher"></li>' +
+    // не забыть поставить class=last, чтобы потом распознать
+    '<li><input class="place"></li>' +
+    '<li class="last"><a class="parity">Все</a></li>' +
+    '</ul>' +
+    '</div>' +
+    '</div>');
+
+// плэйсхолдеры
+var week_PlaceHolder = '1-18';
+var time_PlaceHolder = '11:30';
+var subject_PlaceHolder = 'Математика';
+var teacher_PlaceHolder = 'Попов';
+var place_PlaceHolder = '510х';
+var parity_PlaceHolder = 'Чётные';
+
+//устанавливаем заданные плэйсхолдеры
+$NEW_STR_PLAN_HTML.find('input').each(function () {
+    $(this).attr('placeholder', setTruePlaceholder($(this)));
+});
 
 $(document).ready(function () {
     startBaseFunctions();
@@ -25,35 +77,16 @@ $(document).ready(function () {
     $('.str_plan.change').each(function () {
         setNewListenersSpecial($(this));
         setNewListenersNewStr($(this));
-
     })
 });
 
-// переписать через Load
-var NEW_STR_PLAN_HTML = '' +
-    '<div class="str_fade">' +
-    '<div class="str_plan change" style="opacity: 0; display:none;">' +
-    '<div class="checkbox_wrap">' +
-    '<div class="checkbox_container row"></div>' +
-    '</div>' +
-    '<ul>' +
-    '<li><input placeholder="Недели" class="weeks"></li>' +
-    '<li><input placeholder="Время" class="time"></li>' +
-    '<li><input placeholder="Предмет" class="subject"></li>' +
-    '<li><input placeholder="Преподователь" class="teacher"></li>' +
-    // не забыть поставить class=last, чтобы потом распознать
-    '<li><input placeholder="Место" class="place"></li>' +
-    '<li class="last"><a class="parity">Все</a></li>' +
-    '</ul>' +
-    '</div>' +
-    '</div>';
 
 var thisInput;
 var timerInputId;
 
 // устанавливаем обработчик при нажатии на плюс
 $('.plus_button_form').click(function () {
-    addPlanStr($(this));
+    appendPlanStr($(this));
 });
 
 // если мы нажимаем не на строки расписания и не на поля ввода, то снимаем выделение с активных
@@ -67,8 +100,15 @@ $(window).on('mousedown', function (event) {
 });
 
 // обработчик для верхнего чекбокса, в заголовке каждого дня
-function setGeneralCheckBoxListeners($this_str) {
-    var this_checkbox = $this_str.find('.general_checkbox');
+function setGeneralCheckBoxListeners($this_str, $general_checkbox) {
+    var this_checkbox;
+    if (!$general_checkbox) {
+        this_checkbox = $this_str.find('.general_checkbox');
+    }
+    else {
+        this_checkbox = $general_checkbox;
+    }
+
     this_checkbox.attr('flag_active', 'false');
     this_checkbox.on('click', function () {
         // if (!FLAG_DELETE && !FLAG_CLONE) {
@@ -79,14 +119,37 @@ function setGeneralCheckBoxListeners($this_str) {
 
 
 // удаляет поле галочки в заголовке для пустых дней
-function delete_empty_days() {
+function deleteTopCheckboxInEmptyDays() {
     var $days_content = $('.plan_content');
     $days_content.each(function () {
         var $str_plans = $(this).find('.str_plan ul');
         if ($str_plans.length == 1) {
-            $(this).find('.checkbox_wrap').fadeTo(0, 0);
+            var $this_checkbox = $(this).find('.checkbox_wrap');
+            setCheckBoxInvisible($this_checkbox);
         }
     });
+}
+
+function setCheckBoxInvisible($checkbox_wrap) {
+    var $this_checkbox = $checkbox_wrap.find('.checkbox_container');
+    $this_checkbox.fadeTo(300, 0);
+    $this_checkbox.css('cursor', 'default');
+    $checkbox_wrap.off();
+    $checkbox_wrap.css('cursor', 'default');
+    $checkbox_wrap.addClass("invisible");
+}
+
+function setCheckBoxVisible($checkbox_wrap, type) {
+    // если не указан тип чекбокса, навешиваем обработчки на главный верхний чекбокс
+    if (!type) {
+        $checkbox_wrap.off();
+        setGeneralCheckBoxListeners(false, $checkbox_wrap);
+    }
+    var $this_checkbox = $checkbox_wrap.find('.checkbox_container');
+    $this_checkbox.fadeTo(300, 1);
+    $this_checkbox.css('cursor', 'pointer');
+    $checkbox_wrap.css('cursor', 'pointer');
+    $checkbox_wrap.removeClass("invisible");
 }
 
 // урезанная версия фукнции для установки только событий редактирования
@@ -342,13 +405,29 @@ function actionGeneralCheckBox($general_checkbox) {
 
 
 // устанавливаем чек боксы
+
 function setCheckBox($checkbox_wrap, mode) {
     var $this_str = $checkbox_wrap.parent('.str_plan');
     $this_str.removeClass('selected_str');
+
     var $this_ul = $this_str.find('ul');
     var $this_checkbox = $checkbox_wrap.find('.checkbox_container');
     var $this_plan_content = $this_str.parents('.plan_window');
     var $info_checkboxes = $this_plan_content.find('.info_checkboxes');
+
+    // //прекращаем анимации при нажатии на галочку
+    // //если есть отложенные анимации, то остановить их
+    $this_str.removeClass('animation');
+
+    // // эти таймеры работают пока такому смыслу: пока не зафиксируется, что анимация
+    // // с таймером timer_animate_success не будет остановлена
+    // timer_remover_conflict = setInterval(function () {
+    //     if (timer_animate_success){
+    //         clearInterval(timer_remover_conflict);
+    //     }
+    //     clearTimeout(timer_animate_success);
+    // }, 20);
+
 
     $this_str.stop(true, true);
     $this_ul.stop(true, true);
@@ -363,8 +442,8 @@ function setCheckBox($checkbox_wrap, mode) {
             blockInputs($this_str);
             $this_str.addClass('marked');
             $this_ul.animate({
-                'border-color': 'rgba(139, 29, 235, 0.5)',
-                'background-color': 'rgb(237, 218, 255)'
+                'border-color': borderColorCheckedStr,
+                'background-color': backgroundCheckedStr
             }, 100);
         }
         $this_checkbox.addClass('marked');
@@ -412,67 +491,82 @@ function setEditedField($field) {
 }
 
 //устанавливает выделение для строки, если не установлено
-function hoverSelectStr($this_str) {
+function hoverSelectStr($this_str, mode) {
+    if (mode == 'ease_us') {
+        $this_str.find('ul').animate({'border-color': borderColorSelectStr});
+        return;
+    }
+
     if ($this_str.hasClass('marked') || $this_str.hasClass('animation')) {
         return false;
     }
     if ($this_str.hasClass('clone_str')) {
-        $this_str.find('ul').css({'border': '2px solid rgba(3, 96, 255, 0.3)'});
+        $this_str.find('ul').css({'border-color': borderColorStr});
         return;
     }
     if ($this_str.hasClass('warning_str')) {
-        $this_str.find('ul').css({'border': '2px solid #F37C7C'});
+        $this_str.find('ul').css({'border-color': borderColorErrorStr});
         return;
     }
-    $this_str.find('ul').css({'border': '2px solid rgba(3, 96, 255, 0.3)'});
+    $this_str.find('ul').css({'border-color': borderColorSelectStr});
 }
 //снимает выделение со строки, если  установлено
 function hoverDefaultStr($this_str) {
+
     if ($this_str.hasClass('marked') || $this_str.hasClass('selected_str') || $this_str.hasClass('animation')) {
         return false;
     }
-    if ($this_str.hasClass('warning_str')) {
-        $this_str.find('ul').css({
-            'border-color': 'rgba(103, 198, 97, 0.9)'
-        });
-    }
-    $this_str.find('ul').css({'border': '2px solid rgba(3, 96, 255, 0.0)'});
+    // if ($this_str.hasClass('warning_str')) {
+    //     $this_str.find('ul').css({
+    //         'border-color': borderColorErrorStr
+    //     });
+    // }
+    $this_str.find('ul').css({'border': '2px solid rgba(255, 255, 255, 0.0)'});
 
 }
 
 // устанавливает выделение текущей строки
-function setSelectStr($str_plan) {
+function setSelectStr($str_plan, mode) {
     $str_plan.addClass('selected_str');
-    hoverSelectStr($str_plan);
+    hoverSelectStr($str_plan, mode);
     setOldValues($str_plan);
 }
 
-
+var timer_send_server;
 function setDefaultStr($str_plan, mode) {
     //при расфокусировке отправляем инфу в БД
     $str_plan.removeClass('selected_str');
     hoverDefaultStr($str_plan);
 
-    setTimeout(function () {
-        if (mode == 'clone' || mode == 'delete') {
-            return false;
-        }
+    if (mode == 'clone' || mode == 'delete') {
+        return false;
+    }
+
+    timer_send_server = setTimeout(function () {
         //***************************************************************************************
         // Одна из важнейших строчек во всём коде
         // именно тут данные отправляются на сервер для обновления или создания строки расписания
-        // 1. Если строка изменена при расфокусировки (изменено хотя бы одно поле), то
-        if (checkThatFieldIsChanged($str_plan)) {
-            // 2. Если строка проходит базовую валидацию, то отправляем данные на сервер
-            var errors = mainValidationStr($str_plan);
-            if (!isEmpty(errors)) {
-                callback_editStrPlan_error($str_plan);
-            }
-            // если нет ни одной ошибки, то всё успешно! )
-            else {
-                editStrPlan($str_plan);
-            }
-
+        if(strIsEmpty($str_plan)){
+            return false;
         }
+        if ($str_plan.attr('id') && $str_plan.attr('id') != 0) {
+            // 1. Если строка изменена при расфокусировки (изменено хотя бы одно поле), то
+            if (checkThatFieldIsChanged($str_plan)) {
+                // 2. Если строка проходит базовую валидацию, то отправляем данные на сервер
+                var errors = mainValidationStr($str_plan);
+                if (!isEmpty(errors)) {
+                    callback_editStrPlan_error($str_plan);
+                }
+                // если нет ни одной ошибки, то всё успешно! )
+                else {
+                    editStrPlan($str_plan);
+                }
+            }
+        }
+        else {
+            editStrPlan($str_plan);
+        }
+
     }, 200);
 }
 
@@ -492,6 +586,7 @@ function setOldValues($str_plan) {
 function checkThatFieldIsChanged($str_plan) {
     var new_data = getFieldsInformation($str_plan);
     for (var key in new_data) {
+        // alert(key + ": " + new_data[key] + " " + key + ": " + $str_plan.attr(key + "_old"));
         if (new_data[key] != $str_plan.attr(key + "_old")) {
             return true;
         }
@@ -549,6 +644,10 @@ function input_to_a($field) {
     else {
         // если в поле было что-то введено, а потом поле очистили, то вернётся старое значение
         $field.val(temp_input.attr('old_value'));
+
+        // чтобы не отправлять эту строку на сервер
+        // $ul_parent.parent().addClass('not_update');
+
         return $field;
     }
     // на этой строчке важно обрезать часть строки до 100 символов
@@ -559,20 +658,21 @@ function input_to_a($field) {
     return $field;
 }
 
+
 // устанавливает правильный placeholder
 function setTruePlaceholder($this_field) {
     if ($this_field.hasClass('weeks'))
-        return 'Недели';
+        return week_PlaceHolder;
     if ($this_field.hasClass('time'))
-        return 'Время';
+        return time_PlaceHolder;
     if ($this_field.hasClass('subject'))
-        return 'Предмет';
+        return subject_PlaceHolder;
     if ($this_field.hasClass('teacher'))
-        return 'Преподаватель';
+        return teacher_PlaceHolder;
     if ($this_field.hasClass('place'))
-        return 'Место';
+        return place_PlaceHolder;
     if ($this_field.hasClass('parity'))
-        return 'Чётность';
+        return parity_PlaceHolder;
     return "Пусто";
 }
 
@@ -585,35 +685,50 @@ function setColorStr($this_str) {
             $(this).find('.str_plan.change').each(function (i) {
 
                 if (i % 2 == 0) {
-                    $(this).animate({'background-color': 'rgba(240, 240, 245, 1)'}, time_color);
+                    $(this).animate({'background-color': backgroundColorOddStr}, time_color);
                     if ($(this).hasClass('warning_str') || $(this).hasClass('clone_str')) {
                         return true;
                     }
-                    $(this).find('ul').animate({'background-color': 'rgba(240, 240, 245, 1)'}, time_color);
+                    $(this).find('ul').animate({'background-color': backgroundColorOddStr}, time_color);
                 }
                 else {
-                    $(this).animate({'background-color': 'rgba(255, 255, 255, 1)'}, time_color);
+                    $(this).animate({'background-color': backgroundColorEvenStr}, time_color);
                     if ($(this).hasClass('warning_str') || $(this).hasClass('clone_str')) {
                         return true;
                     }
-                    $(this).find('ul').animate({'background-color': 'rgba(255, 255, 255, 1)'}, time_color);
+                    $(this).find('ul').animate({'background-color': backgroundColorEvenStr}, time_color);
                 }
             });
         });
     }
     // если передана одна строка, для которой нужно установить правильный цвет,
     else {
+        // случай, когда после эффекта успшеной отправки строки на сервер мы сразу нажали на галочку
+
+
         if ($this_str.hasClass('warning_str')) {
             hoverSelectStr($this_str);
-            $this_str.find('ul').css({'background-color': '#FBB6B6'});
+            $this_str.find('ul').css({'background-color': backgroundErrorStr});
             return false;
         }
         if ($this_str.hasClass('clone_str')) {
             hoverSelectStr($this_str);
-            $this_str.find('ul').css({'background-color': '#ABD6F2'});
+            $this_str.find('ul').css({'background-color': backgroundCloneStr});
             return false;
         }
-        $this_str.find('ul').css({'background': $this_str.css('background')});
+
+        // if ($this_str.hasClass('conflict_animation')) {
+        //
+        //     // setTimeout(function () {
+        //     //      alert("Sdf");
+        //     // },1000);
+        //     return false;
+        // }
+
+        hoverSelectStr($this_str);
+        $this_str.find('ul').css({'background-color': 'rgba(255,255,255,0)'});
+
+        // $this_str.find('ul').css({'background': $this_str.css('background')});
 
     }
 }
@@ -635,10 +750,11 @@ function appendNewStrAnimation($new_div, $insert_after_this) {
 }
 
 // добавление новой строки с расписанием
-function addPlanStr($this_button) {
+var timer_setVisibleTopCheckbox;
+function appendPlanStr($this_button) {
 
     var $this_block = $($this_button).closest('.day_plan_content');
-    var $new_div = $(NEW_STR_PLAN_HTML).find('.str_plan.change');
+    var $new_div = $($NEW_STR_PLAN_HTML).clone().find('.str_plan.change');
     var $plus_button = $this_block.find('.str_plus');
 
     // сам плюс погасает
@@ -667,7 +783,18 @@ function addPlanStr($this_button) {
 
     // делаем правильный цвет следующей строчки
     setTimeout(function () {
+        setColorStr();
+    }, 800);
+
+    //если до этого в текущем дне не было ни одной строки, то при добавлении первой показываем чекбокс сверху
+    clearTimeout(timer_setVisibleTopCheckbox);
+    timer_setVisibleTopCheckbox = setTimeout(function () {
+        var $this_plan = $new_div.parents('.plan_window');
+        if ($this_plan.find('.str_plan.change').length == 1 && $this_plan.find('.general_checkbox').hasClass('invisible')) {
+            setCheckBoxVisible($this_plan.find('.general_checkbox'));
+        }
     }, 500);
+
 
     setNewListenersNewStr($new_div);
     setNewListenersSpecial($new_div);
@@ -694,10 +821,10 @@ function validateField(field) {
     var timePatt4 = /^(([0,1][0-9])|(2[0-3])):[0-5]$/;
     var timePatt5 = /^(([0,1][0-9])|(2[0-3])):[0-5][0-9]$/;
     var weekPatt1 = /^([1-9])$/;
-    var weekPatt2 = /^([1-9]-)|([1-4][0-9])|([5][0-6])$/;
-    var weekPatt3 = /^([1-9]-[1-9])|([1-4][0-9]-)|([5][0-6]-)$/;
-    var weekPatt4 = /^([1-9]-[1-4][0-9])|([1-4][0-9]-[1-9])|([5][0-6]-[1-9])|([1-9]-[5][0-6])$/;
-    var weekPatt5 = /^([1-4][0-9]-[1-4][0-9])|([5][0-6]-[1-4][0-9])|([1-4][0-9]-[5][0-6])|([5][0-6]-[5][0-6])$/;
+    var weekPatt2 = /^([1-9]-)|([1-4][0-9])|([5][0-2])$/;
+    var weekPatt3 = /^([1-9]-[1-9])|([1-4][0-9]-)|([5][0-2]-)$/;
+    var weekPatt4 = /^([1-9]-[1-4][0-9])|([1-4][0-9]-[1-9])|([5][0-2]-[1-9])|([1-9]-[5][0-2])$/;
+    var weekPatt5 = /^([1-4][0-9]-[1-4][0-9])|([5][0-2]-[1-4][0-9])|([1-4][0-9]-[5][0-2])|([5][0-2]-[5][0-2])$/;
     var subjectPatt = /^[a-zA-Zа-яА-Я0-9 -]*$/;
     var content = field.val();
     var length = content.length;
@@ -786,27 +913,23 @@ function getAjaxActions($pressed_button, i) {
 
 }
 
-
 // дублируем строку
 // работает с AJAX
-var FLAG_CLONE = false;
 function clone_str(checkboxes) {
     var n = checkboxes.length;
     checkboxes.each(function (i) {
         var $this_str = $(this).parents('.str_plan');
-        if ($this_str.attr('id') != undefined) {
+        if ($this_str.attr('id') != undefined || $this_str.attr('id') != 0) {
             var data = getFieldsInformation($this_str);
-            callback_clone(data, $this_str, 0);
+            callback_clone(data, $this_str);
 
         }
-        // если строка пустая (не сохранена в базе)
+        // если строка полностью пустая (не сохранена в базе)
         else {
-            delete_str(checkboxes, i, n);
+            callback_clone({}, $this_str, 'new_str');
         }
-        // alert(n + " " + i);
+
         if (n == i + 1) {
-            // alert("Sdf");
-            FLAG_CLONE = false;
             setTimeout(function () {
                 setColorStr();
             }, 500);
@@ -816,8 +939,8 @@ function clone_str(checkboxes) {
 }
 
 // визуально дублируем строку, если получен ответ от сервера
-function callback_clone(data, $this_str, new_id) {
-    var $new_div = $(NEW_STR_PLAN_HTML).find('.str_plan.change');
+function callback_clone(data, $this_str, mode) {
+    var $new_div = $($NEW_STR_PLAN_HTML).clone().find('.str_plan.change');
     // чтобы анимация работала правильно для любой высоты блока
     $new_div.css('height', $this_str.height());
     $this_str.stop(true, true);
@@ -831,11 +954,7 @@ function callback_clone(data, $this_str, new_id) {
     $new_div.find('.teacher').attr('value', data['teacher']);
     $new_div.find('.place').attr('value', data['place']);
     $new_div.attr('id', 0);
-    $new_div.attr('id', new_id);
 
-    if ($this_str.hasClass('clone_str')) {
-        $new_div.addClass('clone_str');
-    }
 
     // преобразовываем поля input в a для всех новых полей
     var $new_inputs = $new_div.find('ul li input');
@@ -845,11 +964,15 @@ function callback_clone(data, $this_str, new_id) {
     // вешаем обработчики на все новые поля
     setNewListenersNewStr($new_div);
     setNewListenersSpecial($new_div);
-
     setBlurCheckbox($this_str, 'clone');
-    callback_cloneErrorStr($new_div);
-    // check_field_exist($new_div);
 
+    // если дублируем пустую строку, то не выделяем её
+    if (mode != 'new_str') {
+        if ($this_str.hasClass('clone_str')) {
+            $new_div.addClass('clone_str');
+        }
+        callback_cloneErrorStr($new_div);
+    }
 }
 
 // удаляет строку с расписанием
@@ -899,7 +1022,9 @@ function delete_str(checkboxes, i, n) {
 }
 
 // выполнение стилей и эффектов после успешного удаления строки с сервера
+var timer_setInvisibleTopCheckbox;
 function callback_delete($this_str) {
+    var $this_plan = $this_str.parents('.plan_window');
     $this_str.clearQueue();
     $this_str.find('ul').css({
         'border': '2px solid #FF6161',
@@ -910,8 +1035,18 @@ function callback_delete($this_str) {
     $this_str.fadeTo(100, 0, function () {
         $this_str.slideToggle(200, function () {
             $this_str.remove();
+
+            //если удалённая строка последняя, то убираем чек бокс сверху
+            clearTimeout(timer_setInvisibleTopCheckbox);
+            timer_setInvisibleTopCheckbox = setTimeout(function () {
+                if ($this_plan.find('.str_plan.change').length == 0) {
+                    setCheckBoxInvisible($this_plan.find('.general_checkbox'));
+                }
+            }, 100);
         });
     });
+
+
 }
 
 
@@ -976,10 +1111,9 @@ function mainValidationStr($this_str) {
         var reg_weeks = /^[0-9]{1,2}-[0-9]{1,2}$/;
         if (reg_weeks.test(weeks)) {
             weeks = weeks.split('-');
-            var start_week = weeks[0];
-            var end_week = weeks[1];
-            // alert(start_week + " " + end_week);
-            if (start_week > end_week && start_week <= 52 && end_week <= 52) {
+            var start_week = +weeks[0];
+            var end_week = +weeks[1];
+            if ((start_week > end_week) || (start_week > 52) || (end_week > 52) || (start_week == 0) || (end_week == 0)) {
                 errors['weeks'] = 'logical_error';
             }
         }
@@ -1030,50 +1164,69 @@ function mainValidationStr($this_str) {
 
 function callback_cloneErrorStr($this_str, response) {
     var $this_ul = $this_str.find('ul');
+    var $this_checkbox = $this_str.find('.checkbox_container');
     $this_str.removeClass('warning_str');
     $this_str.addClass('clone_str');
-    $this_ul.animate({
-        'background-color': '#ABD6F2',
-    }, 300);
+    // если после расфокусировки сразу выбрана галочка, то нельзя портить выранную строку этой анимацией
+    if (!$this_checkbox.hasClass('marked')) {
+        $this_ul.animate({
+            'background-color': backgroundCloneStr,
+        }, 300);
+    }
 }
 
 
 function callback_editStrPlan($this_str, response) {
     $this_str.removeClass('warning_str');
     $this_str.removeClass('clone_str');
-    var success_id = response.id;
+    var $this_checkbox = $this_str.find('.checkbox_container');
     var $this_ul = $this_str.find('ul');
     $this_ul.clearQueue();
+    // var success_id = response.id;
+    $this_str.attr('id', response.id);
     $this_str.addClass('animation');
-    $this_ul.animate({
-        'background-color': '#CBF5BD',
-        'border-color': 'rgba(103, 198, 97, 0.9)'
-    }, 300, function () {
-        var $this = $(this);
-        setTimeout(function () {
-            $this.animate({
-                'background-color': $this_str.css('background-color'),
-                'border-color': 'rgba(103, 198, 97, 0.0)'
-            }, function () {
-                $this_str.removeClass('animation');
-                setTimeout(function () {
-                    setColorStr();
-                }, 200);
 
-            });
-        }, 1000);
-    });
-    $this_str.attr('id', success_id);
+    // если после расфокусировки сразу выбрана галочка, то нельзя портить выранную строку этой анимацией
+    // обязательно внутри не через setTimeout а через delay
+    // чтобы можно было остановить очередь jquery
+    if (!$this_checkbox.hasClass('marked')) {
+        $this_ul.animate({
+            'background-color': backgroundSuccessSavedStr,
+            'border-color': borderColorSuccessSavedStr
+        }).delay(1000).animate({
+            'background-color': $this_str.css('background-color'),
+            'border-color': 'rgba(255, 255, 255, 0.0)'
+        }, function () {
+            $this_str.removeClass('animation');
+            if (hasSelectedField($this_str)) {
+                setSelectStr($this_str, 'ease_us');
+            }
+        });
+    }
+
+}
+
+function hasSelectedField($this_str) {
+    if ($this_str.find('.selected_field').length >= 1) {
+        return true;
+    }
+    else {
+        return false;
+    }
 }
 
 function callback_editStrPlan_error($this_str, response) {
     $this_str.addClass('warning_str');
     $this_str.removeClass('clone_str');
     var $this_ul = $this_str.find('ul');
+    var $this_checkbox = $this_str.find('.checkbox_container');
     $this_ul.clearQueue();
-    $this_ul.animate({
-        'background-color': '#FBB6B6',
-    }, 300);
+    // если после расфокусировки сразу выбрана галочка, то нельзя портить выранную строку этой анимацией
+    if (!$this_checkbox.hasClass('marked')) {
+        $this_ul.animate({
+            'background-color': backgroundErrorStr,
+        }, 300);
+    }
 }
 
 // получаем инфу из строки
@@ -1087,7 +1240,8 @@ function getFieldsInformation($this_str) {
     else {
         id = 0;
     }
-    parity = get_patiry_value($this_str.find('.parity').text());
+    parity = get_parity_value($this_str.find('.parity').val());
+    // alert(parity);
     day_of_week = get_day_num($this_plan.attr('day_num'));
 
     // делаем проверку для случая, когда одна из строк активирована и она INPUT
@@ -1142,6 +1296,36 @@ function getFieldsInformation($this_str) {
 
 }
 
+
+// проверка, что вся строка не пустая
+// var count_field = $('.str_plan.change').first().find('li').length;
+function strIsEmpty($this_str) {
+    var flag_exist = true;
+    // считаем в скольки полях есть текст
+    // при снятии фокуса с input он может также присутствовать и не успеть измениться на <a>
+    $this_str.find('ul li a').each(function () {
+        if ($(this).hasClass('parity')) {
+            return true;
+        }
+        if (!$(this).hasClass('parity') && $(this).text() != '') {
+            flag_exist = false;
+            return false;
+        }
+    });
+    $this_str.find('ul li input').each(function () {
+
+        if ($(this).parents('.str_plan').hasClass('parity')) {
+            return true;
+        }
+        if ($(this).val() != '') {
+            flag_exist = false;
+            return false;
+        }
+    });
+    return flag_exist;
+}
+
+
 // возвращает номер дня, начиная с 0
 function get_day_num(name_day) {
     var days = {
@@ -1162,7 +1346,7 @@ function get_day_num(name_day) {
 }
 
 // возвращает значащий номер для чётности
-function get_patiry_value(value) {
+function get_parity_value(value) {
     var values_num = {
         'Все': 0,
         'Чётные': 1,
@@ -1182,7 +1366,6 @@ function get_patiry_value(value) {
 var hasOwnProperty = Object.prototype.hasOwnProperty;
 
 function isEmpty(obj) {
-
     // null and undefined are "empty"
     if (obj == null) return true;
 
@@ -1202,6 +1385,5 @@ function isEmpty(obj) {
     for (var key in obj) {
         if (hasOwnProperty.call(obj, key)) return false;
     }
-
     return true;
 }
