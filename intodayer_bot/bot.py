@@ -70,9 +70,9 @@ def do_mailing(data):
         message_text += 'Староста: ' + unknown
 
     if data['text']:
-        message_text += '"' + data['text'] + '"' + '\n'
+        message_text += '\n' + '"' + data['text'] + '"' + '\n'
     else:
-        message_text += 'Пустое сообщение' + '\n'
+        message_text += '\n' + 'Пустое сообщение' + '\n'
 
     # делаем рассылку по списку контактов
     if data['recipients']:

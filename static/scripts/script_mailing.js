@@ -28,11 +28,8 @@ $(document).ready(function () {
                 data.image = imageData;
                 imageData = undefined;
                 $KLOSS.find($clone).remove();
-                clearInterval(timer);
 
                 data.plan_id = $('.title_content').attr('plan_id');
-
-                alert(data.image);
 
                 $.ajax({
                     url: '/mailing',
@@ -43,29 +40,12 @@ $(document).ready(function () {
                         alert(msg.success);
                     }
                 });
+
+                clearInterval(timer);
             }
         }, 100);
     });
 });
-
-
-// function planRowsFullProc($elem) {
-//     /*
-//      *  Функция удаляет лишнее из DIV блока, содержащего
-//      *  расписание, тем самы подготавливая его для конвертация
-//      *  в изображение.
-//      */
-//     var $clone = $elem.clone();
-//
-//     $.each($clone.find('.checkbox_wrap'), function() {
-//         $(this).remove();
-//     });
-//
-//     alert($clone.html());
-//
-//     return $clone;
-// }
-
 
 
 function htmlToImage($elem) {
@@ -77,12 +57,8 @@ function htmlToImage($elem) {
     html2canvas($elem, {
         onrendered: function (canvas) {
             imageData = canvas.toDataURL("image/png");
-            // imageData.replace("image/png", "image/octet-stream");
-            imageData.replace(/^data:image\/png/, "data:application/octet-stream");
 
             $("#btn-Convert-Html2Image").attr("download", "your_pic_name.png").attr("href", imageData);
-            // $("#btn-Convert-Html2Image").trigger('click');
-
         }
     });
 }

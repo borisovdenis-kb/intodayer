@@ -22,7 +22,7 @@ class MailingParamJson:
         if miss_pad != 0:
             image += '=' * (4 - miss_pad)
 
-        self.image = image
+        self.image = image.split('base64,')[1]
 
     def set_sender_name(self):
         """
@@ -68,7 +68,7 @@ class MailingParamJson:
         plan = PlanLists.objects.get(id=self.plan_id)
 
         self.message['plan_info'] = {'title': plan.title, 'desc': plan.description}
-        self.message['plan_info'].update({'mem_count': utils.members_amount_suffix(count)})
+        self.message['plan_info'].update({'mem_count': str(count)})
 
     def get_mailing_param(self):
         """
@@ -82,8 +82,6 @@ class MailingParamJson:
         self.set_msg_text()
         self.set_msg_image()
         self.set_plan_info()
-
-        print(json.dumps(self.message, ensure_ascii=False, indent=2))
 
         return json.dumps(self.message, ensure_ascii=False, indent=2)
 
