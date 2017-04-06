@@ -1,9 +1,74 @@
 /**
  * Created by Alexey on 02.04.2017.
  */
-// .selected_str - поля помеченные этим классом, означают, что на них есть синее выделение
-// .warning_str - поля помеченные этим классом, означают, что они не прошли валидацию
-// .animation - поля помеченные этим классом, означают, что они анимируются в данный момент
+
+// КОНЦЕПЦИЯ РЕДАКТИРОВАНИЯ РАСПИСАНИЯ (смысл работы)
+/*
+
+ DEFAULT ВЫДЕЛЕНИЕ
+ Когда мы наводим мышкой на строку, она выделяется.
+ DEFAULT выделение строки срабатывает в 2-ух случаях:
+ 1) Если мышь наведена на поле
+ 2) Если мы нажали на любое поле в строке
+ В случае 1. Это работает, если строка не имеет других выделений.
+ В случае 2. Это работает, если текущая строка не отмечена галочкой.
+ В случае 2. DEFAULT выделение не исчезает, пока не будет выбрано другое поле, или поле расфокусировано.
+
+ ВЫДЕЛЕНИЕ CHECK
+ Срабаывает всегда, когда мы отмечаем строку галочкой.
+ Выделение галочкой придерживает следующих правил:
+ 1) Если строка имеет другие выделения, кроме DEFAULT, то после снятие галочки предыдущее выделение остаётся
+ 2) Общая верхняя галочка нажимает на все галочки сразу.
+ 3) При выделении CHECK сама строка не получает новых свойств кроме изменения цвета. Чтобы проверить что строка выделена,
+ нужно проверять галочку.
+
+ КОГДА СТРОКА ОТПРАВЛЯЕТСЯ НА СЕРВЕР?
+ Как только мы расфокусируем строку любым способом происходит следующее:
+ 1) Строка сначала проходит базовые проверки валидации всех полей (включая проверку на пустоту).
+ 2) Далее строка отправляется на сервер
+ a) Так как базовая валидация пройдёна, то ошибок ввода полей быть почти не может. Но ошибки сервер всё равно распознаёт.
+ б) Если строка отправленная на сервер уже существует в текущем расписании и в текущем дне в точности, то
+ она помечается как CLONE.
+ 3) Если строка уже сохранена на сервере и мы её изменяем, то если произойдут 2-a и 2-b, строка не поменяется на сервере.
+ Следовательно, при перезагрузке страницы строка не удалится со страницы и изменится на предыдущее значение (которое не изменялось в БД).
+ 4) Если в пунктах 1 или 2-a найдены ошибки, то строка помечается как ERROR и не сохраняется или не обновляется на сервере.
+
+ ВЫДЕЛЕНИЕ ERROR
+ Общая концепция:
+ 1) Выделение ERROR получается строка, если она отправлена на сервер с ошибкой, или не прошла общую валидацию
+ 2) Выделение DEFAULT и CLONE никогда не сработают на этих строках.
+ 3) Выделение ERROR не исчезнет, пока строка не отправится правильно на сервер.
+ 4) Если строка получила выделение ERROR при создании новой строки и первой расфокусировки, то при обновлениии страницы
+ она исчезнет (так как её нет на сервере).
+
+ КОПИРОВАНИЯ И ВЫДЕЛЕНИЕ CLONE.
+ Общая концепция:
+ 1) Пустые строки клонируются визуально и больше ничего не приосходит.
+ 2) Строки, которые уже есть на сервере клонируются и не отправляются на сервер. Затем, они все отмечаются как CLONE.
+ 3) Если мы клонируем уже клонированные строки, то они клонируются полностью визуально.
+ 4) Если мы клонируем строки, которые отмечены как ERROR, то они клонирются и помечаются как CLONE, а ERROR у них удаляется.
+ 5) Все строки, выделенные CLONE, если до этого они не существовали, исчезнут при перезагрузке страницы. Имеется ввиду,
+ что если мы отредактировали строку и получили метку CLONE, то при перезагрузки к строке вернётся старое значение.
+ 6) Клонирование не затрагивается строки от которых клонируем.
+ 7) Значит, чтобы сохранить на сервере продублированную строку, её нужно обновить, чтобы она стала уникальной.
+
+ ВЫДЕЛЕНИЕ DELETE
+ Общая концепция:
+ 1) Строка, на которой мы нажали "удалить", отмечается как DELETE и отправляется запрос для удаления на сервер.
+ 2) Если всё успешно, то строка удаляется сначала с сервера, а потом визуально со страницы.
+ */
+
+/*
+Строки имеющие следующие CSS классы это:
+ 1) .selected_str - выделение DEFAULT
+ 2) .warning_str - выделение ERROR
+ 3) .clone_str - выделение CLONE
+ 4) .delete_str - выделение DELETE
+ 5) .animation - строки, которые анимируются в данный момент
+ (не забывать устанавливать этот класс и удалять по завершению анимации)
+ */
+
+
 
 // важная переменная, определяющая последнюю выбранную строку
 var $LAST_SELECTED_STR;
@@ -26,16 +91,17 @@ var borderColorSuccessSavedStr = 'rgba(103, 198, 97, 0.9)';
 var backgroundCheckedStr = 'rgba(237, 218, 255,1)';
 var borderColorCheckedStr = 'rgba(139, 29, 235, 0.5)';
 //поле с ошибкой отправки на сервер
-var backgroundErrorStr = '#FBB6B6';
+// var backgroundErrorStr = '#FBB6B6';
+var backgroundErrorStr = '#ffd1cf';
 var borderColorErrorStr = '#F37C7C';
 //строка, которая клонирована и не существует на сервере
 //или строка которая, если была изменена, уже существует на сервере в текущем дне (в точности до всех полей)
-var backgroundCloneStr = '#ABD6F2';
+// var backgroundCloneStr = '#ABD6F2';
+var backgroundCloneStr = '#bee0f2';
 var borderColorStr = 'rgba(3, 96, 255, 0.3)';
 
 // переписать через Load
 var $NEW_STR_PLAN_HTML = $('' +
-    '<div class="str_fade">' +
     '<div class="str_plan change" style="opacity: 0; display:none;">' +
     '<div class="checkbox_wrap">' +
     '<div class="checkbox_container row"></div>' +
@@ -49,21 +115,56 @@ var $NEW_STR_PLAN_HTML = $('' +
     '<li><input class="place"></li>' +
     '<li class="last"><a class="parity">Все</a></li>' +
     '</ul>' +
-    '</div>' +
     '</div>');
 
-// плэйсхолдеры
-var week_PlaceHolder = '1-18';
-var time_PlaceHolder = '11:30';
-var subject_PlaceHolder = 'Математика';
-var teacher_PlaceHolder = 'Попов';
-var place_PlaceHolder = '510х';
-var parity_PlaceHolder = 'Чётные';
+// Возвращает случайное целое число между min (включительно) и max (не включая max)
+// Использование метода Math.round() даст вам неравномерное распределение!
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min)) + min;
+}
 
-//устанавливаем заданные плэйсхолдеры
-$NEW_STR_PLAN_HTML.find('input').each(function () {
-    $(this).attr('placeholder', setTruePlaceholder($(this)));
-});
+
+// плэйсхолдеры переменные
+var subjects = ["Математика", "Русский язык", "Информатика", "История", "Право", "Алгебра", "Рисование", "ИНО", "ОБЖ"];
+var teachers = ["Попов С.Ю.", "Крутов А.Н.", "Елисеев", "Денис Борисов", "Алексей Кротков", "Богатырёв", "Срибная Т.А.", "Родичев", "Марат"];
+var places = ["510x", '110м', "Л-11", "Л-10", '511м', "112ф", "Кафедра-М"];
+var parity_PlaceHolder = 'Все';
+
+function setStrPlaceholders($this_str) {
+    //устанавливаем заданные плэйсхолдеры
+    $this_str.find('input').each(function () {
+        $(this).attr('placeholder', setTrueRandomPlaceholder($(this)));
+    });
+}
+
+
+// устанавливает правильный placeholder
+function setTrueRandomPlaceholder($this_field) {
+    if ($this_field.hasClass('weeks')) {
+        var week_start, week_end;
+        week_start = getRandomInt(1, 10);
+        week_end = getRandomInt(week_start + 1, 18);
+        return week_start + '-' + week_end;
+    }
+    if ($this_field.hasClass('time')) {
+        var time_hours, time_minutes_dec;
+        time_hours = getRandomInt(8, 15);
+        time_minutes_dec = getRandomInt(0, 5);
+        return time_hours + ":" + time_minutes_dec + "0";
+    }
+    if ($this_field.hasClass('subject'))
+        return subjects[getRandomInt(0, subjects.length)];
+    if ($this_field.hasClass('teacher'))
+        return teachers[getRandomInt(0, teachers.length)];
+    if ($this_field.hasClass('place'))
+        return places[getRandomInt(0, places.length)];
+    if ($this_field.hasClass('parity'))
+        return parity_PlaceHolder;
+    return "Пусто";
+}
+
+var thisInput;
+var timerInputId;
 
 $(document).ready(function () {
     startBaseFunctions();
@@ -75,14 +176,12 @@ $(document).ready(function () {
         setGeneralCheckBoxListeners($(this));
     });
     $('.str_plan.change').each(function () {
+        setStrPlaceholders($(this));
         setNewListenersSpecial($(this));
         setNewListenersNewStr($(this));
     })
 });
 
-
-var thisInput;
-var timerInputId;
 
 // устанавливаем обработчик при нажатии на плюс
 $('.plus_button_form').click(function () {
@@ -245,11 +344,19 @@ function setNewListenersNewStr($new_div) {
     });
 
     // при нажатии на enter меняет поле на следующее
-    // $new_inputs.on('keyup', function (e) {
-    //     if (e.which == 13) {
-    //
-    //     }
-    // });
+    $new_inputs.on('keyup', function (e) {
+        if (e.which == 13) {
+            var $this_field = $(e.target);
+            enterPressAction($this_field);
+        }
+    });
+}
+
+// действия при нажатии на enter
+function enterPressAction($this_field) {
+    var $this_str = $this_field.parents('.str_plan.change');
+    setEditedField($this_field);
+    setDefaultStr($this_str);
 }
 
 // устанавливаем появление и скрытие панели инструментов
@@ -419,16 +526,6 @@ function setCheckBox($checkbox_wrap, mode) {
     // //если есть отложенные анимации, то остановить их
     $this_str.removeClass('animation');
 
-    // // эти таймеры работают пока такому смыслу: пока не зафиксируется, что анимация
-    // // с таймером timer_animate_success не будет остановлена
-    // timer_remover_conflict = setInterval(function () {
-    //     if (timer_animate_success){
-    //         clearInterval(timer_remover_conflict);
-    //     }
-    //     clearTimeout(timer_animate_success);
-    // }, 20);
-
-
     $this_str.stop(true, true);
     $this_ul.stop(true, true);
     $this_checkbox.stop(true, true);
@@ -528,6 +625,7 @@ function hoverDefaultStr($this_str) {
 // устанавливает выделение текущей строки
 function setSelectStr($str_plan, mode) {
     $str_plan.addClass('selected_str');
+
     hoverSelectStr($str_plan, mode);
     setOldValues($str_plan);
 }
@@ -546,7 +644,7 @@ function setDefaultStr($str_plan, mode) {
         //***************************************************************************************
         // Одна из важнейших строчек во всём коде
         // именно тут данные отправляются на сервер для обновления или создания строки расписания
-        if(strIsEmpty($str_plan)){
+        if (strIsEmpty($str_plan)) {
             return false;
         }
         if ($str_plan.attr('id') && $str_plan.attr('id') != 0) {
@@ -605,10 +703,11 @@ function a_to_input($field) {
 
     if ($field.get(0).tagName != 'INPUT') {
         $field.replaceWith('<input class="this_edit">');
+        $field.addClass('placeholder');
         $field = $('.this_edit');
         $field.removeClass('this_edit');
         $field.addClass($temp_field.attr('class'));
-        $field.attr('placeholder', setTruePlaceholder($temp_field));
+        $field.attr('placeholder', setTrueRandomPlaceholder($temp_field));
         $field.attr('old_value', $temp_field.text());
     }
     // else {
@@ -631,23 +730,20 @@ function input_to_a($field) {
     var temp_input = $field; // поле input
     var $ul_parent = $field.parent().parent();
     $ul_parent.css('height', 'auto');
-
+    $field.removeClass('selected_field');
     if ($field.val() != '') {
         var old_value = $field.attr('old_value');
         $field.replaceWith('<a class="this_edited"></a>');
         $field = $('.this_edited');
         $field.removeClass('this_edited');
-        $field.removeClass('selected_field');
         $field.addClass(temp_input.attr('class'));
         $field.attr('old_value', old_value);
     }
     else {
         // если в поле было что-то введено, а потом поле очистили, то вернётся старое значение
         $field.val(temp_input.attr('old_value'));
-
         // чтобы не отправлять эту строку на сервер
         // $ul_parent.parent().addClass('not_update');
-
         return $field;
     }
     // на этой строчке важно обрезать часть строки до 100 символов
@@ -656,24 +752,6 @@ function input_to_a($field) {
 
 
     return $field;
-}
-
-
-// устанавливает правильный placeholder
-function setTruePlaceholder($this_field) {
-    if ($this_field.hasClass('weeks'))
-        return week_PlaceHolder;
-    if ($this_field.hasClass('time'))
-        return time_PlaceHolder;
-    if ($this_field.hasClass('subject'))
-        return subject_PlaceHolder;
-    if ($this_field.hasClass('teacher'))
-        return teacher_PlaceHolder;
-    if ($this_field.hasClass('place'))
-        return place_PlaceHolder;
-    if ($this_field.hasClass('parity'))
-        return parity_PlaceHolder;
-    return "Пусто";
 }
 
 
@@ -717,18 +795,8 @@ function setColorStr($this_str) {
             return false;
         }
 
-        // if ($this_str.hasClass('conflict_animation')) {
-        //
-        //     // setTimeout(function () {
-        //     //      alert("Sdf");
-        //     // },1000);
-        //     return false;
-        // }
-
         hoverSelectStr($this_str);
         $this_str.find('ul').css({'background-color': 'rgba(255,255,255,0)'});
-
-        // $this_str.find('ul').css({'background': $this_str.css('background')});
 
     }
 }
@@ -754,7 +822,7 @@ var timer_setVisibleTopCheckbox;
 function appendPlanStr($this_button) {
 
     var $this_block = $($this_button).closest('.day_plan_content');
-    var $new_div = $($NEW_STR_PLAN_HTML).clone().find('.str_plan.change');
+    var $new_div = $($NEW_STR_PLAN_HTML).clone();
     var $plus_button = $this_block.find('.str_plus');
 
     // сам плюс погасает
@@ -795,7 +863,7 @@ function appendPlanStr($this_button) {
         }
     }, 500);
 
-
+    setStrPlaceholders($new_div);
     setNewListenersNewStr($new_div);
     setNewListenersSpecial($new_div);
 }
@@ -919,16 +987,16 @@ function clone_str(checkboxes) {
     var n = checkboxes.length;
     checkboxes.each(function (i) {
         var $this_str = $(this).parents('.str_plan');
-        if ($this_str.attr('id') != undefined || $this_str.attr('id') != 0) {
+        // если строка не пустая, то отмечаем синим, так как она уже существует в базе
+        if (!strIsEmpty($this_str)) {
             var data = getFieldsInformation($this_str);
             callback_clone(data, $this_str);
-
         }
         // если строка полностью пустая (не сохранена в базе)
         else {
             callback_clone({}, $this_str, 'new_str');
         }
-
+        // по окончанию клонирования
         if (n == i + 1) {
             setTimeout(function () {
                 setColorStr();
@@ -940,7 +1008,7 @@ function clone_str(checkboxes) {
 
 // визуально дублируем строку, если получен ответ от сервера
 function callback_clone(data, $this_str, mode) {
-    var $new_div = $($NEW_STR_PLAN_HTML).clone().find('.str_plan.change');
+    var $new_div = $($NEW_STR_PLAN_HTML).clone();
     // чтобы анимация работала правильно для любой высоты блока
     $new_div.css('height', $this_str.height());
     $this_str.stop(true, true);
@@ -955,12 +1023,15 @@ function callback_clone(data, $this_str, mode) {
     $new_div.find('.place').attr('value', data['place']);
     $new_div.attr('id', 0);
 
-
     // преобразовываем поля input в a для всех новых полей
+    // и устанавливаем плэйсхолдеры, которые были на строке дублирования
     var $new_inputs = $new_div.find('ul li input');
-    $new_inputs.each(function () {
+    var $old_inputs = $this_str.find('ul li input');
+    $new_inputs.each(function (i) {
         setEditedField($(this));
+        $(this).attr("placeholder", $($old_inputs[i]).attr('placeholder'));
     });
+
     // вешаем обработчики на все новые поля
     setNewListenersNewStr($new_div);
     setNewListenersSpecial($new_div);
@@ -974,6 +1045,23 @@ function callback_clone(data, $this_str, mode) {
         callback_cloneErrorStr($new_div);
     }
 }
+
+
+function callback_cloneErrorStr($this_str, response) {
+    var $this_ul = $this_str.find('ul');
+    var $this_checkbox = $this_str.find('.checkbox_container');
+    $this_str.removeClass('warning_str');
+    $this_str.addClass('clone_str');
+    // если после расфокусировки сразу выбрана галочка, то нельзя портить выранную строку этой анимацией
+    if (!$this_checkbox.hasClass('marked')) {
+        $this_ul.animate({
+            'background-color': backgroundCloneStr,
+        }, 300, function () {
+            $this_str.css('height', 'auto');
+        });
+    }
+}
+
 
 // удаляет строку с расписанием
 // работает с ajax
@@ -1045,8 +1133,6 @@ function callback_delete($this_str) {
             }, 100);
         });
     });
-
-
 }
 
 
@@ -1157,22 +1243,6 @@ function mainValidationStr($this_str) {
     else {
         return {};
     }
-
-
-}
-
-
-function callback_cloneErrorStr($this_str, response) {
-    var $this_ul = $this_str.find('ul');
-    var $this_checkbox = $this_str.find('.checkbox_container');
-    $this_str.removeClass('warning_str');
-    $this_str.addClass('clone_str');
-    // если после расфокусировки сразу выбрана галочка, то нельзя портить выранную строку этой анимацией
-    if (!$this_checkbox.hasClass('marked')) {
-        $this_ul.animate({
-            'background-color': backgroundCloneStr,
-        }, 300);
-    }
 }
 
 
@@ -1199,6 +1269,7 @@ function callback_editStrPlan($this_str, response) {
         }, function () {
             $this_str.removeClass('animation');
             if (hasSelectedField($this_str)) {
+                // alert("Sdf");
                 setSelectStr($this_str, 'ease_us');
             }
         });
