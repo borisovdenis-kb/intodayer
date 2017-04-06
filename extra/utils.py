@@ -1,11 +1,24 @@
 from datetime import *
 from django.utils import timezone
 from intodayer2_app.models import *
-
+from PIL import Image
+from io import StringIO
+from base64 import b64decode
+from django.core.files.base import ContentFile
 
 ######################################################################################
 #             В ЭТОМ МОДУЛЕ БУДУТ ХРАНИТЬСЯ ВСЯКИЕ ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ           #
 ######################################################################################
+
+
+def save_div_png(base64_str, filename):
+    img_data = b64decode(base64_str)
+    image = ContentFile(img_data, filename)
+    print(image)
+    new_img = DivToPng(image=image)
+    new_img.save()
+
+    return new_img.image.url
 
 
 def members_amount_suffix(n):

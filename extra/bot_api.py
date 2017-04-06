@@ -1,8 +1,7 @@
 import json
-import base64
-from extra.utils import *
+from extra import utils
+from intodayer2_app.models import *
 from intodayer_bot.bot import do_mailing
-from PIL import Image
 
 
 class MailingParamJson:
@@ -15,9 +14,15 @@ class MailingParamJson:
         """
         self.message = {}
         self.msg_text = text
-        self.image = image
         self.plan_id = plan_id
         self.sender_id = sender_id
+
+        # add missing padding
+        miss_pad = len(image) % 4
+        if miss_pad != 0:
+            image += '=' * (4 - miss_pad)
+
+        self.image = image
 
     def set_sender_name(self):
         """
@@ -49,13 +54,10 @@ class MailingParamJson:
         self.message['text'] = self.msg_text
 
     def set_msg_image(self):
-        file_name = "media/tmp/%s.png" % self.sender_id
-        imgdata = base64.b64decode(self.image.encode())
+        filename = '%s_%s.png' % (self.sender_id, self.plan_id)
+        img = utils.save_div_png(self.image, filename)
 
-        with open(file_name, "wb") as f:
-            f.write(imgdata)
-
-        self.message['image'] = self.image
+        self.message['image'] = img
 
     def set_plan_info(self):
         """
@@ -66,7 +68,7 @@ class MailingParamJson:
         plan = PlanLists.objects.get(id=self.plan_id)
 
         self.message['plan_info'] = {'title': plan.title, 'desc': plan.description}
-        self.message['plan_info'].update({'mem_count': members_amount_suffix(count)})
+        self.message['plan_info'].update({'mem_count': utils.members_amount_suffix(count)})
 
     def get_mailing_param(self):
         """
@@ -80,6 +82,8 @@ class MailingParamJson:
         self.set_msg_text()
         self.set_msg_image()
         self.set_plan_info()
+
+        print(json.dumps(self.message, ensure_ascii=False, indent=2))
 
         return json.dumps(self.message, ensure_ascii=False, indent=2)
 

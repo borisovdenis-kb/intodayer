@@ -80,8 +80,8 @@ def do_mailing(data):
             bot.send_message(recp['chat_id'], message_text)
 
             if data['image']:
-                print('POPA')
-                bot.send_photo(recp['chat_id'], data['image'])
+                with open(data['image'], 'rb') as f:
+                    bot.send_photo(recp['chat_id'], f)
 
 
 if __name__ == '__main__':
