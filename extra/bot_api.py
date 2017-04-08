@@ -5,7 +5,7 @@ from intodayer_bot.bot import do_mailing
 
 
 class MailingParamJson:
-    def __init__(self, sender_id, plan_id, image, text):
+    def __init__(self, sender_id, plan_id, image, text=None):
         """
             message - словарь в который будет собираться
             вся необходимая боту информация для рассылки

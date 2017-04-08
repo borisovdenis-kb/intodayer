@@ -72,7 +72,7 @@ def do_mailing(data):
     if data['text']:
         message_text += '\n' + '"' + data['text'] + '"' + '\n'
     else:
-        message_text += '\n' + 'Пустое сообщение' + '\n'
+        message_text += '\n' + '[Пустое сообщение]' + '\n'
 
     # делаем рассылку по списку контактов
     if data['recipients']:

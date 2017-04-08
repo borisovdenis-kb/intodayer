@@ -24,9 +24,10 @@ UPDATE = 'UPDATE'
 
 def mailing_ajax(request):
     """
-
-    :param request:
-    :return:
+        Функция получается данные от клиента и вызывает функцию расслыки
+        do_mailing
+        :param request:
+        :return:
     """
     if request.is_ajax():
         user = CustomUser.objects.get(username=request.user.username)
@@ -35,7 +36,6 @@ def mailing_ajax(request):
             user.id,
             request.POST['plan_id'],
             request.POST['image'],
-            'Всем привет как дела ребята хы хы хы епты крым наш'
         )
 
         do_mailing(mailing.get_mailing_param())
