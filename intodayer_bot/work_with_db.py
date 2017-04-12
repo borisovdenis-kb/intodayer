@@ -1,18 +1,20 @@
 import intodayer_bot.config as config
-import mysql.connector as mysqldb
+import pymysql
 
 
 class MySQLer:
     def __init__(self, database):
-        self.connection = mysqldb.connect(**database)
-        self.cursor = self.connection.cursor()
+        self.connection = pymysql.connect(**database)
 
     def get_user_by_username(self, username):
         query = 'SELECT id FROM intodayer2_app_customuser ' \
                 'WHERE username = "%s";' % username
 
-        self.cursor.execute(query)
-        res = self.cursor.fetchall()
+        with self.connection.cursor() as cursor:
+            cursor.execute(query)
+            res = self.cursor.fetchall()
+
+        cursor.commit()
 
         try:
             return res[0][0]
@@ -23,8 +25,11 @@ class MySQLer:
         query = 'SELECT id FROM intodayer2_app_customuser ' \
                 'WHERE chat_id = "%s";' % chat_id
 
-        self.cursor.execute(query)
-        res = self.cursor.fetchall()
+        with self.connection.cursor() as cursor:
+            cursor.execute(query)
+            res = self.cursor.fetchall()
+
+        cursor.commit()
 
         return True if res else False
 
@@ -40,8 +45,10 @@ class MySQLer:
                 'SET chat_id = "%s" ' \
                 'WHERE id = "%s";' % (chat_id, user_id)
 
-        self.cursor.execute(query)
-        self.connection.commit()
+        with self.connection.cursor() as cursor:
+            cursor.execute(query)
+
+        cursor.commit()
 
 
 if __name__ == '__main__':
