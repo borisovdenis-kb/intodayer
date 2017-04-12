@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block scripts_top %}
-    <script type="text/javascript" src={% static "library/html2canvas.js" %} ></script>
+    <script type="text/javascript" src={% static "library/html2canvas.js" %}></script>
 {% endblock %}
 
 {% block scripts_bottom %}
@@ -41,7 +41,7 @@
     <a id="btn-Convert-Html2Image" href="#">Download</a>
 
     <div class="right_content">
-        <div class="title_content" plan_id={{ cur_plan.id }} >
+        <div class="title_content" plan_id={{ cur_plan.id }}>
             <div id="plan_title">{{ plan_info.0 }}</div>
             <div id="count_title">{{ plan_info.2 }}</div>
         </div>
@@ -133,6 +133,30 @@
                 </div>
             </div>
         {% endfor %}
+    </div>
+{% endblock %}
+
+{% block mailing %}
+    <div class="mailing_wrap">
+        <div class="mailing_header">
+            <div class="mailing_text">
+                Рассылка
+            </div>
+
+            <div class="mailing_close"></div>
+        </div>
+
+        <div class="progress">
+            <div class="progress_indicator"></div>
+        </div>
+
+        <div class="mailing">
+            <textarea placeholder="Ребята, у нас тут такое!!!"></textarea>
+        </div>
+
+        <div class="mailing_footer">
+            <div class="do_mailing_button">Отправить</div>
+        </div>
     </div>
 {% endblock %}
 

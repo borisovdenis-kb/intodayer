@@ -12,9 +12,9 @@ class MySQLer:
 
         with self.connection.cursor() as cursor:
             cursor.execute(query)
-            res = self.cursor.fetchall()
+            res = cursor.fetchall()
 
-        cursor.commit()
+        self.connection.commit()
 
         try:
             return res[0][0]
@@ -27,9 +27,9 @@ class MySQLer:
 
         with self.connection.cursor() as cursor:
             cursor.execute(query)
-            res = self.cursor.fetchall()
+            res = cursor.fetchall()
 
-        cursor.commit()
+        self.connection.commit()
 
         return True if res else False
 
@@ -48,7 +48,7 @@ class MySQLer:
         with self.connection.cursor() as cursor:
             cursor.execute(query)
 
-        cursor.commit()
+        self.connection.commit()
 
 
 if __name__ == '__main__':

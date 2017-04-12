@@ -253,7 +253,7 @@
         <form action="" method="post" enctype="multipart/form-data" id="send_avatar_form">
             <div class="file_upload">
                 Выберите файл
-                <p><input id="id_image_file" name="image_file" type="file" onchange="getFileName();" required /></p>
+                <p><input id="id_image_file" name="image_file" type="file" onchange="getFileName();" required/></p>
             </div>
             <div class="file_info">
             </div>
@@ -265,6 +265,9 @@
         Изображение можно загрузить в формате jpg, png или gif.
     </div>
 </div>
+
+{% block  mailing %}
+{% endblock %}
 
 {% block other %}
 {% endblock %}

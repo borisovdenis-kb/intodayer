@@ -7,11 +7,27 @@ var imageData, timer;
 
 $(document).ready(function () {
 
-    $('.share_button').click(function() {
+    $('.share_button').click(function () {
+        blurElement('.effect_blur', 4);
+        $('.cover_all').fadeIn(800);
+        $('.mailing_wrap').delay(300).fadeIn(500);
+        $('.mailing').slideToggle(800, 'easeInOutBack').css({'display': 'flex'});
+    });
+
+    $('.mailing_close').click(function () {
+        blurElement('.effect_blur', 0);
+        $('.mailing').slideToggle(800, 'easeInOutBack');
+        $('.mailing_wrap').delay(400).fadeOut(500);
+        $('.cover_all').delay(400).fadeOut(800);
+        $('.maiiling_footer').text('Изображение можно загузить в формате jpg, png или gif.');
+    });
+
+    $('.do_mailing_button').click(function() {
 
         var $elem = $(this).parent().parent().parent();
         var $clone = $elem.clone(); // plan_content
         var $KLOSS = $('.KLOSS');
+        var $textarea = $(this).parent().parent().find('textarea');
         var data = {};
 
         $.each($clone.find('.checkbox_wrap'), function () {
@@ -26,10 +42,13 @@ $(document).ready(function () {
         timer = setInterval(function () {
             if (imageData) {
                 data.image = imageData;
+                data.text = $textarea.val();
+                data.plan_id = $('.title_content').attr('plan_id');
+
                 imageData = undefined;
                 $KLOSS.find($clone).remove();
 
-                data.plan_id = $('.title_content').attr('plan_id');
+                $('.progress').css({'display': 'flex'});
 
                 $.ajax({
                     url: '/mailing',
@@ -37,7 +56,9 @@ $(document).ready(function () {
                     data: data,
                     success: function (msg) {
                         msg = JSON.parse(msg);
-                        alert(msg.success);
+                        $('.progress').css({'display': 'none'});
+                        $('.mailing_close').trigger('click');
+                        $textarea.val('');
                     }
                 });
 

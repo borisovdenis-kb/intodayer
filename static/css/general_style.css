@@ -231,7 +231,7 @@ button:focus {
     /*text-shadow: 0px 2px 2px rgba(0, 0, 0, 0.2);*/
 }
 
-.choose_avatar_wrap {
+.choose_avatar_wrap, .mailing_wrap {
     display: none;
     position: fixed;
     top: 0;
@@ -247,7 +247,7 @@ button:focus {
     box-shadow: 0px 0px 10px 1px rgba(0,0,0,0.2);
 }
 
-.choose_avatar {
+.choose_avatar, .mailing {
     display: none;
     align-items: center;
     justify-content: center;
@@ -259,7 +259,7 @@ button:focus {
     background: rgb(244, 243, 248);
 }
 
-.choose_avatar_header {
+.choose_avatar_header, .mailing_header {
     /*position: absolute;*/
     display: inline-flex;
     width: 500px;
@@ -274,10 +274,9 @@ button:focus {
     /*z-index: 10202;*/
 }
 
-.choose_avatar_footer {
+.choose_avatar_footer, .mailing_footer {
     /*position: absolute;*/
     width: 490px;
-    height: 23px;
     padding: 5px;
     /*margin-left: 520px;*/
     border-bottom-right-radius: 4px;
@@ -289,7 +288,15 @@ button:focus {
     /*z-index: 10202;*/
 }
 
-.close {
+.choose_avatar_footer {
+    height: 23px;
+}
+
+.mailing_footer {
+    height: 32px;
+}
+
+.close, .mailing_close {
     float: right;
     width: 30px;
     height: 30px;
@@ -304,16 +311,16 @@ button:focus {
     background-image: url('../images/reject.png');
 }
 
-.choose_avatar_text, .choose_avatar_header, .close{
+.choose_avatar_text, .choose_avatar_header, .mailing_text, .mailing_header, .close {
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
 }
 
-.close:hover {
+.close, .mailing_close:hover {
     cursor: pointer;
 }
 
-.choose_avatar_text {
+.choose_avatar_text, .mailing_text {
     width: 200px;
     height: 25px;
     margin-left: 5px;
@@ -397,6 +404,73 @@ button:focus {
 
 .file_info {
     background-color: #eb6b66;
+}
+
+.do_mailing_button {
+    width: 100px;
+    height: 25px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 6px;
+    border: 1px solid rgba(220, 220, 220, 1);
+    border-radius: 4px;
+    text-align: center;
+    font-size: 15px;
+    user-select: none;
+}
+
+.do_mailing_button:hover {
+    cursor: pointer;
+}
+
+textarea {
+    width: 100%;
+    height: 100%;
+    background: rgb(244, 243, 248);
+    border: 1px solid rgb(244, 243, 248);
+    font-family: "Cyntho Pro" !important;
+    font-size: 16px;
+    outline: none;
+    -moz-appearance: none;
+    overflow: auto;
+    resize: none;
+}
+
+textarea::-webkit-input-placeholder {
+    padding-right: 292px;
+}
+textarea::-moz-placeholder {
+    padding-right: 292px;
+}
+textarea:-moz-placeholder {
+    padding-right: 292px;
+}
+textarea:-ms-input-placeholder {
+    padding-right: 292px;
+}
+
+.progress {
+    display: none;
+    position: absolute;
+    align-items: center;
+    justify-content: center;
+    width: 500px;
+    height: 165px;
+    background: rgba(255, 255, 255, 0.8);
+    z-index: 10202;
+}
+
+.progress_indicator {
+    width: 100px;
+    height: 100px;
+    background-image: url("../images/progress_indicator.gif");
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+
 }
 
 /*.effect_blur {*/

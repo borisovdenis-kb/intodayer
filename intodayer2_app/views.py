@@ -7,7 +7,7 @@ from django.db.utils import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.http import HttpResponseBadRequest
 from django.shortcuts import render_to_response
-from extra.bot_api import *
+from extra.mailing_api import *
 from extra.utils import *
 from intodayer2_app.forms import *
 from intodayer2_app.send_sms import *
@@ -36,6 +36,7 @@ def mailing_ajax(request):
             user.id,
             request.POST['plan_id'],
             request.POST['image'],
+            request.POST['text'],
         )
 
         do_mailing(mailing.get_mailing_param())
@@ -209,15 +210,17 @@ def edit_plan_row(data, this_plan, this_id, mode):
         return this_id
 
     if mode == CREATE:
-        new_plan_row = PlanRows(start_week=start_week,
-                                end_week=end_week,
-                                parity=parity,
-                                day_of_week=day_of_week,
-                                subject=subject,
-                                teacher=teacher,
-                                time=this_time,
-                                place=place,
-                                plan=this_plan)
+        new_plan_row = PlanRows(
+            start_week=start_week,
+            end_week=end_week,
+            parity=parity,
+            day_of_week=day_of_week,
+            subject=subject,
+            teacher=teacher,
+            time=this_time,
+            place=place,
+            plan=this_plan
+        )
         new_plan_row.save()
         # возвращаем новое id, чтобы записать его в html
         return new_plan_row.id
@@ -537,6 +540,8 @@ def plan_view(request, plan_id=0):
 
         context['day_of_weeks'] = day_of_weeks
         context['plan_rows'] = plan_rows
+
+        plan
 
         return render_to_response('plan.html', context)
 
