@@ -256,7 +256,7 @@ label {
     border: 2px solid rgba(3, 96, 255, 0.0);
     border-radius: 4px;
     width: 100%;
-    background-color: rgba(255,255,255,0);
+    background-color: rgba(255, 255, 255, 0);
 }
 
 .str_plan ul li:first-child {
@@ -269,7 +269,6 @@ label {
     padding-right: 0;
     border-right: none;
 }
-
 
 .str_plan ul li {
     display: flex;
@@ -327,13 +326,17 @@ label {
     cursor: default;
 }
 
+/*убрать крестик очистки*/
+.str_plan ul li input::-ms-clear {
+    display: none;
+}
+
 .str_plan ul li input:focus {
     border: none;
     outline: none;
     cursor: auto;
     border: 2px solid rgba(139, 29, 235, 0.4);
 }
-
 
 ::-webkit-input-placeholder {
     color: #b9b9b9;
@@ -421,7 +424,7 @@ label {
 
 }
 
-.test{
+.test {
     background: #bee0f2;
     background: #ffd1cf;
 }

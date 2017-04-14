@@ -87,14 +87,13 @@ def plan_delete_ajax(request):
     """
     if request.is_ajax():
         user = CustomUser.objects.get(username=request.user.username)
-        plan_list = UserPlans.objects.select_related().get(user_id=user.id, current_yn='y')
+        plan = UserPlans.objects.select_related().get(user_id=user.id, current_yn='y')
         data = request.POST
-        print(data)
+
         if 'id' in data:
             delete_id = data['id']
             # выбираем все строчки расписания именно данного пользователя
-            user_plan_rows = PlanRows.objects.filter(plan_id=plan_list.id)
-            user_plan_rows.get(id=delete_id).delete()
+            PlanRows.objects.get(plan_id=plan.plan.id, id=delete_id).delete()
             return HttpResponse('Успешно удалено!')
         else:
             return HttpResponseBadRequest()

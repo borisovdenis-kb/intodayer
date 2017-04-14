@@ -59,7 +59,7 @@
  */
 
 /*
-Строки имеющие следующие CSS классы это:
+ Строки имеющие следующие CSS классы это:
  1) .selected_str - выделение DEFAULT
  2) .warning_str - выделение ERROR
  3) .clone_str - выделение CLONE
@@ -107,7 +107,7 @@ var $NEW_STR_PLAN_HTML = $('' +
     '<div class="checkbox_container row"></div>' +
     '</div>' +
     '<ul>' +
-    '<li><input  class="weeks"></li>' +
+    '<li><input  class="weeks" ></li>' +
     '<li><input class="time"></li>' +
     '<li><input  class="subject"></li>' +
     '<li><input class="teacher"></li>' +
@@ -122,7 +122,6 @@ var $NEW_STR_PLAN_HTML = $('' +
 function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
 }
-
 
 // плэйсхолдеры переменные
 var subjects = ["Математика", "Русский язык", "Информатика", "История", "Право", "Алгебра", "Рисование", "ИНО", "ОБЖ"];
@@ -721,7 +720,10 @@ function a_to_input($field) {
     //поместить курсор в конец поля input
     var inputVal = $field.val();
     $field.val('').focus().val(inputVal);
-    $field.animate({scrollLeft: $field.width() * 2});
+    //умножаем на 4, чтобы курсор точно вставл в конец во всех браузерах
+    // alert($field.val().length);
+    $field.selectionStart = $field.val().length;
+    $field.animate({scrollLeft: +$field.val().length * 10});
     return $field;
 }
 
