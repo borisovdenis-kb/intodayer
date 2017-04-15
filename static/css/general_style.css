@@ -468,8 +468,8 @@ textarea:-ms-input-placeholder {
 }
 
 .progress_indicator {
-    width: 100px;
-    height: 100px;
+    width: 60px;
+    height: 60px;
     background-image: url("../images/progress_indicator.gif");
     -webkit-background-size: cover;
     -moz-background-size: cover;
@@ -477,7 +477,6 @@ textarea:-ms-input-placeholder {
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-
 }
 
 /*.errors_wrap {*/

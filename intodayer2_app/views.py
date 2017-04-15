@@ -26,6 +26,40 @@ UPDATE = 'UPDATE'
 ###################################################################################
 
 
+def get_drop_list_ajax(request):
+    """
+        Функция собирает в html список все доступные у пользователя
+        элементы из таблицы weeks.
+        :param request: 
+        :return: 
+    """
+    if request.is_ajax():
+        user = CustomUser.objects.get(username=request.user.username)
+        context = {'is_error': False}
+
+        try:
+            plan_id = int(request.POST['plan_id'])
+            plan = UserPlans.objects.select_related().get(user_id=user.id, plan_id=plan_id)
+        except ValueError:
+            context['is_error'] = True
+            return render_to_response('templates_for_ajax/drop_list_tmp.html', context)
+
+        # в зависимости от типа поля передаем соотв. данные
+        if request.POST['model'] == 'time':
+            context['time_list'] = Times.objects.filter(plan_id=plan.plan.id).order_by('hh24mm')
+
+        elif request.POST['model'] == 'subject':
+            context['subject_list'] = Subjects.objects.filter(plan_id=plan.plan.id).order_by('name')
+
+        elif request.POST['model'] == 'teacher':
+            context['teacher_list'] = Teachers.objects.filter(plan_id=plan.plan.id).order_by('name_short')
+
+        elif request.POST['model'] == 'place':
+            context['place_list'] = Places.objects.filter(plan_id=plan.plan.id).order_by('name')
+
+        return render_to_response('templates_for_ajax/drop_list_tmp.html', context)
+
+
 def mailing_ajax(request):
     """
         Функция получается данные от клиента и вызывает функцию расслыки
@@ -269,14 +303,14 @@ def switch_plan_home_ajax(request):
             plan_id = int(request.POST['plan_id'])
             plan = UserPlans.objects.select_related().filter(user_id=user.id, plan_id=plan_id)[0]
         except ValueError:
-            return render_to_response('content_errors.html')
+            return render_to_response('templates_for_ajax/content_errors.html')
         except IndexError:
-            return render_to_response('content_errors.html')
+            return render_to_response('templates_for_ajax/content_errors.html')
 
         # get_today_tomorrow_plans возвращает словарь
         context = get_today_tomorrow_plans(plan)
 
-        return render_to_response('today_tomorrow.html', context)
+        return render_to_response('templates_for_ajax/today_tomorrow.html', context)
 
 
 def get_invitations_ajax(request):
@@ -294,7 +328,7 @@ def get_invitations_ajax(request):
             'user': user
         }
 
-        return render_to_response('invitations.html', context)
+        return render_to_response('templates_for_ajax/invitations.html', context)
 
 
 def confirm_invitation_ajax(request):

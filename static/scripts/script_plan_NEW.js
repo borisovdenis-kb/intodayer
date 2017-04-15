@@ -68,6 +68,7 @@
  (не забывать устанавливать этот класс и удалять по завершению анимации)
  */
 
+
 // важная переменная, определяющая последнюю выбранную строку
 var $LAST_SELECTED_STR;
 
@@ -193,6 +194,7 @@ $(window).on('mousedown', function (event) {
             blurSelectStr();
         }
     }
+    $('.drop_list').remove();// ЗДЕСЬ НУЖНО НУЖНО БУДЕТ УДАЛЯТЬ ВЫПАДАЮЩИЙ СПИСОК.
 });
 
 // обработчик для верхнего чекбокса, в заголовке каждого дня
@@ -300,6 +302,11 @@ function setNewListenersNewStr($new_div) {
     $new_inputs.off();
     //!!! позже лучше сделать, чтобы обработчики не отключались, если уже стоят
 
+    // $.getScript("/static/scripts/script_drop_lists_plan.js", function () {
+    //     // ипорт функции для выподающих списков у полей.
+    //     addDropLstListeners($new_div);
+    // });
+
     //редактировать поле при нажатии на него
     $new_a.on('click', function () {
         editField($(this));
@@ -316,6 +323,13 @@ function setNewListenersNewStr($new_div) {
 
     $new_inputs.on('focus', function () {
         $(this).parent().parent().parent().addClass('selected_str');
+    });
+
+    $new_inputs.click(function () {
+        $.getScript("/static/scripts/script_drop_lists_plan.js", function () {
+            // ипорт функции для выподающих списков у полей.
+            createDropLst($(this));
+        });
     });
 
     $new_inputs.on('focusout', function () {
@@ -701,6 +715,12 @@ function a_to_input($field) {
         $field.replaceWith('<input class="this_edit">');
         $field.addClass('placeholder');
         $field = $('.this_edit');
+
+        $.getScript("/static/scripts/script_drop_lists_plan.js", function () {
+            // ипорт функции для выподающих списков у полей.
+            createDropLst($field);
+        });
+
         $field.removeClass('this_edit');
         $field.addClass($temp_field.attr('class'));
         $field.attr('placeholder', setTrueRandomPlaceholder($temp_field));

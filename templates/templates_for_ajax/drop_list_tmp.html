@@ -1,0 +1,56 @@
+{# Логика такая: #}
+{# Если передан список для соотв. модели то выводим его. #}
+{# От вьюх всегда передается только один список. #}
+
+{% if is_error == False %}
+    {% if time_list %}
+
+        <ul>
+            {% for time in time_list %}
+                <li>
+                    <a>{{ time.get_format_time }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+
+    {% elif subject_list %}
+
+        <ul>
+            {% for subj in subject_list %}
+                <li>
+                    <a>{{ subj.name }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+
+    {% elif teacher_list %}
+
+        <ul>
+            {% for teacher in teacher_list %}
+                <li>
+                    <a>{{ teacher.name_short }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+
+    {% elif place_list %}
+
+        <ul>
+            {% for place in place_list %}
+                <li>
+                    <a>{{ place.name }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+
+    {% endif %}
+
+{% else %}
+
+    <ul>
+        <li>
+            <a style="font-size: 13px">Ошибка Перезагрузите страницу</a>
+        </li>
+    </ul>
+
+{% endif %}
