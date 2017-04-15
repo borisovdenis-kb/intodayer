@@ -194,7 +194,7 @@ $(window).on('mousedown', function (event) {
             blurSelectStr();
         }
     }
-    $('.drop_list').remove();// ЗДЕСЬ НУЖНО НУЖНО БУДЕТ УДАЛЯТЬ ВЫПАДАЮЩИЙ СПИСОК.
+    // $('.drop_list').remove();
 });
 
 // обработчик для верхнего чекбокса, в заголовке каждого дня
@@ -307,6 +307,10 @@ function setNewListenersNewStr($new_div) {
     //     addDropLstListeners($new_div);
     // });
 
+    $.getScript("/static/scripts/script_drop_lists_plan.js", function () {
+        addDropLstListeners($new_div);
+    });
+
     //редактировать поле при нажатии на него
     $new_a.on('click', function () {
         editField($(this));
@@ -323,13 +327,6 @@ function setNewListenersNewStr($new_div) {
 
     $new_inputs.on('focus', function () {
         $(this).parent().parent().parent().addClass('selected_str');
-    });
-
-    $new_inputs.click(function () {
-        $.getScript("/static/scripts/script_drop_lists_plan.js", function () {
-            // ипорт функции для выподающих списков у полей.
-            createDropLst($(this));
-        });
     });
 
     $new_inputs.on('focusout', function () {
@@ -644,6 +641,9 @@ var timer_send_server;
 function setDefaultStr($str_plan, mode) {
     //при расфокусировке отправляем инфу в БД
     $str_plan.removeClass('selected_str');
+
+    $('.drop_list').remove();
+
     hoverDefaultStr($str_plan);
 
     if (mode == 'clone' || mode == 'delete') {
@@ -718,7 +718,9 @@ function a_to_input($field) {
 
         $.getScript("/static/scripts/script_drop_lists_plan.js", function () {
             // ипорт функции для выподающих списков у полей.
-            createDropLst($field);
+            if (!$field.hasClass('weeks')){
+                createDropLst($field);
+            }
         });
 
         $field.removeClass('this_edit');

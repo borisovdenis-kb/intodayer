@@ -1,11 +1,11 @@
 /**
  * Created by Denis on 15.04.2017.
  */
+var $this;
 
-
-function addDropLstListeners($thisStr){
+function addDropLstListeners($thisStr) {
     $thisStr.find('ul li input').click(function () {
-
+        createDropLst($(this));
     });
 }
 
@@ -15,14 +15,22 @@ function createDropLst($thisField) {
     $('body').append('<div class="drop_list"></div>');
 
     var $drop_list = $('.drop_list');
-    var posY = $thisField.offset().top + $thisField.outerHeight();
+    var posY = $thisField.offset().top + $thisField.outerHeight() + 2;
+
+    $drop_list.find('ul li a').click(function () {
+        console.log('popa');
+        $($thisField).val($(this).text());
+        // $('.drop_list').delay(200).remove();
+    });
 
     setTimeout(function () {
-        $drop_list.css({
+        $drop_list.animate({
             'width': $thisField.outerWidth() - 3,
             // 'height': $thisField.outerHeight(),
             'top': posY,
             'left': $thisField.offset().left
+        }, 1, function () {
+            $(this).css({'display': 'block'});
         });
     }, 10);
 
@@ -30,6 +38,11 @@ function createDropLst($thisField) {
 }
 
 function loadData($thisField) {
+    /*
+     *  Функция подгружает с сервера уже отрендеренный выподающий список
+     *  и вставляет его под тем инпутом, на который кликнули.
+     */
+    var $bruceLi = $thisField.parent();
     var data = {plan_id: $('.title_content').attr('plan_id')};
 
     if ($thisField.hasClass('weeks')) {
@@ -38,43 +51,15 @@ function loadData($thisField) {
     } else if ($thisField.hasClass('time')) {
         data.model = 'time';
 
-        $('.drop_list').load('/get_drop_list', data, function () {
-
-            $('.drop_list ul li a').click(function () {
-                $($thisField).val($(this).text());
-                $($thisField).remove();
-            });
-        });
     } else if ($thisField.hasClass('subject')) {
         data.model = 'subject';
 
-        $('.drop_list').load('/get_drop_list', data, function () {
-
-            $('.drop_list ul li a').click(function () {
-                $($thisField).val($(this).text());
-                $($thisField).remove();
-            });
-        });
     } else if ($thisField.hasClass('teacher')) {
         data.model = 'teacher';
 
-        $('.drop_list').load('/get_drop_list', data, function () {
-
-            $('.drop_list ul li a').click(function () {
-                $($thisField).val($(this).text());
-                $($thisField).remove();
-            });
-        });
     } else if ($thisField.hasClass('place')) {
         data.model = 'place';
 
-        $('.drop_list').load('/get_drop_list', data, function () {
-
-            $('.drop_list ul li a').click(function () {
-                $($thisField).val($(this).text());
-                $($thisField).remove();
-            });
-        });
     } else if ($thisField.hasClass('parity')) {
         // Здесь без ajax запроса. Т.к. четность у нас статичная
         $('.drop_list').append(
@@ -85,4 +70,26 @@ function loadData($thisField) {
             '</ul>'
         );
     }
+
+    $('.drop_list').load('/get_drop_list', data, function () {
+        if ($('.drop_list').height() >= 150) {
+            // добавляем скролл только, когда размер 300
+            // потому что когда он висит постоянно - это уродство...
+            $('.drop_list').css('overflowY', 'scroll');
+        }
+        setTimeout(function () {
+            $('.drop_list ul li a').click(function () {
+                if ($bruceLi.find('a').length != 0) {
+                    $bruceLi.find('a').text($(this).text());
+
+                } else if ($bruceLi.find('input') != 0) {
+                    console.log('popa');
+                    $bruceLi.find('input').val($(this).text());
+                }
+
+                $('.drop_list').remove();
+            });
+        }, 100);
+    });
+
 }
