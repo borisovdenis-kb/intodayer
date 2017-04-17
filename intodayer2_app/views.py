@@ -1,20 +1,17 @@
-from datetime import datetime as datetime_lib
 import json
 import requests
+import extra.utils as utils
+from datetime import datetime as datetime_lib
 from django.http import JsonResponse
-
 from django.contrib.auth.models import *
 from django.db.utils import IntegrityError
-
 from django.http import HttpResponse, HttpResponseRedirect
 from django.http import HttpResponseBadRequest
 from django.shortcuts import render_to_response
-
 from extra.utils import *
 from intodayer2_app.forms import *
 from intodayer2_app.send_sms import *
 
-import extra.utils as utils
 
 CREATE = 'CREATE'
 UPDATE = 'UPDATE'
