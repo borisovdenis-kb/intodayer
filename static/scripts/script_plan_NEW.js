@@ -269,7 +269,7 @@ function setButtonToolsProperties($button) {
 }
 
 // устанавливает стили кнопок при скрытие
-// удаляет все обработчки событий с кнопок
+// удаляет все обработчики событий с кнопок
 function setDefaultButtonToolsProperties($button) {
     $button.stop(true, true);
     $button.off();

@@ -114,7 +114,6 @@ function validateTextArea(textArea) {
     }
 }
 
-
 function htmlToImage($elem) {
     /*
      *  Функция конвертирует блок HTML в изображение

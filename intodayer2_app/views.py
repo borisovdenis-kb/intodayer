@@ -99,7 +99,7 @@ def plan_delete_ajax(request):
         user = CustomUser.objects.get(username=request.user.username)
         plan_list = UserPlans.objects.select_related().get(user_id=user.id, current_yn='y')
         data = request.POST
-        print(data)
+
         if 'id' in data:
             delete_id = data['id']
             # выбираем все строчки расписания именно данного пользователя
@@ -234,8 +234,17 @@ def switch_plan_home_ajax(request):
     """
     if request.is_ajax():
         user = CustomUser.objects.get(username=request.user.username)
+        # производим валидацию переданных данных со страницы
+        try:
+            plan_id = int(request.POST['plan_id'])
+            plan = UserPlans.objects.select_related().filter(user_id=user.id, plan_id=plan_id)[0]
+        except ValueError:
+            return render_to_response('content_errors.html')
+        except IndexError:
+            return render_to_response('content_errors.html')
+
         # get_today_tomorrow_plans возвращает словарь
-        context = get_today_tomorrow_plans(user.id, plan_id=request.POST['plan_id'])
+        context = get_today_tomorrow_plans(plan)
 
         return render_to_response('today_tomorrow.html', context)
 
@@ -270,8 +279,6 @@ def confirm_invitation_ajax(request):
     if request.is_ajax():
         user = CustomUser.objects.get(username=request.user.username)
         inv = Invitations.objects.select_related().get(to_user=user.id, plan_id=request.GET['plan_id'])
-
-        print(request.GET['decision'])
 
         inv.confirmed_yn = 'y' if request.GET['decision'] == '1' else 'n'
         inv.save()
@@ -430,7 +437,7 @@ def home_view(request):
             context['cur_plan'] = cur_plan
 
             # объединяем контексты
-            context_td_tm = get_today_tomorrow_plans(user.id, cur_plan.plan.id)
+            context_td_tm = get_today_tomorrow_plans(cur_plan)
             context.update(context_td_tm)
 
             return render_to_response('home.html', context)
