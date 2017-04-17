@@ -41,7 +41,8 @@ urlpatterns = [
     # для ajax запросов
     url(r'^plan/update_clone', views.plan_clone_ajax),
     url(r'^plan/update_delete', views.plan_delete_ajax),
-    url(r'^plan/add_plan_row', views.add_plan_row_ajax),
+    url(r'^plan/edit_plan_row', views.edit_plan_row_ajax),
+    url(r'^mailing', views.mailing_ajax),
 ]
 
 
