@@ -103,7 +103,6 @@ $(document).ready(function () {
     });
 });
 
-
 function validateTextArea(textArea) {
     /*
      *  Функция валидации поля ввода сообщения.

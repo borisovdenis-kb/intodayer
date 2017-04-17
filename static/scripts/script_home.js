@@ -10,13 +10,13 @@ $(document).ready(function () {
             $(this).css({'background-color': 'rgb(244, 243, 248)', 'color': '#000000'})
         });
 
-        $(this).css({'background-color': '#000000', 'color': '#FFFFFF'})
+        $(this).css({'background-color': '#000000', 'color': '#FFFFFF'});
 
-        $('.right_content').load('/home/switch_plan', data);
+        $('.right_content').load('/home/switch_plan', data, function () {
+            setStrColor();
+        });
 
         avatarEditAccess(data);
-
-        setStrColor('ff');
     });
 });
 
@@ -35,16 +35,17 @@ function avatarEditAccess(data) {
     });
 }
 
-function setStrColor(s) {
+function setStrColor() {
     /*
      *  Функция окрашивает нечетные строки таблицы в серый цвет
      */
     $.each($('.day_plan_content'), function () {
         $.each($(this).find('.str_plan'), function (i) {
             if ((i % 2) != 0) {
+                $(this).clearQueue();
                 $(this).animate({'background-color': 'rgba(240, 240, 245, 1)'});
+                $(this).find('ul').clearQueue();
                 $(this).find('ul').animate({'background-color': 'rgba(240, 240, 245, 1)'});
-                // alert(s);
             }
         });
     });

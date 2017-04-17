@@ -414,39 +414,6 @@ def registration_view(request):
     return render_to_response('reg.html', context)
 
 
-def home_view(request):
-    """
-        Функция отображения главной страницы сайта
-        с расписанием на сегодня
-    """
-    if request.user.is_authenticated():
-        user = CustomUser.objects.get(username=request.user.username)
-        context = {'user': user}
-
-        all_plans = UserPlans.objects.select_related().filter(user_id=user.id)
-
-        # выбираем текущее расписание юзера
-        try:
-            cur_plan = UserPlans.objects.select_related().filter(user_id=user.id, always_yn='y')[0]
-        except IndexError:
-            cur_plan = all_plans[0]
-
-        if all_plans:
-            context['image_form'] = SetAvatarForm
-            context['all_plans'] = all_plans
-            context['cur_plan'] = cur_plan
-
-            # объединяем контексты
-            context_td_tm = get_today_tomorrow_plans(cur_plan)
-            context.update(context_td_tm)
-
-            return render_to_response('home.html', context)
-        else:
-            return render_to_response('home.html', context)
-    else:
-        return HttpResponseRedirect("/login")
-
-
 def login_view(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -488,6 +455,39 @@ def profile_settings(request):
         return render_to_response('myprofile.html', {})
 
 
+def home_view(request):
+    """
+        Функция отображения главной страницы сайта
+        с расписанием на сегодня
+    """
+    if request.user.is_authenticated():
+        user = CustomUser.objects.get(username=request.user.username)
+        context = {'user': user}
+
+        all_plans = UserPlans.objects.select_related().filter(user_id=user.id)
+
+        # выбираем текущее расписание юзера
+        try:
+            cur_plan = UserPlans.objects.select_related().filter(user_id=user.id, always_yn='y')[0]
+        except IndexError:
+            cur_plan = all_plans[0]
+
+        if all_plans:
+            context['image_form'] = SetAvatarForm
+            context['all_plans'] = all_plans
+            context['cur_plan'] = cur_plan
+
+            # объединяем контексты
+            context_td_tm = get_today_tomorrow_plans(cur_plan)
+            context.update(context_td_tm)
+
+            return render_to_response('home.html', context)
+        else:
+            return render_to_response('home.html', context)
+    else:
+        return HttpResponseRedirect("/login")
+
+
 def plan_view(request, plan_id=0):
     """
        Функция, которая выводит таблицу редактирования текущего (выбранного) расписания.
@@ -501,12 +501,13 @@ def plan_view(request, plan_id=0):
         }
 
         all_plans = UserPlans.objects.select_related().filter(user_id=user.id)
-        count = all_plans.count()
 
         try:
             cur_plan = UserPlans.objects.select_related().filter(user_id=user.id, current_yn='y')[0]
         except IndexError:
             cur_plan = all_plans[0]
+
+        count = UserPlans.objects.filter(plan_id=cur_plan.plan.id).count()
 
         if plan_id == 0:
             # выбираем текущее расписание юзера
@@ -547,8 +548,6 @@ def plan_view(request, plan_id=0):
 
         context['day_of_weeks'] = day_of_weeks
         context['plan_rows'] = plan_rows
-
-        plan
 
         return render_to_response('plan.html', context)
 

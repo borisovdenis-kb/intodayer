@@ -588,7 +588,6 @@ function setColorStr($this_str) {
                 else {
                     $(this).animate({'background-color': 'rgba(255, 255, 255, 1)'}, 150);
                     $(this).find('ul').animate({'background-color': 'rgba(255, 255, 255, 1)'}, 150);
-
                 }
             });
         });
