@@ -11,6 +11,18 @@ from django.utils import timezone
 _MAX_SIZE = 300
 
 
+class DivToPng(models.Model):
+    """
+        Таблица для хранения изображений
+        полученных при конвертации div блоков с расписанием
+    """
+    image = models.ImageField(upload_to='div_to_png/', blank=True, max_length=1000)
+
+    class Meta:
+        managed = True
+        db_table = 'div_to_png'
+
+
 class DaysOfWeek(models.Model):
     """
         Таблица дней недели

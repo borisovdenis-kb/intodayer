@@ -5,10 +5,13 @@
     <link rel="stylesheet" type="text/css" href={% static "css/plan_styles.css" %}>
 {% endblock %}
 
+{% block scripts_top %}
+    <script type="text/javascript" src={% static "library/html2canvas.js" %}></script>
+{% endblock %}
 
 {% block scripts_bottom %}
-    {#    <script type="text/javascript" src={% static "scripts/script_plan.js" %}></script>#}
     <script type="text/javascript" src={% static "scripts/script_plan_NEW.js" %}></script>
+    <script type="text/javascript" src={% static "scripts/script_mailing.js" %}></script>
 {% endblock %}
 
 {% block invitation %}
@@ -35,7 +38,7 @@
     {#    </div>#}
 
     <div class="right_content">
-        <div class="title_content">
+        <div class="title_content" plan_id={{ cur_plan.id }}>
             <div id="plan_title">{{ plan_info.0 }}</div>
             <div id="count_title">{{ plan_info.2 }}</div>
         </div>
@@ -63,12 +66,14 @@
                             <div class="day_title">{{ day.name }}</div>
                         </div>
                         <div class="tools_panel right">
-                            <ul>
-                                <li>
-                                    <button>Share</button>
-                                </li>
-                            </ul>
+
+                            <div class=share_button>
+                                <div class="second_layer"></div>
+                                <div class="first_layer">Share</div>
+                            </div>
+
                         </div>
+
                     </div>
                     <div class="day_plan_content">
                         <div class="str_plan str_title">
@@ -126,5 +131,35 @@
                 </div>
             </div>
         {% endfor %}
+    </div>
+{% endblock %}
+
+{% block mailing %}
+    <div class="mailing_wrap">
+        <div class="mailing_header">
+            <div class="mailing_text">
+                Рассылка
+            </div>
+
+            <div class="mailing_close"></div>
+        </div>
+
+        <div class="progress">
+            <div class="progress_indicator"></div>
+        </div>
+
+        <div class="mailing">
+            <textarea placeholder="Ребята, у нас тут такое!!!"></textarea>
+        </div>
+
+        <div class="mailing_footer">
+            <div class="do_mailing_button">Отправить</div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block other %}
+    <div class="KLOSS">
+
     </div>
 {% endblock %}

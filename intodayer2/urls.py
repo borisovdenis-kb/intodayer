@@ -29,6 +29,11 @@ urlpatterns = [
     url(r'^registration/$', views.registration_view),
     url(r'^profile/$', views.profile_settings),
     url(r'^plan/$', views.plan_view),
+
+    # для ajax запросов
+    url(r'^plan/update_clone', views.plan_clone_ajax),
+    url(r'^plan/update_delete', views.plan_delete_ajax),
+    url(r'^plan/edit_plan_row', views.edit_plan_row_ajax),
     url(r'^home/switch_plan', views.switch_plan_home_ajax),
     url(r'^get_invitations', views.get_invitations_ajax),
     url(r'^plan/invitation/(\d+)$', views.plan_view),
@@ -36,12 +41,9 @@ urlpatterns = [
     url(r'^upload_user_avatar$', views.save_user_avatar_ajax),
     url(r'^upload_plan_avatar/(\d+)$', views.save_plan_avatar_ajax),
     url(r'^get_avatar', views.get_avatar_ajax),
-    # url(r'^add_plans/$', views.add_plans_view),
-
-    # для ajax запросов
-    # url(r'^plan/update_clone', views.plan_clone_ajax),
     url(r'^plan/update_delete', views.plan_delete_ajax),
     url(r'^plan/edit_plan_row', views.edit_plan_row_ajax),
+    url(r'^mailing', views.mailing_ajax),
 ]
 
 

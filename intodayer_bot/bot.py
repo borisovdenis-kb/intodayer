@@ -15,7 +15,7 @@ def say_welcome(message):
         :param message:
         :return:
     """
-    db = MySQLer(config.db_config)
+    db = MySQLer(config.db_config_pymysql)
 
     username = message.chat.first_name
     welcome_text = 'Здравствуйте, %s!\nIntoDayerBot чертовски рад Вас видеть :)' % username
@@ -31,7 +31,7 @@ def say_welcome(message):
 
 @bot.message_handler(func=lambda message: is_logging(message.chat.id) == True)
 def user_login(message):
-    db = MySQLer(config.db_config)
+    db = MySQLer(config.db_config_pymysql)
     user_id = db.get_user_by_username(message.text)
 
     if user_id:
@@ -70,14 +70,18 @@ def do_mailing(data):
         message_text += 'Староста: ' + unknown
 
     if data['text']:
-        message_text += '"' + data['text'] + '"' + '\n'
+        message_text += '\n' + '"' + data['text'] + '"' + '\n'
     else:
-        message_text += 'Пустое сообщение' + '\n'
+        message_text += '\n' + '[Пустое сообщение]' + '\n'
 
     # делаем рассылку по списку контактов
     if data['recipients']:
         for recp in data['recipients']:
             bot.send_message(recp['chat_id'], message_text)
+
+            if data['image']:
+                with open(data['image'], 'rb') as f:
+                    bot.send_photo(recp['chat_id'], f)
 
 
 if __name__ == '__main__':

@@ -2,7 +2,6 @@ import json
 import requests
 import extra.utils as utils
 from datetime import datetime as datetime_lib
-from django.http import JsonResponse
 from django.contrib.auth.models import *
 from django.db.utils import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
@@ -11,6 +10,11 @@ from django.shortcuts import render_to_response
 from extra.utils import *
 from intodayer2_app.forms import *
 from intodayer2_app.send_sms import *
+from extra.mailing_api import *
+from extra.utils import *
+from intodayer2_app.forms import *
+from intodayer2_app.send_sms import *
+from intodayer_bot.bot import do_mailing
 
 
 CREATE = 'CREATE'
@@ -20,6 +24,32 @@ UPDATE = 'UPDATE'
 ###################################################################################
 #                          ОБРАБОТКА AJAX ЗАПРОСОВ                                #
 ###################################################################################
+
+
+def mailing_ajax(request):
+    """
+        Функция получается данные от клиента и вызывает функцию расслыки
+        do_mailing
+        :param request:
+        :return:
+    """
+    if request.is_ajax():
+        user = CustomUser.objects.get(username=request.user.username)
+        # получаем JSON для передачи боту
+        mailing = MailingParamJson(
+            user.id,
+            request.POST['plan_id'],
+            request.POST['image'],
+            request.POST['text'],
+        )
+
+        do_mailing(mailing.get_mailing_param())
+
+        response = HttpResponse()
+        response['Content-Type'] = 'text/javascript'
+        response.write(json.dumps({'success': 1}))
+
+        return response
 
 
 def edit_plan_row_ajax(request):
@@ -234,8 +264,17 @@ def switch_plan_home_ajax(request):
     """
     if request.is_ajax():
         user = CustomUser.objects.get(username=request.user.username)
+        # производим валидацию переданных данных со страницы
+        try:
+            plan_id = int(request.POST['plan_id'])
+            plan = UserPlans.objects.select_related().filter(user_id=user.id, plan_id=plan_id)[0]
+        except ValueError:
+            return render_to_response('content_errors.html')
+        except IndexError:
+            return render_to_response('content_errors.html')
+
         # get_today_tomorrow_plans возвращает словарь
-        context = get_today_tomorrow_plans(user.id, plan_id=request.POST['plan_id'])
+        context = get_today_tomorrow_plans(plan)
 
         return render_to_response('today_tomorrow.html', context)
 
@@ -270,8 +309,6 @@ def confirm_invitation_ajax(request):
     if request.is_ajax():
         user = CustomUser.objects.get(username=request.user.username)
         inv = Invitations.objects.select_related().get(to_user=user.id, plan_id=request.GET['plan_id'])
-
-        print(request.GET['decision'])
 
         inv.confirmed_yn = 'y' if request.GET['decision'] == '1' else 'n'
         inv.save()
@@ -407,39 +444,6 @@ def registration_view(request):
     return render_to_response('reg.html', context)
 
 
-def home_view(request):
-    """
-        Функция отображения главной страницы сайта
-        с расписанием на сегодня
-    """
-    if request.user.is_authenticated():
-        user = CustomUser.objects.get(username=request.user.username)
-        context = {'user': user}
-
-        all_plans = UserPlans.objects.select_related().filter(user_id=user.id)
-
-        # выбираем текущее расписание юзера
-        try:
-            cur_plan = UserPlans.objects.select_related().filter(user_id=user.id, always_yn='y')[0]
-        except IndexError:
-            cur_plan = all_plans[0]
-
-        if all_plans:
-            context['image_form'] = SetAvatarForm
-            context['all_plans'] = all_plans
-            context['cur_plan'] = cur_plan
-
-            # объединяем контексты
-            context_td_tm = get_today_tomorrow_plans(user.id, cur_plan.plan.id)
-            context.update(context_td_tm)
-
-            return render_to_response('home.html', context)
-        else:
-            return render_to_response('home.html', context)
-    else:
-        return HttpResponseRedirect("/login")
-
-
 def login_view(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -481,6 +485,39 @@ def profile_settings(request):
         return render_to_response('myprofile.html', {})
 
 
+def home_view(request):
+    """
+        Функция отображения главной страницы сайта
+        с расписанием на сегодня
+    """
+    if request.user.is_authenticated():
+        user = CustomUser.objects.get(username=request.user.username)
+        context = {'user': user}
+
+        all_plans = UserPlans.objects.select_related().filter(user_id=user.id)
+
+        # выбираем текущее расписание юзера
+        try:
+            cur_plan = UserPlans.objects.select_related().filter(user_id=user.id, always_yn='y')[0]
+        except IndexError:
+            cur_plan = all_plans[0]
+
+        if all_plans:
+            context['image_form'] = SetAvatarForm
+            context['all_plans'] = all_plans
+            context['cur_plan'] = cur_plan
+
+            # объединяем контексты
+            context_td_tm = get_today_tomorrow_plans(cur_plan)
+            context.update(context_td_tm)
+
+            return render_to_response('home.html', context)
+        else:
+            return render_to_response('home.html', context)
+    else:
+        return HttpResponseRedirect("/login")
+
+
 def plan_view(request, plan_id=0):
     """
        Функция, которая выводит таблицу редактирования текущего (выбранного) расписания.
@@ -494,12 +531,13 @@ def plan_view(request, plan_id=0):
         }
 
         all_plans = UserPlans.objects.select_related().filter(user_id=user.id)
-        count = all_plans.count()
 
         try:
             cur_plan = UserPlans.objects.select_related().filter(user_id=user.id, current_yn='y')[0]
         except IndexError:
             cur_plan = all_plans[0]
+
+        count = UserPlans.objects.filter(plan_id=cur_plan.plan.id).count()
 
         if plan_id == 0:
             # выбираем текущее расписание юзера

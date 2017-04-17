@@ -68,8 +68,6 @@
  (не забывать устанавливать этот класс и удалять по завершению анимации)
  */
 
-
-
 // важная переменная, определяющая последнюю выбранную строку
 var $LAST_SELECTED_STR;
 
@@ -422,7 +420,7 @@ function setButtonToolsProperties($button) {
 }
 
 // устанавливает стили кнопок при скрытие
-// удаляет все обработчки событий с кнопок
+// удаляет все обработчики событий с кнопок
 function setDefaultButtonToolsProperties($button) {
     $button.stop(true, true);
     $button.off();
@@ -568,7 +566,6 @@ function setBlurCheckbox($this_str, mode) {
             setDefaultStr($this_str, mode);
         }
     });
-
 }
 
 function editField($field) {
