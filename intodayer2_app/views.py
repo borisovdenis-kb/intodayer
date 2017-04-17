@@ -1,15 +1,20 @@
-import datetime
 import json
-
+import requests
+import extra.utils as utils
+from datetime import datetime as datetime_lib
 from django.contrib.auth.models import *
 from django.db.utils import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.http import HttpResponseBadRequest
 from django.shortcuts import render_to_response
-
 from extra.utils import *
 from intodayer2_app.forms import *
 from intodayer2_app.send_sms import *
+from extra.mailing_api import *
+from extra.utils import *
+from intodayer2_app.forms import *
+from intodayer2_app.send_sms import *
+from intodayer_bot.bot import do_mailing
 
 
 CREATE = 'CREATE'
@@ -21,22 +26,81 @@ UPDATE = 'UPDATE'
 ###################################################################################
 
 
-def add_plan_row_ajax(request):
+def mailing_ajax(request):
+    """
+        Функция получается данные от клиента и вызывает функцию расслыки
+        do_mailing
+        :param request:
+        :return:
+    """
+    if request.is_ajax():
+        user = CustomUser.objects.get(username=request.user.username)
+        # получаем JSON для передачи боту
+        mailing = MailingParamJson(
+            user.id,
+            request.POST['plan_id'],
+            request.POST['image'],
+            request.POST['text'],
+        )
+
+        do_mailing(mailing.get_mailing_param())
+
+        response = HttpResponse()
+        response['Content-Type'] = 'text/javascript'
+        response.write(json.dumps({'success': 1}))
+
+        return response
+
+
+def edit_plan_row_ajax(request):
+    """
+    1. Главная фукнция создания и обновления расписания
+    2. Взависимости от поданой id фукнция определяет обновление или создание строки
+    3. Обрабатывает разные виды исключений, чтобы распознать действия в jquery
+    :param request:
+    :return:
+    """
     if request.is_ajax():
         user = CustomUser.objects.get(username=request.user.username)
         # выбираем текущее расписание юзера
         plan_list = UserPlans.objects.select_related().get(user_id=user.id, current_yn='y')
         data = request.POST
         this_plan = plan_list.plan
+        response = HttpResponse()
+        response['Content-Type'] = 'text/javascript'
 
         if 'id' in data:
             this_id = data['id']
-            if not this_id or this_id == 0 or 'add' in data:
-                return HttpResponse(
-                    {'message': "Успешно добавлено!", 'id': edit_plan_row(data, this_plan, this_id, CREATE)})
+
+            # если мы обновляем уже созданную строку то
+            if this_id != '0':
+                try:
+                    this_id = edit_plan_row(data, this_plan, this_id, UPDATE)
+                except (IntegrityError, ValueError):
+                    response.write(json.dumps({"error": "error", 'id': this_id}))
+                    return response
+                except CloneError:
+                    response.write(json.dumps({"clone_error": "clone_error", 'id': this_id}))
+                    return response
+
+                response.write(
+                    json.dumps({'message': "Успешно обновлено!", 'id': this_id}))
+                return response
+
+            # если мы создаём совсем новую строку то
             else:
-                return HttpResponse(
-                    {'message': "Успешно обновлено!", 'id': edit_plan_row(data, this_plan, this_id, UPDATE)})
+                try:
+                    this_id = edit_plan_row(data, this_plan, this_id, CREATE)
+                except (IntegrityError, ValueError):
+                    response.write(json.dumps({"error": "error", 'id': this_id}))
+                    return response
+                except CloneError:
+                    response.write(json.dumps({"clone_error": "clone_error", 'id': this_id}))
+                    return response
+
+                response.write(
+                    json.dumps({'message': "Успешно добавлено!", 'id': this_id}))
+                return response
         else:
             return HttpResponseBadRequest()
     else:
@@ -44,131 +108,152 @@ def add_plan_row_ajax(request):
 
 
 def plan_delete_ajax(request):
+    """
+    1. Удаляет строку расписания из PlanRows
+    2. Ориентируется только по id и текущем выбранном расписании пользователя
+    """
     if request.is_ajax():
         user = CustomUser.objects.get(username=request.user.username)
-        plan_list = UserPlans.objects.select_related().get(user_id=user.id, current_yn='y')
+        plan = UserPlans.objects.select_related().get(user_id=user.id, current_yn='y')
         data = request.POST
-        if 'delete_id_planRow' in data:
-            delete_id = data['delete_id_planRow']
-            # выбираем все строчки расписания именно данного пользователя
-            user_plan_rows = PlanRows.objects.select_related().filter(plan_id=plan_list.id)
-            user_plan_rows.get(id=delete_id).delete()
-        return HttpResponse('Успешно удалено!')
-    else:
-        return HttpResponseBadRequest()
-
-
-def plan_clone_ajax(request):
-    if request.is_ajax():
-        user = CustomUser.objects.get(username=request.user.username)
-        # выбираем текущее расписание юзера
-        plan_list = UserPlans.objects.select_related().get(user_id=user.id, current_yn='y')
-        data = request.POST
-        this_plan = plan_list.plan
 
         if 'id' in data:
-            this_plan_row = PlanRows.objects.select_related().get(plan_id=this_plan.id, id=data['id'])
-            # просто дублируем запись в БД
-            this_plan_row.pk = None
-            this_plan_row.save()
-
-            return HttpResponse("Успешно продублировано!")
-
+            delete_id = data['id']
+            # выбираем все строчки расписания именно данного пользователя
+            PlanRows.objects.get(plan_id=plan.plan.id, id=delete_id).delete()
+            return HttpResponse('Успешно удалено!')
         else:
-            HttpResponseBadRequest()
-
+            return HttpResponseBadRequest()
     else:
         return HttpResponseBadRequest()
 
 
-#
+class CloneError(Exception):
+    """
+    Исключение для того, чтобы распознать, что пользователь пытается сохранить строку, которая уже существует
+    в точности в текущем дне и расписании
+    """
+    pass
 
-# создаёт или обновляет строку расписания. Берёт данные из data
-# для того, чтобы строка сохранилась в базе, data должны быть переданы полностю для всех полей plan_row
-# если создаём новую запись, то фукнция возвращает id нового plan_row
+
 def edit_plan_row(data, this_plan, this_id, mode):
+    """
+     1. Создаёт или обновляет строку расписания, взависимости от поданой id
+     2. data должны быть переданы полностю для всех полей plan_row
+     3. Выдаёт собственные типы ошибок, чтобы распознать их в jquery
+    """
     day_of_week, place, parity, teacher, this_time, start_week, end_week, subject = \
         None, None, None, None, None, None, None, None
 
-    try:
-        # есть ли уже такой предмет в расписании
-        if 'subject' in data:
-            subjects_objects = Subjects.objects.select_related().filter(plan_id=this_plan, name=data['subject'])
-            if subjects_objects.count() == 0:
-                subject = Subjects(name=data['subject'], plan=this_plan)
-                subject.save()
-            else:
-                subject = subjects_objects[0]
+    # есть ли уже такой предмет в расписании
+    if 'subject' in data:
+        subjects_objects = Subjects.objects.select_related().filter(plan_id=this_plan, name=data['subject'])
+        if subjects_objects.count() == 0:
+            subject = Subjects(name=data['subject'], plan=this_plan)
+            subject.save()
+        else:
+            subject = subjects_objects[0]
 
-        # есть ли уже такой учитель в расписании
-        if 'teacher' in data:
-            teachers_objects = Teachers.objects.select_related().filter(plan_id=this_plan,
-                                                                        name_short=data['teacher'])
-            if teachers_objects.count() == 0:
-                teacher = Teachers(name_short=data['teacher'], plan=this_plan)
-                teacher.save()
-            else:
-                teacher = teachers_objects[0]
+    # есть ли уже такой учитель в расписании
+    if 'teacher' in data:
+        teachers_objects = Teachers.objects.select_related().filter(plan_id=this_plan,
+                                                                    name_short=data['teacher'])
+        if teachers_objects.count() == 0:
+            teacher = Teachers(name_short=data['teacher'], plan=this_plan)
+            teacher.save()
+        else:
+            teacher = teachers_objects[0]
 
-        # есть ли уже такое время в расписании
-        if 'time' in data:
-            dt = datetime.datetime.strptime(data['time'], "%H:%M")
-            times_objects = Times.objects.select_related().filter(plan_id=this_plan, hh24mm=dt)
-            if times_objects.count() == 0:
-                this_time = Times(hh24mm=dt, plan=this_plan)
-                this_time.save()
-            else:
-                this_time = times_objects[0]
+    # есть ли уже такое время в расписании
+    if 'time' in data:
+        dt = datetime_lib.strptime(data['time'], "%H:%M")
+        times_objects = Times.objects.select_related().filter(plan_id=this_plan, hh24mm=dt)
+        times_objects = Times.objects.select_related().filter(plan_id=this_plan, hh24mm=dt)
+        if times_objects.count() == 0:
+            this_time = Times(hh24mm=dt, plan=this_plan)
+            this_time.save()
+        else:
+            this_time = times_objects[0]
 
-        # есть ли уже такое место в расписании
-        if 'place' in data:
-            places_objects = Places.objects.select_related().filter(plan_id=this_plan, name=data['place'])
-            if places_objects.count() == 0:
-                place = Places(name=data['place'], plan=this_plan)
-                place.save()
-            else:
-                place = places_objects[0]
+    # есть ли уже такое место в расписании
+    if 'place' in data:
+        places_objects = Places.objects.select_related().filter(plan_id=this_plan, name=data['place'])
+        if places_objects.count() == 0:
+            place = Places(name=data['place'], plan=this_plan)
+            place.save()
+        else:
+            place = places_objects[0]
 
-        if 'day_of_week' in data:
-            day_of_week = DaysOfWeek.objects.get(id=data['day_of_week'])
-        if 'parity' in data:
-            parity = data['parity']
-        if 'start_week' in data:
-            start_week = data['start_week']
-        if 'end_week' in data:
-            end_week = data['end_week']
+    if 'day_of_week' in data:
+        day_of_week = DaysOfWeek.objects.get(id=data['day_of_week'])
+    if 'parity' in data:
+        parity = data['parity']
+    if 'start_week' in data:
+        start_week = data['start_week']
+    if 'end_week' in data:
+        end_week = data['end_week']
 
-        if mode == UPDATE:
-            PlanRows.objects.select_related().filter(plan_id=this_plan.id, id=this_id).update(
-                start_week=start_week,
-                end_week=end_week,
-                parity=parity,
-                day_of_week=day_of_week,
-                subject=subject,
-                teacher=teacher,
-                time=this_time,
-                place=place
-            )
+    # если текущий режим работы фукнции это обновление строку
+    # в этом случае новая запись не создаётся
+    if mode == UPDATE:
+        plan_row_exist_update = PlanRows.objects.select_related().filter(
+            plan=this_plan,
+            start_week=start_week,
+            end_week=end_week,
+            parity=parity,
+            day_of_week=day_of_week,
+            subject=subject,
+            teacher=teacher,
+            time=this_time,
+            place=place
+        )
 
-            return this_id
+        if plan_row_exist_update:
+            raise CloneError(Exception)
 
-        if mode == CREATE:
+        PlanRows.objects.select_related().filter(plan_id=this_plan.id, id=this_id).update(
+            start_week=start_week,
+            end_week=end_week,
+            parity=parity,
+            day_of_week=day_of_week,
+            subject=subject,
+            teacher=teacher,
+            time=this_time,
+            place=place
+        )
+        # возвращаем то же самое id
+        return this_id
 
-            new_plan_row = PlanRows(start_week=start_week,
-                                    end_week=end_week,
-                                    parity=parity,
-                                    day_of_week=day_of_week,
-                                    subject=subject,
-                                    teacher=teacher,
-                                    time=this_time,
-                                    place=place,
-                                    plan=this_plan)
-            new_plan_row.save()
-            # возвращаем новое id, чтобы записать его в html
-            return new_plan_row.id
+    # если текущий режим работы фукнции это добавление новой строки
+    # в этом случае создаётся новый объект PlanRows
+    if mode == CREATE:
+        plan_row_exist_create = PlanRows.objects.select_related().filter(
+            start_week=start_week,
+            end_week=end_week,
+            parity=parity,
+            day_of_week=day_of_week,
+            subject=subject,
+            teacher=teacher,
+            time=this_time,
+            place=place,
+            plan=this_plan
+        )
 
-    except IntegrityError:
-        return HttpResponseBadRequest()
+        if plan_row_exist_create:
+            raise CloneError(Exception)
+
+        new_plan_row = PlanRows(start_week=start_week,
+                                end_week=end_week,
+                                parity=parity,
+                                day_of_week=day_of_week,
+                                subject=subject,
+                                teacher=teacher,
+                                time=this_time,
+                                place=place,
+                                plan=this_plan)
+        new_plan_row.save()
+        # возвращаем новое id, чтобы записать его в html
+        return new_plan_row.id
 
 
 def switch_plan_home_ajax(request):
@@ -179,8 +264,17 @@ def switch_plan_home_ajax(request):
     """
     if request.is_ajax():
         user = CustomUser.objects.get(username=request.user.username)
+        # производим валидацию переданных данных со страницы
+        try:
+            plan_id = int(request.POST['plan_id'])
+            plan = UserPlans.objects.select_related().filter(user_id=user.id, plan_id=plan_id)[0]
+        except ValueError:
+            return render_to_response('content_errors.html')
+        except IndexError:
+            return render_to_response('content_errors.html')
+
         # get_today_tomorrow_plans возвращает словарь
-        context = get_today_tomorrow_plans(user.id, plan_id=request.POST['plan_id'])
+        context = get_today_tomorrow_plans(plan)
 
         return render_to_response('today_tomorrow.html', context)
 
@@ -215,8 +309,6 @@ def confirm_invitation_ajax(request):
     if request.is_ajax():
         user = CustomUser.objects.get(username=request.user.username)
         inv = Invitations.objects.select_related().get(to_user=user.id, plan_id=request.GET['plan_id'])
-
-        print(request.GET['decision'])
 
         inv.confirmed_yn = 'y' if request.GET['decision'] == '1' else 'n'
         inv.save()
@@ -352,39 +444,6 @@ def registration_view(request):
     return render_to_response('reg.html', context)
 
 
-def home_view(request):
-    """
-        Функция отображения главной страницы сайта
-        с расписанием на сегодня
-    """
-    if request.user.is_authenticated():
-        user = CustomUser.objects.get(username=request.user.username)
-        context = {'user': user}
-
-        all_plans = UserPlans.objects.select_related().filter(user_id=user.id)
-
-        # выбираем текущее расписание юзера
-        try:
-            cur_plan = UserPlans.objects.select_related().filter(user_id=user.id, always_yn='y')[0]
-        except IndexError:
-            cur_plan = all_plans[0]
-
-        if all_plans:
-            context['image_form'] = SetAvatarForm
-            context['all_plans'] = all_plans
-            context['cur_plan'] = cur_plan
-
-            # объединяем контексты
-            context_td_tm = get_today_tomorrow_plans(user.id, cur_plan.plan.id)
-            context.update(context_td_tm)
-
-            return render_to_response('home.html', context)
-        else:
-            return render_to_response('home.html', context)
-    else:
-        return HttpResponseRedirect("/login")
-
-
 def login_view(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -426,6 +485,39 @@ def profile_settings(request):
         return render_to_response('myprofile.html', {})
 
 
+def home_view(request):
+    """
+        Функция отображения главной страницы сайта
+        с расписанием на сегодня
+    """
+    if request.user.is_authenticated():
+        user = CustomUser.objects.get(username=request.user.username)
+        context = {'user': user}
+
+        all_plans = UserPlans.objects.select_related().filter(user_id=user.id)
+
+        # выбираем текущее расписание юзера
+        try:
+            cur_plan = UserPlans.objects.select_related().filter(user_id=user.id, always_yn='y')[0]
+        except IndexError:
+            cur_plan = all_plans[0]
+
+        if all_plans:
+            context['image_form'] = SetAvatarForm
+            context['all_plans'] = all_plans
+            context['cur_plan'] = cur_plan
+
+            # объединяем контексты
+            context_td_tm = get_today_tomorrow_plans(cur_plan)
+            context.update(context_td_tm)
+
+            return render_to_response('home.html', context)
+        else:
+            return render_to_response('home.html', context)
+    else:
+        return HttpResponseRedirect("/login")
+
+
 def plan_view(request, plan_id=0):
     """
        Функция, которая выводит таблицу редактирования текущего (выбранного) расписания.
@@ -439,12 +531,13 @@ def plan_view(request, plan_id=0):
         }
 
         all_plans = UserPlans.objects.select_related().filter(user_id=user.id)
-        count = all_plans.count()
 
         try:
             cur_plan = UserPlans.objects.select_related().filter(user_id=user.id, current_yn='y')[0]
         except IndexError:
             cur_plan = all_plans[0]
+
+        count = UserPlans.objects.filter(plan_id=cur_plan.plan.id).count()
 
         if plan_id == 0:
             # выбираем текущее расписание юзера

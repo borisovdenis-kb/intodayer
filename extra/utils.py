@@ -1,11 +1,25 @@
+import json
 from datetime import *
 from django.utils import timezone
 from intodayer2_app.models import *
-
+from PIL import Image
+from io import BytesIO
+from base64 import b64decode
+from django.core.files.base import ContentFile
 
 ######################################################################################
 #             В ЭТОМ МОДУЛЕ БУДУТ ХРАНИТЬСЯ ВСЯКИЕ ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ           #
 ######################################################################################
+
+
+def save_div_png(base64_str, filename):
+    img_data = b64decode(base64_str)
+    image = ContentFile(img_data, filename)
+
+    new_img = DivToPng(image=image)
+    new_img.save()
+
+    return new_img.image.path
 
 
 def members_amount_suffix(n):
@@ -44,7 +58,7 @@ def weeks_from(start, end):
         return (days.days // 7) + 2
 
 
-def get_today_tomorrow_plans(user_id, plan_id):
+def get_today_tomorrow_plans(plan):
     """
         Функция делает выборку строк расписания
         на сегодняшний и на завтрашний день,
@@ -56,16 +70,15 @@ def get_today_tomorrow_plans(user_id, plan_id):
     """
     context = {}
 
-    cur_plan = UserPlans.objects.select_related().filter(user_id=user_id, plan_id=plan_id)[0]
+    # количество участников
+    count = UserPlans.objects.filter(plan_id=plan.plan.id).count()
 
-    count = UserPlans.objects.filter(plan_id=cur_plan.plan.id).count()
-
-    today = timezone.make_aware(datetime.now())   # опр сегодняшнюю дату
-    tomorrow = today + timedelta(1)               # завтрашняя дата
-    td_weekday = datetime.weekday(today)          # день недели сегодня
-    tm_weekday = datetime.weekday(tomorrow)       # день дедели завтра
-    start_date = cur_plan.plan.start_date             # c какого числа действует расп.
-    cur_week1 = weeks_from(start_date, today)     # определяем номер текущей недели
+    today = timezone.make_aware(datetime.now())          # опр сегодняшнюю дату
+    tomorrow = today + timedelta(1)                      # завтрашняя дата
+    td_weekday = datetime.weekday(today)                 # день недели сегодня
+    tm_weekday = datetime.weekday(tomorrow)              # день дедели завтра
+    start_date = plan.plan.start_date                # c какого числа действует расп.
+    cur_week1 = weeks_from(start_date, today)            # определяем номер текущей недели
     cur_week2 = weeks_from(start_date, tomorrow)
     td_parity, tm_parity = cur_week1 % 2, cur_week2 % 2  # четность недели
 
@@ -73,17 +86,17 @@ def get_today_tomorrow_plans(user_id, plan_id):
     format2 = '%A, %d. %B %Y'
 
     today_plan = PlanRows.objects.select_related().filter(
-        plan_id=cur_plan.plan.id,
+        plan_id=plan.plan.id,
         day_of_week=td_weekday + 1,
         start_week__lte=cur_week1,
         end_week__gte=cur_week1,
         parity=td_parity
     )
     tomorrow_plan = PlanRows.objects.select_related().filter(
-        plan_id=cur_plan.plan.id,
-        day_of_week=tm_weekday + 2,
-        start_week__lte=cur_week1,
-        end_week__gte=cur_week1,
+        plan_id=plan.plan.id,
+        day_of_week=tm_weekday + 1,
+        start_week__lte=cur_week2,
+        end_week__gte=cur_week2,
         parity=tm_parity
     )
 
@@ -99,7 +112,7 @@ def get_today_tomorrow_plans(user_id, plan_id):
     }
 
     # инфа о текущем расписании
-    context['cur_plan_info'] = [cur_plan.plan.title, cur_plan.plan.description]
+    context['cur_plan_info'] = [plan.plan.title, plan.plan.description]
     # добавляем кол-во участников
     context['cur_plan_info'] += [members_amount_suffix(count)]
     # разделитель между неделями

@@ -1,25 +1,23 @@
-$(document).ready( function () {
+$(document).ready(function () {
+    setStrColor('f');
 
     avatarEditAccess({plan_id: $('.ava_content p').text()});
 
-   $('.plan_selector ul li a').click( function () {
+    $('.plan_selector ul li a').click(function () {
         var data = {plan_id: $(this).siblings('p').text()};
 
-       jQuery.each($('.plan_selector ul li a'), function() {
-          $(this).css({'background-color': 'rgb(244, 243, 248)', 'color' : '#000000'})
-       });
+        jQuery.each($('.plan_selector ul li a'), function () {
+            $(this).css({'background-color': 'rgb(244, 243, 248)', 'color': '#000000'})
+        });
 
-       $(this).css({'background-color': '#000000', 'color' : '#FFFFFF'})
+        $(this).css({'background-color': '#000000', 'color': '#FFFFFF'});
 
-       $('.right_content').load('/home/switch_plan', data);
+        $('.right_content').load('/home/switch_plan', data, function () {
+            setStrColor();
+        });
 
-       avatarEditAccess(data);
-   });
-});
-
-// отвечает за оптимизацию шрифта
-$(window).on("resize", function () {
-    normalize_font();
+        avatarEditAccess(data);
+    });
 });
 
 
@@ -37,18 +35,18 @@ function avatarEditAccess(data) {
     });
 }
 
-function normalize_font() {
-    // var $objects = $('.str_plan ul li');
-    // $objects.each(function () {
-    //     var $this_text_block = $(this, 'p');
-    //
-    //     $this_text_block.wrapInner('<div class="fake"/>')
-    //         .each(function (i, el) {
-    //             if ($('.fake', el).height() > $(el).height()) {
-    //                 $(el).css('background', 'black');
-    //             } else {
-    //                 // $(el).after('Контент нормально помещается в блоке');
-    //             }
-    //         });
-    // });
+function setStrColor() {
+    /*
+     *  Функция окрашивает нечетные строки таблицы в серый цвет
+     */
+    $.each($('.day_plan_content'), function () {
+        $.each($(this).find('.str_plan'), function (i) {
+            if ((i % 2) != 0) {
+                $(this).clearQueue();
+                $(this).animate({'background-color': 'rgba(240, 240, 245, 1)'});
+                $(this).find('ul').clearQueue();
+                $(this).find('ul').animate({'background-color': 'rgba(240, 240, 245, 1)'});
+            }
+        });
+    });
 }

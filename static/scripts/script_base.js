@@ -3,6 +3,12 @@
  */
 
 $(document).ready(function () {
+    var page = window.location.href.split('/');
+
+    // if (page[page.length-2] == 'home') {
+    //     setStrColor();
+    // }
+
     if (location.href.indexOf('invitation') < 0) {
         show_invitations();
     } else {

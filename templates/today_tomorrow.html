@@ -12,13 +12,12 @@
             <a>{{ today_plan.date }}</a>
         </div>
         <div class="day_plan_content">
-            <div class="str_plan">
-                <ul class="str_title">
+            <div class="str_plan str_title">
+                <ul>
                     <li><a>Время</a></li>
                     <li><a>Предмет</a></li>
                     <li><a>Преподаватель</a></li>
                     <li><a>Аудитория</a></li>
-
                 </ul>
             </div>
             {#                        а это уже в django шаблоны#}
@@ -37,12 +36,6 @@
     </div>
 </div>
 
-
-{#            {% if separator %}#}
-{#                <div class="separator"></div>#}
-{#            {% endif %}#}
-
-
 <!-- Завтра -->
 <div class="plan_content">
     <div class="plan_window">
@@ -52,13 +45,12 @@
             <a>{{ tomorrow_plan.date }}</a>
         </div>
         <div class="day_plan_content">
-            <div class="str_plan">
-                <ul class="str_title">
+            <div class="str_plan str_title">
+                <ul>
                     <li><a>Время</a></li>
                     <li><a>Предмет</a></li>
                     <li><a>Преподаватель</a></li>
                     <li><a>Аудитория</a></li>
-
                 </ul>
             </div>
             {#                        а это уже в django шаблоны#}

@@ -14,30 +14,34 @@ body {
     width: 15%;
 }
 
-.str_plan ul li:last-child {
-    width: 20%;
+.str_plan ul li:nth-child(5) {
+    width: 15%;
+}
+
+.str_plan ul li:nth-child(6) {
+    width: 15%;
 }
 
 .str_plan ul li {
     width: 30%;
 }
 
-.str_plan ul li a, .str_plan ul li input{
+.str_plan ul li a, .str_plan ul li input {
     min-height: 15px;
     padding-bottom: 0px;
     /* Это чтобы избежать мерцания, но тогда не красиво получается... =( */
-    text-align: left;
+    text-align: center;
 }
 
 .str_plan:nth-child(2) {
     margin: 5px 0 0 0;
 }
+
 /*.change ul:last-child{*/
-    /*margin-bottom: 9px;*/
+/*margin-bottom: 9px;*/
 /*}*/
 
-
-.plus_button_form{
+.plus_button_form {
     margin: auto;
     /*padding: 3px 0 3px 0px;*/
     /*border: 1px solid rgba(81, 198, 102, 1);*/
@@ -61,24 +65,216 @@ body {
 }
 
 /*анимируем этот параметр*/
-.str_plus{
+.str_plus {
 
     margin-top: 10px;
 }
 
-.str_plan.str_plus{;
+.str_plan.str_plus {;
     cursor: default;
     background: white;
     /*background: rgba(144, 238, 144, 0.96);*/
     /*border: 2px solid rgba(3, 96, 255, 0.5);*/
 }
-.str_title{
+
+.str_title {
     cursor: default;
 }
 
-.plus_button_form:hover .plus_button{
+.plus_button_form:hover .plus_button {
     opacity: 1;
 }
-.plus_button_form:active .plus_button{
+
+.plus_button_form:active .plus_button {
     opacity: 0.7;
 }
+
+/*.day_plan_content{*/
+/*display: flex;*/
+/*align-items: stretch;*/
+/*align-content: stretch;*/
+/*flex-direction: column;*/
+/*}*/
+
+.str_plan {
+    width: 100%;
+}
+
+.str_title .checkbox_container {
+    border: 2px solid rgba(255, 255, 255, 1);
+    /*padding: 1px 0 1px 0;*/
+
+}
+
+.str_title .checkbox_wrap {
+    border-right: 1px solid rgba(91, 178, 102, 0.4);
+}
+
+.checkbox_wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    float: left;
+    width: 25px;
+    border-right: 1px solid rgba(230, 230, 230, 1);
+    padding: 2px 8px 2px 10px;
+    margin: 0px 5px 0 0px;
+    border-radius: 4px 0 0 4px;
+    cursor: pointer;
+}
+
+.checkbox_container {
+    display: flex;
+    height: 20px;
+    width: 20px;
+    /*background: red;*/
+    border-radius: 4px;
+    background-color: rgba(0, 0, 0, 0.0);
+    border: 2px solid rgba(103, 198, 97, 1);
+    cursor: pointer;
+
+}
+
+.content_day_title {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: calc(100% - 5px);
+    border-bottom: 1px solid rgba(210, 210, 210, 1);
+}
+
+.tools_panel {
+    width: 30%;
+}
+
+.day_title_container {
+    text-align: center;
+    width: 40%;
+}
+
+.tools_panel ul {
+    display: flex;
+    height: 30px;
+    /*background: gray;*/
+    /*background: rgb(237, 218, 255);*/
+}
+
+.tools_panel.right {
+    display: flex;
+    float: left;
+    justify-content: flex-end;
+}
+
+.tools_panel.left ul li:last-child {
+    padding-right: 10px;
+}
+
+.tools_panel.right:last-child {
+    padding-right: 0;
+    margin-right: 5px;
+}
+
+.tools_panel ul li:first-child {
+    padding-left: 0;
+    margin-left: 10px;
+}
+
+.tools_panel ul li {
+    display: flex;
+    float: left;
+
+}
+
+.tools_panel ul li button {
+    /*width: 100%;*/
+    /*border-radius: 4px;*/
+    /*margin: 0 5px 0 5px;*/
+    /*background: rgba(205, 92, 92, 1);*/
+    width: 60px;
+    /*border-radius: 4px;*/
+    margin: 0 2px 0 2px;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    /*background: rgba(0,0,0,0.1);*/
+    color: rgba(0, 0, 0, 0.2);
+    font-weight: 700;
+    text-decoration: none;
+    border-radius: 3px;
+    /*transition: none;*/
+}
+
+.share_button {
+    margin-right: 65px;
+    margin-bottom: 30px;
+}
+
+.share_button .first_layer {
+    position: absolute;
+    width: 60px;
+    height: 25px;
+    padding-top: 4px;
+    margin: 0 2px 0 2px;
+    background-color: #9dc8eb;
+    color: rgba(0, 0, 0, 0.2);
+    text-align: center;
+    font-weight: 700;
+    text-decoration: none;
+    border-radius: 3px;
+    transition: 0.2s linear;
+    user-select: none;
+}
+.share_button .second_layer {
+    position: absolute;
+    width: 60px;
+    height: 29px;
+    margin: 3px 2px 0 2px;
+    background-color: #7598ba;
+    color: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
+
+.share_button  .first_layer:hover{
+    cursor: pointer;
+}
+
+.share_button .first_layer:active{
+    margin-top: 2px;
+}
+
+#btn-Convert-Html2Image {
+    width: 100px;
+    height: 1000px;
+    background-color: #eb6b66;
+}
+
+.KLOSS {
+    position: absolute;
+    width: 1000px;
+    height: auto;
+    margin: auto;
+    opacity: 0;
+}
+
+
+/*.tools_panel ul li button:hover {*/
+    /*background: none;*/
+/*}*/
+/*.tools_panel ul li button:active {*/
+    /*background: none;*/
+/*}*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

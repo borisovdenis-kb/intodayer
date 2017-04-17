@@ -10,6 +10,18 @@ from django.utils import timezone
 _MAX_SIZE = 300
 
 
+class DivToPng(models.Model):
+    """
+        Таблица для хранения изображений
+        полученных при конвертации div блоков с расписанием
+    """
+    image = models.ImageField(upload_to='div_to_png/', blank=True, max_length=1000)
+
+    class Meta:
+        managed = True
+        db_table = 'div_to_png'
+
+
 class DaysOfWeek(models.Model):
     """
         Таблица дней недели
@@ -146,7 +158,7 @@ class PlanRows(models.Model):
         Таблица, в которой будет храниться основная информация
         необходимая для рассписания
     """
-    parity = models.BooleanField()
+    parity = models.IntegerField(models.DO_NOTHING)
     day_of_week = models.ForeignKey(DaysOfWeek, models.DO_NOTHING)
     time = models.ForeignKey(Times, models.DO_NOTHING)
     subject = models.ForeignKey(Subjects, models.DO_NOTHING)
@@ -156,6 +168,7 @@ class PlanRows(models.Model):
     end_week = models.IntegerField()
     comment = models.CharField(max_length=256)
     plan = models.ForeignKey('PlanLists', models.DO_NOTHING)
+    # subgroup = models.IntegerField(models.DO_NOTHING)
 
     class Meta:
         managed = True
