@@ -22,18 +22,15 @@ button:focus {
 }
 
 .top-block {
+      display: flex;
     border-bottom: 3px solid #8b1deb;
-    /*border-bottom: 3px solid royalblu*/
     background-color: rgba(242, 242, 242, 1);
-    min-width: 768px;
 
 }
 
 .top {
-    display: block;
     max-width: 1200px;
-    min-width: 768px;
-    margin: auto;
+     margin: 0 auto;
 }
 
 .top-line {
@@ -72,7 +69,7 @@ button:focus {
 .logo {
     float: left;
     width: 184px;
-    padding-left: 17px;
+    margin-left: -5px;
     font-size: 24px;
 
 }

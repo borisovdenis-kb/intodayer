@@ -1,53 +1,58 @@
+{% extends 'welcome_base.html' %}
 {% load staticfiles %}
-<html>
-<head>
-    <title>Three pachans Web Site</title>
-    <meta http-equiv="Content-type" content="text/html" charset="UTF-8">
-<!--
-    <link rel="stylesheet" type="text/css" href="../test/style/fonts.css">
-    <link rel="stylesheet" type="text/css" href="../test/style/general_style.css">
-    <link rel="stylesheet" type="text/css" href="../test/style/welcome-auth-reg_style.css">
-    <script type="text/javascript" src="../test/library/jquery-3.1.1.js"></script>
-    <script type="text/javascript" src="../test/library/jquery.animate-colors.js"></script>
--->
-    <link rel="stylesheet" type="text/css" href={% static "css/fonts.css"%}>
-    <link rel="stylesheet" type="text/css" href={% static "css/general_style.css"%}>
-    <link rel="stylesheet" type="text/css" href={% static "css/welcome-auth-reg_style.css"%}>
-    <script type="text/javascript" src={% static "library/jquery-3.1.1.js"%}></script>
-    <script type="text/javascript" src={% static "library/jquery.animate-colors.js"%}></script>
 
-</head>
-<body>
-<div class="top-block">
-    <div class="top">
-        <div class="logo"><a href="">IntoDayer</a></div>
-        <div id="sing_up-top"><a href="/registration">Sign up</a></div>
-        <div id="login-top"><a href="/login">Log In</a></div>
+
+{% block scripts_top %}
+    <link rel="stylesheet" type="text/css" href={% static "css/welcome_main.css" %}>
+{% endblock %}
+
+
+
+{% block content_page %}
+    <div class="container-fluid text-center">
+        <div class="row vertical-center-row">
+            <div class="col-xs-12">
+                <div class="welcome_text" style="opacity: 0">
+                    <h1 class="hidden-lg hidden-md hidden-sm">Welcome to Intodayer</h1>
+                    <h1 class="big-h1 visible-lg visible-md visible-sm">Welcome to Intodayer</h1>
+                    <div style="height: 5px;"></div>
+                    <h2 class="welcome_text">follow your day now</h2>
+                </div>
+            </div>
+
+            <div style="height: 10px;"></div>
+            <div style="height: 20px;" class="hidden-xs"></div>
+
+            <div class="col-xs-12 buttons_row" style="opacity: 0">
+                <a class="btn btn-success btn-lg" id="sign_up" href="/registration">Sing Up</a>
+                <a class="btn btn-default btn-lg" id="sign_in" href="/login">Sing In</a>
+            </div>
+
+            <div style="height: 10px;"></div>
+            <div style="height: 20px;" class="hidden-xs"></div>
+
+            <div class="col-xs-12 about_service_text" style="opacity: 0">
+                <h4>Создавай таблицы с учебным расписанием на весь день</h4>
+                <h5> Каждый день..</h5>
+            </div>
+
+            <div class="col-xs-12 fill-space-bottom hidden-xs"></div>
+            <blockquote class="bottom_text hidden-xs" style="opacity: 0">
+                <p>Это, несомненно, лучший сервис электронных расписаний в России </p>
+                <footer>Разработчик сервисов Вконтакте и Телеграм <cite title="Source Title">Павел Дуров</cite>
+                </footer>
+            </blockquote>
+        </div>
     </div>
-</div>
 
-</body>
+{% endblock %}
 
-<div class="page">
-    <div class="text">
-        <h1>Welcome to Intodayer</h1>
-        <h2>follow your day now</h2>
-    </div>
-    <div class="enter">
-        <ul>
-            <li id="sign_in"><a href="/login">Sign In</a></li>
-            <li id="sign_up"><a href="/registration">Sign Up</a></li>
-        </ul>
-    </div>
 
-    <h3>Создавай таблицы с учебным расписанием на весь день. Каждый день.</h3>
 
-</div>
-<!--
-<script type="text/javascript" src="../test/scripts/set-screen-size.js"></script>
-<script type="text/javascript" src="../test/scripts/script_welcome.js"></script>
--->
-<script type="text/javascript" src={%static "scripts/set-screen-size.js"%}></script>
-<script type="text/javascript" src={%static "scripts/script_welcome.js"%}></script>
+{% block scripts_bottom %}
+    <script type="text/javascript" src={% static "scripts/script_welcome.js" %}></script>
+    <script type="text/javascript" src={% static "scripts/script_welcome_utils.js" %}></script>
+{% endblock %}
 
-</html>
+
+

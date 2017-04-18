@@ -1,62 +1,125 @@
+{% extends 'welcome_base.html' %}
 {% load staticfiles %}
-<html>
-<head>
-    <title>Three pachans Web Site</title>
-    <meta http-equiv="Content-type" content="text/html" charset="UTF-8">
-<!--
-    <link rel="stylesheet" type="text/css" href="../test/style/fonts.css">
-    <link rel="stylesheet" type="text/css" href="../test/style/general_style.css">
-    <link rel="stylesheet" type="text/css" href="../test/style/welcome-auth-reg_style.css">
-    <script type="text/javascript" src="../test/library/jquery-3.1.1.js"></script>
-    <script type="text/javascript" src="../test/library/jquery.animate-colors.js"></script>
--->
-    <link rel="stylesheet" type="text/css" href={% static "css/fonts.css"%}>
-    <link rel="stylesheet" type="text/css" href={% static "css/general_style.css"%}>
-    <link rel="stylesheet" type="text/css" href={% static "css/welcome-auth-reg_style.css"%}>
-    <script type="text/javascript" src={% static "library/jquery-3.1.1.js"%}></script>
-    <script type="text/javascript" src={% static "library/jquery.animate-colors.js"%}></script>
 
-</head>
-<body>
-<div class="top-block">
-    <div class="top">
-        <div class="logo"><a href="/">IntoDayer</a></div>
-        <div id="sing_up-top"><a href="/registration">Sign up</a></div>
-        <div id="login-top"><a href="/login">Log In</a></div>
+
+{% block scripts_top %}
+    <link rel="stylesheet" type="text/css" href={% static "css/welcome_main.css" %}>
+    <link rel="stylesheet" type="text/css" href={% static "css/auth_reg.css" %}>
+
+{% endblock %}
+
+
+{% block content_page %}
+    <div class="container-fluid text-center">
+        <div class="row vertical-center-row">
+            <div class="panel_auth col-xs-11 col-lg-7 col-md-8 col-sm-8 center-block" style="opacity:0;">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h2 class="hidden-xs">Sign In to Intodayer</h2>
+                        <h3 class="visible-xs">Sign In to Intodayer</h3>
+                        <div style="height: 20px;" class="visible-xs"></div>
+                        <div style="height: 30px;" class="hidden-xs"></div>
+                    </div>
+                    {#                                        тут настраивается ширина полей и кнопок#}
+                    <div class="col-xs-12 col-xs-offset-0 col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2 form-content">
+                        <form action="" method="post">
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <input type="text" name='username' class="form-control input-lg"
+                                               id="inputUsername"
+                                               placeholder="Enter username">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <input type="password" name='password' class="form-control input-lg"
+                                               id="inputPassword"
+                                               placeholder="Password">
+                                    </div>
+                                </div>
+                                <div style="height: 20px;"></div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-lg-6 col-xs-6" style="padding-right:3px">
+                                            <input type="button" id="buttonBack"
+                                                   class="form-control btn input-lg btn-default"
+                                                   value="Назад">
+                                        </div>
+                                        <div class="col-lg-6 col-xs-6" style="padding-left:3px">
+                                            <input type="submit" id="buttonEnter"
+                                                   class="form-control btn input-lg  btn-success"
+                                                   value="Войти">
+                                        </div>
+                                    </div>
+                                    <div style="height: 10px;"></div>
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <input type="button" id="buttonHelp"
+                                                   class="form-control btn input-lg  btn-link"
+                                                   value="Не можете войти?">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-xs-12 fill-space-bottom hidden-xs"></div>
+            <blockquote class="bottom_text" style="opacity: 0">
+                <p>Это, несомненно, лучший сервис электронных расписаний в России </p>
+                <footer>Разработчик сервисов Вконтакте и Телеграм <cite title="Source Title">Павел Дуров</cite>
+                </footer>
+            </blockquote>
+        </div>
+
+
     </div>
-</div>
 
-</body>
 
-<div class="page">
-    <!--панель авторазации-->
-    <div class="auth">
-        <form action="" method="post">
-            <ul>
-                <div class="title-sign">Sign In to Intodayer</div>
-                <li id="name">
-                    <input type="text" placeholder="Login" name='username'>
-                </li>
-                <li id="password">
-                    <input type="password" placeholder="Password" name='password'>
-                </li>
-                <ul class="buttons-panel">
-                    <button class="back" type="button"><a href="/">Назад</a></button>
-                    <button id="submit-auth" type="submit">Войти</button>
-                </ul>
-                <div class="forgot"><a href="#">Не можете войти?</a></div>
-            </ul>
-        </form>
-    </div>
 
-    <h3>Всё самое важное о Вашем расписании и ничего больше.</h3>
+{% endblock %}
 
-</div>
-<!--
-<script type="text/javascript" src="../test/scripts/set-screen-size.js"></script>
-<script type="text/javascript" src="../test/scripts/script_auth.js"></script>
--->
-<script type="text/javascript" src={%static "scripts/set-screen-size.js"%}></script>
-<script type="text/javascript" src={%static "scripts/script_auth.js"%}></script>
 
-</html>
+{% block scripts_bottom %}
+    <script type="text/javascript" src={% static "scripts/script_auth.js" %}></script>
+    <script type="text/javascript" src={% static "scripts/script_welcome_utils.js" %}></script>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+{#<div class="page">#}
+{#    <!--панель авторазации-->#}
+{#    <div class="auth">#}
+{#        <form action="" >#}
+{#            <ul>#}
+{#                <div class="title-sign">Sign In to Intodayer</div>#}
+{#                <li id="name">#}
+{#                    <input type="text" placeholder="Login" name='username'>#}
+{#                </li>#}
+{#                <li id="password">#}
+{#                    <input type="password" placeholder="Password" name='password'>#}
+{#                </li>#}
+{#                <ul class="buttons-panel">#}
+{#                    <button class="back" type="button"><a href="/">Назад</a></button>#}
+{#                    <button id="submit-auth" type="submit">Войти</button>#}
+{#                </ul>#}
+{#                <div class="forgot"><a href="#">Не можете войти?</a></div>#}
+{#            </ul>#}
+{#        </form>#}
+{#    </div>#}
+{##}

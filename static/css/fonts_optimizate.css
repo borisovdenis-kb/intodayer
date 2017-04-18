@@ -1,4 +1,4 @@
-@media all{
+@media all {
     body {
         font-family: "PT Sans" !important;
     }
@@ -33,33 +33,33 @@
         font-size: 1.5em;
     }
 
-    .str_title:first-child li a{
+    .str_title:first-child li a {
         /*font-size: 1em;*/
     }
-    .str_plan ul li a, .str_plan ul li input{
+
+    .str_plan ul li a, .str_plan ul li input {
         font-family: "Cyntho Pro" !important;
         font-size: 16px;
         /*font-size: 1vw;*/
         /*min-font-size: 0.6vw;*/
     }
+
+    /*страница регистрации авторизации*/
+     h1,h2,h3{
+        font-family: "Cyntho Pro" !important;
+    }
+
+
+    .welcome_text {
+        font-family: "Segoe UI Light";
+
+    }
+
+    .about_service_text {
+        font-family: "Cyntho Pro" !important;
+    }
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /*все, что написали выше, дублируем сюда, для Firefox*/
 @-moz-document url-prefix() {
