@@ -22,9 +22,11 @@ html, body {
 .center_table{
     display: table-cell;
     vertical-align: middle;
+    /*height: ;*/
 }
 .vertical-center-row {
     display: flex;
+    /*height: 100%;*/
     /*этот важный параметр регулирует js*/
     /*min-height: 100% !important;*/
     /*background: gray;*/
