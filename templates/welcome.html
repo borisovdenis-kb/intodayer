@@ -3,7 +3,7 @@
 
 
 {% block scripts_top %}
-    <link rel="stylesheet" type="text/css" href={% static "css/welcome_main.css" %}>
+    <link rel="stylesheet" type="text/css" href={% static "css/welcome_base.css" %}>
 {% endblock %}
 
 
@@ -11,6 +11,8 @@
 {% block content_page %}
     <div class="container-fluid text-center">
         <div class="row vertical-center-row">
+            <div class="col-xs-12 hidden-xs" style="height: 30px;"></div>
+            <div class="col-xs-12 visible-xs" style="height: 10px;"></div>
             <div class="col-xs-12">
                 <div class="welcome_text" style="opacity: 0">
                     <h1 class="hidden-lg hidden-md hidden-sm">Welcome to Intodayer</h1>
@@ -20,8 +22,8 @@
                 </div>
             </div>
 
-            <div style="height: 10px;"></div>
-            <div style="height: 20px;" class="hidden-xs"></div>
+            <div class="col-xs-12" style="height: 10px;"></div>
+            <div class="col-xs-12 hidden-xs" style="height: 20px;"></div>
 
             <div class="col-xs-12 buttons_row" style="opacity: 0">
                 <a class="btn btn-success btn-lg" id="sign_up" href="/registration">Sing Up</a>

@@ -176,7 +176,7 @@ $(document).ready(function () {
         setStrPlaceholders($(this));
         setNewListenersSpecial($(this));
         setNewListenersNewStr($(this));
-    })
+    });
 });
 
 
@@ -184,6 +184,7 @@ $(document).ready(function () {
 $('.plus_button_form').click(function () {
     appendPlanStr($(this));
 });
+
 
 // если мы нажимаем не на строки расписания и не на поля ввода, то снимаем выделение с активных
 $(window).on('mousedown', function (event) {
@@ -194,6 +195,7 @@ $(window).on('mousedown', function (event) {
         }
     }
 });
+
 
 // обработчик для верхнего чекбокса, в заголовке каждого дня
 function setGeneralCheckBoxListeners($this_str, $general_checkbox) {
@@ -288,6 +290,8 @@ function setTopCheckBox($this_plan_content) {
 
 // обаботчики, которые устанавливаются единожды, при добавлении новой строки
 // нужно для того, чтобы, к примеру, не глючили чекбоксы
+var timer_select;
+var LAST_SELECT_STR_FOCUSES;
 function setNewListenersNewStr($new_div) {
     // Обработчики событый, применяемые к каждой строке расписания
     var $new_inputs = $new_div.find('ul li input');
@@ -305,9 +309,23 @@ function setNewListenersNewStr($new_div) {
         editField($(this));
     });
 
+
+    // при нажатии на iPhone на кнопку нужно также вызывать фукнцию
+    // тут проверяем что поле именно расфокусированно, а не выделено другое поле
+    // для этого нужна небольшая задержка
+    // $new_inputs.focusout(function (event) {
+    //     var $this_input = $(event.target);
+    //     clearTimeout(timer_select);
+    //     timer_select = setTimeout(function () {
+    //         if ($('.selected_field').length == 0) {
+    //             setDefaultStr($LAST_SELECTED_STR);
+    //         }
+    //     }, 50);
+    // });
+
     //при нажатии на другое поле снять выделение с текущей строки
     //если другое поле находится в этой же строке, то не снимаем выделение
-    $new_div.click(function () {
+    $new_div.on('click', function () {
         if ($LAST_SELECTED_STR && !$LAST_SELECTED_STR.is($(this)) && $LAST_SELECTED_STR.hasClass('selected_str')) {
             setDefaultStr($LAST_SELECTED_STR);
         }
@@ -316,6 +334,7 @@ function setNewListenersNewStr($new_div) {
 
     $new_inputs.on('focus', function () {
         $(this).parent().parent().parent().addClass('selected_str');
+        $(this).addClass('selected_field');
     });
 
     $new_inputs.on('focusout', function () {
@@ -340,7 +359,7 @@ function setNewListenersNewStr($new_div) {
         }, 500);
     });
 
-    // при нажатии на enter меняет поле на следующее
+    // при нажатии на enter поле расфокусируется
     $new_inputs.on('keyup', function (e) {
         if (e.which == 13) {
             var $this_field = $(e.target);
@@ -636,6 +655,7 @@ function setDefaultStr($str_plan, mode) {
         return false;
     }
 
+
     timer_send_server = setTimeout(function () {
         //***************************************************************************************
         // Одна из важнейших строчек во всём коде
@@ -643,22 +663,32 @@ function setDefaultStr($str_plan, mode) {
         if (strIsEmpty($str_plan)) {
             return false;
         }
+
         if ($str_plan.attr('id') && $str_plan.attr('id') != 0) {
             // 1. Если строка изменена при расфокусировки (изменено хотя бы одно поле), то
             if (checkThatFieldIsChanged($str_plan)) {
                 // 2. Если строка проходит базовую валидацию, то отправляем данные на сервер
                 var errors = mainValidationStr($str_plan);
                 if (!isEmpty(errors)) {
+                    printObj(errors);
                     callback_editStrPlan_error($str_plan);
                 }
                 // если нет ни одной ошибки, то всё успешно! )
                 else {
+
                     editStrPlan($str_plan);
                 }
             }
         }
         else {
-            editStrPlan($str_plan);
+            var errors = mainValidationStr($str_plan);
+            if (!isEmpty(errors)) {
+                printObj(errors);
+                callback_editStrPlan_error($str_plan);
+            }
+            else {
+                editStrPlan($str_plan);
+            }
         }
 
     }, 200);
@@ -680,8 +710,10 @@ function setOldValues($str_plan) {
 function checkThatFieldIsChanged($str_plan) {
     var new_data = getFieldsInformation($str_plan);
     for (var key in new_data) {
-        // alert(key + ": " + new_data[key] + " " + key + ": " + $str_plan.attr(key + "_old"));
+        // бывает, что $str_plan.attr(key + "_old") == undefined, когда мы перефокусируем поля
+        // не снимая выделения со строки, поэтому проверяем это
         if (new_data[key] != $str_plan.attr(key + "_old")) {
+            // alert(new_data[key] + " " + $str_plan.attr(key + "_old"));
             return true;
         }
         $str_plan.removeAttr(key + "_old");
@@ -693,8 +725,10 @@ function checkThatFieldIsChanged($str_plan) {
 function a_to_input($field) {
     //преобразовывает a в input
     var value = $field.html();
-    var $ul_parent = $field.parent().parent();
-    $ul_parent.css('height', $ul_parent.height());
+    var $ul_parent = $field.parent();
+    //чтобы строка не дёргалась при фокусе на input
+    $ul_parent.css('height', $field.parent().height());
+
     var $temp_field = $field;
 
     if ($field.get(0).tagName != 'INPUT') {
@@ -706,19 +740,17 @@ function a_to_input($field) {
         $field.attr('placeholder', setTrueRandomPlaceholder($temp_field));
         $field.attr('old_value', $temp_field.text());
     }
-    // else {
-    //     $field = input_to_a($field);
-    //     return;
-    // }
 
-    $field.addClass('selected_field');
+
     $field.attr("value", value);
     $field.focus();
+    $field.addClass('selected_field');
     //поместить курсор в конец поля input
     var inputVal = $field.val();
     $field.val('').focus().val(inputVal);
     //умножаем на 4, чтобы курсор точно вставл в конец во всех браузерах
     // alert($field.val().length);
+    // $field.css('height', $field.parent().height() + 10);
     $field.selectionStart = $field.val().length;
     $field.animate({scrollLeft: +$field.val().length * 10});
     return $field;
@@ -727,7 +759,7 @@ function a_to_input($field) {
 function input_to_a($field) {
     //преобразовывает input в a
     var temp_input = $field; // поле input
-    var $ul_parent = $field.parent().parent();
+    var $ul_parent = $field.parent();
     $ul_parent.css('height', 'auto');
     $field.removeClass('selected_field');
     if ($field.val() != '') {
@@ -814,13 +846,23 @@ function appendNewStrAnimation($new_div, $insert_after_this) {
     $new_div.insertAfter($insert_after_this);
     $new_div.slideToggle(200);
     $new_div.fadeTo(200, 1);
+
+    // эта строчка нужна чтобы при добавлении новой строки высота input не глючила и
+    // ровно заполняла li элемент
+    // setTimeout(function () {
+    //     $new_div.find('input').each(function () {
+    //         $(this).css('height', $(this).parent().height());
+    //         // $(this).css('height', 'auto');
+    //     });
+    // }, 200);
+
 }
 
 // добавление новой строки с расписанием
 var timer_setVisibleTopCheckbox;
 function appendPlanStr($this_button) {
 
-    var $this_block = $($this_button).closest('.day_plan_content');
+    var $this_block = $($this_button).parents('.day_plan_content');
     var $new_div = $($NEW_STR_PLAN_HTML).clone();
     var $plus_button = $this_block.find('.str_plus');
 
@@ -836,8 +878,9 @@ function appendPlanStr($this_button) {
         // и потом плюс появляется визуально
         $plus_button.fadeTo(200, 1);
     }, 150);
+
+    var insert_after_this = $this_block.find('.str_plan.change').last();
     setTimeout(function () {
-        var insert_after_this = $this_block.find('.str_plan.change').last();
         if (insert_after_this.hasClass('change')) {
             appendNewStrAnimation($new_div, insert_after_this);
         }
@@ -845,6 +888,7 @@ function appendPlanStr($this_button) {
         else {
             insert_after_this = $this_block.find('.str_title');
             appendNewStrAnimation($new_div, insert_after_this);
+
         }
     }, 200);
 
@@ -861,6 +905,7 @@ function appendPlanStr($this_button) {
             setCheckBoxVisible($this_plan.find('.general_checkbox'));
         }
     }, 500);
+
 
     setStrPlaceholders($new_div);
     setNewListenersNewStr($new_div);
@@ -1177,58 +1222,69 @@ function mainValidationStr($this_str) {
         var place = data['place'];
 
         if (weeks == "") {
-            errors[weeks] = 'empty_value';
+            errors['weeks'] = 'empty_value';
         }
         if (time == "") {
-            errors[time] = 'empty_value';
+            errors['time'] = 'empty_value';
         }
         if (subject == "") {
-            errors[subject] = 'empty_value';
+            errors['subject'] = 'empty_value';
         }
         if (teacher == "") {
-            errors[teacher] = 'empty_value';
+            errors['teacher'] = 'empty_value';
         }
         if (place == "") {
-            errors[place] = 'empty_value';
+            errors['place'] = 'empty_value';
         }
 
         // Проверка корректности ввода дня недели
-        var reg_weeks = /^[0-9]{1,2}-[0-9]{1,2}$/;
-        if (reg_weeks.test(weeks)) {
-            weeks = weeks.split('-');
-            var start_week = +weeks[0];
-            var end_week = +weeks[1];
-            if ((start_week > end_week) || (start_week > 52) || (end_week > 52) || (start_week == 0) || (end_week == 0)) {
-                errors['weeks'] = 'logical_error';
+        if (!errors['weeks']) {
+            var reg_weeks = /^[0-9]{1,2}-[0-9]{1,2}$/;
+            if (reg_weeks.test(weeks)) {
+                weeks = weeks.split('-');
+                var start_week = +weeks[0];
+                var end_week = +weeks[1];
+                if ((start_week > end_week) || (start_week > 52) || (end_week > 52) || (start_week == 0) || (end_week == 0)) {
+                    errors['weeks'] = 'logical_error';
+                }
+            }
+            else {
+                errors['weeks'] = 'format_error';
             }
         }
-        else {
-            errors['weeks'] = 'format_error';
-        }
-        // Проверка корректности ввода времени
-        var timePatt1 = /^(([0,1])|(2))$/;
-        var timePatt2 = /^(([0,1][0-9])|(2[0-3]))$/;
-        var timePatt3 = /^(([0,1][0-9])|(2[0-3])):$/;
-        var timePatt4 = /^(([0,1][0-9])|(2[0-3])):[0-5]$/;
-        var timePatt5 = /^(([0,1][0-9])|(2[0-3])):[0-5][0-9]$/;
-        if (!(timePatt1.test(time[0]) && timePatt2.test(time.slice(0, 2)) && timePatt3.test(time.slice(0, 3)) &&
-            timePatt4.test(time.slice(0, 4)) && timePatt5.test(time.slice(0, 5)))) {
-            errors['time'] = 'format_error';
+
+        if (!errors['time']) {
+            // Проверка корректности ввода времени
+            var timePatt1 = /^(([0,1])|(2))$/;
+            var timePatt2 = /^(([0,1][0-9])|(2[0-3]))$/;
+            var timePatt3 = /^(([0,1][0-9])|(2[0-3])):$/;
+            var timePatt4 = /^(([0,1][0-9])|(2[0-3])):[0-5]$/;
+            var timePatt5 = /^(([0,1][0-9])|(2[0-3])):[0-5][0-9]$/;
+            if (!(timePatt1.test(time[0]) && timePatt2.test(time.slice(0, 2)) && timePatt3.test(time.slice(0, 3)) &&
+                timePatt4.test(time.slice(0, 4)) && timePatt5.test(time.slice(0, 5)))) {
+                errors['time'] = 'format_error';
+            }
         }
         // Проверка корректности ввода предмета
 
-        if (subject.length > 100) {
-            errors['subject'] = 'length_error';
+        if (!errors['subject']) {
+            if (subject.length > 100) {
+                errors['subject'] = 'length_error';
+            }
+            // Проверка корректности ввода учителя
         }
-        // Проверка корректности ввода учителя
 
-        if (subject.length > 100) {
-            errors['teacher'] = 'length_error';
+        if (!errors['teacher']) {
+            if (teacher.length > 100) {
+                errors['teacher'] = 'length_error';
+            }
         }
         // Проверка корректности ввода места
 
-        if (subject.length > 100) {
-            errors['place'] = 'length_error';
+        if (!errors['place']) {
+            if (place.length > 100) {
+                errors['place'] = 'length_error';
+            }
         }
 
     }
@@ -1456,4 +1512,10 @@ function isEmpty(obj) {
         if (hasOwnProperty.call(obj, key)) return false;
     }
     return true;
+}
+
+function printObj(obj) {
+    for (var key in obj) {
+        console.log(key + ": " + obj[key])
+    }
 }

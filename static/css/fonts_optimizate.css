@@ -16,6 +16,7 @@
     }
 
     .logo a {
+        /*font-family: "Fira Sans" !important;*/
         font-family: "Cyntho Pro" !important;
     }
 
@@ -26,7 +27,13 @@
 
     .droplist a {
         font-family: "Fira Sans" !important;
+        font-size: 0.9em;
+    }
+
+    .droplist_click ul li a {
+        font-family: "Cyntho Pro" !important;
         font-size: 0.8em;
+        font-weight: 400;
     }
 
     .day_title {
@@ -45,10 +52,9 @@
     }
 
     /*страница регистрации авторизации*/
-     h1,h2,h3{
+    h1, h2, h3 {
         font-family: "Cyntho Pro" !important;
     }
-
 
     .welcome_text {
         font-family: "Segoe UI Light";

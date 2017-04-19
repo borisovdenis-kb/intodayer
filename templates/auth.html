@@ -3,7 +3,7 @@
 
 
 {% block scripts_top %}
-    <link rel="stylesheet" type="text/css" href={% static "css/welcome_main.css" %}>
+    <link rel="stylesheet" type="text/css" href={% static "css/welcome_base.css" %}>
     <link rel="stylesheet" type="text/css" href={% static "css/auth_reg.css" %}>
 
 {% endblock %}
@@ -12,6 +12,7 @@
 {% block content_page %}
     <div class="container-fluid text-center">
         <div class="row vertical-center-row">
+             <div class="col-xs-12" style="height: 10px;"></div>
             <div class="panel_auth col-xs-11 col-lg-7 col-md-8 col-sm-8 center-block" style="opacity:0;">
                 <div class="row">
                     <div class="col-xs-12">
@@ -21,7 +22,7 @@
                         <div style="height: 30px;" class="hidden-xs"></div>
                     </div>
                     {#                                        тут настраивается ширина полей и кнопок#}
-                    <div class="col-xs-12 col-xs-offset-0 col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2 form-content">
+                    <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2 form-content">
                         <form action="" method="post">
                             <div class="form-group">
                                 <div class="row">
@@ -70,6 +71,7 @@
 
             </div>
             <div class="col-xs-12 fill-space-bottom hidden-xs"></div>
+            <div class="col-xs-12" style="height: 20px;"></div>
             <blockquote class="bottom_text" style="opacity: 0">
                 <p>Это, несомненно, лучший сервис электронных расписаний в России </p>
                 <footer>Разработчик сервисов Вконтакте и Телеграм <cite title="Source Title">Павел Дуров</cite>
