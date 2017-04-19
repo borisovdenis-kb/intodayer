@@ -1,4 +1,5 @@
 import json
+import random
 import requests
 import extra.utils as utils
 from datetime import datetime as datetime_lib
@@ -7,6 +8,7 @@ from django.db.utils import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.http import HttpResponseBadRequest
 from django.shortcuts import render_to_response
+from django.core.exceptions import ObjectDoesNotExist
 from extra.utils import *
 from intodayer2_app.forms import *
 from intodayer2_app.send_sms import *
@@ -26,6 +28,13 @@ UPDATE = 'UPDATE'
 ###################################################################################
 
 
+def tst_vue_ajax(request):
+    if request.is_ajax():
+        times = list(Times.objects.all())
+        time = times[random.randint(0, len(times))]
+        return time.get_format_time()
+
+
 def get_drop_list_ajax(request):
     """
         Функция собирает в html список все доступные у пользователя
@@ -40,7 +49,7 @@ def get_drop_list_ajax(request):
         try:
             plan_id = int(request.POST['plan_id'])
             plan = UserPlans.objects.select_related().get(user_id=user.id, plan_id=plan_id)
-        except ValueError:
+        except (ValueError, ObjectDoesNotExist):
             context['is_error'] = True
             return render_to_response('templates_for_ajax/drop_list_tmp.html', context)
 
@@ -69,18 +78,19 @@ def mailing_ajax(request):
     """
     if request.is_ajax():
         user = CustomUser.objects.get(username=request.user.username)
-        # получаем JSON для передачи боту
-        mailing = MailingParamJson(
+
+        response = HttpResponse()
+        response['Content-Type'] = 'text/javascript'
+
+        mailing = IntodayerMailing(
             user.id,
             request.POST['plan_id'],
             request.POST['image'],
             request.POST['text'],
         )
+        # совершаем рассылку
+        mailing.send()
 
-        do_mailing(mailing.get_mailing_param())
-
-        response = HttpResponse()
-        response['Content-Type'] = 'text/javascript'
         response.write(json.dumps({'success': 1}))
 
         return response
@@ -88,9 +98,9 @@ def mailing_ajax(request):
 
 def edit_plan_row_ajax(request):
     """
-    1. Главная фукнция создания и обновления расписания
-    2. Взависимости от поданой id фукнция определяет обновление или создание строки
-    3. Обрабатывает разные виды исключений, чтобы распознать действия в jquery
+        1. Главная фукнция создания и обновления расписания
+        2. Взависимости от поданой id фукнция определяет обновление или создание строки
+        3. Обрабатывает разные виды исключений, чтобы распознать действия в jquery
     :param request:
     :return:
     """
@@ -561,7 +571,7 @@ def plan_view(request, plan_id=0):
     if request.user.is_authenticated():
         user = CustomUser.objects.get(username=request.user.username)
         context = {
-            'username': user.username,
+            'user': user,
         }
 
         all_plans = UserPlans.objects.select_related().filter(user_id=user.id)

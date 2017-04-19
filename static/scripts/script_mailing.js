@@ -83,6 +83,7 @@ $(document).ready(function () {
                 $KLOSS.find($clone).remove();
 
                 $('.progress').css({'display': 'flex'});
+                $('.progress_indicator').css({'display': 'flex'});
 
                 $.ajax({
                     url: '/mailing',
@@ -91,10 +92,18 @@ $(document).ready(function () {
                     success: function (msg) {
                         msg = JSON.parse(msg);
                         $('.progress').css({'display': 'none'});
+                        $('.progress_indicator').css({'display': 'none'});
                         $('.mailing_close').trigger('click');
                         localStorage.setItem(storageKey, '');
                         $textarea.val('');
+                    },
+                    error: function () {
+                        $('.progress_indicator').css({'display': 'none'});
+                        $('.progress').text('Ошибка. ');
+                        $('.progress').append('<a href="/plan">Перезагрузите страницу.</a>');
+
                     }
+
                 });
 
                 clearInterval(timer);

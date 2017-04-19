@@ -24,7 +24,7 @@
             {% for row in today_plan.plan_rows %}
                 <div class="str_plan">
                     <ul>
-                        <li><a>{{ row.get_format_time }}</a></li>
+                        <li><a>{{ row.time.get_format_time }}</a></li>
                         <li><a>{{ row.subject.name }}</a></li>
                         <li><a>{{ row.teacher.name_short }}</a></li>
                         <li><a>{{ row.place.name }}</a></li>
@@ -57,7 +57,7 @@
             {% for row in tomorrow_plan.plan_rows %}
                 <div class="str_plan">
                     <ul>
-                        <li><a>{{ row.get_format_time }}</a></li>
+                        <li><a>{{ row.time.get_format_time }}</a></li>
                         <li><a>{{ row.subject.name }}</a></li>
                         <li><a>{{ row.teacher.name_short }}</a></li>
                         <li><a>{{ row.place.name }}</a></li>

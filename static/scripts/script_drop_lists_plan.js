@@ -1,6 +1,9 @@
 /**
  * Created by Denis on 15.04.2017.
  */
+
+// TODO: Сделать фичу. При выборе предмета, должен предлагаться соответсвующий препод.
+
 var $this;
 
 function addDropLstListeners($thisStr) {
@@ -45,10 +48,7 @@ function loadData($thisField) {
     var $bruceLi = $thisField.parent();
     var data = {plan_id: $('.title_content').attr('plan_id')};
 
-    if ($thisField.hasClass('weeks')) {
-        // $('.drop_list').load('/get_list_weeks', data);
-
-    } else if ($thisField.hasClass('time')) {
+    if ($thisField.hasClass('time')) {
         data.model = 'time';
 
     } else if ($thisField.hasClass('subject')) {
@@ -71,6 +71,7 @@ function loadData($thisField) {
         );
     }
 
+    // вставляем даные из базы в div drop_list
     $('.drop_list').load('/get_drop_list', data, function () {
         if ($('.drop_list').height() >= 150) {
             // добавляем скролл только, когда размер 300

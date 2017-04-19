@@ -75,8 +75,8 @@ def do_mailing(data):
         message_text += '\n' + '[Пустое сообщение]' + '\n'
 
     # делаем рассылку по списку контактов
-    if data['recipients']:
-        for recp in data['recipients']:
+    if data['recipients_telegram']:
+        for recp in data['recipients_telegram']:
             bot.send_message(recp['chat_id'], message_text)
 
             if data['image']:

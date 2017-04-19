@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
+from intodayer2 import config
 from intodayer2.config import *
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -25,6 +26,7 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'), )
 SECRET_KEY = 'w$b$a198^u8y*!^#l@gsl$(h!=+qex_5n0m$y!7o68i5y&##40'
 
 # SECURITY WARNING: don't run with debug turned on in production!
+# TODO: Поменять на False
 DEBUG = True
 
 ALLOWED_HOSTS = [
@@ -32,7 +34,6 @@ ALLOWED_HOSTS = [
     "192.168.0.8",
     "127.0.0.1",
 ]
-
 
 # Application definition
 
@@ -142,3 +143,10 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 AUTH_USER_MODEL = 'intodayer2_app.CustomUser'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True
+EMAIL_HOST_USER = config.PROJECT_EMAIL
+EMAIL_HOST_PASSWORD = config.PROJECT_EMAIL_PSWD

@@ -211,7 +211,7 @@ class PlanRowsTemporal(models.Model):
 
 class UserPlans(models.Model):
     """
-        Таблица для свизи многие-ко-многим
+        Таблица для связи многие-ко-многим
         между юзерами и рассписаниями
     """
     user = models.ForeignKey('CustomUser', models.DO_NOTHING)

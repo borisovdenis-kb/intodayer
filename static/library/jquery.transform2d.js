@@ -101,7 +101,7 @@ if ( supportProperty && supportProperty != _transform ) {
 			}
 		};
 	}
-	/* TODO: leverage hardware acceleration of 3d transform in Webkit only
+	/*
 	else if ( supportProperty == "Webkit" + suffix && support3dTransform ) {
 		propertyHook = {
 			set: function( elem, value ) {

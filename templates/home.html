@@ -115,29 +115,29 @@
                                 {% endif %}
                             </ul>
                         </div>
-                        <div class="users_online">
-                            <label id="users_online_title">Online</label>
-                            <ul>
-                                <li>
-                                    <a href="#">
-                                        <div class="user_image"></div>
-                                        <div class="user_name">User 1</div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <div class="user_image"></div>
-                                        <div class="user_name">User 1</div>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <div class="user_image"></div>
-                                        <div class="user_name">User 1</div>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
+{#                        <div class="users_online">#}
+{#                            <label id="users_online_title">Online</label>#}
+{#                            <ul>#}
+{#                                <li>#}
+{#                                    <a href="#">#}
+{#                                        <div class="user_image"></div>#}
+{#                                        <div class="user_name">User 1</div>#}
+{#                                    </a>#}
+{#                                </li>#}
+{#                                <li>#}
+{#                                    <a href="#">#}
+{#                                        <div class="user_image"></div>#}
+{#                                        <div class="user_name">User 1</div>#}
+{#                                    </a>#}
+{#                                </li>#}
+{#                                <li>#}
+{#                                    <a href="#">#}
+{#                                        <div class="user_image"></div>#}
+{#                                        <div class="user_name">User 1</div>#}
+{#                                    </a>#}
+{#                                </li>#}
+{#                            </ul>#}
+{#                        </div>#}
                     {% else %}
                         {% block invitation %}{% endblock %}
                     {% endif %}
@@ -212,7 +212,7 @@
                                 {% for row in tomorrow_plan.plan_rows %}
                                     <div class="str_plan">
                                         <ul>
-                                            <li><a>{{ row.get_format_time }}</a></li>
+                                            <li><a>{{ row.time.get_format_time }}</a></li>
                                             <li><a>{{ row.subject.name }}</a></li>
                                             <li><a>{{ row.teacher.name_short }}</a></li>
                                             <li><a>{{ row.place.name }}</a></li>
