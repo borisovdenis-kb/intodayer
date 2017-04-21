@@ -1,23 +1,15 @@
-import json
 import random
-import requests
-import extra.utils as utils
 from datetime import datetime as datetime_lib
 from django.contrib.auth.models import *
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.utils import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.http import HttpResponseBadRequest
 from django.shortcuts import render_to_response
-from django.core.exceptions import ObjectDoesNotExist
-from extra.utils import *
-from intodayer2_app.forms import *
-from intodayer2_app.send_sms import *
 from extra.mailing_api import *
 from extra.utils import *
 from intodayer2_app.forms import *
 from intodayer2_app.send_sms import *
-from intodayer_bot.bot import do_mailing
-
 
 CREATE = 'CREATE'
 UPDATE = 'UPDATE'

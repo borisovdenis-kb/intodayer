@@ -6,6 +6,8 @@ from django.core.mail import EmailMessage
 from django.core.mail import send_mail
 
 
+# TODO: Почитать про линтинг lint
+
 FROM_EMAIL = 'intodayer@yandex.ru'
 
 
