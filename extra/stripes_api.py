@@ -27,7 +27,6 @@ def intersec(intervals, n):
     for start, end, par in intervals:
         arr += interval_to_array(start, end, par)
 
-    print(arr)
     for i in range(1, n+1):
         res[i-1] = arr.count(i)
         
@@ -38,6 +37,7 @@ if __name__ == '__main__':
     # A = list(map(int, input().split()))
     # B = list(map(int, input().split()))
 
-    intervals = [[1, 13, 1], [2, 8, 0]]
+    intervals = [[1,17, None], [1,20, 0], [1, 10, 1]]
 
-    print('---', intersec(intervals, 13))
+    print('---', intersec(intervals, 10000))
+
