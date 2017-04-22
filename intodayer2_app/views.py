@@ -174,6 +174,14 @@ class CloneError(Exception):
     pass
 
 
+
+##################################################################################################
+# ЛЕХА!!!!!!!!! ЛЕХА!!!!!!!!!!!
+##################################################################################################
+# Такие функци нужно выносить в отдельный файл. В файл extra/utils
+# Так как в файле view должны быть только вьюшные функции
+
+
 def edit_plan_row(data, this_plan, this_id, mode):
     """
      1. Создаёт или обновляет строку расписания, взависимости от поданой id
@@ -225,7 +233,12 @@ def edit_plan_row(data, this_plan, this_id, mode):
     if 'day_of_week' in data:
         day_of_week = DaysOfWeek.objects.get(id=data['day_of_week'])
     if 'parity' in data:
-        parity = data['parity']
+        if data['parity'] == 'Все':
+            parity = None
+        elif data['parity'] == 'Чет':
+            parity = 0
+        elif data['parity'] == 'Нечет':
+            parity = 1
     if 'start_week' in data:
         start_week = data['start_week']
     if 'end_week' in data:
