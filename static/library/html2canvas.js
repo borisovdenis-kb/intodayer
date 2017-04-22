@@ -2329,7 +2329,6 @@ NodeParser.prototype.paintText = function(container) {
 
     this.renderer.font(container.parent.color('color'), container.parent.css('fontStyle'), container.parent.css('fontVariant'), weight, size, family);
     if (shadows.length) {
-        // TODO: support multiple text shadows
         this.renderer.fontShadow(shadows[0].color, shadows[0].offsetX, shadows[0].offsetY, shadows[0].blur);
     } else {
         this.renderer.clearShadow();
@@ -2349,14 +2348,12 @@ NodeParser.prototype.renderTextDecoration = function(container, bounds, metrics)
     switch(container.css("textDecoration").split(" ")[0]) {
     case "underline":
         // Draws a line at the baseline of the font
-        // TODO As some browsers display the line as more than 1px if the font-size is big, need to take that into account both in position and size
         this.renderer.rectangle(bounds.left, Math.round(bounds.top + metrics.baseline + metrics.lineWidth), bounds.width, 1, container.color("color"));
         break;
     case "overline":
         this.renderer.rectangle(bounds.left, Math.round(bounds.top), bounds.width, 1, container.color("color"));
         break;
     case "line-through":
-        // TODO try and find exact position for line-through
         this.renderer.rectangle(bounds.left, Math.ceil(bounds.top + metrics.middle + metrics.lineWidth), bounds.width, 1, container.color("color"));
         break;
     }

@@ -12,6 +12,7 @@
 {% block scripts_bottom %}
     <script type="text/javascript" src={% static "scripts/script_plan_NEW.js" %}></script>
     <script type="text/javascript" src={% static "scripts/script_mailing.js" %}></script>
+    <script type="text/javascript" src={% static "scripts/script_drop_lists_plan.js" %}></script>
 {% endblock %}
 
 {% block invitation %}
@@ -100,7 +101,7 @@
                                     </div>
                                     <ul>
                                         <li><a class="weeks">{{ row.start_week }}-{{ row.end_week }}</a></li>
-                                        <li><a class="time">{{ row.get_format_time }}</a></li>
+                                        <li><a class="time">{{ row.time.get_format_time }}</a></li>
                                         <li><a class="subject">{{ row.subject.name }}</a></li>
                                         <li><a class="teacher">{{ row.teacher.name_short }}</a></li>
                                         <li><a class="place">{{ row.place.name }}</a></li>

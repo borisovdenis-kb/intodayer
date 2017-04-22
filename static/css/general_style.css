@@ -467,9 +467,17 @@ textarea:-ms-input-placeholder {
     z-index: 10202;
 }
 
+.progress a {
+    display: flex;
+    margin-left: 5px;
+    color: #8b1deb;
+    cursor: pointer;
+}
+
 .progress_indicator {
-    width: 100px;
-    height: 100px;
+    display: none;
+    width: 60px;
+    height: 60px;
     background-image: url("../images/progress_indicator.gif");
     -webkit-background-size: cover;
     -moz-background-size: cover;
@@ -477,20 +485,23 @@ textarea:-ms-input-placeholder {
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-
 }
 
-/*.errors_wrap {*/
-    /*background-color: rebeccapurple;*/
-/*}*/
+.errors_wrap {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}
 
 .error, .reload_page {
     text-align: center;
     font-size: 20px;
 }
 
-/*.effect_blur {*/
-    /*filter: blur(4px);*/
-    /*!*filter: grayscale(1);*!*/
-/*}*/
+.reload_page a {
+    color: #8b1deb;
+    cursor: pointer;
+}
+
 

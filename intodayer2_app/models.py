@@ -108,6 +108,10 @@ class Times(models.Model):
         managed = True
         db_table = 'times'
 
+    def get_format_time(self):
+        t = self.hh24mm
+        return t.strftime('%H:%M')
+
     def __str__(self):
         return str(self.hh24mm)
 
@@ -174,10 +178,6 @@ class PlanRows(models.Model):
         managed = True
         db_table = 'plan_rows'
 
-    def get_format_time(self):
-        t = self.time.hh24mm
-        return t.strftime('%H:%M')
-
     def __str__(self):
         return '%s' % (
             self.plan.title
@@ -211,7 +211,7 @@ class PlanRowsTemporal(models.Model):
 
 class UserPlans(models.Model):
     """
-        Таблица для свизи многие-ко-многим
+        Таблица для связи многие-ко-многим
         между юзерами и рассписаниями
     """
     user = models.ForeignKey('CustomUser', models.DO_NOTHING)
