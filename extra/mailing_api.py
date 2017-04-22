@@ -1,10 +1,8 @@
 import json
+from django.core.mail import send_mail
 from extra import utils
 from intodayer2_app.models import *
 from intodayer_bot.bot import do_mailing
-from django.core.mail import EmailMessage
-from django.core.mail import send_mail
-
 
 # TODO: Почитать про линтинг lint
 
