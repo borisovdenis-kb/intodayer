@@ -1,5 +1,4 @@
 import json
-
 # ---------------------------------------------------------------
 # для того, что бы тестировать django файлы
 import os
@@ -11,21 +10,43 @@ django.setup()
 
 from intodayer2_app.models import *
 from django.db.models import Max
+from extra import utils
 
 
 class Stripes:
     def __init__(self, plan_id):
         self.plan_id = plan_id
         self.MAX_LEN = 0        # Максимальное кол-во недель в расписании.
+        self.scale = []
         self.stripes = {}
 
     def set_max_len(self):
+        """
+            Функция вовзращает максимальное кол-во недель
+            в расписании.
+            :return: 
+        """
         max_len = PlanRows.objects.filter(plan_id=1).aggregate(Max('end_week'))
         self.MAX_LEN = max_len['end_week__max']
 
         self.stripes['MAX_LEN'] = self.MAX_LEN
 
-    def get_stripes_json(self):
+    def set_scale(self):
+        """
+            Функция устанавливает список с датами.
+            Пример. start_date = 24.04.17, n = 3
+            [24.04, 01.05, 08.05]
+        """
+        plan = PlanLists.objects.get(id=self.plan_id)
+
+        self.scale = utils.get_week_scale(plan.start_date, self.MAX_LEN)
+
+    def set_stripes(self):
+        """
+            Функция возращает вовзращает "Полоски" в формате,
+            как выглядит который можно посмотреть в stripes-concept/stripes-format.json.
+            :return: 
+        """
         plan_rows = PlanRows.objects.select_related().filter(plan_id=self.plan_id)
         # устанавливаем максимальное кол-во недель
         self.set_max_len()
@@ -56,41 +77,9 @@ class Stripes:
 
         return json.dumps(self.stripes, ensure_ascii=False)
 
-    # def interval_to_array(self, start, end, parity=None):
-    #     """
-    #         Функция возвращает для заданного интервала последовательность.
-    #         Т.е. [1-8] -> 1, 2, 3, 4, 5, 6, 7, 8
-    #         Т.е. [1-8] parity = 0 -> 2, 4, 6, 8
-    #         Т.е. [1-8] parity = 1 -> 1, 3, 5, 7
-    #     """
-    #     if parity is not None:
-    #         return [i for i in range(start, end + 1) if i % 2 == parity]
-    #     else:
-    #         return [i for i in range(start, end + 1)]
-    #
-    # def intersec(self, intervals, n):
-    #     """
-    #         Функция пересечения произвольного количества
-    #         промежутков недель в расписании.
-    #         :param intervals: множество промежутков вида
-    #             [[start, end, parity], ...]
-    #         :return: последовательность вида:
-    #             n1,n2,...,ni, ni - кол-во множеств содержащих i
-    #     """
-    #     arr = []
-    #     res = [0] * n
-    #
-    #     for start, end, par in intervals:
-    #         arr += self.interval_to_array(start, end, par)
-    #
-    #     for i in range(1, n+1):
-    #         res[i-1] = arr.count(i)
-    #
-    #     return res
-
 
 if __name__ == '__main__':
     X = Stripes(1)
-    res = X.get_stripes_json()
+    res = X.set_stripes()
 
     print(res)

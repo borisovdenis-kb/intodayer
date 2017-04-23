@@ -1,11 +1,19 @@
 import json
-from datetime import *
+# ---------------------------------------------------------------
+# для того, что бы тестировать django файлы
+import os
+import django
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "intodayer2.settings")
+django.setup()
+# ---------------------------------------------------------------
 from django.utils import timezone
 from intodayer2_app.models import *
 from PIL import Image
 from io import BytesIO
 from base64 import b64decode
 from django.core.files.base import ContentFile
+from datetime import datetime, timedelta
 
 ######################################################################################
 #             В ЭТОМ МОДУЛЕ БУДУТ ХРАНИТЬСЯ ВСЯКИЕ ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ           #
@@ -26,7 +34,6 @@ def members_amount_suffix(n):
     """
         Функция определяет нужно окончание в слове участник
         для заданного n
-        ____________________________________________________
         :param n: целое число
         :return res: строка
     """
@@ -45,7 +52,6 @@ def members_amount_suffix(n):
 def weeks_from(start, end):
     """
         Функция считает какая по счету неделя с опр даты
-        ________________________________________________
         :param start: дата, от которой считаются недели
         :param end: дата, до которой считаются недели
         :return: weeks
@@ -58,12 +64,27 @@ def weeks_from(start, end):
         return (days.days // 7) + 2
 
 
+def get_week_scale(start_date, n):
+    """
+        Функция возвращает список с датами.
+        Пример. start_date = 24.04.17, n = 3
+        [24.04, 01.05, 08.05]    
+        :return: list
+    """
+    delta = timedelta(7)
+    scale = [start_date.strftime('%b, %d')]
+
+    for i in range(n):
+        start_date += delta
+        scale.append(start_date.strftime('%b, %d'))
+
+    return scale
+
 def get_today_tomorrow_plans(plan):
     """
         Функция делает выборку строк расписания
         на сегодняшний и на завтрашний день,
         учитывая номер недели, четность недели и т.д.
-        _____________________________________________
         :param user_id:
         :param plan_id:
         :return:
@@ -77,7 +98,7 @@ def get_today_tomorrow_plans(plan):
     tomorrow = today + timedelta(1)                      # завтрашняя дата
     td_weekday = datetime.weekday(today)                 # день недели сегодня
     tm_weekday = datetime.weekday(tomorrow)              # день дедели завтра
-    start_date = plan.plan.start_date                # c какого числа действует расп.
+    start_date = plan.plan.start_date                    # c какого числа действует расп.
     cur_week1 = weeks_from(start_date, today)            # определяем номер текущей недели
     cur_week2 = weeks_from(start_date, tomorrow)
     td_parity, tm_parity = cur_week1 % 2, cur_week2 % 2  # четность недели
@@ -126,7 +147,6 @@ def get_rows_by_weekday(rows):
         Задача этой функции в том, чтобы распределить
         строки рассписания по дням недели, отсортировав
         их по времени
-        _______________________________________________
         :param rows: строки рассписания, заранее выбранный из таблицы
         :return: days
     """
@@ -149,3 +169,11 @@ def get_rows_by_weekday(rows):
             days[6].append(row)
 
     return days
+
+
+if __name__ == '__main__':
+    start_date = datetime(2017, 4, 1)
+
+    res = get_week_scale(start_date, 5)
+
+    print(res)
