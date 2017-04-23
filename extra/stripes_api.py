@@ -14,6 +14,13 @@ from extra import utils
 
 
 class Stripes:
+    """
+        Класс для формирования json Полосок
+        для клиента.
+        Во view нужно сделать следующее.
+        X = Stripes(plan_id)
+        X.get_stripes_json()
+    """
     def __init__(self, plan_id):
         self.plan_id = plan_id
         self.MAX_LEN = 0        # Максимальное кол-во недель в расписании.
@@ -34,8 +41,8 @@ class Stripes:
     def set_scale(self):
         """
             Функция устанавливает список с датами.
-            Пример. start_date = 24.04.17, n = 3
-            [24.04, 01.05, 08.05]
+            Пример. start_date = 01.04.17, n = 3
+            ["Apr, 01", "Apr, 08", "Apr, 15"]
         """
         plan = PlanLists.objects.get(id=self.plan_id)
 
@@ -75,11 +82,16 @@ class Stripes:
                 else:
                     self.stripes[subj][day][i-1] += 1
 
+    def get_stripes_json(self):
+        self.set_max_len()
+        self.set_scale()
+        self.set_stripes()
+
         return json.dumps(self.stripes, ensure_ascii=False)
 
 
 if __name__ == '__main__':
     X = Stripes(1)
-    res = X.set_stripes()
+    res = X.get_stripes_json()
 
     print(res)
