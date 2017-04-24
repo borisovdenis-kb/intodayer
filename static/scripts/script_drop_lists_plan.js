@@ -69,28 +69,41 @@ function loadData($thisField) {
             '<li><a>Нечет</a></li>' +
             '</ul>'
         );
+        $('.drop_list ul li a').click(function () {
+            if ($bruceLi.find('a').length != 0) {
+                $bruceLi.find('a').text($(this).text());
+
+            } else if ($bruceLi.find('input') != 0) {
+                console.log('popa');
+                $bruceLi.find('input').val($(this).text());
+            }
+
+            $('.drop_list').remove();
+        });
     }
 
-    // вставляем даные из базы в div drop_list
-    $('.drop_list').load('/get_drop_list', data, function () {
-        if ($('.drop_list').height() >= 150) {
-            // добавляем скролл только, когда размер 300
-            // потому что когда он висит постоянно - это уродство...
-            $('.drop_list').css('overflowY', 'scroll');
-        }
-        setTimeout(function () {
-            $('.drop_list ul li a').click(function () {
-                if ($bruceLi.find('a').length != 0) {
-                    $bruceLi.find('a').text($(this).text());
+    if (!$thisField.hasClass('parity')) {
+        // вставляем даные из базы в div drop_list
+        $('.drop_list').load('/get_drop_list', data, function () {
+            if ($('.drop_list').height() >= 150) {
+                // добавляем скролл только, когда размер 300
+                // потому что когда он висит постоянно - это уродство...
+                $('.drop_list').css('overflowY', 'scroll');
+            }
+            setTimeout(function () {
+                $('.drop_list ul li a').click(function () {
+                    if ($bruceLi.find('a').length != 0) {
+                        $bruceLi.find('a').text($(this).text());
 
-                } else if ($bruceLi.find('input') != 0) {
-                    console.log('popa');
-                    $bruceLi.find('input').val($(this).text());
-                }
+                    } else if ($bruceLi.find('input') != 0) {
+                        console.log('popa');
+                        $bruceLi.find('input').val($(this).text());
+                    }
 
-                $('.drop_list').remove();
-            });
-        }, 100);
-    });
+                    $('.drop_list').remove();
+                });
+            }, 100);
+        });
+    }
 
 }

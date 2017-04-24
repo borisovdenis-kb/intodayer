@@ -68,6 +68,7 @@
  (не забывать устанавливать этот класс и удалять по завершению анимации)
  */
 
+// TODO: Лех, расписание косячно работает. Надо разобраться в чем проблема.
 
 // важная переменная, определяющая последнюю выбранную строку
 var $LAST_SELECTED_STR;
@@ -1439,14 +1440,17 @@ function get_day_num(name_day) {
 
 // возвращает значащий номер для чётности
 function get_parity_value(value) {
+    console.log(value);
     var values_num = {
-        'Все': 0,
-        'Чётные': 1,
-        'Четные': 1,
-        'Нечётные': 2,
-        'Нечетные': 2
+        'Все': undefined,
+        'Чёт': 0,
+        'Чет': 0,
+        'Нечёт': 1,
+        'Нечет': 1
     };
     if (values_num[value] != undefined) {
+        console.log('ZSHEL');
+        console.log(values_num[value]);
         return values_num[value];
     }
     else {

@@ -1,19 +1,22 @@
 import random
+import json
 from datetime import datetime as datetime_lib
+from intodayer2_app.models import *
 from django.contrib.auth.models import *
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.utils import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.http import HttpResponseBadRequest
 from django.shortcuts import render_to_response
-from extra.mailing_api import *
-from extra.utils import *
 from intodayer2_app.forms import *
 from intodayer2_app.send_sms import *
+from extra.mailing_api import *
+from extra.utils import *
 
 CREATE = 'CREATE'
 UPDATE = 'UPDATE'
 
+# TODO: Сделать в выводе расписания в /plan сортировку по времени, а не по неделям
 
 ###################################################################################
 #                          ОБРАБОТКА AJAX ЗАПРОСОВ                                #
@@ -172,6 +175,13 @@ class CloneError(Exception):
     pass
 
 
+##################################################################################################
+# ЛЕХА!!!!!!!!! ЛЕХА!!!!!!!!!!!
+##################################################################################################
+# Такие функци нужно выносить в отдельный файл. В файл extra/utils
+# Так как в файле view должны быть только вьюшные функции
+
+
 def edit_plan_row(data, this_plan, this_id, mode):
     """
      1. Создаёт или обновляет строку расписания, взависимости от поданой id
@@ -224,6 +234,7 @@ def edit_plan_row(data, this_plan, this_id, mode):
         day_of_week = DaysOfWeek.objects.get(id=data['day_of_week'])
     if 'parity' in data:
         parity = data['parity']
+        print(parity)
     if 'start_week' in data:
         start_week = data['start_week']
     if 'end_week' in data:

@@ -7,13 +7,14 @@
 
 
 import unittest
-from extra.stripes_api import *
+from extra.stripes_api import Stripes
 
 
 class MyTestCase(unittest.TestCase):
     def test_something(self):
-        tst_intervals = [[1,1300, None], [1,2000, 0], [1, 10000, 1]]
-        res = intersec(tst_intervals, 10000)
+        X = Stripes(1)
+        res = X.get_stripes_json()
+
         # print(res)
         # self.assertEqual(True, False)
 
