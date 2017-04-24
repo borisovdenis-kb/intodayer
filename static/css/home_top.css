@@ -22,8 +22,8 @@ button:focus {
 }
 
 .container-fluid {
-    padding-left: 10px;
-    padding-right: 10px;
+    /*padding-left: 10px;*/
+    /*padding-right: 10px;*/
 }
 
 .row {
@@ -41,7 +41,7 @@ button:focus {
     max-width: 1200px;
     width: 100%;
     /*background: red;*/
-    margin: 0 auto;
+    /*margin: 0 auto;*/
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
@@ -77,7 +77,7 @@ button:focus {
     height: auto;
     width: 187px;
     font-size: 24px;
-    padding-left: 5px
+
 }
 
 /*логотип на iphone и других*/
@@ -85,6 +85,7 @@ button:focus {
     .logo {
         width: auto;
         padding-right: 20px;
+        /*padding-left: 5px;*/
         font-size: 20px;
         margin-top: 2px;
     }

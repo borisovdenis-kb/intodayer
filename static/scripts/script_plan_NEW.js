@@ -313,15 +313,15 @@ function setNewListenersNewStr($new_div) {
     // при нажатии на iPhone на кнопку нужно также вызывать фукнцию
     // тут проверяем что поле именно расфокусированно, а не выделено другое поле
     // для этого нужна небольшая задержка
-    // $new_inputs.focusout(function (event) {
-    //     var $this_input = $(event.target);
-    //     clearTimeout(timer_select);
-    //     timer_select = setTimeout(function () {
-    //         if ($('.selected_field').length == 0) {
-    //             setDefaultStr($LAST_SELECTED_STR);
-    //         }
-    //     }, 50);
-    // });
+    $new_inputs.focusout(function (event) {
+        var $this_input = $(event.target);
+        clearTimeout(timer_select);
+        timer_select = setTimeout(function () {
+            if ($('.selected_field').length == 0) {
+                setDefaultStr($LAST_SELECTED_STR);
+            }
+        }, 50);
+    });
 
     //при нажатии на другое поле снять выделение с текущей строки
     //если другое поле находится в этой же строке, то не снимаем выделение

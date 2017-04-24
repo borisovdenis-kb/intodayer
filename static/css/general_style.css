@@ -3,7 +3,7 @@
 body {
     margin: 0 auto;
     background: rgb(244, 243, 248);
-    /*min-width: 600px;*/
+    min-width: 368px;
 }
 
 .logo a {
