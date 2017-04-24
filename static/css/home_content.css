@@ -195,7 +195,8 @@ body {
     align-items: center;
     padding-top: 5px;
     /*background: green;*/
-    width: calc(100% - 20px);
+    width: calc(100% - 40px);
+
     margin: auto;
     border-bottom: 1px solid rgba(210, 210, 210, 1);
 }
@@ -228,7 +229,9 @@ body {
     align-items: stretch; /*Пункты внутри контейнер будут принимать всю его высоту*/
     /*расстояние между строчками*/
     margin-top: 3px;
-    width: 100%;
+    width: calc(100% - 20px);
+    margin-right: 10px;
+    margin-left: 10px;
     border-radius: 4px;
     background: white;
 }

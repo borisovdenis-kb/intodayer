@@ -152,7 +152,7 @@ body {
 }
 
 .tools_panel.left ul li:first-child {
-    margin-left: 8px;
+    /*margin-left: 8px;*/
     margin-right: 2px;
 }
 
