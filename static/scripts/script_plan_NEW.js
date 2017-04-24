@@ -1442,13 +1442,15 @@ function get_day_num(name_day) {
 function get_parity_value(value) {
     console.log(value);
     var values_num = {
-        'Все': 0,
-        'Чёт': 1,
-        'Чет': 1,
-        'Нечёт': 2,
-        'Нечет': 2
+        'Все': undefined,
+        'Чёт': 0,
+        'Чет': 0,
+        'Нечёт': 1,
+        'Нечет': 1
     };
     if (values_num[value] != undefined) {
+        console.log('ZSHEL');
+        console.log(values_num[value]);
         return values_num[value];
     }
     else {

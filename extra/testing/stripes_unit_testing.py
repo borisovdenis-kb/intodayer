@@ -15,7 +15,7 @@ class MyTestCase(unittest.TestCase):
         X = Stripes(1)
         res = X.get_stripes_json()
 
-        print(res)
+        # print(res)
         # self.assertEqual(True, False)
 
 
