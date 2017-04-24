@@ -155,6 +155,10 @@
 
             {% block right_content %}
                 <div class="right_content">
+                    <div class="plan_load_progres">
+                        <div class="plan_load_progres_indicator"></div>
+                    </div>
+
                     <div class="title_content">
                         <div id="plan_title">{{ cur_plan_info.0 }}</div>
                         <div id="count_title">{{ cur_plan_info.2 }}</div>
@@ -281,10 +285,11 @@
 
 </body>
 
-{#должен быть на всех страницах#}
+{# Скрипты, который должены быть на всех страницах #}
 <script type="text/javascript" src={% static "scripts/script_home_top.js" %}></script>
+<script type="text/javascript" src={% static "scripts/script_home.js" %}></script>
+
 {% block scripts_bottom %}
-    <script type="text/javascript" src={% static "scripts/script_home.js" %}></script>
 {% endblock %}
 
 </html>

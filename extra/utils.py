@@ -142,35 +142,6 @@ def get_today_tomorrow_plans(plan):
     return context
 
 
-def get_rows_by_weekday(rows):
-    """
-        Задача этой функции в том, чтобы распределить
-        строки рассписания по дням недели, отсортировав
-        их по времени
-        :param rows: строки рассписания, заранее выбранный из таблицы
-        :return: days
-    """
-    days = [[i] for i in range(7)]
-
-    for row in rows:
-        if row.day_of_week.name == 'Понедельник':
-            days[0].append(row)
-        elif row.day_of_week.name == 'Вторник':
-            days[1].append(row)
-        elif row.day_of_week.name == 'Среда':
-            days[2].append(row)
-        elif row.day_of_week.name == 'Четверг':
-            days[3].append(row)
-        elif row.day_of_week.name == 'Пятница':
-            days[4].append(row)
-        elif row.day_of_week.name == 'Суббота':
-            days[5].append(row)
-        elif row.day_of_week.name == 'Воскресенье':
-            days[6].append(row)
-
-    return days
-
-
 if __name__ == '__main__':
     start_date = datetime(2017, 4, 1)
 

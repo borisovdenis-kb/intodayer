@@ -35,6 +35,7 @@ urlpatterns = [
     url(r'^plan/update_delete', views.plan_delete_ajax),
     url(r'^plan/edit_plan_row', views.edit_plan_row_ajax),
     url(r'^home/switch_plan', views.switch_plan_home_ajax),
+    url(r'^plan/switch_plan', views.switch_plan_plan_ajax),
     url(r'^get_invitations', views.get_invitations_ajax),
     url(r'^plan/invitation/(\d+)$', views.plan_view),
     url(r'^confirm_invitation', views.confirm_invitation_ajax),

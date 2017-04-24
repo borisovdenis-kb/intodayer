@@ -4,22 +4,47 @@ $(document).ready(function () {
     avatarEditAccess({plan_id: $('.ava_content p').text()});
 
     $('.plan_selector ul li a').click(function () {
-        var data = {plan_id: $(this).siblings('p').text()};
-
-        jQuery.each($('.plan_selector ul li a'), function () {
-            $(this).css({'background-color': 'rgb(244, 243, 248)', 'color': '#000000'})
-        });
-
-        $(this).css({'background-color': '#000000', 'color': '#FFFFFF'});
-
-        $('.right_content').load('/home/switch_plan', data, function () {
-            setStrColor();
-        });
-
-        avatarEditAccess(data);
+        switchPlan($(this));
     });
 });
 
+function switchPlan($this_plan) {
+    /*
+     * Это функция общая для всего сайта.
+     * Отвечает за подгрузку и замену данных в right_content при переключении расписания.
+     * Какие данные будут погружаться зависит от того, на какой странице мы находимся.
+     * Соответственно обращение на сервер будет происходит вот так:
+     * --- /{{page_name}}/switch_plan
+     *
+     * Пока возможны всего два варианта:
+     * --- /home/switch_plan
+     * --- /plan/switch_plan
+     */
+    var data = {plan_id: $this_plan.siblings('p').text()};
+    var loc = location.href.split('/');
+    var address = loc[loc.length - 2];
+
+    jQuery.each($('.plan_selector ul li a'), function () {
+        $(this).css({'background-color': 'rgb(244, 243, 248)', 'color': '#000000'})
+    });
+
+    $this_plan.css({'background-color': '#000000', 'color': '#FFFFFF'});
+
+    $.each($('.right_content').children(), function () {
+        if (!$(this).hasClass('plan_load_progres')){
+            $(this).remove();
+        }
+    });
+
+    $('.plan_load_progres_indicator').css('display', 'flex');
+
+    $('.right_content').load('/' + address + '/switch_plan', data, function () {
+        $('.plan_load_progres_indicator').css('display', 'none');
+        setStrColor();
+    });
+
+    avatarEditAccess(data);
+}
 
 function avatarEditAccess(data) {
     /*
