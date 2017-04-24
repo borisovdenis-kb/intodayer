@@ -1,11 +1,14 @@
 
 
-var main_time = 150;
 
 $(document).ready(function () {
-    $('.auth').delay(100).fadeIn(300, function () {
-        $('h3').fadeTo(main_time * 2, 1);
-    });
+    $('.panel_auth').stop(true,true);
+    $('.panel_auth').fadeTo(300,1);
+     $('.bottom_text').delay(200).fadeTo(300,1);
+});
+
+$('#buttonBack').click(function () {
+    window.location.href = "/";
 });
 
 // временное действие кнопки

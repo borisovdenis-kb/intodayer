@@ -1,25 +1,14 @@
 /**
  * Created by Alexey on 12.03.2017.
  */
-//############################################################################## отвечает за выпадающий список
+
 var $droplist = $('.droplist');
 var FLAG_DROPLIST = false;
 
-// сохранять положение выпадающего списка
-$(window).on('resize', set_place_droplist_click);
-
-function set_place_droplist_click() {
-    if (FLAG_DROPLIST == true) {
-        $('.droplist_click_container').css({
-            'top': $droplist.offset().top + 30, 'left': $droplist.offset().left - 20
-        }, 100);
-    }
-}
-
 $droplist.on('click', function (e) {
-    $(window).bind('resize', set_place_droplist_click);
     click_on_droplist($(this), e);
 });
+
 $droplist.mouseover(function () {
     if (FLAG_DROPLIST == false) {
         $(this).animate({'background-color': 'rgba(210,210,210, 1)'}, 200);
@@ -30,31 +19,24 @@ $droplist.mouseleave(function () {
         $(this).animate({'background-color': 'rgba(240,240,240,1)'}, 200);
     }
 });
+
 $(window).on('click', function (event) {
     if ($('.droplist_click_container').length != 0) {
         hide_droplist(event);
     }
 });
-
-
-// скрытие выпадающего списка
-function hide_droplist(event, hide) {
-    if (!event.target.closest('.droplist') && !event.target.closest('.droplist_click_container') || hide == true) {
-        var $this_droplist_click = $('.droplist_click_container');
-        $this_droplist_click.fadeOut(200);
-        $this_droplist_click.animate({
-            top: $this_droplist_click.offset().top + 20,
-            left: $this_droplist_click.offset().left - 5
-        }, 200, function () {
-            $this_droplist_click.remove();
-        });
-        $this_droplist_click.dequeue();
-        $('.droplist').animate({'background-color': 'rgba(240,240,240,1)'}, 100);
-        $('#arrow_down').animate({'border-top-color': 'rgba(150, 150, 150, 1)'}, 100);
-        FLAG_DROPLIST = false;
+// для мобильных устройств
+// document.addEventListener('touchcancel', function (e) {
+//     if ($('.droplist_click_container').length != 0) {
+//         hide_droplist(event);
+//     }
+// }, false);
+// для мобильных устройств
+$(document).on("touchstart",function(){
+  if ($('.droplist_click_container').length != 0) {
+        hide_droplist(event);
     }
-
-}
+});
 
 // появление выпадающего списка
 function click_on_droplist(this_elem, event) {
@@ -66,18 +48,17 @@ function click_on_droplist(this_elem, event) {
     $('#arrow_down').animate({'border-top-color': 'rgba(255, 255, 255, 1)'}, 100);
     FLAG_DROPLIST = true;
 
-    $('body').append(
+
+    $('.droplist').append(
         '<div class="droplist_click_container" style="opacity: 0;">' +
         '<div class="triangle"></div>' +
         '<div class="triangle_bottom"></div>' +
         '<div class="droplist_click">' +
         '<ul style="display: none">' +
         '<li></li>' +
-
         '<li><a href="#">Мой профиль</a></li>' +
         '<li><a href="#">О сервисе</a></li>' +
         '<li><a href="/logout">Выйти</a></li>' +
-
         '<li></li>' +
         '</ul>' +
         '</div>' +
@@ -85,9 +66,8 @@ function click_on_droplist(this_elem, event) {
     );
 
     var $droplist_click = $('.droplist_click_container');
-
     $droplist_click.css({
-        'position': 'absolute', 'top': this_elem.offset().top, 'left': this_elem.offset().left + 80,
+        'position': 'absolute', 'top': 10, 'left': 10
     });
 
     //делаем анимацию на разные объекты, чтобы псевдо-стрелка корректо появлялась
@@ -95,11 +75,32 @@ function click_on_droplist(this_elem, event) {
     $('.droplist_click_container li').animate({
         'width': 162
     }, 300);
+
+
+    // var offset_out = this_elem.offset().left + this_elem.outerWidth();
     $('.droplist_click_container').animate({
-        top: this_elem.offset().top + 30,
-        left: this_elem.offset().left - 20,
+        top: 30,
+        left: -30,
         opacity: 1
     }, 300);
+}
+
+// скрытие выпадающего списка
+function hide_droplist(event, hide) {
+    var $this_elem = $(event.target);
+    if (($this_elem.parents('.droplist_click_container').length == 0 && $this_elem.parents('.droplist').length == 0) || hide == true) {
+        var $this_droplist_click = $('.droplist_click_container');
+        $this_droplist_click.fadeOut(200);
+        $this_droplist_click.animate({
+            top: 50,
+            left: -40
+        }, 200, function () {
+            $this_droplist_click.remove();
+        });
+        $this_droplist_click.dequeue();
+        $('.droplist').animate({'background-color': 'rgba(240,240,240,1)'}, 100);
+        $('#arrow_down').animate({'border-top-color': 'rgba(150, 150, 150, 1)'}, 100);
+        FLAG_DROPLIST = false;
+    }
 
 }
-//############################################################################## отвечает за выпадающий список

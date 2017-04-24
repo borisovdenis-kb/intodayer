@@ -1,5 +1,7 @@
 body {
     overflow-y: scroll;
+    min-width: 600px;
+
 }
 
 .page {
@@ -8,48 +10,53 @@ body {
 
 .content {
     margin: auto;
+    /*display: flex;*/
     background: rgba(244, 243, 248, 1);
     width: 100%;
     max-width: 1200px;
-    min-width: 768px;
+    padding: 0 8px 0 8px;
 }
 
 .content, .left_content, .right_content {
-
     margin-top: 10px;
 }
 
 .left_content {
-    font-size: 0.9em;
-    /*padding-top: 10px;*/
-    width: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 180px;
     float: left;
-    /*background: rgba(244, 243, 248, 1);*/
+    margin-right:8px;
+    /*background: indianred;*/
 }
 
 .right_content {
-    margin-left: 0px;
     float: left;
-    width: calc(100% - 200px);
+    /*отнимаем с учётом отступов*/
+
+    width: calc(100% - 188px);
 }
 
+@media (max-width: 768px) {
+    .right_content {
+        width: 100%;
+    }
+}
 .ava_content {
-    height: 170px;
-    width: 170px;
-    margin: 0px 0px 0px 15px;
-    /*background-image: url("../images/putin.jpg");*/
-    background-position: center;
-    background-repeat: no-repeat;
+    height: 180px;
+    width: 180px;
+    background: center no-repeat;
     background-size: cover;
     border-radius: 4px;
     overflow: hidden;
-    /*border: 1px solid rgba(230, 230, 230, 1);*/
     transition: 0.2s;
+    border: 1px solid rgba(230, 230, 230, 1);
+
 }
 
 .ava_cover {
     position: absolute;
-    margin: 0px 0px 0px 15px;
     background-color: #ffffff;
     opacity: 0;
     transition: 0.3s;
@@ -61,19 +68,16 @@ body {
 
 .ava_cover_text {
     display: flex;
-    /*justify-content: center;*/
+    justify-content: center;
     align-items: center;
 }
 
 .ava_cover, .ava_cover_text {
-    width: 170px;
-    height: 170px;
+    width: 180px;
+    height: 180px;
     border-radius: 4px;
 }
 
-.ava_cover_text p {
-    margin-left: 37px;
-}
 
 .ava_content, .ava_cover, .ava_cover_text, :hover {
     cursor: default;
@@ -85,8 +89,7 @@ body {
 }
 
 .plan_selector, .users_online {
-    width: 170px;
-    margin: 15px 0px 0px 15px;
+    width: calc(100% - 20px);
     border-radius: 4px;
     overflow: hidden;
 }
@@ -94,10 +97,6 @@ body {
 .plan_selector ul li {
     border: 1px solid rgba(220, 220, 220, 1);
     border-radius: 4px;
-}
-
-.plan_selector ul li:first-child {
-    margin-top: 0px;
 }
 
 .plan_selector ul li {
@@ -109,7 +108,8 @@ body {
     display: block;
     padding: 10px 0px 10px 10px;
     line-height: 20px;
-    width: 160px;
+    width: 100%;
+    cursor: pointer;
 }
 
 .plan_selector ul li p {
@@ -123,8 +123,6 @@ body {
 .users_online ul li {
     font-weight: normal;
     margin-top: 10px;
-    height: 30px;
-    width: 100%;
 }
 
 .user_name {
@@ -134,22 +132,13 @@ body {
     height: 30px;
 }
 
-label {
+#plan_selector_title {
     display: block;
     margin: 10px 0px 15px 10px;
 }
 
 #users_online_title {
-    padding-top: 10px;
-    border-top: 1px solid rgba(210, 210, 210, 1);
-}
-
-.users_online ul li:first-child {
-    margin-top: 15px;
-}
-
-.users_online ul li:last-child {
-    margin-bottom: 10px;
+    margin: 10px 0px 15px 10px;
 }
 
 .user_image {
@@ -158,44 +147,41 @@ label {
     height: 30px;
     width: 30px;
     border-radius: 4px;
-    background-position: center;
-    background-repeat: no-repeat;
+    background: center no-repeat;
     background-size: cover;
 }
 
 .plan_window:first-child {
-    margin-top: 0px;
+    margin-top: 0;
 }
 
 .plan_window {
-    margin: 10px 0 0px 0;
     background: white;
-    padding: 10px 20px 20px 20px;
     border: 1px solid rgba(230, 230, 230, 1);
     border-radius: 4px;
+    padding-bottom: 10px;
 }
 
 .title_content {
     border-radius: 4px;
     background: white;
-    padding: 10px 20px 10px 20px;
-    margin-right: 15px;
-    font-size: 1.5em;
-    /*background: gray;*/
+    padding: 10px 0 10px 0;
     text-align: center;
     border: 1px solid rgba(230, 230, 230, 1);
-    /*border-bottom: 1px solid rgba(220,220,220,1);*/
+}
+
+#plan_title{
+   font-size: 2em;
 }
 
 #count_title {
-    margin-top: 5px;
-    font-size: 0.6em;
+    padding-top: 5px;
+    font-size: 1em;
     color: gray;
 }
 
 .plan_content {
-    margin: 10px 15px 0 0;
-    overflow: hidden;
+    margin-top: 10px;
 }
 
 .plan_content:last-child {
@@ -207,44 +193,51 @@ label {
     justify-content: center;
     flex-direction: column;
     align-items: center;
-    width: 100%;
+    padding-top: 5px;
+    /*background: green;*/
+    width: calc(100% - 40px);
+
+    margin: auto;
     border-bottom: 1px solid rgba(210, 210, 210, 1);
 }
 
+/*дата*/
 .content_day_title a {
     display: none;
 }
 
 .day_title {
-    padding: 5px 10px 5px 20px;
+    /*padding: 0px 0 5px 0;*/
 }
 
 .day_data {
-    padding: 0px 10px 15px 10px;
-}
-
-.day_plan_content:first-child {
-    margin-top: 0;
+    padding: 0 0 10px 0;
 }
 
 .day_plan_content {
-    margin-top: 5px;
-    padding: 15px 10px 1px 10px;
+    margin: auto;
+    width: calc(100% - 20px);
 }
 
 .str_plan:nth-child(2) {
-    margin: 10px 0 0 0;
+    /*margin: 0px 0 0 0;*/
 }
 
 .str_plan {
     display: flex;
     flex-direction: row; /*Пункты внутри контейнера будут располагаться горизонтально*/
     align-items: stretch; /*Пункты внутри контейнер будут принимать всю его высоту*/
+    /*расстояние между строчками*/
     margin-top: 3px;
-    width: 100%;
+    width: calc(100% - 20px);
+    margin-right: 10px;
+    margin-left: 10px;
     border-radius: 4px;
     background: white;
 }
+/*.str_plan input:focus{*/
+/*padding-top: 2px;*/
+/*}*/
 
 .str_plan, .plan_selector:hover {
     cursor: default;
@@ -256,6 +249,7 @@ label {
     border: 2px solid rgba(3, 96, 255, 0.0);
     border-radius: 4px;
     width: 100%;
+    /*height: auto;*/
     background-color: rgba(255, 255, 255, 0);
 }
 
@@ -273,14 +267,12 @@ label {
 .str_plan ul li {
     display: flex;
     justify-content: center;
-    vertical-align: middle;
+    align-content: center;
     width: 30%;
-    padding-right: 2px;
-    padding-left: 2px;
-    height: 100%;
-    float: left;
-    content: "";
+    /*height: 100%;*/
+    height: auto;
     border-right: 1px solid rgba(230, 230, 230, 1);
+    /*background: dodgerblue;*/
 
 }
 
@@ -289,41 +281,37 @@ label {
     /* These are technically the same, but use both */
     overflow-wrap: break-word;
     word-wrap: break-word;
-
     -ms-word-break: break-all;
     /* This is the dangerous one in WebKit, as it breaks things wherever */
     word-break: break-all;
     /* Instead use this non-standard one: */
     word-break: break-word;
-
     /* Adds a hyphen where the word breaks, if supported (No Blink) */
     -ms-hyphens: auto;
     -moz-hyphens: auto;
     -webkit-hyphens: auto;
-    hyphens: auto;
 
 }
 
 .str_plan ul li a, .str_plan ul li input {
     display: flex;
+    /*background: dodgerblue;*/
+    /*height: 20px;*/
+    /*min-height: 100%;*/
     justify-content: center;
     align-items: center;
-    overflow-wrap: normal;
-    word-wrap: normal;
-    outline: none;
     border-radius: 4px;
     width: 100%;
     min-height: 30px;
     max-height: 200px;
-    padding: 3px 0px 3px 0px;
-    /*border: 1px solid rgba(230, 230, 230, 1);*/
-    /*font-size: 1vw;*/
-    border: none;
-    text-align: center;
-    background: none;
     border: 3px solid rgba(100, 149, 237, 0.0);
     transition: 0.1s all;
     cursor: default;
+    background: none;
+    overflow: hidden;
+}
+.str_plan ul li input{
+    /*max-height: 40px;*/
 }
 
 /*убрать крестик очистки*/
@@ -341,90 +329,93 @@ label {
 ::-webkit-input-placeholder {
     color: #b9b9b9;
     text-align: center;
-    padding-left: 3px;
+    padding-top: 2px;
+    /*padding-left: 3px;*/
 }
 
 :-moz-placeholder { /* Firefox 18- */
     color: #c3c3c3;
     text-align: center;
-    padding-left: 3px;
+    /*padding-left: 3px;*/
+    padding-top: 2px;
 }
 
 ::-moz-placeholder { /* Firefox 19+ */
     color: #c3c3c3;
     text-align: center;
-    padding-left: 3px;
+    padding-top: 2px;
+    /*padding-left: 3px;*/
 }
 
 :-ms-input-placeholder {
     color: #c3c3c3;
     text-align: center;
-    padding-left: 3px;
+    padding-top: 2px;
+    /*padding-left: 3px;*/
 }
 
 .str_title:first-child li {
     border-right: 1px solid rgba(91, 178, 102, 0.4);
 }
 
-.str_title:first-child li a {
-    padding-bottom: 1px;
-}
-
 .str_title {
     background: rgba(103, 198, 97, 0.9);
     border-radius: 4px;
+    margin-top: 10px;
+    /*margin-bottom: 10px;*/
+    min-height: 35px;
 }
 
-.separator {
-    width: 200px;
-    height: 1px;
-    background-color: red;
-}
+/*.separator {*/
+    /*width: 200px;*/
+    /*height: 1px;*/
+    /*background-color: red;*/
+/*}*/
 
 /*меню, при нажатии на правую кнопку мыши на строке расписания*/
-.drop_menu li {
-    min-width: 150px;
-    line-height: 35px;
-    padding: 0px 20px 0px 15px;
-    cursor: pointer;
-    -moz-user-select: none;
-    -khtml-user-select: none;
-    user-select: none;
+/*.drop_menu li {*/
+    /*min-width: 150px;*/
+    /*line-height: 35px;*/
+    /*padding: 0px 20px 0px 15px;*/
+    /*cursor: pointer;*/
+    /*-moz-user-select: none;*/
+    /*-khtml-user-select: none;*/
+    /*user-select: none;*/
 
-}
+/*}*/
 
-.drop_menu li:first-child {
-    border-radius: 0px 0px 0 0;
-    padding-top: 1px;
-}
+/*.drop_menu li:first-child {*/
+    /*border-radius: 0px 0px 0 0;*/
+    /*padding-top: 1px;*/
+/*}*/
 
-.drop_menu li:last-child {
-    padding-bottom: 2px;
-    border-radius: 0 0 0px 0px;
-}
+/*.drop_menu li:last-child {*/
+    /*padding-bottom: 2px;*/
+    /*border-radius: 0 0 0px 0px;*/
+/*}*/
 
-.drop_menu li:hover {
-    background: black;
-    color: white;
-}
+/*.drop_menu li:hover {*/
+    /*background: black;*/
+    /*color: white;*/
+/*}*/
 
-.drop_menu li:active {
-    background: #3e1e7d;
-    color: white;
-}
+/*.drop_menu li:active {*/
+    /*background: #3e1e7d;*/
+    /*color: white;*/
+/*}*/
 
-.drop_menu {
-    background: white;
-    border-radius: 0px 0px 0px 0px;
-    border: 1px solid rgba(128, 128, 128, 0.30);
-    overflow: hidden;
-    -webkit-box-shadow: 0px 2px 15px 0px rgba(0, 0, 0, 0.2);
-    -moz-box-shadow: 0px 2px 15px 0px rgba(0, 0, 0, 0.2);
-    box-shadow: 0px 2px 15px 0px rgba(0, 0, 0, 0.2);
+/*.drop_menu {*/
+    /*background: white;*/
+    /*border-radius: 0px 0px 0px 0px;*/
+    /*border: 1px solid rgba(128, 128, 128, 0.30);*/
+    /*overflow: hidden;*/
+    /*-webkit-box-shadow: 0px 2px 15px 0px rgba(0, 0, 0, 0.2);*/
+    /*-moz-box-shadow: 0px 2px 15px 0px rgba(0, 0, 0, 0.2);*/
+    /*box-shadow: 0px 2px 15px 0px rgba(0, 0, 0, 0.2);*/
 
-}
+/*}*/
 
-.test {
-    background: #bee0f2;
-    background: #ffd1cf;
-}
+/*.test {*/
+    /*background: #bee0f2;*/
+    /*background: #ffd1cf;*/
+/*}*/
