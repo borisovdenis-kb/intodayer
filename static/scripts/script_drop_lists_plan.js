@@ -14,30 +14,32 @@ function addDropLstListeners($thisStr) {
 
 function createDropLst($thisField) {
     $('.drop_list').remove();
+    if (!$thisField.hasClass('weeks')) {
 
-    $('body').append('<div class="drop_list"></div>');
+        $('body').append('<div class="drop_list"></div>');
 
-    var $drop_list = $('.drop_list');
-    var posY = $thisField.offset().top + $thisField.outerHeight() + 2;
+        var $drop_list = $('.drop_list');
+        var posY = $thisField.offset().top + $thisField.outerHeight() + 2;
 
-    $drop_list.find('ul li a').click(function () {
-        console.log('popa');
-        $($thisField).val($(this).text());
-        // $('.drop_list').delay(200).remove();
-    });
-
-    setTimeout(function () {
-        $drop_list.animate({
-            'width': $thisField.outerWidth() - 3,
-            // 'height': $thisField.outerHeight(),
-            'top': posY,
-            'left': $thisField.offset().left
-        }, 1, function () {
-            $(this).css({'display': 'block'});
+        $drop_list.find('ul li a').click(function () {
+            console.log('popa');
+            $($thisField).val($(this).text());
+            // $('.drop_list').delay(200).remove();
         });
-    }, 10);
 
-    loadData($thisField);
+        setTimeout(function () {
+            $drop_list.animate({
+                'width': $thisField.outerWidth() - 3,
+                // 'height': $thisField.outerHeight(),
+                'top': posY,
+                'left': $thisField.offset().left
+            }, 1, function () {
+                $(this).css({'display': 'block'});
+            });
+        }, 10);
+
+        loadData($thisField);
+    }
 }
 
 function loadData($thisField) {
@@ -46,6 +48,8 @@ function loadData($thisField) {
      *  и вставляет его под тем инпутом, на который кликнули.
      */
     var $bruceLi = $thisField.parent();
+
+
     var data = {plan_id: $('.title_content').attr('plan_id')};
 
     if ($thisField.hasClass('time')) {
@@ -91,7 +95,10 @@ function loadData($thisField) {
                 $('.drop_list').css('overflowY', 'scroll');
             }
             setTimeout(function () {
+                // $('.drop_list ul li a').css('background', 'green');
                 $('.drop_list ul li a').click(function () {
+                    // alert("Sdfsdaf");
+
                     if ($bruceLi.find('a').length != 0) {
                         $bruceLi.find('a').text($(this).text());
 
