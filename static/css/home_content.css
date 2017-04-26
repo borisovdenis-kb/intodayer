@@ -296,7 +296,7 @@ body {
 
 }
 
-.str_plan ul li a, .str_plan ul li input {
+.str_plan ul li a, .str_plan ul li input, .str_plan ul li textarea  {
     display: flex;
     /*background: dodgerblue;*/
     /*height: 20px;*/

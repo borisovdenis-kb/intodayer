@@ -148,6 +148,9 @@ function setTrueRandomPlaceholder($this_field) {
     if ($this_field.hasClass('time')) {
         var time_hours, time_minutes_dec;
         time_hours = getRandomInt(8, 15);
+        if (time_hours < 10) {
+            time_hours = '0' + time_hours;
+        }
         time_minutes_dec = getRandomInt(0, 5);
         return time_hours + ":" + time_minutes_dec + "0";
     }
@@ -431,6 +434,8 @@ function setNewListenersNewStr($new_div) {
     });
 
     $new_inputs.click(function (e) {
+        // $(this).parent().css('background', 'black');
+        var $li_parent = $(this).parent();
         var $this_str = $(this).parent().parent().parent();
         $this_str.addClass('selected_str');
         var $this_field = $(this);
@@ -439,12 +444,13 @@ function setNewListenersNewStr($new_div) {
         $.getScript("/static/scripts/script_drop_lists_plan.js", function () {
             // ипорт функции для выподающих списков у полей.
             // делаем услования, чтобы дроп лист больше не открывался при 2 клике на поле
-            if (!$(this).hasAttribute('drop_is')) {
+            //   createDropLst($this_field);
+            if (!$this_field.hasClass('drop_is') && $this_field.val() == "") {
                 createDropLst($this_field);
-                $(this).attr('drop_is', 'true');
+                $this_field.addClass('drop_is');
             }
             else {
-                $(this).removeAttribute('drop_is');
+                $this_field.removeClass('drop_is');
             }
         });
     });
@@ -758,7 +764,7 @@ function setDefaultStr($str_plan, mode) {
     if (mode == 'clone' || mode == 'delete' || mode == 'animation') {
         return false;
     }
-
+    // alert("SDfsaf");
     timer_send_server = setTimeout(function () {
         //***************************************************************************************
         // Одна из важнейших строчек во всём коде
@@ -833,10 +839,25 @@ function a_to_input($field) {
         $field.addClass('parityOpen');
     }
 
-    $.getScript("/static/scripts/script_drop_lists_plan.js", function () {
-        // ипорт функции для выподающих списков у полей.
-        createDropLst($field);
-    });
+    createDropLst($field);
+    $field.parent().addClass('drop_is');
+    setTimeout(function () {
+        $field.click(function () {
+            $.getScript("/static/scripts/script_drop_lists_plan.js", function () {
+                // ипорт функции для выподающих списков у полей.
+                // делаем услования, чтобы дроп лист больше не открывался при 2 клике на поле
+                //   createDropLst($this_field);
+                if (!$field.parent().hasClass('drop_is')) {
+                    createDropLst($field);
+                    $field.parent().addClass('drop_is');
+                }
+                else {
+                    $field.parent().removeClass('drop_is');
+                }
+            });
+        });
+    }, 50);
+
 
     $field.addClass('selected_field');
     $field.attr("value", value);
@@ -939,12 +960,22 @@ function setColorStr($this_str) {
 
 //снимает выделение со всех выделенных строк
 function blurSelectStr() {
-    var $selected_str = $('.selected_str');
-    if ($selected_str.length > 0) {
-        $selected_str.each(function () {
-            setDefaultStr($(this));
-        });
-    }
+    setTimeout(function () {
+        var $selected_str = $('.selected_str');
+        if ($selected_str.length > 0) {
+            // условия для того, чтобы при расфокусировки после нажатого дроп листа для парити поле отправлялось на сервер
+            $selected_str.each(function () {
+                 setDefaultStr($(this), 'animation');
+                if ($('.parityChanged').parent().attr('old_value') != $('.parityChanged').html()) {
+                    setDefaultStr($(this), 'animation');
+                }
+                else {
+                    setDefaultStr($(this));
+                }
+            });
+        }
+    }, 20);
+
 }
 
 function appendNewStrAnimation($new_div, $insert_after_this) {
@@ -1348,10 +1379,10 @@ function mainValidationStr($this_str) {
             errors['place'] = 'empty_value';
         }
 
-        if (parity == "") {
-            alert(0 == "");
-            errors['parity'] = 'empty_value';
-        }
+        // if (parity == "") {
+        //     alert(0 == "");
+        //     errors['parity'] = 'empty_value';
+        // }
 
         // Проверка корректности ввода дня недели
         if (!errors['weeks']) {
@@ -1596,11 +1627,9 @@ function get_day_num(name_day) {
 function get_parity_value(value) {
     console.log(value);
     var values_num = {
-        'Все': 3,
-        'Чёт': 1,
-        'Чет': 1,
-        'Нечёт': 2,
-        'Нечет': 2
+        'Все': 'Все',
+        'Чет': 'Чет',
+        'Нечет': 'Нечет'
     };
     if (values_num[value] != undefined) {
         return values_num[value];

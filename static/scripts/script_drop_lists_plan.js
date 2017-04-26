@@ -15,10 +15,7 @@ var $this;
 function createDropLst($thisField) {
     $('.drop_list').remove();
     if (!$thisField.hasClass('weeks')) {
-
         $('body').append('<div class="drop_list"></div>');
-
-
         loadData($thisField);
     }
 }
@@ -83,7 +80,8 @@ function loadData($thisField) {
 
     setTimeout(function () {
 
-        $('.drop_list ul li a').click(function () {
+        $('.drop_list ul li').on('click', function () {
+
             $thisField.removeClass('selected_field');
 
             var $this_str = $bruceLi.parent().parent();
@@ -106,6 +104,8 @@ function loadData($thisField) {
             }
             $('.drop_list').remove();
         });
+
+
         $('.drop_list ul li a').css({
             'height': $bruceLi.height()
         });
