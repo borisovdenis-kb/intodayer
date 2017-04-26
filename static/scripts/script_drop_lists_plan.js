@@ -6,11 +6,6 @@
 
 var $this;
 
-// function addDropLstListeners($thisStr) {
-//     $thisStr.find('ul li input').click(function () {
-//         createDropLst($(this));
-//     });
-// }
 
 function createDropLst($thisField) {
     $('.drop_list').remove();
@@ -62,16 +57,6 @@ function loadData($thisField) {
                 $('.drop_list').remove();
                 return false;
             }
-            // var first_li_height = $('.drop_list').find('li').last().outerHeight();
-            // var total_height = count_li * first_li_height;
-            // if (total_height >= 130) {
-            //     // добавляем скролл только, когда размер 300
-            //     // потому что когда он висит постоянно - это уродство...
-            //     $('.drop_list').css({
-            //         'overflow-y': 'scroll',
-            //         'height': 130
-            //     });
-            // }
         });
     }
 
@@ -80,28 +65,10 @@ function loadData($thisField) {
 
     setTimeout(function () {
 
-        $('.drop_list ul li').on('click', function () {
+        $('.drop_list ul li a').on('mousedown', function () {
+            console.log($(this).text());
+            $thisField.val($(this).text());
 
-            $thisField.removeClass('selected_field');
-
-            var $this_str = $bruceLi.parent().parent();
-            if ($bruceLi.find('a').length != 0) {
-                if ($bruceLi.find('a').text() != $(this).text()) {
-
-                    // добавляем этот атрибут, чтобы строка смогла пройти валидацию на изменение содержимого
-                    $this_str.attr('edited', 'true');
-                }
-                $bruceLi.find('a').text($(this).text());
-            } else if ($bruceLi.find('input') != 0) {
-
-                if ($bruceLi.find('input').val() != $(this).text()) {
-
-                    // добавляем этот атрибут, чтобы строка смогла пройти валидацию на изменение содержимого
-                    $this_str.attr('edited', 'true');
-                }
-                $bruceLi.find('input').val($(this).text());
-
-            }
             $('.drop_list').remove();
         });
 

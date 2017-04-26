@@ -44,7 +44,7 @@
         /*font-size: 1em;*/
     }
 
-    .str_plan ul li a, .str_plan ul li input {
+    .str_plan ul li a, .str_plan ul li textarea {
         font-family: "Cyntho Pro" !important;
         font-size: 16px;
         /*font-size: 1vw;*/

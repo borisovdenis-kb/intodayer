@@ -268,18 +268,15 @@ body {
     position: relative;
     display: flex;
     justify-content: center;
-    /*align-content: center;*/
-    /*align-items: center;*/
     width: 30%;
-    /*height: 100%;*/
     height: auto;
     border-right: 1px solid rgba(230, 230, 230, 1);
-    /*background: dodgerblue;*/
+
 
 }
 
 /*отвечает за корректный перенос слов и букв в словах*/
-.str_plan ul li a {
+.str_plan ul li a, .str_plan ul li textarea {
 
     /* These are technically the same, but use both */
     overflow-wrap: break-word;
@@ -296,33 +293,31 @@ body {
 
 }
 
-.str_plan ul li a, .str_plan ul li input, .str_plan ul li textarea  {
-    display: flex;
-    /*background: dodgerblue;*/
-    /*height: 20px;*/
-    /*min-height: 100%;*/
-    justify-content: center;
-    align-items: center;
+.str_plan ul li a, .str_plan ul li textarea  {
     border-radius: 4px;
     width: 100%;
-    min-height: 30px;
-    max-height: 200px;
+    /*height: 100%;*/
+    text-align: center;
+    /*max-height: 200px;*/
+    height: 30px;
     border: 3px solid rgba(100, 149, 237, 0.0);
     transition: 0.1s all;
     cursor: default;
     background: none;
-    overflow: hidden;
-}
-.str_plan ul li input{
-    /*max-height: 40px;*/
+    /*overflow: hidden;*/
+    cursor: text;
+    outline: none;
+    -moz-appearance: none;
+    overflow-y: hidden;
+    resize: none;
 }
 
 /*убрать крестик очистки*/
-.str_plan ul li input::-ms-clear {
+.str_plan ul li textarea::-ms-clear {
     display: none;
 }
 
-.str_plan ul li input:focus {
+.str_plan ul li textarea:focus {
     border: none;
     outline: none;
     cursor: auto;
@@ -333,33 +328,19 @@ body {
     /*cursor: pointer;*/
 /*}*/
 
-::-webkit-input-placeholder {
+
+textarea::-webkit-input-placeholder {
     color: #b9b9b9;
     text-align: center;
-    padding-top: 2px;
-    /*padding-left: 3px;*/
+
 }
 
-:-moz-placeholder { /* Firefox 18- */
-    color: #c3c3c3;
+textarea:-moz-placeholder {
+    color: #b9b9b9;
+    color: red;
     text-align: center;
-    /*padding-left: 3px;*/
-    padding-top: 2px;
 }
 
-::-moz-placeholder { /* Firefox 19+ */
-    color: #c3c3c3;
-    text-align: center;
-    padding-top: 2px;
-    /*padding-left: 3px;*/
-}
-
-:-ms-input-placeholder {
-    color: #c3c3c3;
-    text-align: center;
-    padding-top: 2px;
-    /*padding-left: 3px;*/
-}
 
 .str_title:first-child li {
     border-right: 1px solid rgba(91, 178, 102, 0.4);
