@@ -38,7 +38,7 @@ body {
     width: calc(100% - 188px);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     .right_content {
         width: 100%;
     }
@@ -265,9 +265,11 @@ body {
 }
 
 .str_plan ul li {
+    position: relative;
     display: flex;
     justify-content: center;
-    align-content: center;
+    /*align-content: center;*/
+    /*align-items: center;*/
     width: 30%;
     /*height: 100%;*/
     height: auto;
@@ -278,6 +280,7 @@ body {
 
 /*отвечает за корректный перенос слов и букв в словах*/
 .str_plan ul li a {
+
     /* These are technically the same, but use both */
     overflow-wrap: break-word;
     word-wrap: break-word;
@@ -325,6 +328,10 @@ body {
     cursor: auto;
     border: 2px solid rgba(139, 29, 235, 0.4);
 }
+/*.last{ */
+    /*!*background: black;*!*/
+    /*cursor: pointer;*/
+/*}*/
 
 ::-webkit-input-placeholder {
     color: #b9b9b9;

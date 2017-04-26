@@ -16,6 +16,7 @@ from extra.utils import *
 CREATE = 'CREATE'
 UPDATE = 'UPDATE'
 
+
 # TODO: Сделать в выводе расписания в /plan сортировку по времени, а не по неделям
 # TODO: Сделать аутентификацию по почте, а не по логину. Значит нужно сделать и подтверждение email
 
@@ -44,7 +45,7 @@ def get_drop_list_ajax(request):
 
         try:
             plan_id = int(request.POST['plan_id'])
-            print(request.POST)
+            # print(request.POST)
             plan = UserPlans.objects.select_related().get(user_id=user.id, plan_id=plan_id)
         except (ValueError, ObjectDoesNotExist):
             context['is_error'] = True
@@ -62,8 +63,6 @@ def get_drop_list_ajax(request):
 
         elif request.POST['model'] == 'place':
             context['place_list'] = Places.objects.filter(plan_id=plan.plan.id).order_by('name')
-
-
 
         return render_to_response('templates_for_ajax/drop_list_tmp.html', context)
 
@@ -582,7 +581,6 @@ def plan_view(request, plan_id=0):
         }
 
         all_plans = UserPlans.objects.select_related().filter(user_id=user.id)
-
 
         try:
             cur_plan = UserPlans.objects.select_related().filter(user_id=user.id, current_yn='y')[0]

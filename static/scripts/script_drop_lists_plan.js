@@ -6,11 +6,11 @@
 
 var $this;
 
-function addDropLstListeners($thisStr) {
-    $thisStr.find('ul li input').click(function () {
-        createDropLst($(this));
-    });
-}
+// function addDropLstListeners($thisStr) {
+//     $thisStr.find('ul li input').click(function () {
+//         createDropLst($(this));
+//     });
+// }
 
 function createDropLst($thisField) {
     $('.drop_list').remove();
@@ -18,31 +18,13 @@ function createDropLst($thisField) {
 
         $('body').append('<div class="drop_list"></div>');
 
-        var $drop_list = $('.drop_list');
-        var posY = $thisField.offset().top + $thisField.outerHeight() + 2;
-
-        $drop_list.find('ul li a').click(function () {
-            console.log('popa');
-            $($thisField).val($(this).text());
-            // $('.drop_list').delay(200).remove();
-        });
-
-        setTimeout(function () {
-            $drop_list.animate({
-                'width': $thisField.outerWidth() - 3,
-                // 'height': $thisField.outerHeight(),
-                'top': posY,
-                'left': $thisField.offset().left
-            }, 1, function () {
-                $(this).css({'display': 'block'});
-            });
-        }, 10);
 
         loadData($thisField);
     }
 }
 
 function loadData($thisField) {
+    var $thisField = $thisField;
     /*
      *  Функция подгружает с сервера уже отрендеренный выподающий список
      *  и вставляет его под тем инпутом, на который кликнули.
@@ -73,44 +55,89 @@ function loadData($thisField) {
             '<li><a>Нечет</a></li>' +
             '</ul>'
         );
-        $('.drop_list ul li a').click(function () {
-            if ($bruceLi.find('a').length != 0) {
-                $bruceLi.find('a').text($(this).text());
-
-            } else if ($bruceLi.find('input') != 0) {
-                console.log('popa');
-                $bruceLi.find('input').val($(this).text());
-            }
-
-            $('.drop_list').remove();
-        });
     }
 
     if (!$thisField.hasClass('parity')) {
         // вставляем даные из базы в div drop_list
         $('.drop_list').load('/get_drop_list', data, function () {
-            if ($('.drop_list').height() >= 150) {
-                // добавляем скролл только, когда размер 300
-                // потому что когда он висит постоянно - это уродство...
-                $('.drop_list').css('overflowY', 'scroll');
+            var count_li = $('.drop_list').find('li').length;
+            if (count_li == 0) {
+                $('.drop_list').remove();
+                return false;
             }
-            setTimeout(function () {
-                // $('.drop_list ul li a').css('background', 'green');
-                $('.drop_list ul li a').click(function () {
-                    // alert("Sdfsdaf");
-
-                    if ($bruceLi.find('a').length != 0) {
-                        $bruceLi.find('a').text($(this).text());
-
-                    } else if ($bruceLi.find('input') != 0) {
-                        console.log('popa');
-                        $bruceLi.find('input').val($(this).text());
-                    }
-
-                    $('.drop_list').remove();
-                });
-            }, 100);
+            // var first_li_height = $('.drop_list').find('li').last().outerHeight();
+            // var total_height = count_li * first_li_height;
+            // if (total_height >= 130) {
+            //     // добавляем скролл только, когда размер 300
+            //     // потому что когда он висит постоянно - это уродство...
+            //     $('.drop_list').css({
+            //         'overflow-y': 'scroll',
+            //         'height': 130
+            //     });
+            // }
         });
     }
 
+    var $drop_list = $('.drop_list');
+    var posY = $thisField.offset().top + $thisField.outerHeight() + 2;
+
+    setTimeout(function () {
+
+        $('.drop_list ul li a').click(function () {
+            $thisField.removeClass('selected_field');
+
+            var $this_str = $bruceLi.parent().parent();
+            if ($bruceLi.find('a').length != 0) {
+                if ($bruceLi.find('a').text() != $(this).text()) {
+
+                    // добавляем этот атрибут, чтобы строка смогла пройти валидацию на изменение содержимого
+                    $this_str.attr('edited', 'true');
+                }
+                $bruceLi.find('a').text($(this).text());
+            } else if ($bruceLi.find('input') != 0) {
+
+                if ($bruceLi.find('input').val() != $(this).text()) {
+
+                    // добавляем этот атрибут, чтобы строка смогла пройти валидацию на изменение содержимого
+                    $this_str.attr('edited', 'true');
+                }
+                $bruceLi.find('input').val($(this).text());
+
+            }
+            $('.drop_list').remove();
+        });
+        $('.drop_list ul li a').css({
+            'height': $bruceLi.height()
+        });
+        $drop_list.animate({
+            'width': $thisField.outerWidth(),
+            'top': posY,
+            'left': $thisField.offset().left
+        }, 1, function () {
+            $(this).fadeTo(1, 1);
+        });
+    }, 50);
 }
+
+// делает чтобы дроп лист двигался вместе с полем
+// и соответственно изменял ширину
+$(window).on('resize scroll', function () {
+    var $active_elem = $(document.activeElement);
+    var $this_field = $(document.activeElement);
+    console.log($active_elem.get(0).tagName);
+    if ($active_elem.get(0).tagName == "BODY") {
+        $this_field = ($('.selected_field'));
+        if ($this_field.length != 1) {
+            $('.drop_list').remove();
+            return false;
+        }
+    }
+
+    var $droplist = $('.drop_list');
+    var posY = $this_field.offset().top + $this_field.outerHeight() + 2;
+    $droplist.css({
+        'width': $this_field.outerWidth(),
+        'top': posY,
+        'left': $this_field.offset().left
+    });
+});
