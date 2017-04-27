@@ -59,6 +59,7 @@ $(document).ready(function () {
 
 // Запуск всего скрипта, навершивание всхе обработчкиков
 function startIntodayer() {
+
     $('.str_plan.change').each(function () {
         setNewListenersNewStr($(this));
         setNewListenersSpecial($(this));
@@ -68,6 +69,11 @@ function startIntodayer() {
 
     });
     setTimeout(function () {
+        // устанавливаем обработчик при нажатии на плюс
+        $('.plus_button_form').click(function () {
+            appendPlanStr($(this));
+        });
+
         $('.str_plan.change').each(function () {
             $(this).find('li').each(function () {
                 resizeArea($(this).children());
@@ -124,10 +130,6 @@ $(window).on('keydown', function (e) {
     }
 });
 
-// устанавливаем обработчик при нажатии на плюс
-$('.plus_button_form').click(function () {
-    appendPlanStr($(this));
-});
 
 var timer_focusout;
 function setNewListenersNewStr($new_div) {

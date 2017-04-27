@@ -38,7 +38,9 @@
     <!--Добавление в наследующие шаблоны новых стилей-->
     {% block styles %}{% endblock %}
     <!--Добавление в наследующие шаблоны новых скриптов-->
-    {% block scripts_top %}{% endblock %}
+    {% block scripts_top %}
+        <script type="text/javascript" src={% static "scripts/script_home.js" %}></script>
+    {% endblock %}
 </head>
 
 
@@ -267,7 +269,7 @@
 
 {# Скрипты, который должены быть на всех страницах #}
 <script type="text/javascript" src={% static "scripts/script_home_top.js" %}></script>
-<script type="text/javascript" src={% static "scripts/script_home.js" %}></script>
+<script type="text/javascript" src={% static "scripts/script_general.js" %}></script>
 
 {% block scripts_bottom %}
 {% endblock %}
