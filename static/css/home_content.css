@@ -243,6 +243,7 @@ body {
 
 .str_plan ul {
     display: flex;
+    min-height: 32px;
     text-align: center;
     border: 2px solid rgba(3, 96, 255, 0.0);
     border-radius: 4px;
@@ -261,22 +262,10 @@ body {
     border-right: none;
 }
 
-.str_plan ul li {
-    height: 100%;
-    position: relative;
-    display: flex;
-    align-content: center;
-    align-items: center;
-    justify-content: center;
-    width: 30%;
-    border-right: 1px solid rgba(230, 230, 230, 1);
 
-
-}
 
 /*отвечает за корректный перенос слов и букв в словах*/
 .str_plan ul li a, .str_plan ul li textarea {
-
     /* These are technically the same, but use both */
     overflow-wrap: break-word;
     word-wrap: break-word;
@@ -294,7 +283,7 @@ body {
 
 /*скрытый блок для формирования высоты */
 .comment_text_hidden{
-     visibility:hidden;
+    visibility:hidden;
     position: absolute;
     display: block;
     background: red;
@@ -308,11 +297,22 @@ body {
     word-break: break-word;
 }
 
+.str_plan ul li {
+    position: relative;
+    display: flex;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    width: 30%;
+    border-right: 1px solid rgba(230, 230, 230, 1);
+
+
+}
+
 .str_plan ul li a, .str_plan ul li textarea, .str_plan ul li input{
-    /*padding-top: 3px;*/
     border-radius: 4px;
     width: 100%;
-    height: 32px;
+    min-height: 32px;
     text-align: center;
     border: 2px solid rgba(100, 149, 237, 0.0);
     transition: 0.1s all;
@@ -323,6 +323,10 @@ body {
     overflow-y: hidden;
     resize: none;
 }
+.str_plan ul li textarea{
+    height: 32px;
+}
+
 .str_plan ul li button{
     cursor: pointer;
 }
@@ -365,6 +369,6 @@ textarea:-moz-placeholder {
     border-radius: 4px;
     margin-top: 10px;
     /*margin-bottom: 10px;*/
-    min-height: 35px;
+    min-height: 30px;
 }
 

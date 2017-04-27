@@ -58,10 +58,19 @@ $(document).ready(function () {
         setNewListenersNewStr($(this));
         setNewListenersSpecial($(this));
         $(this).find('li').each(function () {
-            resizeArea($(this).children(), 32, 300);
+            resizeArea($(this).children());
         });
 
     });
+    setTimeout(function () {
+        $('.str_plan.change').each(function () {
+            $(this).find('li').each(function () {
+                resizeArea($(this).children());
+            });
+
+        });
+    }, 100);
+
     $('.str_plan.str_title').each(function () {
         setGeneralCheckBoxListeners($(this));
     });
@@ -70,11 +79,13 @@ $(document).ready(function () {
 });
 
 // при нажатии в любое место в браузере
-$(window).on('mousedown', function (e) {
+$(window).on('mousedown touchend', function (e) {
     var $this_active_obj = $(document.activeElement).parents('.str_plan.change');
     var $this_click_obj = $(e.target).parents('.str_plan.change');
-    if ($this_active_obj.length == 0 || $this_click_obj.length == 0 || !$this_active_obj.is($this_click_obj)) {
+    var $drop_lists = $(e.target).parents('.drop_list');
+    if (($this_active_obj.length == 0 || $this_click_obj.length == 0 || !$this_active_obj.is($this_click_obj))) {
         setDefaultStr($this_active_obj);
+        $(document.activeElement).blur();
     }
     // Если нажали на скролл бар в браузере
     if (e.target === $('html')[0] && e.clientX >= document.documentElement.offsetWidth) {
@@ -94,7 +105,7 @@ $('.plus_button_form').click(function () {
     appendPlanStr($(this));
 });
 
-
+var timer_focusout;
 function setNewListenersNewStr($new_div) {
     // Обработчики событый, применяемые к каждой строке расписания
     var $new_textarea = $new_div.find('ul li textarea');
@@ -104,6 +115,14 @@ function setNewListenersNewStr($new_div) {
     // сбрасываем все обработчики (так как постоянно их заново ставим)
     $new_div.off();
     $new_textarea.off();
+
+    // отвечает за выделение строки при наведении
+    $new_div.hover(function () {
+        hoverSelectStr($(this));
+    }, function () {
+        hoverDefaultStr($(this));
+    });
+
 
     //редактировать поле при нажатии на него
     var arr_objs = [$new_textarea, $parity];
@@ -117,6 +136,7 @@ function setNewListenersNewStr($new_div) {
         });
     }
 
+    // при нажатии на LI также выделяем textarea
     $LI.on('click', function () {
         var $children = $(this).children();
         if (!$children.is(":hover")) {
@@ -124,25 +144,98 @@ function setNewListenersNewStr($new_div) {
         }
     });
 
+    // делаем правильно курсор и выпадающий список
     $new_textarea.on('focus', function () {
         var $this_field = $(this);
-        var $this_str = $this_field.parents('.str_plan.change');
-        $this_field.attr('old_value', $this_field.val());
-        setSelectStr($this_str);
 
+        openHelpDropList($this_field);
         // курсор становится всегда в конце при выделении
         $(function () {
             var data = $this_field.val();
             $this_field.val('').val(data);
         });
+
+        $this_field.addClass('selected_field');
+    });
+
+
+    // при расфокусировки или нажатии клавиши удаляем выпадающий список
+    // а также если нажали клавишу вверх или вниз меняем поля
+    $new_textarea.on('focusout keydown', function (e) {
+        var $this_str = $(this).parents('.str_plan.change');
+        // var $this_field = $(this);
+        // для проверки валидации
+        if ($(this).attr('old_value') != $(this).val()) {
+            $this_str.attr('edited', 'true');
+        }
+
+        $(this).removeClass('drop_is');
+        $('.drop_list').remove();
+
+        // смена полей при нажатии на кнопку вверх или вниз
+        var $this_field = $(this);
+        focusFieldWithKeys($this_field, $this_str, e);
+
+        $this_field.removeClass('selected_field');
+
+        // для корректной работы на iPhone
+        clearTimeout(timer_focusout);
+        timer_focusout = setTimeout(function () {
+            if (device.iphone()) {
+                if ($this_str.find($(document.activeElement)).length == 0) {
+                    setDefaultStr($this_str)
+                }
+            }
+        }, 100)
+
     });
 
 
     // для правильного вызова и сворачивания дроп листа
+    // как бы если нажимаем на уже сфокусированное поле
     $new_textarea.on('mousedown', function () {
         var $this_field = $(this);
         openHelpDropList($this_field);
     });
+
+    // тут удаляются пробелмы и нормализируется размер текстового поля по высоте
+    $new_textarea.on('change focusout', function () {
+        var $this_field = $(this);
+        // удаление пробелов в начале и вконце строки
+        $this_field.val($this_field.val().trim());
+        if ($this_field.val() == "") {
+            return false;
+        }
+        setTimeout(function () {
+            resizeArea($this_field);
+        }, 100);
+
+    });
+
+    // также при вводе нормализируем высоту поля
+    $new_textarea.on('input', function () {
+        var $this_textarea = $(this);
+        resizeArea($this_textarea, 32, 300);
+    });
+
+    // Работа валидации при вводе
+    $new_textarea.on('input', function () {
+        thisInput = $(this);
+        timerInputId = setInterval(function () {
+            validateField(thisInput);
+        }, 50);
+        setTimeout(function () {
+            clearInterval(timerInputId);
+        }, 100);
+    });
+
+
+    if (device.iphone()) {
+        $parity.on('click', function () {
+            $(this).trigger('focus');
+        });
+    }
+    // для работы parity
 
     $parity.on('focus', function () {
         var $this_field = $(this);
@@ -162,8 +255,10 @@ function setNewListenersNewStr($new_div) {
         if ($(this).attr('old_value') != $(this).val()) {
             $this_str.attr('edited', 'true');
         }
+
         $('.drop_list').remove();
         $(this).removeClass('drop_is');
+
         if (!$(this).is(":hover")) {
             $(this).css({'background': 'rgba(255,255,255,0)'});
         }
@@ -179,41 +274,6 @@ function setNewListenersNewStr($new_div) {
         focusFieldWithKeys($this_field, $this_str, e);
     });
 
-
-    $new_textarea.on('focusout keydown', function (e) {
-        var $this_str = $(this).parents('.str_plan.change');
-        // для проверки валидации
-        if ($(this).attr('old_value') != $(this).val()) {
-            $this_str.attr('edited', 'true');
-        }
-        $('.drop_list').remove();
-
-        // смена полей при нажатии на кнопку вверх вниз
-        var $this_field = $(this);
-        focusFieldWithKeys($this_field, $this_str, e);
-    });
-
-    $new_textarea.on('change focusout', function () {
-        var $this_field = $(this);
-        // удаление пробелов в начале и вконце строки
-        $this_field.val($this_field.val().trim());
-        if ($this_field.val() == "") {
-            return false;
-        }
-        setTimeout(function () {
-            resizeArea($this_field);
-        }, 100);
-
-    });
-
-
-    // отвечает за выделение строки при наведении
-    $new_div.hover(function () {
-        hoverSelectStr($(this));
-    }, function () {
-        hoverDefaultStr($(this));
-    });
-
     $parity.mouseover(function () {
         if (!$(this).hasClass('drop_is')) {
             $(this).css({'background': '#e6ccff'});
@@ -225,21 +285,26 @@ function setNewListenersNewStr($new_div) {
         }
     });
 
-    $new_textarea.on('input', function () {
-        var $this_textarea = $(this);
-        resizeArea($this_textarea, 32, 300);
-    });
-
-    $new_textarea.on('input', function () {
-        thisInput = $(this);
-        timerInputId = setInterval(function () {
-            validateField(thisInput);
-        }, 50);
-        setTimeout(function () {
-            clearInterval(timerInputId);
-        }, 100);
-    });
 }
+
+// function setTrueInputHeight($this_str) {
+// setTimeout(function () {
+//     var max_height = 0;
+//     $this_str.find('li').each(function () {
+//         var $this_child = $(this).children();
+//         if (!$this_child.hasClass('parity')) {
+//             if ($this_child.height() > max_height) {
+//                 max_height = $this_child.height();
+//             }
+//         }
+//         else {
+//             // alert(max_height);
+//             $this_child.css('height', max_height);
+//         }
+//     });
+// }, 200);
+
+// }
 
 // TODO сделать ещё для случая ресайза окна, чтобы автоматом тоже поле устанавливалолсь
 // отвечает за ресайз полей textarea
@@ -256,9 +321,9 @@ function resizeArea($this_textarea, minHeight, maxHeight) {
     if (minHeight != undefined && !$this_textarea.hasClass('time') && !$this_textarea.hasClass('weeks')) {
         strings[0] = "XXXX" + strings[0];
     }
-    else{
-       strings[0] = strings[0].slice(1);
-     }
+    else {
+        strings[0] = strings[0].slice(1);
+    }
     for (var i = 0, ln = strings.length; i < ln; i++) {
         text = text + '<div>' + strings[i].replace(/\s\s/g, ' &nbsp;') + '&nbsp;</div>' + "\n";
     }
@@ -304,22 +369,14 @@ function focusFieldWithKeys($this_field, $this_str, e) {
 
 
 function openHelpDropList($this_field) {
-    if (!$(document.activeElement).is($this_field)) {
-        $this_field.removeClass('drop_is');
-    }
 
     if ($this_field.hasClass('drop_is')) {
         $('.drop_list').remove();
-        // для работы выпадающего меню parity
-        if ($this_field.hasClass('parity')) {
-            $this_field.css({'background': '#e6ccff'});
-            $this_field.removeClass('drop_is');
-        }
     }
     else {
         $this_field.addClass('drop_is', 'drop_is');
         $.getScript("/static/scripts/script_drop_lists_plan.js", function () {
-            // ипорт функции для вып    одающих списков у полей.
+            // ипорт функции для выпадающих списков у полей.
             // делаем услования, чтобы дроп лист больше не открывался при 2 клике на поле
             createDropLst($this_field);
         });
@@ -725,6 +782,7 @@ function setDefaultStr($str_plan, mode) {
     if ($str_plan) {
         $str_plan.removeClass('selected_str');
     }
+
 
     hoverDefaultStr($str_plan);
 
