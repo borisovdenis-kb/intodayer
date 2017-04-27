@@ -235,9 +235,7 @@ body {
     border-radius: 4px;
     background: white;
 }
-/*.str_plan input:focus{*/
-/*padding-top: 2px;*/
-/*}*/
+
 
 .str_plan, .plan_selector:hover {
     cursor: default;
@@ -249,7 +247,6 @@ body {
     border: 2px solid rgba(3, 96, 255, 0.0);
     border-radius: 4px;
     width: 100%;
-    /*height: auto;*/
     background-color: rgba(255, 255, 255, 0);
 }
 
@@ -265,11 +262,13 @@ body {
 }
 
 .str_plan ul li {
+    height: 100%;
     position: relative;
     display: flex;
+    align-content: center;
+    align-items: center;
     justify-content: center;
     width: 30%;
-    height: auto;
     border-right: 1px solid rgba(230, 230, 230, 1);
 
 
@@ -293,23 +292,38 @@ body {
 
 }
 
-.str_plan ul li a, .str_plan ul li textarea  {
+/*скрытый блок для формирования высоты */
+.comment_text_hidden{
+    position: absolute;
+    display: block;
+    background: red;
+    /* These are technically the same, but use both */
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    -ms-word-break: break-all;
+    /* This is the dangerous one in WebKit, as it breaks things wherever */
+    word-break: break-all;
+    /* Instead use this non-standard one: */
+    word-break: break-word;
+}
+
+.str_plan ul li a, .str_plan ul li textarea, .str_plan ul li input{
+    /*padding-top: 3px;*/
     border-radius: 4px;
     width: 100%;
-    /*height: 100%;*/
+    height: 32px;
     text-align: center;
-    /*max-height: 200px;*/
-    height: 30px;
-    border: 3px solid rgba(100, 149, 237, 0.0);
+    border: 2px solid rgba(100, 149, 237, 0.0);
     transition: 0.1s all;
     cursor: default;
     background: none;
-    /*overflow: hidden;*/
-    cursor: text;
     outline: none;
     -moz-appearance: none;
     overflow-y: hidden;
     resize: none;
+}
+.str_plan ul li button{
+    cursor: pointer;
 }
 
 /*убрать крестик очистки*/
@@ -321,21 +335,20 @@ body {
     border: none;
     outline: none;
     cursor: auto;
+    /*padding-top: 4px;*/
     border: 2px solid rgba(139, 29, 235, 0.4);
 }
-/*.last{ */
-    /*!*background: black;*!*/
-    /*cursor: pointer;*/
-/*}*/
 
 
 textarea::-webkit-input-placeholder {
+     padding-top: 1px;
     color: #b9b9b9;
     text-align: center;
 
 }
 
 textarea:-moz-placeholder {
+    padding-top: 1px;
     color: #b9b9b9;
     color: red;
     text-align: center;
@@ -354,56 +367,3 @@ textarea:-moz-placeholder {
     min-height: 35px;
 }
 
-/*.separator {*/
-    /*width: 200px;*/
-    /*height: 1px;*/
-    /*background-color: red;*/
-/*}*/
-
-/*меню, при нажатии на правую кнопку мыши на строке расписания*/
-/*.drop_menu li {*/
-    /*min-width: 150px;*/
-    /*line-height: 35px;*/
-    /*padding: 0px 20px 0px 15px;*/
-    /*cursor: pointer;*/
-    /*-moz-user-select: none;*/
-    /*-khtml-user-select: none;*/
-    /*user-select: none;*/
-
-/*}*/
-
-/*.drop_menu li:first-child {*/
-    /*border-radius: 0px 0px 0 0;*/
-    /*padding-top: 1px;*/
-/*}*/
-
-/*.drop_menu li:last-child {*/
-    /*padding-bottom: 2px;*/
-    /*border-radius: 0 0 0px 0px;*/
-/*}*/
-
-/*.drop_menu li:hover {*/
-    /*background: black;*/
-    /*color: white;*/
-/*}*/
-
-/*.drop_menu li:active {*/
-    /*background: #3e1e7d;*/
-    /*color: white;*/
-/*}*/
-
-/*.drop_menu {*/
-    /*background: white;*/
-    /*border-radius: 0px 0px 0px 0px;*/
-    /*border: 1px solid rgba(128, 128, 128, 0.30);*/
-    /*overflow: hidden;*/
-    /*-webkit-box-shadow: 0px 2px 15px 0px rgba(0, 0, 0, 0.2);*/
-    /*-moz-box-shadow: 0px 2px 15px 0px rgba(0, 0, 0, 0.2);*/
-    /*box-shadow: 0px 2px 15px 0px rgba(0, 0, 0, 0.2);*/
-
-/*}*/
-
-/*.test {*/
-    /*background: #bee0f2;*/
-    /*background: #ffd1cf;*/
-/*}*/

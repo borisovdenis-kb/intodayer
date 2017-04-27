@@ -28,7 +28,7 @@ body {
 }
 
 .str_plan ul li a, .str_plan ul li input {
-    min-height: 30px;
+    /*min-height: 30px;*/
     /* Это чтобы избежать мерцания, но тогда не красиво получается... =( */
     text-align: center;
 }

@@ -27,15 +27,19 @@ var $NEW_STR_PLAN_HTML = $('' +
     '<div class="checkbox_container row"></div>' +
     '</div>' +
     '<ul>' +
-    '<li><textarea  class="weeks"></textarea></li>' +
-    '<li><textarea class="time"></textarea></li>' +
-    '<li><textarea  class="subject"></textarea></li>' +
-    '<li><textarea class="teacher"></textarea></li>' +
+    '<li><textarea  class="weeks" num="1"></textarea></li>' +
+    '<li><textarea class="time" num="2"></textarea></li>' +
+    '<li><textarea  class="subject" num="3"></textarea></li>' +
+    '<li><textarea class="teacher" num="4"></textarea></li>' +
     // не забыть поставить class=last, чтобы потом распознать
-    '<li><textarea class="place"></textarea></li>' +
-    '<li class="last"><textarea class="parity">Все</textarea></li>' +
+    '<li><textarea class="place" num="5"></textarea></li>' +
+    '<li class="last"><input class="parity" type="button" num="6" value="Все"></li>' +
     '</ul>' +
     '</div>');
+
+
+var thisInput;
+var timerInputId;
 
 // Возвращает случайное целое число между min (включительно) и max (не включая max)
 // Использование метода Math.round() даст вам неравномерное распределение!
@@ -53,6 +57,10 @@ $(document).ready(function () {
     $('.str_plan.change').each(function () {
         setNewListenersNewStr($(this));
         setNewListenersSpecial($(this));
+        $(this).find('li').each(function () {
+            resizeArea($(this).children(), 32, 300);
+        });
+
     });
     $('.str_plan.str_title').each(function () {
         setGeneralCheckBoxListeners($(this));
@@ -61,12 +69,24 @@ $(document).ready(function () {
 
 });
 
+// при нажатии в любое место в браузере
+$(window).on('mousedown', function (e) {
+    var $this_active_obj = $(document.activeElement).parents('.str_plan.change');
+    var $this_click_obj = $(e.target).parents('.str_plan.change');
+    if ($this_active_obj.length == 0 || $this_click_obj.length == 0 || !$this_active_obj.is($this_click_obj)) {
+        setDefaultStr($this_active_obj);
+    }
+    // Если нажали на скролл бар в браузере
+    if (e.target === $('html')[0] && e.clientX >= document.documentElement.offsetWidth) {
+        $(document.activeElement).blur();
+    }
+});
 
-$(window).click(function (e) {
-    // var $this_obj = $(e.target);
-    // if ($this_obj.get(0).tagName != 'TEXTAREA' && ($this_obj.is('.drop_list').length == 0 || $this_obj.parents('.drop_list').length == 0)){
-    //     $('.drop_list').remove();
-    // }
+// при нажатии на enter
+$(window).on('keydown', function (e) {
+    if (e.which == 13) {
+        enterPressAction();
+    }
 });
 
 // устанавливаем обработчик при нажатии на плюс
@@ -74,44 +94,118 @@ $('.plus_button_form').click(function () {
     appendPlanStr($(this));
 });
 
+
 function setNewListenersNewStr($new_div) {
     // Обработчики событый, применяемые к каждой строке расписания
     var $new_textarea = $new_div.find('ul li textarea');
-
+    var $parity = $new_div.find('.parity');
+    var $LI = $new_div.find('ul li');
 
     // сбрасываем все обработчики (так как постоянно их заново ставим)
     $new_div.off();
     $new_textarea.off();
 
     //редактировать поле при нажатии на него
-    $new_textarea.on('focus', function () {
-        var $this_field = $(this);
-        var $this_str = $(this).parents('.str_plan.change');
-        $(this).attr('old_value', $(this).val());
-
-        $.getScript("/static/scripts/script_drop_lists_plan.js", function () {
-            // ипорт функции для выподающих списков у полей.
-            // делаем услования, чтобы дроп лист больше не открывался при 2 клике на поле
-            //   createDropLst($this_field);
-             createDropLst($this_field);
+    var arr_objs = [$new_textarea, $parity];
+    for (var i = 0; i < 2; i++) {
+        arr_objs[i].on('focus', function () {
+            var $this_field = $(this);
+            var $this_str = $this_field.parents('.str_plan.change');
+            $this_field.attr('old_value', $this_field.val());
+            setSelectStr($this_str);
 
         });
+    }
 
-        setSelectStr($this_str);
-        // editField($(this));
+    $LI.on('click', function () {
+        var $children = $(this).children();
+        if (!$children.is(":hover")) {
+            $children.trigger('focus');
+        }
     });
-    $new_textarea.on('focusout', function () {
+
+    $new_textarea.on('focus', function () {
+        var $this_field = $(this);
+        var $this_str = $this_field.parents('.str_plan.change');
+        $this_field.attr('old_value', $this_field.val());
+        setSelectStr($this_str);
+
+        // курсор становится всегда в конце при выделении
+        $(function () {
+            var data = $this_field.val();
+            $this_field.val('').val(data);
+        });
+    });
+
+
+    // для правильного вызова и сворачивания дроп листа
+    $new_textarea.on('mousedown', function () {
+        var $this_field = $(this);
+        openHelpDropList($this_field);
+    });
+
+    $parity.on('focus', function () {
+        var $this_field = $(this);
+        $this_field.css('background', '#deb7ff');
+        openHelpDropList($this_field);
+    });
+    // вот это событие нужно для того, чтобы фокусировка работала и при нажатии
+    // просто если не навесить соыбие focus выше, то не будет работать дроп лист, при нажатии на TAB
+    $parity.on('mousedown', function () {
+        if ($(this).hasClass('drop_is')) {
+            $(this).blur();
+            return false;
+        }
+    });
+    $parity.on('focusout keydown', function (e) {
         var $this_str = $(this).parents('.str_plan.change');
         if ($(this).attr('old_value') != $(this).val()) {
             $this_str.attr('edited', 'true');
         }
-        // setTimeout(function () {
-           $('.drop_list').remove();
-        // },100);
+        $('.drop_list').remove();
+        $(this).removeClass('drop_is');
+        if (!$(this).is(":hover")) {
+            $(this).css({'background': 'rgba(255,255,255,0)'});
+        }
+        else {
+            $(this).css({'background': '#e6ccff'});
+        }
+        if (e.which == 9) {
+            setDefaultStr($this_str);
+        }
 
-        setDefaultStr($this_str);
-        return false;
+        // смена полей при нажатии на кнопку вверх вниз
+        var $this_field = $(this);
+        focusFieldWithKeys($this_field, $this_str, e);
     });
+
+
+    $new_textarea.on('focusout keydown', function (e) {
+        var $this_str = $(this).parents('.str_plan.change');
+        // для проверки валидации
+        if ($(this).attr('old_value') != $(this).val()) {
+            $this_str.attr('edited', 'true');
+        }
+        $('.drop_list').remove();
+
+        // смена полей при нажатии на кнопку вверх вниз
+        var $this_field = $(this);
+        focusFieldWithKeys($this_field, $this_str, e);
+    });
+
+    $new_textarea.on('change focusout', function () {
+        var $this_field = $(this);
+        // удаление пробелов в начале и вконце строки
+        $this_field.val($this_field.val().trim());
+        if ($this_field.val() == "") {
+            return false;
+        }
+        setTimeout(function () {
+            resizeArea($this_field);
+        }, 100);
+
+    });
+
 
     // отвечает за выделение строки при наведении
     $new_div.hover(function () {
@@ -119,6 +213,116 @@ function setNewListenersNewStr($new_div) {
     }, function () {
         hoverDefaultStr($(this));
     });
+
+    $parity.mouseover(function () {
+        if (!$(this).hasClass('drop_is')) {
+            $(this).css({'background': '#e6ccff'});
+        }
+    });
+    $parity.mouseout(function () {
+        if (!$(this).hasClass('drop_is')) {
+            $(this).css({'background': 'rgba(255,255,255,0)'});
+        }
+    });
+
+    $new_textarea.on('input', function () {
+        var $this_textarea = $(this);
+        resizeArea($this_textarea, 32, 300);
+    });
+
+    $new_textarea.on('input', function () {
+        thisInput = $(this);
+        timerInputId = setInterval(function () {
+            validateField(thisInput);
+        }, 50);
+        setTimeout(function () {
+            clearInterval(timerInputId);
+        }, 100);
+    });
+}
+
+// отвечает за ресайз полей textarea
+// при передаче одного аргемента уст. истинный размер
+function resizeArea($this_textarea, minHeight, maxHeight) {
+    var $area = $this_textarea;
+    var $area_hidden = $('.comment_text_hidden');
+    $area_hidden.css('width', $area.width());
+    var text = '';
+    var strings = $area.val().toString().replace(/[<>]/g, '_').split("\n");
+
+    //эти два условия нужны чтобы добавить дополнительные символы в псевдо строку,
+    // чтобы поле  увеличивалось чуть раньше
+    if (minHeight != undefined && !$this_textarea.hasClass('time') && !$this_textarea.hasClass('weeks')) {
+        strings[0] = "XXXX" + strings[0];
+    }
+    else{
+       strings[0] = strings[0].slice(1);
+     }
+    for (var i = 0, ln = strings.length; i < ln; i++) {
+        text = text + '<div>' + strings[i].replace(/\s\s/g, ' &nbsp;') + '&nbsp;</div>' + "\n";
+    }
+
+    // небольшой отступ, чтобы поле расширялось раньше
+    $area_hidden.html(text);
+
+    var height = $area_hidden.outerHeight() + 10;
+
+    if (height < +$area.attr('start_height')) {
+        height = +$area.attr('start_height');
+    }
+    // height = Math.min(maxHeight, height);
+    // height = Math.max(minHeight, height);
+    $area.stop(true, true);
+    $area.animate({'height': height}, 10);
+}
+
+
+// Позволяет перемещаться по редактированию расписания при помощи кнопок вверх вниз
+function focusFieldWithKeys($this_field, $this_str, e) {
+    if (e.which == 40) {
+        $this_str.next().find('li').each(function () {
+            var $this_iter_field = $(this).children().first();
+            if ($this_iter_field.attr('num') == $this_field.attr('num')) {
+                setDefaultStr($this_str);
+                $this_field.blur();
+                $this_iter_field.focus();
+            }
+        });
+    }
+    if (e.which == 38) {
+        $this_str.prev().find('li').each(function () {
+            var $this_iter_field = $(this).children().first();
+            if ($this_iter_field.attr('num') == $this_field.attr('num')) {
+                setDefaultStr($this_str);
+                $this_field.blur();
+                $this_iter_field.focus();
+            }
+        });
+    }
+}
+
+
+function openHelpDropList($this_field) {
+    if (!$(document.activeElement).is($this_field)) {
+        $this_field.removeClass('drop_is');
+    }
+
+    if ($this_field.hasClass('drop_is')) {
+        $('.drop_list').remove();
+        // для работы выпадающего меню parity
+        if ($this_field.hasClass('parity')) {
+            $this_field.css({'background': '#e6ccff'});
+            $this_field.removeClass('drop_is');
+        }
+    }
+    else {
+        $this_field.addClass('drop_is', 'drop_is');
+        $.getScript("/static/scripts/script_drop_lists_plan.js", function () {
+            // ипорт функции для вып    одающих списков у полей.
+            // делаем услования, чтобы дроп лист больше не открывался при 2 клике на поле
+            createDropLst($this_field);
+        });
+    }
 }
 
 
@@ -148,10 +352,10 @@ function startBaseFunctions() {
 
 
 // действия при нажатии на enter
-function enterPressAction($this_field) {
-    $this_field.blur();
-    setDefaultStr($LAST_SELECTED_STR);
-    $('.drop_list').remove();
+function enterPressAction() {
+    var $active_field = $(document.activeElement);
+    $active_field.blur();
+    setDefaultStr($active_field.parents('.str_plan.change'));
 }
 
 // когда нажимаем на галочку блокируем
@@ -492,7 +696,7 @@ function hoverSelectStr($this_str) {
         return false;
     }
     if ($this_str.hasClass('clone_str')) {
-          // чтобы работало для клонированных строк
+        // чтобы работало для клонированных строк
         $this_str.find('ul').css({'border-color': borderColorStr});
         return;
     }
@@ -536,7 +740,7 @@ function setDefaultStr($str_plan, mode) {
         }
         // 1. Если строка изменена при расфокусировки (изменено хотя бы одно поле), то
         if (checkThatFieldIsChanged($str_plan)) {
-            console.log("ВЫЗОВ");
+            // console.log("ВЫЗОВ");
             // 2. Если строка проходит базовую валидацию, то отправляем данные на сервер
             var errors = mainValidationStr($str_plan);
             if (!isEmpty(errors)) {
@@ -769,17 +973,16 @@ function clone_str(checkboxes) {
 function callback_clone(data, $this_str, mode) {
     var $new_div = $($NEW_STR_PLAN_HTML).clone();
     // чтобы анимация работала правильно для любой высоты блока
-    $new_div.css('height', $this_str.height());
     $this_str.stop(true, true);
     $new_div.stop(true, true);
 
     appendNewStrAnimation($new_div, $this_str);
-    $new_div.find('.weeks').attr('value', data['weeks']);
-    $new_div.find('.parity').attr('value', data['parity']);
-    $new_div.find('.time').attr('value', data['time']);
-    $new_div.find('.subject').attr('value', data['subject']);
-    $new_div.find('.teacher').attr('value', data['teacher']);
-    $new_div.find('.place').attr('value', data['place']);
+    $new_div.find('.weeks').val(data['weeks']);
+    $new_div.find('.parity').val(data['parity']);
+    $new_div.find('.time').val(data['time']);
+    $new_div.find('.subject').val(data['subject']);
+    $new_div.find('.teacher').val(data['teacher']);
+    $new_div.find('.place').val(data['place']);
     $new_div.attr('id', 0);
 
     // преобразовываем поля input в a для всех новых полей
@@ -787,7 +990,6 @@ function callback_clone(data, $this_str, mode) {
     var $new_textareas = $new_div.find('ul li textarea');
     var $old_textareas = $this_str.find('ul li textarea');
     $new_textareas.each(function (i) {
-        console.log($old_textareas[i]);
         $(this).attr("placeholder", $($old_textareas[i]).attr('placeholder'));
     });
 
@@ -926,7 +1128,7 @@ function getFieldsInformation($this_str) {
     else {
         id = 0;
     }
-    parity = get_parity_value($this_str.find('.parity').text());
+    parity = get_parity_value($this_str.find('.parity').val());
 
     day_of_week = get_day_num($this_plan.attr('day_num'));
 
@@ -979,7 +1181,7 @@ function get_day_num(name_day) {
 
 // возвращает значащий номер для чётности
 function get_parity_value(value) {
-    console.log(value);
+    // console.log(value);
     var values_num = {
         'Все': 'Все',
         'Чет': 'Чет',
@@ -1095,16 +1297,6 @@ function appendNewStrAnimation($new_div, $insert_after_this) {
     $new_div.insertAfter($insert_after_this);
     $new_div.slideToggle(200);
     $new_div.fadeTo(200, 1);
-
-    // эта строчка нужна чтобы при добавлении новой строки высота input не глючила и
-    // ровно заполняла li элемент
-    // setTimeout(function () {
-    //     $new_div.find('input').each(function () {
-    //         $(this).css('height', $(this).parent().height());
-    //         // $(this).css('height', 'auto');
-    //     });
-    // }, 200);
-
 }
 
 // добавление новой строки с расписанием
@@ -1173,6 +1365,8 @@ function delExtraSymbols(field, n) {
     }
 }
 
+
+// Валидация полей
 function validateField(field) {
     /*
      *  Функция в зависимости от предназначения поля
@@ -1244,7 +1438,7 @@ function validateField(field) {
     }
     if (field.hasClass('subject')) {
         if (content.search(subjectPatt) == -1) {
-            delExtraSymbols(field, length - 1);
+            delExtraSymbols(field, 100);
         }
     }
 }

@@ -81,38 +81,10 @@ $(window).on('mousedown', function (event) {
 // });
 
 
-// при нажатии на enter меняет поле на следующее
-$(window).on('keyup', function (e) {
-    if (e.which == 13) {
-        $('.parityOpen').css({'background-color': 'rgba(255,255,255,0)'});
-        var $this_field = $(e.target);
-        enterPressAction($this_field);
-    }
-});
 
 
 // TODO Разобраться как можно отследить изменение или удаление (например класса) у объекта DOM - https://toster.ru/q/217999
-// var origFn = $.fn.removeClass;
-// $.fn.removeClass = function (className) {
-//     var this_remove_class = arguments[0];
-//     console.log(className);
-//     if (this_remove_class == 'selected_field') {
-//         setTimeout(function () {
-//             $('.drop_list').remove();
-//         }, 200);
-//
-//     }
-//
-//     origFn.apply(this, arguments);
-// };
-
 // TODO Сделать действие для Tab
-// $(window).on('keyup', function (e) {
-//     // return false;
-//     // e.preventDefault();
-//     // e.stopPropagation();
-// });
-
 
 // урезанная версия фукнции для установки только событий редактирования
 // (используется, когда мы отключаем обработчики редактирования, используя чекбоксы)

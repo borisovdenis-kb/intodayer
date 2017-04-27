@@ -65,11 +65,13 @@ function loadData($thisField) {
 
     setTimeout(function () {
 
-        $('.drop_list ul li a').on('mousedown', function () {
+        $('.drop_list ul li a').on('mousedown', function (e) {
             console.log($(this).text());
             $thisField.val($(this).text());
 
             $('.drop_list').remove();
+            e.preventDefault();
+            return false;
         });
 
 
