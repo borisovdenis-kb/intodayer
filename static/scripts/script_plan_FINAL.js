@@ -108,7 +108,6 @@ $(window).on('mousedown touchend', function (e) {
 $(window).on('mousedown', function (e) {
     var $this_obj = $(e.target);
     if ($this_obj.get(0).tagName == "LI" && $this_obj.parents('.selected_str').length != 0) {
-        // alert($this_obj.get(0).tagName);
         return false;
     }
 });
@@ -157,6 +156,9 @@ function setNewListenersNewStr($new_div) {
     }
 
     // при нажатии на LI также выделяем textarea
+    // чтобы LI повторно не выполняла
+    // чтобы при нажатии на LI текущее выбранное поле не расфокусировалоась мы внесли обработчик на window с return false
+    // выше в этом коде
     $LI.on('click', function () {
         var $children = $(this).children();
         if (!$children.is(":hover")) {

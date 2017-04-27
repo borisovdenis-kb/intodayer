@@ -356,12 +356,10 @@ def statistics_view(request):
         context = json.loads(stripes_dict_json)
         print(stripes_dict_json)
 
-        return render_to_response('statistics.html', {'data': json.loads(stripes_dict_json).items()})
+        return render_to_response('statistics.html', {'data': json.loads(stripes_dict_json)})
 
     else:
         return HttpResponseRedirect("/login")
-
-
 
 
 def welcome_view(request):

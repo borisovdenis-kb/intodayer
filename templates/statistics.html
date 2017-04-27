@@ -13,14 +13,11 @@
 {% block right_content %}
 
 
+    {% for subject, subject_info in data.items %}
+        {% for num_day, values_pack in subject_info.items %}
+            <div>{{ num_day }}</div>
+        {% endfor %}
+    {% endfor %}
 
-
-{#    {% for subject, subject_info in data %}#}
-{#        {% for day_num, key in data.subject %}#}
-{#            <div>{{ subject_info }}</div>#}
-{##}
-{#        {% endfor %}#}
-{##}
-{#    {% endfor %}#}
 
 {% endblock %}
