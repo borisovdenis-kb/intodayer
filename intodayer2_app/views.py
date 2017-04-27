@@ -12,6 +12,7 @@ from intodayer2_app.forms import *
 from intodayer2_app.send_sms import *
 from extra.mailing_api import *
 from extra.utils import *
+from extra.stripes_api import *
 
 
 # TODO: Сделать в выводе расписания в /plan сортировку по времени, а не по неделям
@@ -329,6 +330,38 @@ def get_avatar_ajax(request):
 ###################################################################################
 #                         ОБРАБОТКА ОБЫЧНЫХ ЗАПРОСОВ                              #
 ###################################################################################
+
+
+def statistics_view(request):
+    if request.user.is_authenticated():
+        user = CustomUser.objects.get(username=request.user.username)
+        context = {'user': user}
+
+        all_plans = UserPlans.objects.select_related().filter(user_id=user.id)
+
+        # выбираем текущее расписание юзера
+        try:
+            cur_plan = UserPlans.objects.select_related().filter(user_id=user.id, always_yn='y')[0]
+        except IndexError:
+            cur_plan = all_plans[0]
+
+        # plan_rows = PlanRows.objects.select_related().filter(plan_id=cur_plan.plan_id)
+
+        stripes_dict = Stripes(cur_plan.plan_id)
+        stripes_dict_json = stripes_dict.get_stripes_json()
+
+        # объединяем данные словарей
+        # context = dict(stripes_dict.items() + context.items())
+        # print(context)
+        context = json.loads(stripes_dict_json)
+        print(stripes_dict_json)
+
+        return render_to_response('statistics.html', {'data': json.loads(stripes_dict_json).items()})
+
+    else:
+        return HttpResponseRedirect("/login")
+
+
 
 
 def welcome_view(request):

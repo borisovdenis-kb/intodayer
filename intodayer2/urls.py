@@ -29,7 +29,7 @@ urlpatterns = [
     url(r'^registration/$', views.registration_view),
     url(r'^profile/$', views.profile_settings),
     url(r'^plan/$', views.plan_view),
-    url(r'^statistics/$', views.plan_view),
+    url(r'^statistics/$', views.statistics_view),
 
     # для ajax запросов
     # url(r'^plan/update_clone', views.plan_clone_ajax),

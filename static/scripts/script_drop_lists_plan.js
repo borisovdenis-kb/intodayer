@@ -66,15 +66,19 @@ function loadData($thisField) {
     setTimeout(function () {
 
         $('.drop_list ul li a').on('mousedown touchstart', function (e) {
-            console.log($(this).text());
+            // console.log($(this).text());
             $thisField.val($(this).text());
+
+            if ($thisField.hasClass('drop_button')) {
+                $thisField.removeClass('drop_is');
+                $thisField.css({'background': 'rgba(255,255,255,0)'});
+            }
             
             $('.drop_list').remove();
             e.preventDefault();
             return false;
         });
-
-
+        
         $('.drop_list ul li a').css({
             'height': $bruceLi.height()
         });

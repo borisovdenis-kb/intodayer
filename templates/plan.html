@@ -15,7 +15,7 @@
     <script type="text/javascript" src={% static "scripts/script_drop_lists_plan.js" %}></script>
     <script type="text/javascript" src={% static "library/jquery.maskedinput.js" %}></script>
     <script type="text/javascript" src={% static "library/autoresize.jquery.js" %}></script>
-     <script type="text/javascript" src={% static "library/device.js" %}></script>
+    <script type="text/javascript" src={% static "library/device.js" %}></script>
 
 {% endblock %}
 
@@ -76,7 +76,7 @@
                                         <div class="second_layer"></div>
                                         <div class="first_layer">Share</div>
                                     </div>
-                                </ul>
+                            </ul>
                             </li>
                         </div>
 
@@ -105,19 +105,25 @@
                                         <div class="checkbox_container row"></div>
                                     </div>
                                     <ul>
-                                        <li><textarea class="weeks" num="1">{{ row.start_week }}-{{ row.end_week }}</textarea></li>
-                                        <li><textarea class="time" num="2">{{ row.time.get_format_time }}</textarea></li>
+                                        <li><textarea class="weeks"
+                                                      num="1">{{ row.start_week }}-{{ row.end_week }}</textarea></li>
+                                        <li><textarea class="time" num="2">{{ row.time.get_format_time }}</textarea>
+                                        </li>
                                         <li><textarea class="subject" num="3">{{ row.subject.name }}</textarea></li>
-                                        <li><textarea class="teacher" num="4">{{ row.teacher.name_short }}</textarea></li>
+                                        <li><textarea class="teacher" num="4">{{ row.teacher.name_short }}</textarea>
+                                        </li>
                                         <li><textarea class="place" num="5">{{ row.place.name }}</textarea></li>
                                         {% if row.parity == None %}
-                                            <li class="last" num="6"><input class="parity" type="button" value="Все"></li>
+                                            <li class="last"><input class="parity drop_button" type="button" value="Все"
+                                                                    num="6"></li>
                                         {% endif %}
                                         {% if row.parity == 0 %}
-                                            <li class="last" num="6"><input class="parity" type="button" value="Чет"></li>
+                                            <li class="last"><input class="parity drop_button" type="button" value="Чет"
+                                                                    num="6"></li>
                                         {% endif %}
                                         {% if row.parity == 1 %}
-                                            <li class="last" num="6"><input class="parity" type="button" value="Нечет"></li>
+                                            <li class="last"><input class="parity drop_button" type="button"
+                                                                    value="Нечет" num="6"></li>
                                         {% endif %}
                                     </ul>
                                 </div>

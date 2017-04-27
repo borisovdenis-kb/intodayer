@@ -33,7 +33,7 @@ var $NEW_STR_PLAN_HTML = $('' +
     '<li><textarea class="teacher" num="4"></textarea></li>' +
     // не забыть поставить class=last, чтобы потом распознать
     '<li><textarea class="place" num="5"></textarea></li>' +
-    '<li class="last"><input class="parity" type="button" num="6" value="Все"></li>' +
+    '<li class="last"><input class="parity drop_button" type="button" num="6" value="Все"></li>' +
     '</ul>' +
     '</div>');
 
@@ -103,6 +103,16 @@ $(window).on('mousedown touchend', function (e) {
     }
 });
 
+// чтобы при нажатии на LI текущее выбранное поле не расфокусировалоась
+// нужно для корректного скрытия droplist
+$(window).on('mousedown', function (e) {
+    var $this_obj = $(e.target);
+    if ($this_obj.get(0).tagName == "LI" && $this_obj.parents('.selected_str').length != 0) {
+        // alert($this_obj.get(0).tagName);
+        return false;
+    }
+});
+
 // при нажатии на enter
 $(window).on('keydown', function (e) {
     if (e.which == 13) {
@@ -119,7 +129,7 @@ var timer_focusout;
 function setNewListenersNewStr($new_div) {
     // Обработчики событый, применяемые к каждой строке расписания
     var $new_textarea = $new_div.find('ul li textarea');
-    var $parity = $new_div.find('.parity');
+    var $input_button = $new_div.find('.parity');
     var $LI = $new_div.find('ul li');
 
     // сбрасываем все обработчики (так как постоянно их заново ставим)
@@ -135,7 +145,7 @@ function setNewListenersNewStr($new_div) {
 
 
     //редактировать поле при нажатии на него
-    var arr_objs = [$new_textarea, $parity];
+    var arr_objs = [$new_textarea, $input_button];
     for (var i = 0; i < 2; i++) {
         arr_objs[i].on('focus', function () {
             var $this_field = $(this);
@@ -158,7 +168,7 @@ function setNewListenersNewStr($new_div) {
     $new_textarea.on('focus', function () {
         var $this_field = $(this);
 
-        openHelpDropList($this_field);
+        openTextareaDropList($this_field);
         // курсор становится всегда в конце при выделении
         $(function () {
             var data = $this_field.val();
@@ -205,7 +215,7 @@ function setNewListenersNewStr($new_div) {
     // как бы если нажимаем на уже сфокусированное поле
     $new_textarea.on('mousedown', function () {
         var $this_field = $(this);
-        openHelpDropList($this_field);
+        openTextareaDropList($this_field);
     });
 
     // тут удаляются пробелмы и нормализируется размер текстового поля по высоте
@@ -241,40 +251,42 @@ function setNewListenersNewStr($new_div) {
 
 
     if (device.iphone()) {
-        $parity.on('click', function () {
+        $input_button.on('click', function () {
             $(this).trigger('focus');
         });
     }
     // для работы parity
 
-    $parity.on('focus', function () {
+    $input_button.on('focus', function () {
         var $this_field = $(this);
         $this_field.css('background', '#deb7ff');
-        openHelpDropList($this_field);
+        openInputDropList($this_field);
     });
+
     // вот это событие нужно для того, чтобы фокусировка работала и при нажатии
     // просто если не навесить соыбие focus выше, то не будет работать дроп лист, при нажатии на TAB
-    $parity.on('mousedown', function () {
-        if ($(this).hasClass('drop_is')) {
-            $(this).blur();
-            return false;
+    $input_button.on('mousedown', function () {
+        if ($(this).is(':focus')) {
+            openInputDropList($(this), 'true');
         }
     });
-    $parity.on('focusout keydown', function (e) {
+    $input_button.on('focusout keydown', function (e) {
         var $this_str = $(this).parents('.str_plan.change');
         if ($(this).attr('old_value') != $(this).val()) {
             $this_str.attr('edited', 'true');
         }
 
-        $('.drop_list').remove();
-        $(this).removeClass('drop_is');
-
-        if (!$(this).is(":hover")) {
-            $(this).css({'background': 'rgba(255,255,255,0)'});
-        }
-        else {
+        if ($(this).is(':hover')) {
             $(this).css({'background': '#e6ccff'});
         }
+        else {
+            $(this).css({'background': 'rgba(255,255,255,0)'});
+        }
+
+
+        $(this).removeClass('drop_is');
+        $('.drop_list').remove();
+
         if (e.which == 9) {
             setDefaultStr($this_str);
         }
@@ -284,37 +296,19 @@ function setNewListenersNewStr($new_div) {
         focusFieldWithKeys($this_field, $this_str, e);
     });
 
-    $parity.mouseover(function () {
+    $input_button.mouseover(function () {
         if (!$(this).hasClass('drop_is')) {
             $(this).css({'background': '#e6ccff'});
         }
     });
-    $parity.mouseout(function () {
+    $input_button.mouseout(function () {
+        // $(this).blur();
         if (!$(this).hasClass('drop_is')) {
             $(this).css({'background': 'rgba(255,255,255,0)'});
         }
     });
-
 }
 
-// function setTrueInputHeight($this_str) {
-// setTimeout(function () {
-//     var max_height = 0;
-//     $this_str.find('li').each(function () {
-//         var $this_child = $(this).children();
-//         if (!$this_child.hasClass('parity')) {
-//             if ($this_child.height() > max_height) {
-//                 max_height = $this_child.height();
-//             }
-//         }
-//         else {
-//             // alert(max_height);
-//             $this_child.css('height', max_height);
-//         }
-//     });
-// }, 200);
-
-// }
 
 // TODO сделать ещё для случая ресайза окна, чтобы автоматом тоже поле устанавливалолсь
 // отвечает за ресайз полей textarea
@@ -378,12 +372,36 @@ function focusFieldWithKeys($this_field, $this_str, e) {
 }
 
 
-function openHelpDropList($this_field) {
-
+function openTextareaDropList($this_field) {
     if ($this_field.hasClass('drop_is')) {
         $('.drop_list').remove();
     }
     else {
+        $this_field.addClass('drop_is', 'drop_is');
+        $.getScript("/static/scripts/script_drop_lists_plan.js", function () {
+            // ипорт функции для выпадающих списков у полей.
+            // делаем услования, чтобы дроп лист больше не открывался при 2 клике на поле
+            createDropLst($this_field);
+        });
+    }
+}
+
+
+// фукнция для Input отдеальная, потому что это type="button"
+// и смысл появления дроп листа и оформления нажатия у них другой
+function openInputDropList($this_field) {
+    if ($this_field.hasClass('drop_is')) {
+        $('.drop_list').remove();
+        $this_field.removeClass('drop_is');
+        if ($this_field.is(':hover')) {
+            $this_field.css({'background': '#e6ccff'});
+        }
+        else {
+            $this_field.css({'background': 'rgba(255,255,255,0)'});
+        }
+    }
+    else {
+        $this_field.css('background', '#deb7ff');
         $this_field.addClass('drop_is', 'drop_is');
         $.getScript("/static/scripts/script_drop_lists_plan.js", function () {
             // ипорт функции для выпадающих списков у полей.
