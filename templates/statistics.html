@@ -1,0 +1,23 @@
+{% extends 'home.html' %}
+{% load staticfiles %}
+{#{% load new_tags %}#}
+
+{% block styles %}
+    <link rel="stylesheet" type="text/css" href={% static "css/statistics.css" %}>
+{% endblock %}
+
+{% block scripts_top %}
+    <script type="text/javascript" src={% static "scripts/script_statistics.js" %}></script>
+{% endblock %}
+
+{% block right_content %}
+
+
+    {% for subject, subject_info in data.items %}
+        {% for num_day, values_pack in subject_info.items %}
+            <div>{{ num_day }}</div>
+        {% endfor %}
+    {% endfor %}
+
+
+{% endblock %}

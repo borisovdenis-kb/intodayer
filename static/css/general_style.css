@@ -429,7 +429,7 @@ button:focus {
     cursor: pointer;
 }
 
-textarea {
+.mailing textarea {
     width: 480px;
     height: 140px;
     background: rgb(255, 255, 255);
@@ -445,20 +445,20 @@ textarea {
     resize: none;
 }
 
-textarea:hover {
+.mailing textarea:hover {
     cursor: text;
 }
 
-textarea::-webkit-input-placeholder {
+.mailing textarea::-webkit-input-placeholder {
     padding-right: 279px;
 }
-textarea::-moz-placeholder {
+.mailing textarea::-moz-placeholder {
     padding-right: 279px;
 }
-textarea:-moz-placeholder {
+.mailing textarea:-moz-placeholder {
     padding-right: 279px;
 }
-textarea:-ms-input-placeholder {
+.mailing textarea:-ms-input-placeholder {
     padding-right: 279px;
 }
 

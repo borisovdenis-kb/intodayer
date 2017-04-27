@@ -38,7 +38,7 @@ body {
     width: calc(100% - 188px);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     .right_content {
         width: 100%;
     }
@@ -235,9 +235,7 @@ body {
     border-radius: 4px;
     background: white;
 }
-/*.str_plan input:focus{*/
-/*padding-top: 2px;*/
-/*}*/
+
 
 .str_plan, .plan_selector:hover {
     cursor: default;
@@ -245,11 +243,11 @@ body {
 
 .str_plan ul {
     display: flex;
+    min-height: 32px;
     text-align: center;
     border: 2px solid rgba(3, 96, 255, 0.0);
     border-radius: 4px;
     width: 100%;
-    /*height: auto;*/
     background-color: rgba(255, 255, 255, 0);
 }
 
@@ -264,20 +262,10 @@ body {
     border-right: none;
 }
 
-.str_plan ul li {
-    display: flex;
-    justify-content: center;
-    align-content: center;
-    width: 30%;
-    /*height: 100%;*/
-    height: auto;
-    border-right: 1px solid rgba(230, 230, 230, 1);
-    /*background: dodgerblue;*/
 
-}
 
 /*отвечает за корректный перенос слов и букв в словах*/
-.str_plan ul li a {
+.str_plan ul li a, .str_plan ul li textarea {
     /* These are technically the same, but use both */
     overflow-wrap: break-word;
     word-wrap: break-word;
@@ -293,66 +281,84 @@ body {
 
 }
 
-.str_plan ul li a, .str_plan ul li input {
+/*скрытый блок для формирования высоты */
+.comment_text_hidden{
+    visibility:hidden;
+    position: absolute;
+    display: block;
+    background: red;
+    /* These are technically the same, but use both */
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    -ms-word-break: break-all;
+    /* This is the dangerous one in WebKit, as it breaks things wherever */
+    word-break: break-all;
+    /* Instead use this non-standard one: */
+    word-break: break-word;
+}
+
+.str_plan ul li {
+    position: relative;
     display: flex;
-    /*background: dodgerblue;*/
-    /*height: 20px;*/
-    /*min-height: 100%;*/
-    justify-content: center;
+    align-content: center;
     align-items: center;
+    justify-content: center;
+    width: 30%;
+    border-right: 1px solid rgba(230, 230, 230, 1);
+
+
+}
+
+.str_plan ul li a, .str_plan ul li textarea, .str_plan ul li input{
     border-radius: 4px;
     width: 100%;
-    min-height: 30px;
-    max-height: 200px;
-    border: 3px solid rgba(100, 149, 237, 0.0);
+    min-height: 32px;
+    text-align: center;
+    border: 2px solid rgba(100, 149, 237, 0.0);
     transition: 0.1s all;
     cursor: default;
     background: none;
-    overflow: hidden;
+    outline: none;
+    -moz-appearance: none;
+    overflow-y: hidden;
+    resize: none;
 }
-.str_plan ul li input{
-    /*max-height: 40px;*/
+.str_plan ul li textarea{
+    height: 32px;
+}
+
+.str_plan ul li button{
+    cursor: pointer;
 }
 
 /*убрать крестик очистки*/
-.str_plan ul li input::-ms-clear {
+.str_plan ul li textarea::-ms-clear {
     display: none;
 }
 
-.str_plan ul li input:focus {
+.str_plan ul li textarea:focus {
     border: none;
     outline: none;
     cursor: auto;
+    /*padding-top: 4px;*/
     border: 2px solid rgba(139, 29, 235, 0.4);
 }
 
-::-webkit-input-placeholder {
+
+textarea::-webkit-input-placeholder {
+     padding-top: 1px;
     color: #b9b9b9;
     text-align: center;
-    padding-top: 2px;
-    /*padding-left: 3px;*/
+
 }
 
-:-moz-placeholder { /* Firefox 18- */
-    color: #c3c3c3;
+textarea:-moz-placeholder {
+    padding-top: 1px;
+    color: #b9b9b9;
+    color: red;
     text-align: center;
-    /*padding-left: 3px;*/
-    padding-top: 2px;
 }
 
-::-moz-placeholder { /* Firefox 19+ */
-    color: #c3c3c3;
-    text-align: center;
-    padding-top: 2px;
-    /*padding-left: 3px;*/
-}
-
-:-ms-input-placeholder {
-    color: #c3c3c3;
-    text-align: center;
-    padding-top: 2px;
-    /*padding-left: 3px;*/
-}
 
 .str_title:first-child li {
     border-right: 1px solid rgba(91, 178, 102, 0.4);
@@ -363,59 +369,6 @@ body {
     border-radius: 4px;
     margin-top: 10px;
     /*margin-bottom: 10px;*/
-    min-height: 35px;
+    min-height: 30px;
 }
 
-/*.separator {*/
-    /*width: 200px;*/
-    /*height: 1px;*/
-    /*background-color: red;*/
-/*}*/
-
-/*меню, при нажатии на правую кнопку мыши на строке расписания*/
-/*.drop_menu li {*/
-    /*min-width: 150px;*/
-    /*line-height: 35px;*/
-    /*padding: 0px 20px 0px 15px;*/
-    /*cursor: pointer;*/
-    /*-moz-user-select: none;*/
-    /*-khtml-user-select: none;*/
-    /*user-select: none;*/
-
-/*}*/
-
-/*.drop_menu li:first-child {*/
-    /*border-radius: 0px 0px 0 0;*/
-    /*padding-top: 1px;*/
-/*}*/
-
-/*.drop_menu li:last-child {*/
-    /*padding-bottom: 2px;*/
-    /*border-radius: 0 0 0px 0px;*/
-/*}*/
-
-/*.drop_menu li:hover {*/
-    /*background: black;*/
-    /*color: white;*/
-/*}*/
-
-/*.drop_menu li:active {*/
-    /*background: #3e1e7d;*/
-    /*color: white;*/
-/*}*/
-
-/*.drop_menu {*/
-    /*background: white;*/
-    /*border-radius: 0px 0px 0px 0px;*/
-    /*border: 1px solid rgba(128, 128, 128, 0.30);*/
-    /*overflow: hidden;*/
-    /*-webkit-box-shadow: 0px 2px 15px 0px rgba(0, 0, 0, 0.2);*/
-    /*-moz-box-shadow: 0px 2px 15px 0px rgba(0, 0, 0, 0.2);*/
-    /*box-shadow: 0px 2px 15px 0px rgba(0, 0, 0, 0.2);*/
-
-/*}*/
-
-/*.test {*/
-    /*background: #bee0f2;*/
-    /*background: #ffd1cf;*/
-/*}*/

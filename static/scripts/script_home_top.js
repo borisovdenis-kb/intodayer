@@ -25,12 +25,7 @@ $(window).on('click', function (event) {
         hide_droplist(event);
     }
 });
-// для мобильных устройств
-// document.addEventListener('touchcancel', function (e) {
-//     if ($('.droplist_click_container').length != 0) {
-//         hide_droplist(event);
-//     }
-// }, false);
+
 // для мобильных устройств
 $(document).on("touchstart",function(){
   if ($('.droplist_click_container').length != 0) {

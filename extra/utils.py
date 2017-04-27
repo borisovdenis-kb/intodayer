@@ -14,10 +14,24 @@ from io import BytesIO
 from base64 import b64decode
 from django.core.files.base import ContentFile
 from datetime import datetime, timedelta
+from datetime import datetime as datetime_lib
+
 
 ######################################################################################
 #             В ЭТОМ МОДУЛЕ БУДУТ ХРАНИТЬСЯ ВСЯКИЕ ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ           #
 ######################################################################################
+
+CREATE = 'CREATE'
+UPDATE = 'UPDATE'
+
+
+class CloneError(Exception):
+    """
+    Исключение для того, чтобы распознать, что пользователь пытается сохранить строку, которая уже существует
+    в точности в текущем дне и расписании
+    """
+    pass
+
 
 
 def save_div_png(base64_str, filename):
@@ -169,6 +183,139 @@ def get_rows_by_weekday(rows):
             days[6].append(row)
 
     return days
+
+##################################################################################################
+# ЛЕХА!!!!!!!!! ЛЕХА!!!!!!!!!!!
+##################################################################################################
+# Такие функци нужно выносить в отдельный файл. В файл extra/utils
+# Так как в файле view должны быть только вьюшные функции
+
+
+def edit_plan_row(data, this_plan, this_id, mode):
+    """
+     1. Создаёт или обновляет строку расписания, взависимости от поданой id
+     2. data должны быть переданы полностю для всех полей plan_row
+     3. Выдаёт собственные типы ошибок, чтобы распознать их в jquery
+    """
+    day_of_week, place, parity, teacher, this_time, start_week, end_week, subject = \
+        None, None, None, None, None, None, None, None
+
+    # есть ли уже такой предмет в расписании
+    if 'subject' in data:
+        subjects_objects = Subjects.objects.select_related().filter(plan_id=this_plan, name=data['subject'])
+        if subjects_objects.count() == 0:
+            subject = Subjects(name=data['subject'], plan=this_plan)
+            subject.save()
+        else:
+            subject = subjects_objects[0]
+
+    # есть ли уже такой учитель в расписании
+    if 'teacher' in data:
+        teachers_objects = Teachers.objects.select_related().filter(plan_id=this_plan,
+                                                                    name_short=data['teacher'])
+        if teachers_objects.count() == 0:
+            teacher = Teachers(name_short=data['teacher'], plan=this_plan)
+            teacher.save()
+        else:
+            teacher = teachers_objects[0]
+
+    # есть ли уже такое время в расписании
+    if 'time' in data:
+        dt = datetime_lib.strptime(data['time'], "%H:%M")
+        times_objects = Times.objects.select_related().filter(plan_id=this_plan, hh24mm=dt)
+        times_objects = Times.objects.select_related().filter(plan_id=this_plan, hh24mm=dt)
+        if times_objects.count() == 0:
+            this_time = Times(hh24mm=dt, plan=this_plan)
+            this_time.save()
+        else:
+            this_time = times_objects[0]
+
+    # есть ли уже такое место в расписании
+    if 'place' in data:
+        places_objects = Places.objects.select_related().filter(plan_id=this_plan, name=data['place'])
+        if places_objects.count() == 0:
+            place = Places(name=data['place'], plan=this_plan)
+            place.save()
+        else:
+            place = places_objects[0]
+
+    if 'day_of_week' in data:
+        day_of_week = DaysOfWeek.objects.get(id=data['day_of_week'])
+    if 'parity' in data:
+        if data['parity'] == 'Все':
+            parity = None
+        elif data['parity'] == 'Чет':
+            parity = 0
+        elif data['parity'] == 'Нечет':
+            parity = 1
+    if 'start_week' in data:
+        start_week = data['start_week']
+    if 'end_week' in data:
+        end_week = data['end_week']
+
+    # если текущий режим работы фукнции это обновление строку
+    # в этом случае новая запись не создаётся
+    if mode == UPDATE:
+        plan_row_exist_update = PlanRows.objects.select_related().filter(
+            plan=this_plan,
+            start_week=start_week,
+            end_week=end_week,
+            parity=parity,
+            day_of_week=day_of_week,
+            subject=subject,
+            teacher=teacher,
+            time=this_time,
+            place=place
+        )
+
+        if plan_row_exist_update:
+            raise CloneError(Exception)
+
+        PlanRows.objects.select_related().filter(plan_id=this_plan.id, id=this_id).update(
+            start_week=start_week,
+            end_week=end_week,
+            parity=parity,
+            day_of_week=day_of_week,
+            subject=subject,
+            teacher=teacher,
+            time=this_time,
+            place=place
+        )
+        # возвращаем то же самое id
+        return this_id
+
+    # если текущий режим работы фукнции это добавление новой строки
+    # в этом случае создаётся новый объект PlanRows
+    if mode == CREATE:
+        plan_row_exist_create = PlanRows.objects.select_related().filter(
+            start_week=start_week,
+            end_week=end_week,
+            parity=parity,
+            day_of_week=day_of_week,
+            subject=subject,
+            teacher=teacher,
+            time=this_time,
+            place=place,
+            plan=this_plan
+        )
+
+        if plan_row_exist_create:
+            raise CloneError(Exception)
+
+        new_plan_row = PlanRows(start_week=start_week,
+                                end_week=end_week,
+                                parity=parity,
+                                day_of_week=day_of_week,
+                                subject=subject,
+                                teacher=teacher,
+                                time=this_time,
+                                place=place,
+                                plan=this_plan)
+        new_plan_row.save()
+        # возвращаем новое id, чтобы записать его в html
+        return new_plan_row.id
+
+
 
 
 if __name__ == '__main__':

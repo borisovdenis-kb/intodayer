@@ -148,6 +148,9 @@ function setTrueRandomPlaceholder($this_field) {
     if ($this_field.hasClass('time')) {
         var time_hours, time_minutes_dec;
         time_hours = getRandomInt(8, 15);
+        if (time_hours < 10) {
+            time_hours = '0' + time_hours;
+        }
         time_minutes_dec = getRandomInt(0, 5);
         return time_hours + ":" + time_minutes_dec + "0";
     }
@@ -164,6 +167,20 @@ function setTrueRandomPlaceholder($this_field) {
 
 var thisInput;
 var timerInputId;
+
+$(window).resize(function () {
+    var $active_elem = $(document.activeElement);
+    if ($active_elem.get(0).tagName == 'BODY') {
+        blurSelectStr();
+        $('.parityOpen').css({'background-color': 'rgba(255,255,255,0)'});
+        $('.parityOpen').removeClass('selected_field');
+        $('selected_field').removeClass('selected_field');
+    }
+    else {
+        setDefaultStr($(document.activeElement).parents('.str_plan.change'));
+        $(document.activeElement).blur();
+    }
+});
 
 $(document).ready(function () {
     startBaseFunctions();
@@ -186,20 +203,64 @@ $(document).ready(function () {
 $('.plus_button_form').click(function () {
     appendPlanStr($(this));
 });
-
-
+//
+// $(window).resize(function () {
+//    $('.selected_field').each(function () {
+//       $(this).css({'height': $(this).parent().parent().height()});
+//    });
+// });
 // если мы нажимаем не на строки расписания и не на поля ввода, то снимаем выделение с активных
 $(window).on('mousedown', function (event) {
-    var $event_obj = $(event.target);
+
+    $('.parityOpen').css({'background-color': 'rgba(255,255,255,0)'});
+    $('.parityOpen').removeClass('selected_field');
+    $('selected_field').removeClass('selected_field');
+
     if (event.button == 0 || event.button == 2 || event.button == 1) {
-        var tag_name = $(event.target).get(0).tagName.toUpperCase();
-        if (tag_name != 'A' && tag_name != 'LI' && tag_name != 'INPUT' && $event_obj.parents('.drop_list').length == 0) {
+        var $this_obj = $(event.target);
+        var tag_name = $this_obj.get(0).tagName.toUpperCase();
+        // console.log($this_obj.parents('.drop_list').attr('class'));
+        if ($this_obj.attr('class') != 'drop_list' && $this_obj.parents('.drop_list').attr('class') != 'drop_list') {
             $('.drop_list').remove();
+        }
+
+        if (tag_name != 'A' && tag_name != 'LI' && tag_name != 'INPUT') {
             blurSelectStr();
         }
     }
-
 });
+//
+// $(window).mousedown(function (event) {
+//     if (event.target === $('html')[0] && event.clientX >= document.documentElement.offsetWidth){
+//         event.preventDefault();
+//     }
+// });
+
+
+// при нажатии на enter меняет поле на следующее
+$(window).on('keyup', function (e) {
+    if (e.which == 13) {
+        $('.parityOpen').css({'background-color': 'rgba(255,255,255,0)'});
+        var $this_field = $(e.target);
+        enterPressAction($this_field);
+    }
+});
+
+
+// TODO Разобраться как можно отследить изменение или удаление (например класса) у объекта DOM - https://toster.ru/q/217999
+// var origFn = $.fn.removeClass;
+// $.fn.removeClass = function (className) {
+//     var this_remove_class = arguments[0];
+//     console.log(className);
+//     if (this_remove_class == 'selected_field') {
+//         setTimeout(function () {
+//             $('.drop_list').remove();
+//         }, 200);
+//
+//     }
+//
+//     origFn.apply(this, arguments);
+// };
 
 // TODO Сделать действие для Tab
 // $(window).on('keyup', function (e) {
@@ -301,8 +362,7 @@ function setTopCheckBox($this_plan_content) {
 
 // обаботчики, которые устанавливаются единожды, при добавлении новой строки
 // нужно для того, чтобы, к примеру, не глючили чекбоксы
-var timer_select;
-var LAST_SELECT_STR_FOCUSES;
+var timer_delete_drop_list;
 function setNewListenersNewStr($new_div) {
     // Обработчики событый, применяемые к каждой строке расписания
     var $new_inputs = $new_div.find('ul li input');
@@ -313,67 +373,86 @@ function setNewListenersNewStr($new_div) {
     $new_div.off();
     $new_a.off();
     $new_inputs.off();
-    //!!! позже лучше сделать, чтобы обработчики не отключались, если уже стоят
-
-    // $.getScript("/static/scripts/script_drop_lists_plan.js", function () {
-    //     // ипорт функции для выподающих списков у полей.
-    //     addDropLstListeners($new_div);
-    // });
-
-    // $.getScript("/static/scripts/script_drop_lists_plan.js", function () {
-    //     addDropLstListeners($new_div);
-    // });
 
     //редактировать поле при нажатии на него
     $new_a.on('click', function () {
         editField($(this));
     });
+    $new_a.each(function () {
+        if ($(this).hasClass('parity')) {
+            $(this).on('click', function () {
+                $(this).addClass('selected_field');
+                $(this).css('background', 'rgba(139, 29, 235, 0.4)');
+            });
+            $(this).on('mouseover', function () {
+                $(this).css('cursor', 'pointer');
+            });
+        }
+    });
 
+    // важный обработчик событий , срабатывает, когда поле Input расфокусирвоано
+    $new_inputs.focusout(function (e) {
+        // $('.drop_list').remove();
 
-    // при нажатии на iPhone на кнопку нужно также вызывать фукнцию
-    // тут проверяем что поле именно расфокусированно, а не выделено другое поле
-    // для этого нужна небольшая задержка
-    $new_inputs.focusout(function (event) {
-        var $this_input = $(event.target);
-        clearTimeout(timer_select);
-        timer_select = setTimeout(function () {
-            if ($('.selected_field').length == 0) {
-                setDefaultStr($LAST_SELECTED_STR);
-            }
-        }, 50);
+        if (!$(this).hasClass('selected_field')) {
+            $(this).removeClass('selected_field');
+        }
+
+        var $this_str = $(this).parent().parent().parent();
+        setEditedField($(this));
+        if (!$this_str.hasClass('selected_str')) {
+            setDefaultStr($this_str);
+        }
+
     });
 
     //при нажатии на другое поле снять выделение с текущей строки
     //если другое поле находится в этой же строке, то не снимаем выделение
     $new_div.on('click', function () {
+        if (!$LAST_SELECTED_STR) {
+            $LAST_SELECTED_STR = $(this);
+        }
         if ($LAST_SELECTED_STR && !$LAST_SELECTED_STR.is($(this)) && $LAST_SELECTED_STR.hasClass('selected_str')) {
             setDefaultStr($LAST_SELECTED_STR);
         }
         $LAST_SELECTED_STR = $(this);
     });
 
-    $new_inputs.on('focus', function () {
-        $(this).parent().parent().parent().addClass('selected_str');
-        // $new_inputs.css('background', 'black');
+    // при нажатии правой кнопкой мыши на полях, они расфокусируеются только в случае, если нажато другое поле str_plan
+    // также чтобы корректно работали нажатия колёсиком мышки и поле осталось сфокусированным
+    $new_div.on('mousedown', function (e) {
+        var $this_str = $(this);
+        setSelectStr($this_str);
+        if (!$LAST_SELECTED_STR) {
+            $LAST_SELECTED_STR = $this_str;
+        }
+        if (e.which == 3) {
+            if (!$LAST_SELECTED_STR.is($this_str)) {
+                setDefaultStr($LAST_SELECTED_STR);
+            }
+        }
     });
 
-    $new_inputs.each(function () {
-        $(this).on('focus', function () {
-            var $this_field = $(this);
-            // $(this).css('background', 'black');
-            $.getScript("/static/scripts/script_drop_lists_plan.js", function () {
-                // ипорт функции для выподающих списков у полей.
-               
-                    createDropLst($this_field);
-           
-            });
+    $new_inputs.click(function (e) {
+        // $(this).parent().css('background', 'black');
+        var $li_parent = $(this).parent();
+        var $this_str = $(this).parent().parent().parent();
+        $this_str.addClass('selected_str');
+        var $this_field = $(this);
+        $this_field.addClass('selected_field');
 
+        $.getScript("/static/scripts/script_drop_lists_plan.js", function () {
+            // ипорт функции для выподающих списков у полей.
+            // делаем услования, чтобы дроп лист больше не открывался при 2 клике на поле
+            //   createDropLst($this_field);
+            if (!$this_field.hasClass('drop_is') && $this_field.val() == "") {
+                createDropLst($this_field);
+                $this_field.addClass('drop_is');
+            }
+            else {
+                $this_field.removeClass('drop_is');
+            }
         });
-    });
-
-    $new_inputs.on('focusout', function () {
-        $(this).removeClass('focus');
-        setEditedField($(this));
     });
 
     // отвечает за выделение строки при наведении
@@ -383,7 +462,9 @@ function setNewListenersNewStr($new_div) {
         hoverDefaultStr($(this));
     });
 
-    $new_inputs.on('input', function () {
+    $new_inputs.on('keypress', function () {
+        $('.drop_list').remove();
+
         thisInput = $(this);
         timerInputId = setInterval(function () {
             validateField(thisInput);
@@ -393,21 +474,13 @@ function setNewListenersNewStr($new_div) {
         }, 500);
     });
 
-    // при нажатии на enter меняет поле на следующее
-    $new_inputs.on('keyup', function (e) {
-        if (e.which == 13) {
-            var $this_field = $(e.target);
-            enterPressAction($this_field);
-        }
-    });
 }
+
 
 // действия при нажатии на enter
 function enterPressAction($this_field) {
-    var $this_str = $this_field.parents('.str_plan.change');
-    setEditedField($this_field);
-    setDefaultStr($this_str);
-
+    $this_field.blur();
+    setDefaultStr($LAST_SELECTED_STR);
     $('.drop_list').remove();
 }
 
@@ -432,6 +505,7 @@ function setTools($this_plan) {
 // устанавливает стили кнопок при появлении
 // устанавливает обработчики событий для кнопок
 var time_animate = 100;
+
 function setButtonToolsProperties($button) {
     $button.off();
     $button.animate({
@@ -658,17 +732,14 @@ function hoverSelectStr($this_str, mode) {
     }
     $this_str.find('ul').css({'border-color': borderColorSelectStr});
 }
+
 //снимает выделение со строки, если  установлено
 function hoverDefaultStr($this_str) {
 
-    if ($this_str.hasClass('marked') || $this_str.hasClass('selected_str') || $this_str.hasClass('animation')) {
+    if (!$this_str || $this_str.hasClass('marked') || $this_str.hasClass('selected_str') || $this_str.hasClass('animation')) {
         return false;
     }
-    // if ($this_str.hasClass('warning_str')) {
-    //     $this_str.find('ul').css({
-    //         'border-color': borderColorErrorStr
-    //     });
-    // }
+
     $this_str.find('ul').css({'border': '2px solid rgba(255, 255, 255, 0.0)'});
 
 }
@@ -676,31 +747,24 @@ function hoverDefaultStr($this_str) {
 // устанавливает выделение текущей строки
 function setSelectStr($str_plan, mode) {
     $str_plan.addClass('selected_str');
-
     hoverSelectStr($str_plan, mode);
-    setOldValues($str_plan);
+
 }
 
 var timer_send_server;
-// устанавливает выделение текущей строки
-function setSelectStr($str_plan, mode) {
-    $str_plan.addClass('selected_str');
 
-    hoverSelectStr($str_plan, mode);
-    setOldValues($str_plan);
-}
-
-var timer_send_server;
 function setDefaultStr($str_plan, mode) {
     //при расфокусировке отправляем инфу в БД
-    $str_plan.removeClass('selected_str');
-    hoverDefaultStr($str_plan);
-
-    if (mode == 'clone' || mode == 'delete') {
-        return false;
+    if ($str_plan) {
+        $str_plan.removeClass('selected_str');
     }
 
+    hoverDefaultStr($str_plan);
 
+    if (mode == 'clone' || mode == 'delete' || mode == 'animation') {
+        return false;
+    }
+    // alert("SDfsaf");
     timer_send_server = setTimeout(function () {
         //***************************************************************************************
         // Одна из важнейших строчек во всём коде
@@ -720,11 +784,11 @@ function setDefaultStr($str_plan, mode) {
                 }
                 // если нет ни одной ошибки, то всё успешно! )
                 else {
-
                     editStrPlan($str_plan);
                 }
             }
         }
+        // для случаев пустых строк
         else {
             var errors = mainValidationStr($str_plan);
             if (!isEmpty(errors)) {
@@ -740,33 +804,15 @@ function setDefaultStr($str_plan, mode) {
 }
 
 
-
-//устанавливаем старые значения полей строки, до фокусировки
-//чтобы потом проверить, что строка была изменена => отправить на сервер
-//все старые значения записываются в виде атрибутов в строку с теми же названиями как у классов
-function setOldValues($str_plan) {
-    var old_data = getFieldsInformation($str_plan);
-    for (var key in old_data) {
-        // alert(key + " " + old_data[key]);
-        $str_plan.attr(key + "_old", old_data[key])
-    }
-}
-
 // проверяет, что в текущей строке, с момента фокусировки было ли что-то изменено
 function checkThatFieldIsChanged($str_plan) {
-    var new_data = getFieldsInformation($str_plan);
-    for (var key in new_data) {
-        // бывает, что $str_plan.attr(key + "_old") == undefined, когда мы перефокусируем поля
-        // не снимая выделения со строки, поэтому проверяем это
-        if (new_data[key] != $str_plan.attr(key + "_old")) {
-            // alert(new_data[key] + " " + $str_plan.attr(key + "_old"));
-            return true;
-        }
-        $str_plan.removeAttr(key + "_old");
+    if ($str_plan.attr('edited')) {
+        return true;
     }
-    return false;
+    else {
+        return false;
+    }
 }
-
 
 function a_to_input($field) {
     //преобразовывает a в input
@@ -774,10 +820,13 @@ function a_to_input($field) {
     var $ul_parent = $field.parent();
     //чтобы строка не дёргалась при фокусе на input
     $ul_parent.css('height', $field.parent().height());
+    var $li_parent = $field.parent();
+    $li_parent.attr('old_value', $field.text())
+
 
     var $temp_field = $field;
 
-    if ($field.get(0).tagName != 'INPUT') {
+    if ($field.get(0).tagName != 'INPUT' && !$field.hasClass('parity')) {
         $field.replaceWith('<input class="this_edit">');
         $field.addClass('placeholder');
         $field = $('.this_edit');
@@ -786,16 +835,33 @@ function a_to_input($field) {
         $field.attr('placeholder', setTrueRandomPlaceholder($temp_field));
         $field.attr('old_value', $temp_field.text());
     }
+    if ($field.hasClass('parity')) {
+        $field.addClass('parityOpen');
+    }
 
-    $.getScript("/static/scripts/script_drop_lists_plan.js", function () {
-        // ипорт функции для выподающих списков у полей.
-        createDropLst($field);
-    });
+    createDropLst($field);
+    $field.parent().addClass('drop_is');
+    setTimeout(function () {
+        $field.click(function () {
+            $.getScript("/static/scripts/script_drop_lists_plan.js", function () {
+                // ипорт функции для выподающих списков у полей.
+                // делаем услования, чтобы дроп лист больше не открывался при 2 клике на поле
+                //   createDropLst($this_field);
+                if (!$field.parent().hasClass('drop_is')) {
+                    createDropLst($field);
+                    $field.parent().addClass('drop_is');
+                }
+                else {
+                    $field.parent().removeClass('drop_is');
+                }
+            });
+        });
+    }, 50);
+
 
     $field.addClass('selected_field');
     $field.attr("value", value);
     $field.focus();
-    $field.addClass('selected_field');
     //поместить курсор в конец поля input
     var inputVal = $field.val();
     $field.val('').focus().val(inputVal);
@@ -804,15 +870,17 @@ function a_to_input($field) {
     // $field.css('height', $field.parent().height() + 10);
     $field.selectionStart = $field.val().length;
     $field.animate({scrollLeft: +$field.val().length * 10});
+
+
     return $field;
 }
 
 function input_to_a($field) {
     //преобразовывает input в a
+    var $li_parent = $field.parent();
     var temp_input = $field; // поле input
     var $ul_parent = $field.parent();
     $ul_parent.css('height', 'auto');
-    $field.removeClass('selected_field');
     if ($field.val() != '') {
         var old_value = $field.attr('old_value');
         $field.replaceWith('<a class="this_edited"></a>');
@@ -832,6 +900,13 @@ function input_to_a($field) {
     // именно эта строка отвечает за обновление полей при вводе
     $field.text(temp_input.val().slice(0, 100));
 
+    // тут мы проверяем, что в поле мы ввели действительно новое значение
+    // и отмечаем, что строка была изменена для отправки на сервер
+    if ($li_parent.attr('old_value') && $li_parent.attr('old_value') != $field.text()) {
+        $li_parent.parent().parent().attr('edited', 'true');
+    }
+
+    $field.removeClass('selected_field');
 
     return $field;
 }
@@ -885,12 +960,22 @@ function setColorStr($this_str) {
 
 //снимает выделение со всех выделенных строк
 function blurSelectStr() {
-    var $selected_str = $('.selected_str');
-    if ($selected_str.length > 0) {
-        $selected_str.each(function () {
-            setDefaultStr($(this));
-        });
-    }
+    setTimeout(function () {
+        var $selected_str = $('.selected_str');
+        if ($selected_str.length > 0) {
+            // условия для того, чтобы при расфокусировки после нажатого дроп листа для парити поле отправлялось на сервер
+            $selected_str.each(function () {
+                 setDefaultStr($(this), 'animation');
+                if ($('.parityChanged').parent().attr('old_value') != $('.parityChanged').html()) {
+                    setDefaultStr($(this), 'animation');
+                }
+                else {
+                    setDefaultStr($(this));
+                }
+            });
+        }
+    }, 20);
+
 }
 
 function appendNewStrAnimation($new_div, $insert_after_this) {
@@ -911,6 +996,7 @@ function appendNewStrAnimation($new_div, $insert_after_this) {
 
 // добавление новой строки с расписанием
 var timer_setVisibleTopCheckbox;
+
 function appendPlanStr($this_button) {
 
     var $this_block = $($this_button).parents('.day_plan_content');
@@ -1161,6 +1247,7 @@ function callback_cloneErrorStr($this_str, response) {
 // удаляет строку с расписанием
 // работает с ajax
 var FLAG_DELETE = false;
+
 function delete_str(checkboxes, i, n) {
     if (!i) {
         FLAG_DELETE = true;
@@ -1206,6 +1293,7 @@ function delete_str(checkboxes, i, n) {
 
 // выполнение стилей и эффектов после успешного удаления строки с сервера
 var timer_setInvisibleTopCheckbox;
+
 function callback_delete($this_str) {
     var $this_plan = $this_str.parents('.plan_window');
     $this_str.clearQueue();
@@ -1234,6 +1322,7 @@ function callback_delete($this_str) {
 // добавляет новую строку в расписание
 // пока все поля не будут заполнены, строчка не добавится в БД
 function editStrPlan($selected_str) {
+    $selected_str.removeAttr('edited');
     var data = getFieldsInformation($selected_str);
     $.ajax({
         url: '/plan/edit_plan_row',
@@ -1243,6 +1332,7 @@ function editStrPlan($selected_str) {
                 callback_editStrPlan_error($selected_str, response);
             }
             else if (response.clone_error) {
+                // alert("sdfaf");
                 callback_cloneErrorStr($selected_str);
             }
             else {
@@ -1271,6 +1361,7 @@ function mainValidationStr($this_str) {
         var subject = data['subject'];
         var teacher = data['teacher'];
         var place = data['place'];
+        var parity = data['parity'];
 
         if (weeks == "") {
             errors['weeks'] = 'empty_value';
@@ -1287,6 +1378,11 @@ function mainValidationStr($this_str) {
         if (place == "") {
             errors['place'] = 'empty_value';
         }
+
+        // if (parity == "") {
+        //     alert(0 == "");
+        //     errors['parity'] = 'empty_value';
+        // }
 
         // Проверка корректности ввода дня недели
         if (!errors['weeks']) {
@@ -1417,12 +1513,13 @@ function getFieldsInformation($this_str) {
     else {
         id = 0;
     }
-    parity = get_parity_value($this_str.find('.parity').val());
-    // alert(parity);
+    parity = get_parity_value($this_str.find('.parity').text());
+
     day_of_week = get_day_num($this_plan.attr('day_num'));
 
     // делаем проверку для случая, когда одна из строк активирована и она INPUT
     if ($this_str.find('.weeks').get(0).tagName == 'A') {
+        console.log($this_str.find('.weeks').text());
         weeks = $this_str.find('.weeks').text();
     }
     else {
@@ -1458,6 +1555,7 @@ function getFieldsInformation($this_str) {
         place = $this_str.find('.place').val();
     }
 
+
     return {
         'weeks': weeks,
         'start_week': start_week,
@@ -1480,6 +1578,9 @@ function strIsEmpty($this_str) {
     var flag_exist = true;
     // считаем в скольки полях есть текст
     // при снятии фокуса с input он может также присутствовать и не успеть измениться на <a>
+    if (!$this_str) {
+        return false;
+    }
     $this_str.find('ul li a').each(function () {
         if ($(this).hasClass('parity')) {
             return true;
@@ -1526,15 +1627,11 @@ function get_day_num(name_day) {
 function get_parity_value(value) {
     console.log(value);
     var values_num = {
-        'Все': undefined,
-        'Чёт': 0,
-        'Чет': 0,
-        'Нечёт': 1,
-        'Нечет': 1
+        'Все': 'Все',
+        'Чет': 'Чет',
+        'Нечет': 'Нечет'
     };
     if (values_num[value] != undefined) {
-        console.log('ZSHEL');
-        console.log(values_num[value]);
         return values_num[value];
     }
     else {
