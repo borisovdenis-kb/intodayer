@@ -14,6 +14,8 @@ from django.db.models import Max
 from extra import utils
 
 
+# TODO: Сделать двумерный массив.
+
 class Stripes:
     """
         Класс для формирования json Полосок
