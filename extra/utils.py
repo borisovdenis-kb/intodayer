@@ -315,9 +315,6 @@ def edit_plan_row(data, this_plan, this_id, mode):
         # возвращаем новое id, чтобы записать его в html
         return new_plan_row.id
 
-
-
-
 if __name__ == '__main__':
     start_date = datetime(2017, 4, 1)
 

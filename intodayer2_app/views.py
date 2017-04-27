@@ -16,7 +16,15 @@ from extra.stripes_api import *
 
 
 # TODO: Сделать в выводе расписания в /plan сортировку по времени, а не по неделям
+
 # TODO: Сделать аутентификацию по почте, а не по логину. Значит нужно сделать и подтверждение email
+
+# {
+# TODO: Переписать функции переключения расписания.
+# Теперь нужно, что бы сервер в ответе выдавал не отрендеренную html разметку,
+# а данные в формате json. А на стороне клиента уже данные бы вставлялись куда надо.
+# Предполагается повышение эффективности.
+# }
 
 ###################################################################################
 #                          ОБРАБОТКА AJAX ЗАПРОСОВ                                #
@@ -172,9 +180,9 @@ def plan_delete_ajax(request):
 
 def switch_plan_home_ajax(request):
     """
-        Функция для переключения между расписаниями
+        Функция для переключения между расписаниями со страницы /home
         :param request:
-        :return: отрендеренную html разметку опр расписания
+        :return: Отрендеренная html разметка расписания
     """
     if request.is_ajax():
         user = CustomUser.objects.get(username=request.user.username)
@@ -191,6 +199,37 @@ def switch_plan_home_ajax(request):
         context = get_today_tomorrow_plans(plan)
 
         return render_to_response('templates_for_ajax/today_tomorrow.html', context)
+
+
+def switch_plan_plan_ajax(request):
+    """
+        Функция для переключения между расписаниями со страницы /plan
+        :param request:
+        :return: Отрендеренная html разметка расписания
+    """
+    if request.is_ajax:
+        user = CustomUser.objects.get(username=request.user.username)
+        context = {}
+
+        try:
+            plan_id = int(request.POST['plan_id'])
+            plan = UserPlans.objects.select_related().filter(user_id=user.id, plan_id=plan_id)[0]
+        except ValueError:
+            return render_to_response('templates_for_ajax/content_errors.html')
+        except IndexError:
+            return render_to_response('templates_for_ajax/content_errors.html')
+
+        plan_rows = PlanRows.objects.select_related().filter(plan_id=plan.plan.id).order_by('start_week')
+        count = UserPlans.objects.filter(plan_id=plan.plan.id).count()
+        day_of_weeks = DaysOfWeek.objects.all()
+
+        context['cur_plan'] = plan
+        context['plan_info'] = [plan.plan.title, plan.plan.description, members_amount_suffix(count)]
+        context['day_of_weeks'] = day_of_weeks
+        context['plan_rows'] = plan_rows
+
+        print('YES')
+        return render_to_response('templates_for_ajax/plan_for_ajax.html', context)
 
 
 def get_invitations_ajax(request):
@@ -474,50 +513,42 @@ def plan_view(request, plan_id=0):
             'user': user,
         }
 
-        all_plans = UserPlans.objects.select_related().filter(user_id=user.id)
-
-        try:
-            cur_plan = UserPlans.objects.select_related().filter(user_id=user.id, current_yn='y')[0]
-
-        except IndexError:
-            cur_plan = all_plans[0]
-
-        count = UserPlans.objects.filter(plan_id=cur_plan.plan.id).count()
-
         if plan_id == 0:
+            all_plans = UserPlans.objects.select_related().filter(user_id=user.id)
             # выбираем текущее расписание юзера
-            plan_list = UserPlans.objects.select_related().filter(
-                user_id=user.id, current_yn='y'
-            )
-            plan = plan_list[0]
+            cur_plan = UserPlans.objects.select_related().get(user_id=user.id, current_yn='y')
 
             plan_rows = PlanRows.objects.select_related().filter(
-                plan_id=plan.plan.id,
+                plan_id=cur_plan.plan.id,
             ).order_by('start_week')
-        else:
-            inv = Invitations.objects.filter(to_user=user.id, plan_id=plan_id)
-            if inv:
-                context['is_invitation'] = True
-                context['invitation'] = inv[0]
 
-                plan_list = UserPlans.objects.select_related().filter(
-                    user_id=user.id, plan_id=plan_id
-                )
-                plan = plan_list[0]
+            count = UserPlans.objects.filter(plan_id=cur_plan.plan.id).count()
+            # все расписания
+            context['all_plans'] = all_plans
+            context['cur_plan'] = cur_plan
+            # имя описание расписания
+            context['plan_info'] = [cur_plan.plan.title, cur_plan.plan.description]
+            # количество участников
+            context['plan_info'] += [members_amount_suffix(count)]
+        else:
+            invitation = Invitations.objects.get(to_user=user.id, plan_id=plan_id)
+            if invitation:
+                context['is_invitation'] = True
+                context['invitation'] = invitation
+
+                plan = PlanLists.objects.get(id=plan_id)
 
                 plan_rows = PlanRows.objects.select_related().filter(
                     plan_id=plan_id,
                 ).order_by('start_week')
+
+                count = UserPlans.objects.filter(plan_id=plan.id).count()
+                # имя описание расписания
+                context['plan_info'] = [plan.title, plan.description]
+                # количество участников
+                context['plan_info'] += [members_amount_suffix(count)]
             else:
                 return render_to_response("ops_page.html")
-
-        # все расписания
-        context['all_plans'] = all_plans
-        context['cur_plan'] = cur_plan
-        # имя описание плана
-        context['plan_info'] = [plan.plan.title, plan.plan.description]
-        # количество участников
-        context['plan_info'] += [members_amount_suffix(count)]
 
         day_of_weeks = DaysOfWeek.objects.all()
 

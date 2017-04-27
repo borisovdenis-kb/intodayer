@@ -261,6 +261,23 @@ body {
     background-color: rgb(240, 240, 245);
 }
 
+.plan_load_progres {
+    width: 100%;
+}
+
+.plan_load_progres_indicator {
+    display: none;
+    width: 60px;
+    height: 60px;
+    margin: auto;
+    background-image: url("../images/progress_indicator.gif");
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
 
 
 

@@ -484,6 +484,8 @@ button:focus {
     display: none;
     width: 60px;
     height: 60px;
+    margin-left: auto;
+    margin-right: auto;
     background-image: url("../images/progress_indicator.gif");
     -webkit-background-size: cover;
     -moz-background-size: cover;
