@@ -79,17 +79,27 @@ $(document).ready(function () {
 });
 
 // при нажатии в любое место в браузере
+// именн этот обработчик событий расфокусирует строку при определённых условиях
+// и отправляет данные на проверку валидации и на сервер setDefaultStr(...)
 $(window).on('mousedown touchend', function (e) {
     var $this_active_obj = $(document.activeElement).parents('.str_plan.change');
     var $this_click_obj = $(e.target).parents('.str_plan.change');
     var $drop_lists = $(e.target).parents('.drop_list');
     if (($this_active_obj.length == 0 || $this_click_obj.length == 0 || !$this_active_obj.is($this_click_obj))) {
-        setDefaultStr($this_active_obj);
+        // расфокусируем обязательно именно все строки на сайте (если есть больше одной)
         $(document.activeElement).blur();
+        $('.selected_str').each(function () {
+            var $this_str = $(this);
+            setDefaultStr($this_str);
+        });
     }
     // Если нажали на скролл бар в браузере
     if (e.target === $('html')[0] && e.clientX >= document.documentElement.offsetWidth) {
         $(document.activeElement).blur();
+        $('.selected_str').each(function () {
+            var $this_str = $(this);
+            setDefaultStr($this_str);
+        });
     }
 });
 
