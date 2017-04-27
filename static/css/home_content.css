@@ -294,6 +294,7 @@ body {
 
 /*скрытый блок для формирования высоты */
 .comment_text_hidden{
+     visibility:hidden;
     position: absolute;
     display: block;
     background: red;

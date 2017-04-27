@@ -241,6 +241,7 @@ function setNewListenersNewStr($new_div) {
     });
 }
 
+// TODO сделать ещё для случая ресайза окна, чтобы автоматом тоже поле устанавливалолсь
 // отвечает за ресайз полей textarea
 // при передаче одного аргемента уст. истинный размер
 function resizeArea($this_textarea, minHeight, maxHeight) {
