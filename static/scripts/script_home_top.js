@@ -11,11 +11,13 @@ $droplist.on('click', function (e) {
 
 $droplist.mouseover(function () {
     if (FLAG_DROPLIST == false) {
+        $(this).stop(true, true);
         $(this).animate({'background-color': 'rgba(210,210,210, 1)'}, 200);
     }
 });
 $droplist.mouseleave(function () {
     if (FLAG_DROPLIST == false) {
+        $(this).stop(true, true);
         $(this).animate({'background-color': 'rgba(240,240,240,1)'}, 200);
     }
 });
@@ -85,6 +87,7 @@ function hide_droplist(event, hide) {
     var $this_elem = $(event.target);
     if (($this_elem.parents('.droplist_click_container').length == 0 && $this_elem.parents('.droplist').length == 0) || hide == true) {
         var $this_droplist_click = $('.droplist_click_container');
+        $this_droplist_click.stop(true,true);
         $this_droplist_click.fadeOut(200);
         $this_droplist_click.animate({
             top: 50,
@@ -93,7 +96,9 @@ function hide_droplist(event, hide) {
             $this_droplist_click.remove();
         });
         $this_droplist_click.dequeue();
+        $('.droplist').stop(true,true);
         $('.droplist').animate({'background-color': 'rgba(240,240,240,1)'}, 100);
+        $('#arrow_down').stop(true,true);
         $('#arrow_down').animate({'border-top-color': 'rgba(150, 150, 150, 1)'}, 100);
         FLAG_DROPLIST = false;
     }

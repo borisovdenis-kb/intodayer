@@ -389,10 +389,6 @@ def statistics_view(request):
         stripes_dict = Stripes(cur_plan.plan_id)
         stripes_dict_json = stripes_dict.get_stripes_json()
 
-        # объединяем данные словарей
-        # context = dict(stripes_dict.items() + context.items())
-        # print(context)
-        context = json.loads(stripes_dict_json)
         print(stripes_dict_json)
 
         return render_to_response('statistics.html', {'data': json.loads(stripes_dict_json)})

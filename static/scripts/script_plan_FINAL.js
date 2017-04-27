@@ -54,6 +54,11 @@ var places = ["510x", '110м', "Л-11", "Л-10", '511м', "112ф", "Кафедр
 var parity_PlaceHolder = 'Все';
 
 $(document).ready(function () {
+    startIntodayer();
+});
+
+// Запуск всего скрипта, навершивание всхе обработчкиков
+function startIntodayer() {
     $('.str_plan.change').each(function () {
         setNewListenersNewStr($(this));
         setNewListenersSpecial($(this));
@@ -74,9 +79,9 @@ $(document).ready(function () {
     $('.str_plan.str_title').each(function () {
         setGeneralCheckBoxListeners($(this));
     });
-    startBaseFunctions();
-
-});
+    deleteTopCheckboxInEmptyDays();
+    setColorStr();
+}
 
 // при нажатии в любое место в браузере
 // именн этот обработчик событий расфокусирует строку при определённых условиях
@@ -430,12 +435,6 @@ function setStrPlaceholders($this_str) {
     $this_str.find('textarea').each(function () {
         $(this).attr('placeholder', setTrueRandomPlaceholder($(this)));
     });
-}
-
-
-function startBaseFunctions() {
-    deleteTopCheckboxInEmptyDays();
-    setColorStr();
 }
 
 

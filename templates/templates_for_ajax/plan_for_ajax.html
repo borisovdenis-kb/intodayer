@@ -38,6 +38,8 @@
                             </div>
                     </ul>
                     </li>
+                    </li>
+                    </ul>
                 </div>
 
             </div>
@@ -65,19 +67,25 @@
                                 <div class="checkbox_container row"></div>
                             </div>
                             <ul>
-                                <li><a class="weeks">{{ row.start_week }}-{{ row.end_week }}</a></li>
-                                <li><a class="time">{{ row.time.get_format_time }}</a></li>
-                                <li><a class="subject">{{ row.subject.name }}</a></li>
-                                <li><a class="teacher">{{ row.teacher.name_short }}</a></li>
-                                <li><a class="place">{{ row.place.name }}</a></li>
+                                <li><textarea class="weeks"
+                                              num="1">{{ row.start_week }}-{{ row.end_week }}</textarea></li>
+                                <li><textarea class="time" num="2">{{ row.time.get_format_time }}</textarea>
+                                </li>
+                                <li><textarea class="subject" num="3">{{ row.subject.name }}</textarea></li>
+                                <li><textarea class="teacher" num="4">{{ row.teacher.name_short }}</textarea>
+                                </li>
+                                <li><textarea class="place" num="5">{{ row.place.name }}</textarea></li>
                                 {% if row.parity == None %}
-                                    <li class="last"><a class="parity">Все</a></li>
+                                    <li class="last"><input class="parity drop_button" type="button" value="Все"
+                                                            num="6"></li>
                                 {% endif %}
                                 {% if row.parity == 0 %}
-                                    <li class="last"><a class="parity">Чет</a></li>
+                                    <li class="last"><input class="parity drop_button" type="button" value="Чет"
+                                                            num="6"></li>
                                 {% endif %}
                                 {% if row.parity == 1 %}
-                                    <li class="last"><a class="parity">Нечет</a></li>
+                                    <li class="last"><input class="parity drop_button" type="button"
+                                                            value="Нечет" num="6"></li>
                                 {% endif %}
                             </ul>
                         </div>

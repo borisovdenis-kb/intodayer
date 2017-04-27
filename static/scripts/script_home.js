@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    setStrColor('f');
+    // setStrColor('f');
 
     avatarEditAccess({plan_id: $('.ava_content p').text()});
 
@@ -40,7 +40,9 @@ function switchPlan($this_plan) {
 
     $('.right_content').load('/' + address + '/switch_plan', data, function () {
         $('.plan_load_progres_indicator').css('display', 'none');
-        setStrColor();
+        // setStrColor();
+        startIntodayer();
+
     });
 
     avatarEditAccess(data);
@@ -60,18 +62,18 @@ function avatarEditAccess(data) {
     });
 }
 
-function setStrColor() {
-    /*
-     *  Функция окрашивает нечетные строки таблицы в серый цвет
-     */
-    $.each($('.day_plan_content'), function () {
-        $.each($(this).find('.str_plan'), function (i) {
-            if ((i % 2) != 0) {
-                $(this).clearQueue();
-                $(this).animate({'background-color': 'rgba(240, 240, 245, 1)'});
-                $(this).find('ul').clearQueue();
-                $(this).find('ul').animate({'background-color': 'rgba(240, 240, 245, 1)'});
-            }
-        });
-    });
-}
+// function setStrColor() {
+//     /*
+//      *  Функция окрашивает нечетные строки таблицы в серый цвет
+//      */
+//     $.each($('.day_plan_content'), function () {
+//         $.each($(this).find('.str_plan'), function (i) {
+//             if ((i % 2) != 0) {
+//                 $(this).clearQueue();
+//                 $(this).animate({'background-color': 'rgba(240, 240, 245, 1)'});
+//                 $(this).find('ul').clearQueue();
+//                 $(this).find('ul').animate({'background-color': 'rgba(240, 240, 245, 1)'});
+//             }
+//         });
+//     });
+// }

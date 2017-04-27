@@ -26,7 +26,7 @@ class Stripes:
     """
     def __init__(self, plan_id):
         self.plan_id = plan_id
-        self.MAX_LEN = 0        # Максимальное кол-во недель в расписании.
+        self.MAX_LEN = []        # Максимальное кол-во недель в расписании.
         self.scale = []
         self.stripes = {}
 
@@ -39,7 +39,7 @@ class Stripes:
         max_len = PlanRows.objects.filter(plan_id=1).aggregate(Max('end_week'))
         self.MAX_LEN = max_len['end_week__max']
 
-        self.stripes['MAX_LEN'] = self.MAX_LEN
+        self.stripes['MAX_LEN'] = list(range(self.MAX_LEN + 1))
 
     def set_scale(self):
         """
@@ -50,6 +50,7 @@ class Stripes:
         plan = PlanLists.objects.get(id=self.plan_id)
 
         self.scale = utils.get_week_scale(plan.start_date, self.MAX_LEN)
+        self.stripes['scale'] = self.scale
 
     def set_stripes(self):
         """

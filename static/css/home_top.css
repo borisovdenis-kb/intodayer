@@ -111,7 +111,7 @@ button:focus {
     justify-content: center;
     align-items: center;
     color: black;
-    font-size: 0.9em;
+    font-size: 0.85em;
     padding-left: 20px;
     padding-right: 20px;
 
@@ -120,9 +120,9 @@ button:focus {
 /*вид меню на iphone и других*/
 @media (max-width: 768px) {
     .top-menu ul li a {
-        /*font-size: 0.8em;*/
-        padding-left: 10px;
-        padding-right: 10px;
+        font-size: 0.7em;
+        padding-left: 8px;
+        padding-right: 8px;
     }
 }
 
