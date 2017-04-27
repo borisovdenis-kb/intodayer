@@ -749,7 +749,11 @@ function setSelectStr($str_plan, mode) {
 }
 
 //устанавливает выделение для строки, если не установлено
-function hoverSelectStr($this_str) {
+function hoverSelectStr($this_str, mode) {
+    if (mode == 'ease_us') {
+        $this_str.find('ul').animate({'border-color': borderColorSelectStr});
+        return;
+    }
     if ($this_str.hasClass('marked') || $this_str.hasClass('animation')) {
         return false;
     }
