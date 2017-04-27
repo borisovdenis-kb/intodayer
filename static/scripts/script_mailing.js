@@ -7,7 +7,8 @@ $(document).ready(function () {
         $(this).click(function () {
 
             var $textarea = $('.mailing').find('textarea');
-            day = $(this).parent().parent().parent().attr('day_num');
+            day = $(this).parent().parent().parent().parent().parent().attr('day_num');
+            console.log(day);
             storageKey = day + $('.title_content').attr('plan_id');
 
             blurElement('.effect_blur', 4);
@@ -101,7 +102,6 @@ $(document).ready(function () {
                         $('.progress_indicator').css({'display': 'none'});
                         $('.progress').text('Ошибка. ');
                         $('.progress').append('<a href="/plan">Перезагрузите страницу.</a>');
-
                     }
 
                 });
