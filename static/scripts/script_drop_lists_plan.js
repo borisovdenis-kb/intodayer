@@ -89,7 +89,7 @@ function loadData($thisField) {
         }, 1, function () {
             $(this).fadeTo(1, 1);
         });
-    }, 50);
+    }, 300);
 }
 
 // делает чтобы дроп лист двигался вместе с полем

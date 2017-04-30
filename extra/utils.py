@@ -33,6 +33,23 @@ class CloneError(Exception):
     pass
 
 
+def set_current_plan(user_id, plan_id):
+    """
+        Функция для данного юзера усатанавливает текущее расписание,
+        при этом снимая метку current_yn у предыдущего текущего.
+        :param user_id: 
+        :param plan_id: 
+        :return: 
+    """
+    user_plans = UserPlans.objects.filter(user_id=user_id)
+
+    for row in user_plans:
+        if row.plan_id == plan_id:
+            row.current_yn = 'y'
+            row.save()
+        else:
+            row.current_yn = 'n'
+            row.save()
 
 def save_div_png(base64_str, filename):
     img_data = b64decode(base64_str)

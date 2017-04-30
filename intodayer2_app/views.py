@@ -176,8 +176,6 @@ def plan_delete_ajax(request):
         return HttpResponseBadRequest()
 
 
-
-
 def switch_plan_home_ajax(request):
     """
         Функция для переключения между расписаниями со страницы /home
@@ -197,6 +195,8 @@ def switch_plan_home_ajax(request):
 
         # get_today_tomorrow_plans возвращает словарь
         context = get_today_tomorrow_plans(plan)
+        # устанавливаем current_yn
+        set_current_plan(user.id, plan_id)
 
         return render_to_response('templates_for_ajax/today_tomorrow.html', context)
 
@@ -222,6 +222,8 @@ def switch_plan_plan_ajax(request):
         plan_rows = PlanRows.objects.select_related().filter(plan_id=plan.plan.id).order_by('start_week')
         count = UserPlans.objects.filter(plan_id=plan.plan.id).count()
         day_of_weeks = DaysOfWeek.objects.all()
+        # устанавливаем current_yn
+        set_current_plan(user.id, plan_id)
 
         context['cur_plan'] = plan
         context['plan_info'] = [plan.plan.title, plan.plan.description, members_amount_suffix(count)]
@@ -477,7 +479,7 @@ def home_view(request):
 
         # выбираем текущее расписание юзера
         try:
-            cur_plan = UserPlans.objects.select_related().filter(user_id=user.id, always_yn='y')[0]
+            cur_plan = UserPlans.objects.select_related().get(user_id=user.id, current_yn='y')
         except IndexError:
             cur_plan = all_plans[0]
 
