@@ -71,7 +71,7 @@ class IntodayerMailing:
                     'chat_id': user.user.chat_id,
                     'name': ' '.join(user.user.get_name())
                 })
-            elif user.user.email and not user.user.chat_id:
+            elif user.user.email:
                 self.message['recipients_email'].append(user.user.email)
 
     def set_msg_text(self):

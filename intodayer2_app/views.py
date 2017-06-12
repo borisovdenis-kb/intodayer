@@ -437,7 +437,7 @@ def login_view(request):
                 auth.login(request, user)
                 return HttpResponseRedirect("/home")
             else:
-                return HttpResponse('POPKA')
+                return HttpResponse('User is not active')
         else:
             return HttpResponse('Invalid Login or Password')
     else:
