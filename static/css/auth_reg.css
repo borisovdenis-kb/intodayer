@@ -95,3 +95,7 @@ h2 {
 #sign_in:hover {
     border-color: rgba(50, 50, 50, 1);
 }
+
+.pswd_equal_pswd_confirm {
+    background-color: #fff5a1;
+}

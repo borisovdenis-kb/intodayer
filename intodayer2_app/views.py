@@ -411,18 +411,16 @@ def registration_view(request):
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             # сохраняем usr_name и pswd в таблицу auth_user
-            form.save()
-            # # сохраняем phone и связь один к одному в таблицу custom_user
-            # new_user = CustomUser.objects.get(username=request.POST['username'])
-            # new_user.phone = request.POST['phone']
-            # new_user.save()
+            new_user = form.save()
+            # добавляем пользователю дефолтное расписание
+            new_user.create_default_plan()
 
             return HttpResponseRedirect('/login')
     else:
         form = CustomUserCreationForm()
 
     context = {'form': form}
-    return render_to_response('reg.html', context)
+    return render_to_response('reg_tst.html', context)
 
 
 def login_view(request):

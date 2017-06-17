@@ -1,7 +1,6 @@
 import os
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from datetime import *
 from PIL import Image
 from datetime import *
 from django.utils import timezone
@@ -217,7 +216,6 @@ class UserPlans(models.Model):
     user = models.ForeignKey('CustomUser', models.DO_NOTHING)
     plan = models.ForeignKey('PlanLists', models.DO_NOTHING)
     current_yn = models.CharField(max_length=1, blank=False)
-    always_yn = models.CharField(max_length=1, blank=False)
 
     class Meta:
         managed = True
@@ -310,6 +308,24 @@ class CustomUser(AbstractUser):
         else:
             res = [self.username]
             return res
+
+    def create_default_plan(self):
+        """
+            Эта функцию нужна для того, чтобы при создании нового пользователя
+            добавить ему дефолтное расписание.
+            :return: plan_list object
+        """
+        new_plan = PlanLists(
+            title='No name',
+            description='No description',
+            start_date=datetime.now(),
+            owner_id=self.id
+        )
+        new_plan.save()
+
+        UserPlans(user_id=self.id, plan_id=new_plan.id, current_yn='y').save()
+
+        return new_plan
 
     def __str__(self):
         return '%s %s %s' % (
