@@ -252,9 +252,9 @@ class PlanLists(models.Model):
             if os.path.exists(self.avatar.path):
                 return self.avatar.url
             else:
-                return '/static/images/plan_avatar_default.jpg'
+                return '/static/images/plan_avatar_default.png'
         else:
-            return '/static/images/plan_avatar_default.jpg'
+            return '/static/images/plan_avatar_default.png'
 
     def __str__(self):
         return '%s %s' % (
