@@ -83,9 +83,9 @@
         </div>
     {% endblock %}
 
-
     <div class="page">
         <div class="content">
+
             {% block left_content %}
                 <div class="left_content hidden-xs">
                     <div class="ava_cover">
@@ -101,36 +101,31 @@
                     {% if is_invitation != True %}
                         <div class="plan_selector">
                             <label id="plan_selector_title">Мои расписания</label>
-                            <ul>
-                                {% if all_plans|length > 1 %}
-                                    {% for plan in all_plans %}
-                                        <li>
-                                            <a
-                                                    {% if plan.current_yn == 'y' %}
-                                                        style="background-color: #000000; color: #ffffff"
-                                                    {% endif %}
-                                            >
-                                                {{ plan.plan.title }}
-
-                                            </a>
-                                            <p>{{ plan.plan.id }}</p>
-                                        </li>
-                                    {% endfor %}
-                                {% else %}
+                            <ul class="plan_list">
+                                {% for plan in all_plans %}
                                     <li>
-                                        <a style="background-color: #000000; color: #ffffff">
-                                            {{ all_plans.0.plan.title }}
+                                        <a
+                                            {% if plan.current_yn == 'y' %}
+                                                style="background-color: #000000; color: #ffffff"
+                                            {% endif %}
+                                        >
+                                            {{ plan.plan.title }}
+
                                         </a>
-                                        <p>{{ all_plans.0.plan.id }}</p>
+                                        <p>{{ plan.plan.id }}</p>
                                     </li>
-                                {% endif %}
+                                {% endfor %}
+                            </ul>
+                            <ul class="create_plan">
+                                <li>
+                                    <a></a>
+                                </li>
                             </ul>
                         </div>
                     {% else %}
                         {% block invitation %}{% endblock %}
                     {% endif %}
                 </div>
-
             {% endblock %}
 
             {% block right_content %}
@@ -139,9 +134,11 @@
                         <div class="plan_load_progres_indicator"></div>
                     </div>
 
-                    <div class="title_content">
-                        <div id="plan_title">{{ cur_plan_info.0 }}</div>
-                        <div id="count_title">{{ cur_plan_info.2 }}</div>
+                    <div class="title_content" plan_id="{{ cur_plan_info.2 }}">
+                        <div id="plan_title">
+                            <input id='title_edit_input' type="text" value="{{ cur_plan_info.0 }}">
+                        </div>
+                        <div id="count_title">{{ cur_plan_info.3 }}</div>
                     </div>
 
                     <!-- Сегодня -->

@@ -57,7 +57,7 @@ $(document).ready(function () {
     startIntodayer();
 });
 
-// Запуск всего скрипта, навершивание всхе обработчкиков
+// Запуск всего скрипта, навешивание всех обработчиков
 function startIntodayer() {
 
     $('.str_plan.change').each(function () {

@@ -31,11 +31,28 @@ from extra.stripes_api import *
 ###################################################################################
 
 
-def tst_vue_ajax(request):
+def update_plan_title_ajax(request):
     if request.is_ajax():
-        times = list(Times.objects.all())
-        time = times[random.randint(0, len(times))]
-        return time.get_format_time()
+        user = CustomUser.objects.get(username=request.user.username)
+
+        response = HttpResponse()
+        response['Content-Type'] = 'text/javascript'
+
+        response.write(json.dumps({'success': 1}))
+
+        try:
+            plan_id = int(request.POST['plan_id'])
+            plan = UserPlans.objects.select_related().get(user_id=user.id, plan_id=plan_id)
+
+            if plan.plan.owner != user:
+                raise ValueError
+        except (ValueError, ObjectDoesNotExist):
+            return response.write(json.dumps({'success': 0}))
+
+        plan.plan.title = request.POST['new_title']
+        plan.plan.save()
+
+        return response.write(json.dumps({'success': 1}))
 
 
 def get_drop_list_ajax(request):
@@ -80,6 +97,7 @@ def mailing_ajax(request):
         :param request:
         :return:
     """
+    # TODO: Где Валидация, Денис?!?!
     if request.is_ajax():
         user = CustomUser.objects.get(username=request.user.username)
 
@@ -196,7 +214,7 @@ def switch_plan_home_ajax(request):
         # get_today_tomorrow_plans возвращает словарь
         context = get_today_tomorrow_plans(plan)
         # устанавливаем current_yn
-        set_current_plan(user.id, plan_id)
+        user.set_current_plan(plan_id)
 
         return render_to_response('templates_for_ajax/today_tomorrow.html', context)
 
@@ -223,7 +241,7 @@ def switch_plan_plan_ajax(request):
         count = UserPlans.objects.filter(plan_id=plan.plan.id).count()
         day_of_weeks = DaysOfWeek.objects.all()
         # устанавливаем current_yn
-        set_current_plan(user.id, plan_id)
+        user.set_current_plan(plan_id)
 
         context['cur_plan'] = plan
         context['plan_info'] = [plan.plan.title, plan.plan.description, members_amount_suffix(count)]

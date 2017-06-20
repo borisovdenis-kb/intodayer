@@ -327,6 +327,23 @@ class CustomUser(AbstractUser):
 
         return new_plan
 
+    def set_current_plan(self, plan_id):
+        """
+            Функция для данного юзера усатанавливает текущее расписание,
+            при этом снимая метку current_yn у предыдущего текущего.
+            :param plan_id: 
+            :return: 
+        """
+        user_plans = UserPlans.objects.filter(user_id=self.id)
+
+        for row in user_plans:
+            if row.plan_id == plan_id:
+                row.current_yn = 'y'
+                row.save()
+            else:
+                row.current_yn = 'n'
+                row.save()
+
     def __str__(self):
         return '%s %s %s' % (
             self.first_name,

@@ -33,24 +33,6 @@ class CloneError(Exception):
     pass
 
 
-def set_current_plan(user_id, plan_id):
-    """
-        Функция для данного юзера усатанавливает текущее расписание,
-        при этом снимая метку current_yn у предыдущего текущего.
-        :param user_id: 
-        :param plan_id: 
-        :return: 
-    """
-    user_plans = UserPlans.objects.filter(user_id=user_id)
-
-    for row in user_plans:
-        if row.plan_id == plan_id:
-            row.current_yn = 'y'
-            row.save()
-        else:
-            row.current_yn = 'n'
-            row.save()
-
 def save_div_png(base64_str, filename):
     img_data = b64decode(base64_str)
     image = ContentFile(img_data, filename)
@@ -111,6 +93,7 @@ def get_week_scale(start_date, n):
 
     return scale
 
+
 def get_today_tomorrow_plans(plan):
     """
         Функция делает выборку строк расписания
@@ -164,7 +147,7 @@ def get_today_tomorrow_plans(plan):
     }
 
     # инфа о текущем расписании
-    context['cur_plan_info'] = [plan.plan.title, plan.plan.description]
+    context['cur_plan_info'] = [plan.plan.title, plan.plan.description, plan.plan.id]
     # добавляем кол-во участников
     context['cur_plan_info'] += [members_amount_suffix(count)]
     # разделитель между неделями
