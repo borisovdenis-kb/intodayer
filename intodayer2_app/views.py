@@ -38,7 +38,7 @@ def update_plan_title_ajax(request):
         response = HttpResponse()
         response['Content-Type'] = 'text/javascript'
 
-        response.write(json.dumps({'success': 1}))
+        print('KAL')
 
         try:
             plan_id = int(request.POST['plan_id'])
@@ -46,13 +46,18 @@ def update_plan_title_ajax(request):
 
             if plan.plan.owner != user:
                 raise ValueError
+
         except (ValueError, ObjectDoesNotExist):
-            return response.write(json.dumps({'success': 0}))
+            response.write(json.dumps({'success': 0}))
+
+            return response
 
         plan.plan.title = request.POST['new_title']
         plan.plan.save()
 
-        return response.write(json.dumps({'success': 1}))
+        response.write(json.dumps({'success': 1}))
+
+        return response
 
 
 def get_drop_list_ajax(request):
