@@ -188,20 +188,22 @@ body {
 }
 
 
-#plan_title{
-   font-size: 2em;
+#plan_title {
+    font-size: 2em;
 }
 
 #title_edit_input {
+    /*max-width: 500px;*/
     border: 1px solid #ffffff;
     text-align: center;
+    transition: 0.5s;
 }
 
 
 #title_edit_input:focus {
     outline: none;
     cursor: auto;
-    border: 1px solid rgb(236, 236, 246);
+    border: 1px solid rgb(217, 217, 227);
     /*border: 1px solid rgba(139, 29, 235, 0.4);*/
 }
 
