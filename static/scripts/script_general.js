@@ -1,3 +1,4 @@
+
 $(document).ready(function () {
     // setStrColor('f');
 
@@ -7,46 +8,55 @@ $(document).ready(function () {
         switchPlan($(this));
     });
 
+    bindPlanTitleAndPlanSelector();
+    updatePlanTitle();
+    createPlan();
+});
+
+
+function createPlan() {
+    /*
+     *  Функция создает новое расписание. Т.е.:
+     *  1. Добавляет кнопку в панели переключения расписаний;
+     *  2. Создает для данного пользователя в базе "дефолтное" расписание.
+     */
     $('.create_plan li a').click(function() {
-        var $new_plan;
+        var $new_plan_li, $new_plan_li_a;
 
         $(this).animate({'background-color': '#ffffff'}, 200);
         $(this).delay(100).animate({'background-color': '#f4f3f8'}, 200);
 
-        $('.plan_list').append('<li style="display: none; opacity: 0"><a>No name</a></li>');
+        $.ajax({
+            url: '/create_new_plan',
+            type: 'GET',
+            success: function(msg) {
+                msg = JSON.parse(msg);
+                // создаем новую кнопку
+                $('.plan_list').append('<li style="display: none; opacity: 0"><a>No name</a></li>');
 
-        $new_plan = $('.plan_list li').last();
-        $new_plan.slideToggle(200);
+                $new_plan_li = $('.plan_list li').last();
+                $new_plan_li.slideToggle(200);
 
-        setTimeout(function() {
-            $new_plan.fadeTo(100, 1);
-        }, 200);
+                $new_plan_li_a = $new_plan_li.find('a');
+                // добавляем этой кнопке в атрибуты id нового расписания
+                $new_plan_li_a.attr('plan_id', msg.new_plan_id);
+
+                setTimeout(function () {
+                    $new_plan_li.fadeTo(100, 1);
+                }, 200);
+
+                setTimeout(function () {
+                    // навешиваем возможность переключения
+                    $new_plan_li_a.click(function () {
+                        switchPlan($(this));
+                    });
+                    // переключаемся на него, иммитируя клик
+                    $new_plan_li_a.trigger('click');
+                }, 600);
+            }
+        });
     });
-
-    bindPlanTitleAndPlanSelector();
-    updatePlanTitle();
-
-    // $('#plan_title').click(function() {
-    //     var $title_input, title_val;
-    //
-    //     title_val = $(this).text();
-    //
-    //     $(this).text("");
-    //     $(this).append('<input type="text">');
-    //
-    //     $title_input = $(this).find('input');
-    //     $title_input.attr({value: title_val, id: 'plan_title_input'});
-    //
-    //     $('#plan_title_input').focusout(function() {
-    //         var $plan_title;
-    //
-    //         $plan_title = $(this).parent();
-    //
-    //         $plan_title.text($(this).val());
-    //         $(this).remove();
-    //     });
-    // });
-});
+}
 
 
 function bindPlanTitleAndPlanSelector() {
@@ -58,14 +68,14 @@ function bindPlanTitleAndPlanSelector() {
         var plan_id = $(this).parent().parent().attr('plan_id');
         var $plan_selector;
 
-        $.each($('.plan_list li'), function() {
-            var id = $(this).find('p').text();
+        $.each($('.plan_list li a'), function() {
+            var id = $(this).attr("plan_id");
             if (plan_id == id){
                 $plan_selector = $(this);
             }
         });
 
-        $plan_selector.find('a').text($(this).val());
+        $plan_selector.text($(this).val());
     });
 }
 
@@ -113,7 +123,7 @@ function switchPlan($this_plan) {
      * --- /home/switch_plan
      * --- /plan/switch_plan
      */
-    var data = {plan_id: $this_plan.siblings('p').text()};
+    var data = {plan_id: $this_plan.attr('plan_id')};
     var loc = location.href.split('/');
     var address = loc[loc.length - 2];
 

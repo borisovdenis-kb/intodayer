@@ -3,7 +3,9 @@
 </div>
 
 <div class="title_content" plan_id={{ cur_plan.plan.id }}>
-    <div id="plan_title">{{ plan_info.0 }}</div>
+    <div id="plan_title">
+        <input id='title_edit_input' type="text" value="{{ cur_plan.plan.title }}">
+    </div>
     <div id="count_title">{{ plan_info.2 }}</div>
 </div>
 

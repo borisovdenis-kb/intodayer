@@ -309,10 +309,10 @@ class CustomUser(AbstractUser):
             res = [self.username]
             return res
 
-    def create_default_plan(self):
+    def add_default_plan(self):
         """
-            Эта функцию нужна для того, чтобы при создании нового пользователя
-            добавить ему дефолтное расписание.
+            Эта функцию нужна для того, чтобы добавить пользователю дефолтное
+            расписание.
             :return: plan_list object
         """
         new_plan = PlanLists(
@@ -323,7 +323,9 @@ class CustomUser(AbstractUser):
         )
         new_plan.save()
 
-        UserPlans(user_id=self.id, plan_id=new_plan.id, current_yn='y').save()
+        UserPlans(user_id=self.id, plan_id=new_plan.id).save()
+        # устанавливаем это расписание текущим
+        self.set_current_plan(new_plan.id)
 
         return new_plan
 
@@ -343,6 +345,9 @@ class CustomUser(AbstractUser):
             else:
                 row.current_yn = 'n'
                 row.save()
+
+    def user_plans_count(self):
+        return UserPlans.objects.filter(user_id=self.id).count()
 
     def __str__(self):
         return '%s %s %s' % (

@@ -104,7 +104,7 @@
                             <ul class="plan_list">
                                 {% for plan in all_plans %}
                                     <li>
-                                        <a
+                                        <a plan_id="{{ plan.plan.id }}"
                                             {% if plan.current_yn == 'y' %}
                                                 style="background-color: #000000; color: #ffffff"
                                             {% endif %}
@@ -112,7 +112,6 @@
                                             {{ plan.plan.title }}
 
                                         </a>
-                                        <p>{{ plan.plan.id }}</p>
                                     </li>
                                 {% endfor %}
                             </ul>

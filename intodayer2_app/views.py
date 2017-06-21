@@ -30,6 +30,17 @@ from extra.stripes_api import *
 #                          ОБРАБОТКА AJAX ЗАПРОСОВ                                #
 ###################################################################################
 
+def create_new_plan_ajax(request):
+    if request.is_ajax():
+        user = CustomUser.objects.get(username=request.user.username)
+        new_plan = user.add_default_plan()
+
+        response = HttpResponse()
+        response['Content-Type'] = 'text/javascript'
+        response.write(json.dumps({'success': 1, 'new_plan_id': new_plan.id}))
+
+        return response
+
 
 def update_plan_title_ajax(request):
     if request.is_ajax():
@@ -37,8 +48,6 @@ def update_plan_title_ajax(request):
 
         response = HttpResponse()
         response['Content-Type'] = 'text/javascript'
-
-        print('KAL')
 
         try:
             plan_id = int(request.POST['plan_id'])
@@ -436,7 +445,7 @@ def registration_view(request):
             # сохраняем usr_name и pswd в таблицу auth_user
             new_user = form.save()
             # добавляем пользователю дефолтное расписание
-            new_user.create_default_plan()
+            new_user.add_default_plan()
 
             return HttpResponseRedirect('/login')
     else:

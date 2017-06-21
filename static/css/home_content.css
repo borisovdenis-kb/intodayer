@@ -207,6 +207,13 @@ body {
     /*border: 1px solid rgba(139, 29, 235, 0.4);*/
 }
 
+#title_edit_input:hover {
+    outline: none;
+    cursor: pointer;
+    /*border: 1px solid rgb(217, 217, 227);*/
+    /*border: 1px solid rgba(139, 29, 235, 0.4);*/
+}
+
 
 #count_title {
     padding-top: 5px;
