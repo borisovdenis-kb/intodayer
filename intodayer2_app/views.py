@@ -582,6 +582,7 @@ def plan_view(request, plan_id=0):
 
         context['day_of_weeks'] = day_of_weeks
         context['plan_rows'] = plan_rows
+        context['is_plan_page'] = True
 
         return render_to_response('plan.html', context)
 

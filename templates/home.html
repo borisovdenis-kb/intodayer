@@ -115,11 +115,16 @@
                                     </li>
                                 {% endfor %}
                             </ul>
-                            <ul class="create_plan">
-                                <li>
-                                    <a></a>
-                                </li>
-                            </ul>
+
+                            {% if is_plan_page %}
+                                <!--Выводится только на странице /plan-->
+                                <ul class="create_plan">
+                                    <li>
+                                        <a></a>
+                                    </li>
+                                </ul>
+                            {% endif %}
+
                         </div>
                     {% else %}
                         {% block invitation %}{% endblock %}
@@ -134,8 +139,8 @@
                     </div>
 
                     <div class="title_content" plan_id="{{ cur_plan_info.2 }}">
-                        <div id="plan_title">
-                            <input id='title_edit_input' type="text" value="{{ cur_plan_info.0 }}">
+                            <div id="plan_title">
+                                <input id='title_edit_input' type="text" value="{{ cur_plan_info.0 }}">
                         </div>
                         <div id="count_title">{{ cur_plan_info.3 }}</div>
                     </div>

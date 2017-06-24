@@ -221,6 +221,29 @@ body {
     color: gray;
 }
 
+.title_wrap {
+    display: inline;
+    background-color: #2b542c;
+}
+
+.plan_settings {
+    /*display: inline;*/
+    float: right;
+    margin-right: 10px;
+    width: 40px;
+    height: 40px;
+    margin-left: 200px;
+    background-color: #2b669a;
+    background: url("../images/35.png") center no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+}
+
 .plan_content {
     margin-top: 10px;
 }
