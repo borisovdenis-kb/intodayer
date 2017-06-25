@@ -65,7 +65,7 @@ function bindPlanTitleAndPlanSelector() {
      *  и в кнопке соответсвуещей данному расписанию в панели переключения расписаний
      */
     $('#title_edit_input').on('input', function() {
-        var plan_id = $(this).parent().parent().attr('plan_id');
+        var plan_id = $(this).parent().parent().parent().attr('plan_id');
         var $plan_selector;
 
         $.each($('.plan_list li a'), function() {
@@ -87,7 +87,7 @@ function updatePlanTitle() {
         var data;
 
         data = {
-            plan_id: $(this).parent().parent().attr('plan_id'),
+            plan_id: $(this).parent().parent().parent().attr('plan_id'),
             new_title: $(this).val()
         };
 

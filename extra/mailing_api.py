@@ -30,8 +30,7 @@ class IntodayerMailing:
             :param sender_id:
             :param text:
         """
-        # все данные будут собирать в этот словарь
-        self.message = {}
+        self.message = {}  # все данные будут собирать в этот словарь
         self.msg_text = text
         self.plan_id = plan_id
         self.sender_id = sender_id
