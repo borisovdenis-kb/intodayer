@@ -258,7 +258,6 @@ class PlanLists(models.Model):
 
     def count_of_users(self):
         n = UserPlans.objects.filter(user_id=self.id).count()
-        res = ''
 
         if (n % 10) in [0, 5, 6, 7, 8, 9]:
             res = '%s участников' % n
@@ -266,6 +265,7 @@ class PlanLists(models.Model):
             res = '%s участника' % n
         else:
             res = '%s участник' % n
+        res = res
 
         return res
 

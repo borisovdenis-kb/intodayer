@@ -188,9 +188,10 @@ body {
 }
 
 
-#plan_title {
+#plan_title{
     font-size: 2em;
 }
+
 
 #title_edit_input {
     /*max-width: 500px;*/
@@ -432,10 +433,10 @@ textarea:-moz-placeholder {
     background: rgba(103, 198, 97, 0.9);
     border-radius: 4px;
     margin-top: 10px;
-    /*margin-bottom: 10px;*/
     min-height: 30px;
 }
 
 #plan_title_input {
     text-align: center;
 }
+

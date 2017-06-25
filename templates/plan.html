@@ -46,11 +46,11 @@
             <div class="plan_load_progres_indicator"></div>
         </div>
 
-        <div class="title_content" plan_id={{ cur_plan.plan.id }}>
+        <div class="title_content" plan_id={{ cur_plan.id }}>
             <div id="plan_title">
-                <input id='title_edit_input' type="text" value="{{ cur_plan.plan.title }}">
+                <input id='title_edit_input' type="text" value="{{ cur_plan.title }}">
             </div>
-            <div id="count_title">{{ plan_info.2 }}</div>
+            <div id="count_title">{{ cur_plan.count_of_users }}</div>
         </div>
 
         <!-- Вывод всех дней недели -->
@@ -177,6 +177,8 @@
         </div>
     </div>
 {% endblock %}
+
+
 
 {% block other %}
     <div class="KLOSS">
