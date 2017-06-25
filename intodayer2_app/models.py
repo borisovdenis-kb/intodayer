@@ -244,7 +244,7 @@ class PlanLists(models.Model):
 
     def get_image_url(self):
         """
-            Returns the URL of the image associated with this Object.
+            Returns the URL of the image assoc1iated with this Object.
             If an image hasn't been uploaded yet, it returns a stock image
             :returns: str -- the image url
         """
@@ -255,6 +255,19 @@ class PlanLists(models.Model):
                 return '/static/images/plan_avatar_default.png'
         else:
             return '/static/images/plan_avatar_default.png'
+
+    def count_of_users(self):
+        n = UserPlans.objects.filter(user_id=self.id).count()
+        res = ''
+
+        if (n % 10) in [0, 5, 6, 7, 8, 9]:
+            res = '%s участников' % n
+        elif (n % 10) in [2, 3, 4]:
+            res = '%s участника' % n
+        else:
+            res = '%s участник' % n
+
+        return res
 
     def __str__(self):
         return '%s %s' % (
@@ -345,9 +358,6 @@ class CustomUser(AbstractUser):
             else:
                 row.current_yn = 'n'
                 row.save()
-
-    def user_plans_count(self):
-        return UserPlans.objects.filter(user_id=self.id).count()
 
     def __str__(self):
         return '%s %s %s' % (
