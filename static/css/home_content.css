@@ -189,6 +189,7 @@ body {
 
 
 #plan_title {
+    margin-left: 250px;
     font-size: 2em;
 }
 
@@ -216,24 +217,26 @@ body {
 
 
 #count_title {
-    padding-top: 5px;
-    font-size: 1em;
+    margin-top: 5px;
+    /*background-color: #2b542c;*/
     color: gray;
+    font-size: 1em;
 }
 
 .title_wrap {
     display: inline;
-    background-color: #2b542c;
+    /*background-color: #2b542c;*/
 }
 
 .plan_settings {
     /*display: inline;*/
     float: right;
-    margin-right: 10px;
-    width: 40px;
-    height: 40px;
+    margin-right: 20px;
+    width: 30px;
+    height: 30px;
     margin-left: 200px;
-    background-color: #2b669a;
+    margin-top: 18px;
+    /*background-color: #2b669a;*/
     background: url("../images/35.png") center no-repeat;
     -webkit-background-size: cover;
     -moz-background-size: cover;

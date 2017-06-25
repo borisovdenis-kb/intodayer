@@ -10,9 +10,10 @@ from django.http import HttpResponseBadRequest
 from django.shortcuts import render_to_response
 from intodayer2_app.forms import *
 from intodayer2_app.send_sms import *
-from extra.mailing_api import *
 from extra.utils import *
 from extra.stripes_api import *
+from extra.mailing_api import *
+from extra.plan_settings_api import *
 
 
 # TODO: Сделать в выводе расписания в /plan сортировку по времени, а не по неделям
@@ -30,10 +31,32 @@ from extra.stripes_api import *
 #                          ОБРАБОТКА AJAX ЗАПРОСОВ                                #
 ###################################################################################
 
+def delete_plan_ajax(request):
+    if request.is_ajax():
+        user = CustomUser.objects.get(username=request.user.username)
+
+        response = HttpResponse()
+        response['Content-Type'] = 'text/javascript'
+
+        try:
+            plan_id = int(request.POST['plan_id'])
+            UserPlans.objects.get(user_id=user.id, plan_id=plan_id)
+        except (ValueError, ObjectDoesNotExist):
+            response.write(json.dumps({'success': 0}))
+            return response
+
+        settings = PlanSettings(user.id, plan_id)
+        settings.delete_plan()
+
+        response.write(json.dumps({'success': 1}))
+
+        return response
+
+
 def create_new_plan_ajax(request):
     if request.is_ajax():
         user = CustomUser.objects.get(username=request.user.username)
-        new_plan = user.add_default_plan()
+        new_plan = user.add_new_plan()
 
         response = HttpResponse()
         response['Content-Type'] = 'text/javascript'
@@ -445,7 +468,7 @@ def registration_view(request):
             # сохраняем usr_name и pswd в таблицу auth_user
             new_user = form.save()
             # добавляем пользователю дефолтное расписание
-            new_user.add_default_plan()
+            new_user.add_new_plan()
 
             return HttpResponseRedirect('/login')
     else:
@@ -510,11 +533,10 @@ def home_view(request):
         # выбираем текущее расписание юзера
         try:
             cur_plan = UserPlans.objects.select_related().get(user_id=user.id, current_yn='y')
-        except IndexError:
+        except (IndexError, ObjectDoesNotExist):
             cur_plan = all_plans[0]
 
         if all_plans:
-            context['image_form'] = SetAvatarForm
             context['all_plans'] = all_plans
             context['cur_plan'] = cur_plan
 

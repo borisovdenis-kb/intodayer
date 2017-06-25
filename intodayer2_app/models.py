@@ -309,9 +309,9 @@ class CustomUser(AbstractUser):
             res = [self.username]
             return res
 
-    def add_default_plan(self):
+    def add_new_plan(self):
         """
-            Эта функцию нужна для того, чтобы добавить пользователю дефолтное
+            Эта функцию нужна для того, чтобы добавить пользователю новое пустое
             расписание.
             :return: plan_list object
         """

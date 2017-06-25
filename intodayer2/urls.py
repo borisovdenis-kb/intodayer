@@ -49,6 +49,7 @@ urlpatterns = [
     url(r'^get_drop_list', views.get_drop_list_ajax),
     url(r'^update_plan_title', views.update_plan_title_ajax),
     url(r'^create_new_plan', views.create_new_plan_ajax),
+    url(r'^delete_plan', views.delete_plan_ajax),
 ]
 
 
