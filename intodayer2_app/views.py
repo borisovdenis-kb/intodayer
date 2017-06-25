@@ -408,9 +408,10 @@ def get_avatar_ajax(request):
 def statistics_view(request):
     if request.user.is_authenticated():
         user = CustomUser.objects.get(username=request.user.username)
-        context = {'user': user}
 
         all_plans = UserPlans.objects.select_related().filter(user_id=user.id)
+        if all_plans.count() == 0:
+            return HttpResponseRedirect("/plan")
 
         # выбираем текущее расписание юзера
         try:
@@ -506,6 +507,9 @@ def home_view(request):
         context = {'user': user}
 
         all_plans = UserPlans.objects.select_related().filter(user_id=user.id)
+
+        if all_plans.count() == 0:
+            return HttpResponseRedirect("/plan")
 
         # выбираем текущее расписание юзера
         try:
