@@ -196,6 +196,7 @@ body {
 
 #title_edit_input {
     /*max-width: 500px;*/
+    width: 100%;
         font-size: 2em;
     border: 1px solid #ffffff;
     text-align: center;
@@ -256,7 +257,7 @@ body {
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    width: 40%;
+    width: 100%;
 }
 
 .plan_content {

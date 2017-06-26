@@ -8,6 +8,7 @@
 {% block scripts_bottom %}
     <script type="text/javascript" src={% static "library/device.js" %}></script>
     <script type="text/javascript" src={% static "scripts/script_plan_empty.js" %}></script>
+    <script type="text/javascript" src={% static "scripts/script_plan_FINAL.js" %}></script>
 {% endblock %}
 
 {% block right_content %}
@@ -17,14 +18,44 @@
             <div class="plan_load_progres_indicator"></div>
         </div>
 
-        <div class="title_content">
-            <div id="plan_title">
-                <h2> Create your first plan now</h2>
+
+        {% if select_flag == True %}
+            <div class="title_content" style="margin-bottom: 15px">
+                <div id="plan_title">
+                    <h2> Select your current plan </h2>
+                </div>
             </div>
-        </div>
-        <div class="col-lg-offset-3 col-lg-6 col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3">
-             <div class="create_plan_first btn-success btn-lg text-center">Create plan</div>
-        </div>
+
+            {% for plan in all_plans %}
+                <div class="row">
+                <div class="col-lg-offset-3 col-lg-6 col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3">
+                    <div class="select_plan btn-primary btn-lg text-center" plan_id="{{ plan.plan.id }}">{{ plan.plan.title }}</div>
+                </div>
+            </div>
+            {% endfor %}
+
+            <div class="title_content" style="margin: 15px 0 15px 0">
+                <div id="plan_title">
+                    <h2> Or create new plan </h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-offset-3 col-lg-6 col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3">
+                    <div class="create_plan_first btn-success btn-lg text-center" style="margin-bottom: 15px">Create new plan</div>
+                </div>
+            </div>
+        {% else %}
+            <div class="title_content" style="margin-bottom: 15px">
+                <div id="plan_title">
+                    <h2> Create your first plan now </h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-offset-3 col-lg-6 col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3">
+                    <div class="create_plan_first btn-success btn-lg text-center">Create new plan</div>
+                </div>
+            </div>
+        {% endif %}
 
 
     </div>

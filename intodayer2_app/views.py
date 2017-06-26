@@ -570,10 +570,16 @@ def plan_view(request):
         context['all_plans'] = all_plans
         context['is_plan_page'] = True
 
-        if all_plans.count() == 0:
-            return render_to_response('plan_empty.html', context)
+        cur_plan = UserPlans.objects.select_related().filter(user_id=user.id, current_yn='y')
 
-        cur_plan = UserPlans.objects.select_related().get(user_id=user.id, current_yn='y')
+        if cur_plan.count() == 0:
+            if all_plans.count() == 0:
+                return render_to_response('plan_empty.html', context)
+            else:
+                context['select_flag'] = True
+                return render_to_response('plan_empty.html', context)
+
+        cur_plan = cur_plan[0]
         plan_rows = PlanRows.objects.select_related().filter(plan_id=cur_plan.plan.id).order_by('start_week')
         day_of_weeks = DaysOfWeek.objects.all()
 
