@@ -2,3 +2,5 @@
 /.idea/*
 /.idea/
 /media/
+/__pycache__/*
+*.pyc

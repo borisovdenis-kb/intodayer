@@ -1,4 +1,3 @@
-
 $(document).ready(function () {
     // setStrColor('f');
 
@@ -6,6 +5,14 @@ $(document).ready(function () {
 
     $('.plan_list li a').click(function () {
         switchPlan($(this));
+    });
+
+    $('.create_plan_first').click(function () {
+        createPlan();
+    });
+
+    $('.create_plan li a').click(function () {
+        createPlan()
     });
 
     bindPlanTitleAndPlanSelector();
@@ -29,7 +36,7 @@ function createPlan() {
         $.ajax({
             url: '/create_new_plan',
             type: 'GET',
-            success: function(msg) {
+            success: function (msg) {
                 msg = JSON.parse(msg);
                 // создаем новую кнопку
                 $('.plan_list').append('<li style="display: none; opacity: 0"><a>No name</a></li>');

@@ -3,13 +3,14 @@
 </div>
 
 <div class="title_content" plan_id="{{ cur_plan.plan.id }}">
-    <div class="title_wrap">
-        <div class="plan_settings"></div>
-        <div id="plan_title">
-            <input id='title_edit_input' type="text" value="{{ cur_plan.plan.title }}">
-        </div>
+    <div class="setting_left"></div>
+    <div id="plan_title">
+        <input id='title_edit_input' type="text" value="{{ cur_plan.plan.title }}">
+        <div id="count_title">{{ cur_plan.plan.count_of_users }}</div>
     </div>
-    <div id="count_title">{{ plan_info.2 }}</div>
+    <div class="setting_right">
+        <div class="plan_settings"></div>
+    </div>
 </div>
 
 <!-- Вывод всех дней недели -->

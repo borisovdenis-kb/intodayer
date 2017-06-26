@@ -185,16 +185,18 @@ body {
     padding: 10px 0 10px 0;
     text-align: center;
     border: 1px solid rgba(230, 230, 230, 1);
+    display: flex;
+}
+.title_content h2{
+    padding: 10px 0 10px 0;
+    margin: 0;
 }
 
 
-#plan_title {
-    margin-left: 250px;
-    font-size: 2em;
-}
 
 #title_edit_input {
     /*max-width: 500px;*/
+        font-size: 2em;
     border: 1px solid #ffffff;
     text-align: center;
     transition: 0.5s;
@@ -219,32 +221,42 @@ body {
 #count_title {
     margin-top: 5px;
     /*background-color: #2b542c;*/
-    color: gray;
+    padding-top: 5px;
     font-size: 1em;
 }
 
 .title_wrap {
-    display: inline;
+    background: gray;
     /*background-color: #2b542c;*/
 }
 
 .plan_settings {
-    /*display: inline;*/
-    float: right;
-    margin-right: 20px;
     width: 30px;
-    height: 30px;
-    margin-left: 200px;
-    margin-top: 18px;
-    /*background-color: #2b669a;*/
+    height: 100%;
+    margin-right: 20px;
+    float: right;
     background: url("../images/35.png") center no-repeat;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
     background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
     cursor: pointer;
+}
+.setting_left{
+    width: 30%;
+}
+
+.setting_right{
+    width: 30%;
+}
+
+#plan_title {
+    display: flex;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 40%;
 }
 
 .plan_content {
@@ -435,10 +447,10 @@ textarea:-moz-placeholder {
     background: rgba(103, 198, 97, 0.9);
     border-radius: 4px;
     margin-top: 10px;
-    /*margin-bottom: 10px;*/
     min-height: 30px;
 }
 
 #plan_title_input {
     text-align: center;
 }
+

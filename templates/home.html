@@ -59,10 +59,10 @@
                     <div class="top-menu">
                         <ul>
                             <!-- Не переименовывать классы и имена страниц! -->
-                            <li id="home"><a href="/home">Сегодня</a></li>
-                            <li id="table"><a href="/plan">Расписание</a></li>
-                            <li id="group"><a href="/home">Участники</a></li>
-                            <li id="statistic"><a href="/statistics">Статистика</a></li>
+                            <li id="home" class="today_bt"><a href="/home">Сегодня</a></li>
+                            <li id="table" class="plan_bt"><a href="/plan">Расписание</a></li>
+                            <li id="group" class="group_bt"><a href="/home">Участники</a></li>
+                            <li id="statistic" class="statistic_bt"><a href="/statistics">Статистика</a></li>
                         </ul>
                     </div>
                     <div class="droplist">
@@ -105,9 +105,9 @@
                                 {% for plan in all_plans %}
                                     <li>
                                         <a plan_id="{{ plan.plan.id }}"
-                                            {% if plan.current_yn == 'y' %}
-                                                style="background-color: #000000; color: #ffffff"
-                                            {% endif %}
+                                                {% if plan.current_yn == 'y' %}
+                                           style="background-color: #000000; color: #ffffff"
+                                                {% endif %}
                                         >
                                             {{ plan.plan.title }}
 
@@ -138,14 +138,14 @@
                         <div class="plan_load_progres_indicator"></div>
                     </div>
 
-                    <div class="title_content" plan_id="{{ cur_plan_info.2 }}">
-                        <div class="title_wrap">
-                            <div class="plan_settings"></div>
-                            <div id="plan_title">
-                                <input id='title_edit_input' type="text" value="{{ cur_plan_info.0 }}">
-                            </div>
+                    <div class="title_content" plan_id="{{ cur_plan.plan.id }}">
+                        <div class="setting_left"></div>
+                        <div id="plan_title">
+                            <input id='title_edit_input' type="text" value="{{ cur_plan.plan.title }}">
+                               <div id="count_title">{{ cur_plan.plan.count_of_users }}</div>
                         </div>
-                        <div id="count_title">{{ cur_plan_info.3 }}</div>
+                        <div class="setting_right">
+                        </div>
                     </div>
 
                     <!-- Сегодня -->
@@ -264,11 +264,14 @@
 {% block  mailing %}
 {% endblock %}
 
+
 {% block other %}
 {% endblock %}
 <div>
-<div class="textarea_behavior comment_text_hidden">sdfasdfsd</div>
-    </div>
+    <div class="textarea_behavior comment_text_hidden">sdfasdfsd</div>
+</div>
+
+
 </body>
 
 {# Скрипты, который должены быть на всех страницах #}
@@ -277,5 +280,6 @@
 
 {% block scripts_bottom %}
 {% endblock %}
+
 
 </html>

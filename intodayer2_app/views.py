@@ -431,9 +431,10 @@ def get_avatar_ajax(request):
 def statistics_view(request):
     if request.user.is_authenticated():
         user = CustomUser.objects.get(username=request.user.username)
-        context = {'user': user}
 
         all_plans = UserPlans.objects.select_related().filter(user_id=user.id)
+        if all_plans.count() == 0:
+            return HttpResponseRedirect("/plan")
 
         # выбираем текущее расписание юзера
         try:
@@ -530,6 +531,9 @@ def home_view(request):
 
         all_plans = UserPlans.objects.select_related().filter(user_id=user.id)
 
+        if all_plans.count() == 0:
+            return HttpResponseRedirect("/plan")
+
         # выбираем текущее расписание юзера
         try:
             cur_plan = UserPlans.objects.select_related().get(user_id=user.id, current_yn='y')
@@ -551,7 +555,7 @@ def home_view(request):
         return HttpResponseRedirect("/login")
 
 
-def plan_view(request, plan_id=0):
+def plan_view(request):
     """
        Функция, которая выводит таблицу редактирования текущего (выбранного) расписания.
        На странице имеем доступ для всех дней недели и для всего расписания (всех диапазонов) в целом.
@@ -559,52 +563,23 @@ def plan_view(request, plan_id=0):
    """
     if request.user.is_authenticated():
         user = CustomUser.objects.get(username=request.user.username)
-        context = {
-            'user': user,
-        }
+        all_plans = UserPlans.objects.select_related().filter(user_id=user.id)
 
-        if plan_id == 0:
-            all_plans = UserPlans.objects.select_related().filter(user_id=user.id)
-            # выбираем текущее расписание юзера
-            cur_plan = UserPlans.objects.select_related().get(user_id=user.id, current_yn='y')
+        context = dict()
+        context['user'] = user
+        context['all_plans'] = all_plans
+        context['is_plan_page'] = True
 
-            plan_rows = PlanRows.objects.select_related().filter(
-                plan_id=cur_plan.plan.id,
-            ).order_by('start_week')
+        if all_plans.count() == 0:
+            return render_to_response('plan_empty.html', context)
 
-            count = UserPlans.objects.filter(plan_id=cur_plan.plan.id).count()
-            # все расписания
-            context['all_plans'] = all_plans
-            context['cur_plan'] = cur_plan
-            # имя описание расписания
-            context['plan_info'] = [cur_plan.plan.title, cur_plan.plan.description]
-            # количество участников
-            context['plan_info'] += [members_amount_suffix(count)]
-        else:
-            invitation = Invitations.objects.get(to_user=user.id, plan_id=plan_id)
-            if invitation:
-                context['is_invitation'] = True
-                context['invitation'] = invitation
-
-                plan = PlanLists.objects.get(id=plan_id)
-
-                plan_rows = PlanRows.objects.select_related().filter(
-                    plan_id=plan_id,
-                ).order_by('start_week')
-
-                count = UserPlans.objects.filter(plan_id=plan.id).count()
-                # имя описание расписания
-                context['plan_info'] = [plan.title, plan.description]
-                # количество участников
-                context['plan_info'] += [members_amount_suffix(count)]
-            else:
-                return render_to_response("ops_page.html")
-
+        cur_plan = UserPlans.objects.select_related().get(user_id=user.id, current_yn='y')
+        plan_rows = PlanRows.objects.select_related().filter(plan_id=cur_plan.plan.id).order_by('start_week')
         day_of_weeks = DaysOfWeek.objects.all()
 
+        context['cur_plan'] = cur_plan
         context['day_of_weeks'] = day_of_weeks
         context['plan_rows'] = plan_rows
-        context['is_plan_page'] = True
 
         return render_to_response('plan.html', context)
 
