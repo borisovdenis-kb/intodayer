@@ -10,11 +10,14 @@ $(document).ready(function () {
     $('.create_plan_first').click(function () {
         createPlan();
         setScrollTop();
-        // focusInputTitle();
     });
 
     $('.create_plan li a').click(function () {
         createPlan($(this).parents('li'));
+    });
+
+    $('.plan_settings').click(function () {
+        activeSettings();
     });
 
     $(".select_plan").click(function () {
@@ -22,13 +25,81 @@ $(document).ready(function () {
         setScrollTop();
     });
 
-    bindPlanTitleAndPlanSelector();
-    updatePlanTitle();
-    createPlan();
+    setCurrentMenu();
 });
 
+
+function getCursorToEnd($this_input) {
+    $this_input.val($this_input.val());
+}
+
+function activeSettings() {
+    if ($('.buttons_setting').length > 0) {
+        deactivateSettings();
+        return true;
+    }
+
+    var $title_input = $('#title_edit_input');
+    var $title_content = $('.title_content');
+
+    bindPlanTitleAndPlanSelector();
+    $title_input.prop('disabled', false);
+    $title_input.focus();
+
+    var $buttons = $(
+        '<div class="buttons_setting row">' +
+        '<div class="text-center">' +
+        '<button type="button" class="setting_success col-lg-2 col-lg-offset-4 col-md-2 col-md-offset-4 col-xs-4  col-xs-offset-2 col-sm-4 col-sm-offset-2 btn-primary btn-lg text-center">Применить</button>' +
+        '<button type="button" class="setting_cancel col-lg-2 col-md-2 col-md-offset-4 col-xs-4 col-sm-4 btn-danger btn-lg text-center">Отмена</button>' +
+        '</div>' +
+        '</div>');
+
+    $buttons.insertAfter($title_content);
+
+    $('.setting_cancel').click(function () {
+        deactivateSettings();
+    });
+
+    $('.setting_success').click(function () {
+        updatePlanTitle();
+        deactivateSettings();
+    });
+
+    $title_input.css({
+        "border": "1px solid rgb(217, 217, 227)"
+    });
+
+    // редактировать дату действия расписания
+    var $dates_block = $(
+        '<form class="select_dates">' +
+        '<div class="form-group col-lg-10">' +
+        '<input type="date" class="start_date form-control">' +
+        '</div>' +
+        '<div class="form-group col-lg-10">' +
+        '<input type="date" class="end_date form-control">' +
+        '</div>' +
+        '</form>');
+    $('.data_work').remove();
+    $('.setting_left').append($dates_block);
+
+
+    getCursorToEnd($title_input);
+}
+function deactivateSettings() {
+    var $title_input = $('#title_edit_input');
+    var $dates = $('.select_dates');
+    $title_input.css({'border-color': 'rgba(0,0,0,0)'});
+    $title_input.prop('disabled', true);
+    $dates.remove();
+    var dates_work = $('<div class="data_work">22.03.16-24.12.16</div>')
+    $('.setting_left').append(dates_work);
+    $('.buttons_setting').remove();
+    updatePlanTitle();
+}
+
+
 function setScrollTop() {
-        $('html, body').animate({scrollTop: 0}, 400); //1100 - скорость
+    $('html, body').animate({scrollTop: 0}, 400); //1100 - скорость
 }
 // function focusInputTitle() {
 //        $('#title_edit_input').trigger('focus');
@@ -96,8 +167,7 @@ function bindPlanTitleAndPlanSelector() {
             if (plan_id == id) {
                 $plan_selector = $(this);
             }
-        });
-
+        })
         $plan_selector.text($(this).val());
     });
 }
@@ -135,7 +205,6 @@ function updatePlanTitle() {
 }
 
 
-
 function switchPlan($this_plan) {
     /*
      * Это функция общая для всего сайта.
@@ -170,8 +239,8 @@ function switchPlan($this_plan) {
     $('.right_content').load('/' + address + '/switch_plan', data, function () {
         $('.plan_load_progres_indicator').css('display', 'none');
 
-        bindPlanTitleAndPlanSelector();
-        updatePlanTitle();
+        // bindPlanTitleAndPlanSelector();
+        // updatePlanTitle();
         startIntodayer();
     });
 
@@ -196,4 +265,31 @@ function avatarEditAccess(data) {
             $('.ava_cover').css({'display': 'none'});
         }
     });
+}
+
+function setCurrentMenu() {
+    /*
+     Эта функция подсвечивает текущее выбранное меню
+     */
+    var this_url = document.location.href;
+    if (this_url.match('/home/')) {
+        $('.today_bt a').css({
+            "color": "#1E90FF",
+        })
+    }
+    if (this_url.match('/plan/')) {
+        $('.plan_bt a').css({
+            "color": "#1E90FF",
+        })
+    }
+    if (this_url.match('/statistics/')) {
+        $('.statistic_bt a').css({
+            "color": "#1E90FF",
+        })
+    }
+    if (this_url.match('/group/')) {
+        $('.group_bt a').css({
+            "color": "#1E90FF",
+        })
+    }
 }

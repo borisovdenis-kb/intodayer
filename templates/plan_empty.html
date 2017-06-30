@@ -2,13 +2,13 @@
 {% load staticfiles %}
 
 {% block styles %}
-    <link rel="stylesheet" type="text/css" href={% static "css/plan_styles.css" %}>
+    <link rel="stylesheet" type="text/css" href={% static "css/__old/plan_styles.css" %}>
 {% endblock %}
 
 {% block scripts_bottom %}
     <script type="text/javascript" src={% static "library/device.js" %}></script>
     <script type="text/javascript" src={% static "scripts/script_plan_empty.js" %}></script>
-    <script type="text/javascript" src={% static "scripts/script_plan_FINAL.js" %}></script>
+    <script type="text/javascript" src={% static "scripts/script_plan_edit.js" %}></script>
 {% endblock %}
 
 {% block right_content %}

@@ -57,39 +57,39 @@ function loadData($thisField) {
                 $('.drop_list').remove();
                 return false;
             }
+            $('.drop_list ul li a').on('mousedown touchstart', function (e) {
+                // console.log($(this).text());
+                $thisField.val($(this).text());
+
+                if ($thisField.hasClass('drop_button')) {
+                    $thisField.removeClass('drop_is');
+                    $thisField.css({'background': 'rgba(255,255,255,0)'});
+                }
+
+                $('.drop_list').remove();
+                e.preventDefault();
+                return false;
+            });
+
+            $('.drop_list ul li a').css({
+                'height': $bruceLi.height()
+            });
+            $drop_list.animate({
+                'width': $thisField.outerWidth(),
+                'top': posY,
+                'left': $thisField.offset().left
+            }, 1, function () {
+                $(this).fadeTo(1, 1);
+            });
+
+
         });
     }
 
     var $drop_list = $('.drop_list');
     var posY = $thisField.offset().top + $thisField.outerHeight() + 2;
 
-    setTimeout(function () {
 
-        $('.drop_list ul li a').on('mousedown touchstart', function (e) {
-            // console.log($(this).text());
-            $thisField.val($(this).text());
-
-            if ($thisField.hasClass('drop_button')) {
-                $thisField.removeClass('drop_is');
-                $thisField.css({'background': 'rgba(255,255,255,0)'});
-            }
-            
-            $('.drop_list').remove();
-            e.preventDefault();
-            return false;
-        });
-        
-        $('.drop_list ul li a').css({
-            'height': $bruceLi.height()
-        });
-        $drop_list.animate({
-            'width': $thisField.outerWidth(),
-            'top': posY,
-            'left': $thisField.offset().left
-        }, 1, function () {
-            $(this).fadeTo(1, 1);
-        });
-    }, 300);
 }
 
 // делает чтобы дроп лист двигался вместе с полем

@@ -186,21 +186,50 @@ body {
     text-align: center;
     border: 1px solid rgba(230, 230, 230, 1);
     display: flex;
+    transition: 0.3s all;
 }
 .title_content h2{
     padding: 10px 0 10px 0;
     margin: 0;
 }
 
+.buttons_setting{
+    margin-top: 10px;
+}
+.setting_success{
+    margin-right:2px
+}
+.setting_cancel{
+    margin-left: 2px;
+}
+
+.form-group{
+    margin: 0;
+    padding: 0;
+    margin-left: 25px;
+    /*background: blue;*/
+}
+
+#plan_title {
+    display: flex;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 100%;
+    /*background: red;*/
+    cursor: default;
+}
 
 
 #title_edit_input {
     /*max-width: 500px;*/
     width: 100%;
-        font-size: 2em;
+    font-size: 2em;
     border: 1px solid #ffffff;
     text-align: center;
-    transition: 0.5s;
+    transition: 0.3s;
+    text-overflow: ellipsis;
 }
 
 
@@ -211,6 +240,10 @@ body {
     /*border: 1px solid rgba(139, 29, 235, 0.4);*/
 }
 
+/*.title_input_active{*/
+    /*border: 1px solid #8b1deb;*/
+/*}*/
+
 #title_edit_input:hover {
     outline: none;
     cursor: pointer;
@@ -219,10 +252,16 @@ body {
 }
 
 
+#title_edit_input:disabled{
+    background: rgba(255,255,255,0);
+    cursor: default;
+}
+
+
 #count_title {
     margin-top: 5px;
     /*background-color: #2b542c;*/
-    padding-top: 5px;
+    padding-top: 1px;
     font-size: 1em;
 }
 
@@ -231,7 +270,7 @@ body {
     /*background-color: #2b542c;*/
 }
 
-.plan_settings {
+.plan_settings{
     width: 30px;
     height: 100%;
     margin-right: 20px;
@@ -243,22 +282,37 @@ body {
     background-size: contain;
     cursor: pointer;
 }
+
+.data_work {
+    height: 100%;
+    float: left;
+    margin-left: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.start_date{
+    /*border: 1px solid rgb(217, 217, 227);*/
+    margin-bottom: 2px;
+}
+.end_date{
+    /*border: 1px solid rgb(217, 217, 227);*/
+    margin-top: 2px;
+}
+
 .setting_left{
-    width: 30%;
+    width: 40%;
+    display: flex;
+    /*background: blue;*/
+    align-items: center;
+    align-content: center;
 }
 
 .setting_right{
-    width: 30%;
+    width: 40%;
 }
 
-#plan_title {
-    display: flex;
-    align-content: center;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    width: 100%;
-}
 
 .plan_content {
     margin-top: 10px;

@@ -1,0 +1,35 @@
+@mixin border-radius($val)
+  -moz-border-radius: $val
+  -webkit-border-radius: $val
+  -khtml-border-radius: $val
+  border-radius: $val
+  -ms-border-radius: $val
+
+@mixin box-shadow($val)
+  -webkit-box-shadow: $val
+  -moz-box-shadow: $val
+  box-shadow: $val
+  -ms-box-shadow: $val
+  -o-box-shadow: $val
+  -khtml-box-shadow: $val
+
+@mixin user-select($val)
+  -webkit-touch-callout: $val /* iOS Safari */
+  -webkit-user-select: $val /* Safari */
+  -khtml-user-select: $val /* Konqueror HTML */
+  -moz-user-select: $val /* Firefox */
+  -ms-user-select: $val /* Internet Explorer/Edge */
+  user-select: $val /* Non-pre */
+
+
+// центрирует flex блок по вертикали и горизонтали
+@mixin set-flex($type)
+  display: flex
+  @if $type == center
+    align-items: center
+    justify-content: center
+    align-content: center
+  @else
+    align-items: flex-start
+    justify-content: flex-start
+    align-content: flex-start

@@ -1,0 +1,231 @@
+$width-page: 600px
+$alpha_zero: rgba(255, 255, 255, 0)
+
+//переменные для чекбокса
+$checkbox-panel-border-right-color: rgba(91, 178, 102, 0.4)
+$checkbox-border-color: rgba(103, 198, 97, 1)
+$checkbox-size: 23px
+
+//переменные для кнопок панели инструментов
+$tools-buttons-border-color: rgba(0, 0, 0, 0.1)
+$tools-buttons-font-color: rgba(0, 0, 0, 0.2)
+$share-second-layer-background: #7598ba
+$share-first-layer-background: #9dc8eb
+
+//переменные для выпадающего списка
+$droplist-box-shadow: 0px 10px 20px -4px rgba(0, 0, 0, 0.4)
+$droplist-border-split-color: rgba(231, 230, 235, 1)
+
+//переменные для индикатора загрузки
+$plan-load-indicator-size: 60px
+
+//импорт кросс-бразерных миксинов
+@import mixins
+
+body
+  overflow-y: scroll
+  min-width: $width-page
+
+.day_title
+  padding: 5px 0 10px 0
+
+.day_title_container
+  text-align: center
+  width: 30%
+
+.str_plan
+  ul li
+    &:nth-child(1), &:nth-child(2), &:nth-child(5), &:nth-child(6)
+      width: 15%
+    width: 30%
+
+    a, input
+      text-align: center
+
+.plus_button_form
+  margin: auto
+  width: 25px
+  height: 25px
+  @include border-radius(100%)
+  transition: 0.3s
+  padding: 0 0 0 0
+
+  &:hover .plus_button
+    opacity: 1
+  &:active .plus_button
+    opacity: 0.7
+
+.plus_button
+  transition: 0.1s
+  height: 100%
+  background: url("../images/plus_1.png") center no-repeat
+  background-size: cover
+  opacity: 0.5
+  cursor: pointer
+
+.str_plan
+  &.str_plus
+    cursor: default
+    background: $alpha_zero
+    padding: 0 0 5px 0
+    margin:
+      top: 10px
+  .change
+    &:nth-child(2)
+      margin:
+        top: 5px
+
+.checkbox_wrap
+  @include set-flex(center)
+  float: left
+  width: 40px
+  padding:
+    left: 2px
+  cursor: pointer
+
+.checkbox_container
+  display: flex
+  width: $checkbox-size
+  height: $checkbox-size
+  @include border-radius(4px)
+  background-color: $alpha_zero
+  border: 2px solid $checkbox-border-color
+  cursor: pointer
+
+.content_day_title
+  flex-direction: row
+
+.str_title
+  cursor: default
+
+  .checkbox_container
+    border: 2px solid white
+  .checkbox_wrap
+    border:
+      right: 1px solid $checkbox-panel-border-right-color
+
+.tools_panel
+  ul
+    height: 30px
+    li
+      display: inline-flex
+      height: 100%
+      width: 80px
+      button
+        width: 100%
+        border: 2px solid $tools-buttons-border-color
+        color: $tools-buttons-font-color
+        font-weight: 700
+        @include border-radius(3px)
+  &.left
+    min-width: 170px
+    width: 35%
+    ul li
+      &:first-child
+        margin-right: 2px
+  &.right
+    text-align: right
+    width: 35%
+    float: right
+    ul li
+      width: 70px
+
+%share_button_layers
+  position: absolute
+  width: 70px
+  @include border-radius(3px)
+
+.share_button
+  display: inline
+  position: relative
+  .first_layer
+    @extend %share_button_layers
+    padding: 3px 0 3px 0
+    background: $share-first-layer-background
+    color: $tools-buttons-font-color
+    text-align: center
+    font-weight: 700
+    text-decoration: none
+    transition: 0.1s ease
+    user-select: none
+
+    &:hover
+      cursor: pointer
+    &:active
+      margin-top: 2px
+
+  .second_layer
+    @extend %share_button_layers
+    height: 30px
+    background: $share-second-layer-background
+    color: $tools-buttons-font-color
+
+#btn-Convert-Html2Image
+  width: 100px
+  height: 1000px
+  background: #eb6b66
+
+.KLOSS
+  position: absolute
+  width: 1000px
+  height: auto
+  margin: auto
+  opacity: 0
+
+.drop_list
+  display: none
+  position: absolute
+  max-height: 150px
+  background: white
+  @include border-radius(4px)
+  @include box-shadow($droplist-box-shadow)
+  overflow-x: hidden
+  ul li
+    display: flex
+    justify-content: center
+    vertical-align: middle
+    a
+      @include set-flex(center)
+      width: 100%
+      background: white
+      border-bottom: 1px solid $droplist-border-split-color
+      text-align: center
+      padding: 0 5px 0 5px
+      max-height: 25px
+      display: block
+      white-space: nowrap
+      text-overflow: ellipsis
+      overflow: hidden
+
+      &:hover
+        cursor: pointer
+        background: rgb(240, 240, 245)
+
+.plan_load_progres
+  width: 100%
+
+.plan_load_progres_indicator
+  display: none
+  width: $plan-load-indicator-size
+  height: $plan-load-indicator-size
+  margin: auto
+  background: url("../images/progress_indicator.gif") no-repeat center
+  background-size: contain
+
+.create_plan_first, .select_plan
+  font-size: 1.5em
+  font-weight: 600
+  margin: 2px 0 2px 0
+
+
+
+
+
+
+
+
+
+
+
+
+

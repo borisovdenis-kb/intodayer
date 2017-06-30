@@ -309,36 +309,3 @@ button:focus {
     z-index: 3;
 
 }
-
-/*.droplist_click ul:after {*/
-/*content: '';*/
-/*position: absolute;*/
-/*bottom: 111px;*/
-/*right: 89px;*/
-/*border: 8px solid transparent;*/
-/*border-bottom: 9px solid white;*/
-/*z-index: 12;*/
-/*cursor: default;*/
-/*}*/
-
-/*.droplist_click ul:before {*/
-/*content: '';*/
-/*position: absolute;*/
-/*bottom: 112px;*/
-/*right: 89px;*/
-/*border: 8px solid transparent;*/
-/*cursor: default;*/
-/*border-bottom: 8px solid rgba(180, 180, 180 , 1);*/
-/*z-index: -10;*/
-/*filter: blur(2px); !* Someday, sigh ... *!*/
-/*-webkit-filter: blur(2px); !* Prefixed CSS3 blur filters *!*/
-/*-moz-filter: blur(2px);*/
-/*-o-filter: blur(2px);*/
-/*-ms-filter: blur(2px);*/
-/*filter: url(#blur); !* Firefox needs SVG *!*/
-/*filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius='2'); !* IE lte 9 *!*/
-/*}*/
-
-/*#jQuery ###########################################################*/
-/*#jQuery ###########################################################*/
-/*#jQuery ###########################################################*/

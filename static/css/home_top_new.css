@@ -1,0 +1,242 @@
+ul {
+  list-style: none;
+  margin: 0 auto; }
+
+a {
+  text-decoration: none;
+  transition: 0.2s linear; }
+
+button {
+  background: none;
+  border: none; }
+  button:hover, button:focus {
+    outline: none; }
+
+.top-block {
+  border-bottom: 3px solid #8b1deb;
+  background: #f2f2f2; }
+
+.top {
+  max-width: 1200px;
+  width: 100%;
+  margin: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  padding: 0 10px 0 10px; }
+
+.top-menu ul {
+  display: flex;
+  height: 40px; }
+  .top-menu ul li {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    height: auto; }
+    .top-menu ul li a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      align-content: center;
+      height: 100%;
+      width: 100%;
+      color: black;
+      font-size: 0.85em;
+      padding-left: 20px;
+      padding-right: 20px; }
+      .top-menu ul li a:hover {
+        background: white;
+        color: dodgerblue;
+        transition: 0.3s ease; }
+      .top-menu ul li a:active {
+        background: #f2f2f2;
+        transition: 0.3s ease; }
+
+.droplist {
+  display: flex;
+  justify-content: center;
+  margin-left: auto;
+  min-width: 120px;
+  max-width: 150px;
+  z-index: 100;
+  background: #f0f0f0;
+  position: relative;
+  cursor: pointer; }
+  .droplist a {
+    display: flex;
+    cursor: pointer;
+    padding: 0 15px 0 10px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none; }
+
+.logo {
+  display: flex;
+  align-content: center;
+  height: auto;
+  width: 187px;
+  font-size: 24px; }
+  .logo a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-content: center; }
+
+#profile_title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  height: auto; }
+  #profile_title a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    height: auto;
+    margin-top: 1px; }
+
+#user_ava_thumbnail_content {
+  cursor: pointer;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  padding: 0 10px 0 0; }
+
+#user_ava_thumbnail {
+  width: 30px;
+  height: 30px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  -khtml-border-radius: 2px;
+  border-radius: 2px;
+  -ms-border-radius: 2px;
+  background: center no-repeat;
+  background-size: cover;
+  cursor: pointer; }
+
+#arrow_down_content {
+  cursor: pointer;
+  padding: 0 10px 0 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-content: center; }
+
+#arrow_down {
+  margin: 5px 0 0 0;
+  border: 6px solid transparent;
+    border-top: 7px solid #969696;
+  cursor: pointer; }
+
+.droplist_click {
+  position: absolute;
+  margin-top: -10px;
+  background: white;
+  font-size: 0.9em;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  -khtml-border-radius: 4px;
+  border-radius: 4px;
+  -ms-border-radius: 4px;
+  border: 1px solid #d2d2d2;
+  -webkit-box-shadow: 0px 2px 15px 0px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0px 2px 15px 0px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 2px 15px 0px rgba(0, 0, 0, 0.2);
+  -ms-box-shadow: 0px 2px 15px 0px rgba(0, 0, 0, 0.2);
+  -o-box-shadow: 0px 2px 15px 0px rgba(0, 0, 0, 0.2);
+  -khtml-box-shadow: 0px 2px 15px 0px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  z-index: 1; }
+
+.droplist_click_container {
+  display: inline;
+  margin-top: 10px; }
+
+.droplist_click {
+  position: relative; }
+  .droplist_click ul li {
+    cursor: pointer;
+    width: 110px;
+    line-height: 35px;
+    overflow: hidden;
+    border-bottom: 1px solid #e6e6e6; }
+    .droplist_click ul li:first-child {
+      -moz-border-radius: 4px 4px 0 0;
+      -webkit-border-radius: 4px 4px 0 0;
+      -khtml-border-radius: 4px 4px 0 0;
+      border-radius: 4px 4px 0 0;
+      -ms-border-radius: 4px 4px 0 0; }
+    .droplist_click ul li:last-child {
+      -moz-border-radius: 0 0 4px 4px;
+      -webkit-border-radius: 0 0 4px 4px;
+      -khtml-border-radius: 0 0 4px 4px;
+      border-radius: 0 0 4px 4px;
+      -ms-border-radius: 0 0 4px 4px; }
+    .droplist_click ul li:first-child, .droplist_click ul li:last-child {
+      background: white;
+      cursor: default; }
+      .droplist_click ul li:first-child:hover, .droplist_click ul li:first-child:active, .droplist_click ul li:last-child:hover, .droplist_click ul li:last-child:active {
+        background: white; }
+    .droplist_click ul li:first-child {
+      height: 4px;
+      border-bottom: none; }
+    .droplist_click ul li:last-child {
+      height: 3px;
+      border-bottom: none; }
+    .droplist_click ul li:nth-child(4) {
+      border-bottom: none; }
+    .droplist_click ul li:hover {
+      background: #e6e6e6; }
+    .droplist_click ul li:active {
+      background: gainsboro; }
+    .droplist_click ul li a {
+      display: block;
+      width: 100%;
+      padding: 0 10px 0 10px;
+      cursor: pointer; }
+
+.triangle, .triangle_bottom {
+  display: inline-table;
+  position: relative;
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  z-index: 3; }
+
+.triangle {
+  bottom: 5px;
+  right: -79px;
+  border-bottom: 6px solid gainsboro; }
+
+.triangle_bottom {
+  bottom: 4px;
+  right: -63px;
+  border-bottom: 6px solid white; }
+
+@media (max-width: 768px) {
+  .logo {
+    width: auto;
+    padding-right: 20px;
+    font-size: 20px;
+    margin-top: 2px; }
+
+  .top-menu ul li a {
+    font-size: 0.7em;
+    padding-left: 8px;
+    padding-right: 8px; } }
+
+/*# sourceMappingURL=home_top_new.css.map */

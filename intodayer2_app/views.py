@@ -31,6 +31,19 @@ from extra.plan_settings_api import *
 #                          ОБРАБОТКА AJAX ЗАПРОСОВ                                #
 ###################################################################################
 
+# def setting_plan_ajax(request):
+#     if request.is_ajax():
+#         user = CustomUser.objects.get(username=request.user.username)
+#         response = HttpResponse()
+#         response['Content-Type'] = 'text/javascript'
+#     try:
+#         plan_id = int(request.POST['plan_id'])
+#         UserPlans.objects.get(user_id=user.id, plan_id=plan_id)
+#     except (ValueError, ObjectDoesNotExist):
+#         response.write(json.dumps({'success': 0}))
+#         return response
+
+
 def delete_plan_ajax(request):
     if request.is_ajax():
         user = CustomUser.objects.get(username=request.user.username)
