@@ -1,12 +1,14 @@
 $(document).ready(function () {
-    // setStrColor('f');
 
     avatarEditAccess({plan_id: $('.ava_content p').text()});
+    setListenersTitleBlock();
+    setListenersEmptyPlan();
+    setListenersLeftContent();
+    setCurrentMenu();
 
-    $('.plan_list li a').click(function () {
-        switchPlan($(this));
-    });
+});
 
+function setListenersEmptyPlan() {
     $('.create_plan_first').click(function () {
         createPlan();
         setScrollTop();
@@ -15,18 +17,41 @@ $(document).ready(function () {
     $('.create_plan li a').click(function () {
         createPlan($(this).parents('li'));
     });
+}
 
+function setListenersTitleBlock() {
     $('.plan_settings').click(function () {
         activeSettings();
     });
+}
 
+function setListenersLeftContent() {
     $(".select_plan").click(function () {
         switchPlan($(this));
+        loadLeftContent();
         setScrollTop();
+        avatarEditAccess({plan_id: $('.ava_content p').text()});
     });
 
-    setCurrentMenu();
-});
+    $('.plan_list li a').click(function () {
+        switchPlan($(this));
+    });
+
+}
+
+
+function loadLeftContent() {
+    /*
+     Функция загружает правый контент
+     */
+    $('.left_content').load('/left_content', {}, function () {
+        setListenersLeftContent();
+    });
+    // при загрузке левого конетнта, правый должен быть именно такого размера
+    $('.right_content').css({
+        'width': 'calc(100% - 188px)'
+    })
+}
 
 
 function getCursorToEnd($this_input) {
@@ -34,6 +59,11 @@ function getCursorToEnd($this_input) {
 }
 
 function activeSettings() {
+    /*
+     функция активирует настройки при нажатии на кнопку
+     активируется поле имени расписания
+     появляются поля для изменения начальной даты расписания
+     */
     if ($('.buttons_setting').length > 0) {
         deactivateSettings();
         return true;
@@ -70,17 +100,17 @@ function activeSettings() {
     });
 
     // редактировать дату действия расписания
-    var $dates_block = $(
-        '<form class="select_dates">' +
-        '<div class="form-group col-lg-10">' +
-        '<input type="date" class="start_date form-control">' +
-        '</div>' +
-        '<div class="form-group col-lg-10">' +
-        '<input type="date" class="end_date form-control">' +
-        '</div>' +
-        '</form>');
+    // var $dates_block = $(
+    //     '<form class="select_dates">' +
+    //     '<div class="form-group col-lg-10">' +
+    //     '<input type="date" class="start_date form-control">' +
+    //     '</div>' +
+    //     '<div class="form-group col-lg-10">' +
+    //     '<input type="date" class="end_date form-control">' +
+    //     '</div>' +
+    //     '</form>');
     $('.data_work').remove();
-    $('.setting_left').append($dates_block);
+    // $('.setting_left').append($dates_block);
 
 
     getCursorToEnd($title_input);
@@ -101,9 +131,6 @@ function deactivateSettings() {
 function setScrollTop() {
     $('html, body').animate({scrollTop: 0}, 400); //1100 - скорость
 }
-// function focusInputTitle() {
-//        $('#title_edit_input').trigger('focus');
-// }
 
 function createPlan($plus_button) {
     /*
@@ -113,9 +140,6 @@ function createPlan($plus_button) {
      */
     var $new_plan_li, $new_plan_li_a;
 
-    $(this).animate({'background-color': '#ffffff'}, 200);
-    $(this).delay(100).animate({'background-color': '#f4f3f8'}, 200);
-
     // если мы нажимаем на меню справа, то плюс исчезает на мгновение
     if ($plus_button) {
         $plus_button.fadeTo(50, 0).delay(100).fadeTo(200, 1);
@@ -124,12 +148,13 @@ function createPlan($plus_button) {
     $.ajax({
         url: '/create_new_plan',
         type: 'GET',
+        dataType: 'json',
         success: function (msg) {
-            msg = JSON.parse(msg);
             // создаем новую кнопку
             $('.plan_list').append('<li style="display: none; opacity: 0"><a>No name</a></li>');
 
             $new_plan_li = $('.plan_list li').last();
+
             $new_plan_li.slideToggle(200);
 
             $new_plan_li_a = $new_plan_li.find('a');
@@ -167,7 +192,7 @@ function bindPlanTitleAndPlanSelector() {
             if (plan_id == id) {
                 $plan_selector = $(this);
             }
-        })
+        });
         $plan_selector.text($(this).val());
     });
 }
@@ -176,31 +201,31 @@ function updatePlanTitle() {
     /*
      * Функция обновляет заголовок расписания в базе после редактирования.
      */
-    $('#title_edit_input').focusout(function () {
-        var data;
+    var data;
+    var $title_input = $('#title_edit_input');
 
-        data = {
-            plan_id: $(this).parent().parent().parent().attr('plan_id'),
-            new_title: $(this).val()
-        };
+    data = {
+        plan_id: $('.title_content').attr('plan_id'),
+        new_title: $title_input.val()
+    };
 
-        $.ajax({
-            url: '/update_plan_title',
-            type: 'POST',
-            data: data,
-            success: function (msg) {
-                msg = JSON.parse(msg);
-                if (msg.success == 0) {
-                    $(this).parent().text('Ошибка');
-                    $(this).parent().append('<a href="/plan">Перезагрузите страницу.</a>');
-                }
-            },
-            error: function () {
-                $(this).parent().text('Ошибка');
-                $(this).parent().append('<a href="/plan">Перезагрузите страницу.</a>');
+    $.ajax({
+        url: '/update_plan_title',
+        type: 'POST',
+        data: data,
+        dataType: 'json',
+        success: function (msg) {
+            if (!msg.success) {
+                $title_input.parent().text('Ошибка');
+                $title_input.parent().append('<a href="/plan">Перезагрузите страницу.</a>');
             }
+        },
+        error: function () {
+            $title_input.parent().text('Ошибка');
+            $title_input.parent().append('<a href="/plan">Перезагрузите страницу.</a>');
+        }
 
-        });
+
     });
 }
 
@@ -217,16 +242,28 @@ function switchPlan($this_plan) {
      * --- /home/switch_plan
      * --- /plan/switch_plan
      */
-    var data = {plan_id: $this_plan.attr('plan_id')};
-    var loc = location.href.split('/');
-    var address = loc[loc.length - 2];
 
+    var data = {plan_id: $this_plan.attr('plan_id')};
+
+    // подгружаем правый контент, изменяем стиль кнопок слева
+    goSwitchPlan(data);
 
     jQuery.each($('.plan_list li a'), function () {
         $(this).css({'background-color': 'rgb(244, 243, 248)', 'color': '#000000'})
     });
 
     $this_plan.css({'background-color': '#000000', 'color': '#FFFFFF'});
+
+    // установить выбранный цвет
+    var id = data.plan_id;
+    var plan_menu = $('[plan_id=' + id + ']');
+    plan_menu.css({'background': 'black', 'color': 'white'});
+}
+// изменяет расписание, показываем шкалу загрузки (не зависит от правой панели)
+// можно просто вызвать для переключения расписания
+function goSwitchPlan(data) {
+    var loc = location.href.split('/');
+    var address = loc[loc.length - 2];
 
     $.each($('.right_content').children(), function () {
         if (!$(this).hasClass('plan_load_progres')) {
@@ -238,18 +275,13 @@ function switchPlan($this_plan) {
 
     $('.right_content').load('/' + address + '/switch_plan', data, function () {
         $('.plan_load_progres_indicator').css('display', 'none');
+        // навешиваем обработчики
+        setListenersTitleBlock();
+        setListenersRightContent();
+        avatarEditAccess(data);
 
-        // bindPlanTitleAndPlanSelector();
-        // updatePlanTitle();
-        startIntodayer();
     });
 
-    avatarEditAccess(data);
-
-    // установить выбранный цвет
-    var id = data.plan_id;
-    var plan_menu = $('[plan_id=' + id + ']');
-    plan_menu.css({'background': 'black', 'color': 'white'});
 
 }
 

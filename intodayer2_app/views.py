@@ -49,7 +49,7 @@ def delete_plan_ajax(request):
         user = CustomUser.objects.get(username=request.user.username)
 
         response = HttpResponse()
-        response['Content-Type'] = 'text/javascript'
+        response['Content-Type'] = 'application/json'
 
         try:
             plan_id = int(request.POST['plan_id'])
@@ -72,7 +72,7 @@ def create_new_plan_ajax(request):
         new_plan = user.add_new_plan()
 
         response = HttpResponse()
-        response['Content-Type'] = 'text/javascript'
+        response['Content-Type'] = 'application/json'
         response.write(json.dumps({'success': 1, 'new_plan_id': new_plan.id}))
 
         return response
@@ -83,7 +83,7 @@ def update_plan_title_ajax(request):
         user = CustomUser.objects.get(username=request.user.username)
 
         response = HttpResponse()
-        response['Content-Type'] = 'text/javascript'
+        response['Content-Type'] = 'application/json'
 
         try:
             plan_id = int(request.POST['plan_id'])
@@ -152,7 +152,7 @@ def mailing_ajax(request):
         user = CustomUser.objects.get(username=request.user.username)
 
         response = HttpResponse()
-        response['Content-Type'] = 'text/javascript'
+        response['Content-Type'] = 'application/json'
 
         mailing = IntodayerMailing(
             user.id,
@@ -183,7 +183,7 @@ def edit_plan_row_ajax(request):
         data = request.POST
         this_plan = plan_list.plan
         response = HttpResponse()
-        response['Content-Type'] = 'text/javascript'
+        response['Content-Type'] = 'application/json'
 
         if 'id' in data:
             this_id = data['id']
@@ -242,6 +242,21 @@ def plan_delete_ajax(request):
             return HttpResponseBadRequest()
     else:
         return HttpResponseBadRequest()
+
+
+def left_content_load_ajax(request):
+    """
+        Функция динамически загружает левый контент сайта
+    """
+    if request.is_ajax():
+        user = CustomUser.objects.get(username=request.user.username)
+        all_plans = UserPlans.objects.select_related().filter(user_id=user.id)
+        context = dict()
+        context['user'] = user
+        context['all_plans'] = all_plans
+        context['is_plan_page'] = True
+
+        return render_to_response('templates_for_ajax/left_content.html', context)
 
 
 def switch_plan_home_ajax(request):
@@ -348,7 +363,7 @@ def confirm_invitation_ajax(request):
         inv.delete()
 
         response = HttpResponse()
-        response['Content-Type'] = 'text/javascript'
+        response['Content-Type'] = 'application/json'
         response.write(json.dumps([{'success': 1}]))
 
         return response
@@ -363,7 +378,7 @@ def save_user_avatar_ajax(request):
     if request.is_ajax():
         form = SetAvatarForm(request.POST, request.FILES)
         response = HttpResponse()
-        response['Content-Type'] = 'text/javascript'
+        response['Content-Type'] = 'application/json'
 
         if form.is_valid():
             user = CustomUser(username=request.user.username)
@@ -389,7 +404,7 @@ def save_plan_avatar_ajax(request, plan_id):
         plan = PlanLists.objects.get(id=plan_id, owner=user.id)
 
         response = HttpResponse()
-        response['Content-Type'] = 'text/javascript'
+        response['Content-Type'] = 'application/json'
 
         if plan:
             # если пользователь имеет права редактирования
@@ -411,7 +426,7 @@ def get_avatar_ajax(request):
         user = CustomUser.objects.get(username=request.user.username)
 
         response = HttpResponse()
-        response['Content-Type'] = 'text/javascript'
+        response['Content-Type'] = 'application/json'
 
         try:
             if request.GET['user_id']:
@@ -543,9 +558,16 @@ def home_view(request):
         context = {'user': user}
 
         all_plans = UserPlans.objects.select_related().filter(user_id=user.id)
+        context['all_plans'] = all_plans
 
-        if all_plans.count() == 0:
-            return HttpResponseRedirect("/plan")
+        cur_plan = UserPlans.objects.select_related().filter(user_id=user.id, current_yn='y')
+
+        if cur_plan.count() == 0:
+            if all_plans.count() == 0:
+                return render_to_response('plan_empty.html', context)
+            else:
+                context['select_flag'] = True
+                return render_to_response('plan_empty.html', context)
 
         # выбираем текущее расписание юзера
         try:
@@ -553,10 +575,7 @@ def home_view(request):
         except (IndexError, ObjectDoesNotExist):
             cur_plan = all_plans[0]
 
-        if all_plans:
-            context['all_plans'] = all_plans
             context['cur_plan'] = cur_plan
-
             # объединяем контексты
             context_td_tm = get_today_tomorrow_plans(cur_plan)
             context.update(context_td_tm)
@@ -595,10 +614,13 @@ def plan_view(request):
         cur_plan = cur_plan[0]
         plan_rows = PlanRows.objects.select_related().filter(plan_id=cur_plan.plan.id).order_by('start_week')
         day_of_weeks = DaysOfWeek.objects.all()
+        start_date = cur_plan.plan.start_date
+        start_date = datetime.strftime(start_date, "%d.%m.%y")
 
         context['cur_plan'] = cur_plan
         context['day_of_weeks'] = day_of_weeks
         context['plan_rows'] = plan_rows
+        context['start_date'] = start_date
 
         return render_to_response('plan.html', context)
 

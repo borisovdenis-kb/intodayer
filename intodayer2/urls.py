@@ -50,6 +50,7 @@ urlpatterns = [
     url(r'^update_plan_title', views.update_plan_title_ajax),
     url(r'^create_new_plan', views.create_new_plan_ajax),
     url(r'^delete_plan', views.delete_plan_ajax),
+    url(r'^left_content', views.left_content_load_ajax),
     # url(r'^setting_plan', views.setting_plan_ajax),
 ]
 

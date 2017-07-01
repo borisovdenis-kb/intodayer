@@ -1,10 +1,8 @@
-
 $IM: !important
 
-@media all
-  @-moz-document url-prefix()
-    body
-      font-family: "PT Sans" $IM
+@mixin set_fonts()
+  body
+    font-family: "PT Sans" $IM
     a
       font-family: "Cyntho Pro" $IM
 
@@ -44,7 +42,12 @@ $IM: !important
       font-family: "Cyntho Pro" $IM
       font-size: 16px
     .welcome_text
-      font-family: "Segoe UL Light"
+      font-family: "Segoe UL Light" $IM
     .about_service_text
       font-size: "Cyntho Pro" $IM
 
+@media all
+  @include set_fonts()
+
+@-moz-document url-prefix()
+  @include set_fonts()

@@ -1,0 +1,29 @@
+{% block header %}
+    <div class="top-block">
+        <div class="top">
+            <div class="logo"><a href="/home">IntoDayer</a></div>
+            <div class="top-menu">
+                <ul>
+                    <!-- Не переименовывать классы и имена страниц! -->
+                    <li id="home" class="today_bt"><a href="/home">Сегодня</a></li>
+                    <li id="table" class="plan_bt"><a href="/plan">Расписание</a></li>
+                    <li id="group" class="group_bt"><a href="/home">Участники</a></li>
+                    <li id="statistic" class="statistic_bt"><a href="/statistics">Статистика</a></li>
+                </ul>
+            </div>
+            <div class="droplist">
+                <div id="profile_title">
+                    <a>{{ user.get_name.0 }}</a>
+                </div>
+                <div id="user_ava_thumbnail_content">
+                    <div id="user_ava_thumbnail"
+                         style="background-image: url({{ user.get_image_url }})"></div>
+                </div>
+                <div id="arrow_down_content">
+                    <div id="arrow_down"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -54,11 +54,11 @@ var places = ["510x", '110м', "Л-11", "Л-10", '511м', "112ф", "Кафедр
 var parity_PlaceHolder = 'Все';
 
 $(document).ready(function () {
-    startIntodayer();
+    setListenersRightContent();
 });
 
 // Запуск всего скрипта, навешивание всех обработчиков
-function startIntodayer() {
+function setListenersRightContent() {
 
     $('.str_plan.change').each(function () {
         setNewListenersNewStr($(this));
@@ -68,19 +68,19 @@ function startIntodayer() {
         });
 
     });
-    setTimeout(function () {
-        // устанавливаем обработчик при нажатии на плюс
-        $('.plus_button_form').click(function () {
-            appendPlanStr($(this));
+
+    // устанавливаем обработчик при нажатии на плюс
+    $('.plus_button_form').click(function () {
+        appendPlanStr($(this));
+    });
+
+    $('.str_plan.change').each(function () {
+        $(this).find('li').each(function () {
+            resizeArea($(this).children());
         });
 
-        $('.str_plan.change').each(function () {
-            $(this).find('li').each(function () {
-                resizeArea($(this).children());
-            });
+    });
 
-        });
-    }, 100);
 
     $('.str_plan.str_title').each(function () {
         setGeneralCheckBoxListeners($(this));
@@ -132,6 +132,9 @@ $(window).on('keydown', function (e) {
 
 
 var timer_focusout;
+
+
+
 function setNewListenersNewStr($new_div) {
     // Обработчики событый, применяемые к каждой строке расписания
     var $new_textarea = $new_div.find('ul li textarea');
@@ -412,11 +415,8 @@ function openInputDropList($this_field) {
     else {
         $this_field.css('background', '#deb7ff');
         $this_field.addClass('drop_is', 'drop_is');
-        $.getScript("/static/scripts/script_drop_lists_plan.js", function () {
-            // ипорт функции для выпадающих списков у полей.
-            // делаем услования, чтобы дроп лист больше не открывался при 2 клике на поле
-            createDropLst($this_field);
-        });
+        createDropLst($this_field);
+
     }
 }
 
@@ -949,12 +949,11 @@ function editStrPlan($selected_str) {
     $.ajax({
         url: '/plan/edit_plan_row',
         success: function (response) {
-            var response = JSON.parse(response);
+            // alert(response);
             if (response.error) {
                 callback_editStrPlan_error($selected_str, response);
             }
             else if (response.clone_error) {
-                // alert("sdfaf");
                 callback_cloneErrorStr($selected_str);
             }
             else {
@@ -963,8 +962,12 @@ function editStrPlan($selected_str) {
         },
         method: 'POST',
         data: data,
+        // dataType: 'json',
         error: function (jqXHR, textStatus, errorThrown) {
             alert('Ошибка! Новая запись не будет сохранена! Обновите страницу. (');
+            // console.log(jqXHR);
+            console.log(textStatus);
+            // console.log(errorThrown);
         }
     });
 }
@@ -1345,31 +1348,26 @@ var time_color = 200;
 // устанвалвает цвет для нечётных строк таблицы расписания
 function setColorStr($this_str) {
     if (!$this_str) {
-        $('.plan_content').each(function () {
-            $(this).find('.str_plan.change').each(function (i) {
-
-                if (i % 2 == 0) {
-                    $(this).animate({'background-color': backgroundColorOddStr}, time_color);
-                    if ($(this).hasClass('warning_str') || $(this).hasClass('clone_str')) {
-                        return true;
-                    }
-                    $(this).find('ul').animate({'background-color': backgroundColorOddStr}, time_color);
+        $('.str_plan.change').each(function (i) {
+            if (i % 2 == 0) {
+                $(this).delay(10*i).animate({'background-color': backgroundColorOddStr}, time_color);
+                if ($(this).hasClass('warning_str') || $(this).hasClass('clone_str')) {
+                    return true;
                 }
-                else {
-                    $(this).animate({'background-color': backgroundColorEvenStr}, time_color);
-                    if ($(this).hasClass('warning_str') || $(this).hasClass('clone_str')) {
-                        return true;
-                    }
-                    $(this).find('ul').animate({'background-color': backgroundColorEvenStr}, time_color);
+                $(this).find('ul').delay(10*i).animate({'background-color': backgroundColorOddStr}, time_color);
+            }
+            else {
+                $(this).delay(10*i).animate({'background-color': backgroundColorEvenStr}, time_color);
+                if ($(this).hasClass('warning_str') || $(this).hasClass('clone_str')) {
+                    return true;
                 }
-            });
+                $(this).find('ul').delay(10*i).animate({'background-color': backgroundColorEvenStr}, time_color);
+            }
         });
     }
     // если передана одна строка, для которой нужно установить правильный цвет,
     else {
         // случай, когда после эффекта успшеной отправки строки на сервер мы сразу нажали на галочку
-
-
         if ($this_str.hasClass('warning_str')) {
             hoverSelectStr($this_str);
             $this_str.find('ul').css({'background-color': backgroundErrorStr});

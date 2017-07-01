@@ -16,13 +16,10 @@ function createDropLst($thisField) {
 }
 
 function loadData($thisField) {
-    var $thisField = $thisField;
     /*
      *  Функция подгружает с сервера уже отрендеренный выподающий список
      *  и вставляет его под тем инпутом, на который кликнули.
      */
-    var $bruceLi = $thisField.parent();
-
 
     var data = {plan_id: $('.title_content').attr('plan_id')};
 
@@ -53,43 +50,45 @@ function loadData($thisField) {
         // вставляем даные из базы в div drop_list
         $('.drop_list').load('/get_drop_list', data, function () {
             var count_li = $('.drop_list').find('li').length;
-            if (count_li == 0) {
+            if (!count_li) {
                 $('.drop_list').remove();
                 return false;
             }
-            $('.drop_list ul li a').on('mousedown touchstart', function (e) {
-                // console.log($(this).text());
-                $thisField.val($(this).text());
-
-                if ($thisField.hasClass('drop_button')) {
-                    $thisField.removeClass('drop_is');
-                    $thisField.css({'background': 'rgba(255,255,255,0)'});
-                }
-
-                $('.drop_list').remove();
-                e.preventDefault();
-                return false;
-            });
-
-            $('.drop_list ul li a').css({
-                'height': $bruceLi.height()
-            });
-            $drop_list.animate({
-                'width': $thisField.outerWidth(),
-                'top': posY,
-                'left': $thisField.offset().left
-            }, 1, function () {
-                $(this).fadeTo(1, 1);
-            });
-
-
+            setStyleDropList($thisField);
         });
     }
+    else {
+        setStyleDropList($thisField);
+    }
+}
 
-    var $drop_list = $('.drop_list');
+function setStyleDropList($thisField) {
+    var $bruceLi = $thisField.parent();
+    var $droplist = $('.drop_list');
+    $droplist.find('ul li a').on('mousedown touchstart', function (e) {
+        $thisField.val($(this).text());
+
+        if ($thisField.hasClass('drop_button')) {
+            $thisField.removeClass('drop_is');
+            $thisField.css({'background': 'rgba(255,255,255,0)'});
+        }
+
+        $droplist.remove();
+        e.preventDefault();
+        return false;
+    });
+
+    $('.drop_list ul li a').css({
+        'height': $bruceLi.height()
+    });
     var posY = $thisField.offset().top + $thisField.outerHeight() + 2;
-
-
+    $droplist.animate({
+        'width': $thisField.outerWidth(),
+        'top': posY,
+        'left': $thisField.offset().left
+    }, 1, function () {
+        $(this).fadeTo(1, 1);
+    });
 }
 
 // делает чтобы дроп лист двигался вместе с полем
