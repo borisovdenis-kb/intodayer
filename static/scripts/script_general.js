@@ -21,7 +21,7 @@ function setListenersEmptyPlan() {
 
 function setListenersTitleBlock() {
     $('.plan_settings').click(function () {
-        activeSettings();
+        activeSettingsTitle();
     });
 }
 
@@ -58,14 +58,14 @@ function getCursorToEnd($this_input) {
     $this_input.val($this_input.val());
 }
 
-function activeSettings() {
+function activeSettingsTitle() {
     /*
      функция активирует настройки при нажатии на кнопку
      активируется поле имени расписания
      появляются поля для изменения начальной даты расписания
      */
     if ($('.buttons_setting').length > 0) {
-        deactivateSettings();
+        deactivateSettingsTitle();
         return true;
     }
 
@@ -87,12 +87,12 @@ function activeSettings() {
     $buttons.insertAfter($title_content);
 
     $('.setting_cancel').click(function () {
-        deactivateSettings();
+        deactivateSettingsTitle();
     });
 
     $('.setting_success').click(function () {
         updatePlanTitle();
-        deactivateSettings();
+        deactivateSettingsTitle();
     });
 
     $title_input.css({
@@ -115,7 +115,7 @@ function activeSettings() {
 
     getCursorToEnd($title_input);
 }
-function deactivateSettings() {
+function deactivateSettingsTitle() {
     var $title_input = $('#title_edit_input');
     var $dates = $('.select_dates');
     $title_input.css({'border-color': 'rgba(0,0,0,0)'});

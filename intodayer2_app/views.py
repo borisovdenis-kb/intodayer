@@ -267,21 +267,23 @@ def switch_plan_home_ajax(request):
     """
     if request.is_ajax():
         user = CustomUser.objects.get(username=request.user.username)
+        context = dict()
         # производим валидацию переданных данных со страницы
         try:
             plan_id = int(request.POST['plan_id'])
-            plan = UserPlans.objects.select_related().filter(user_id=user.id, plan_id=plan_id)[0]
+            cur_plan = UserPlans.objects.select_related().filter(user_id=user.id, plan_id=plan_id)[0]
         except ValueError:
             return render_to_response('templates_for_ajax/content_errors.html')
         except IndexError:
             return render_to_response('templates_for_ajax/content_errors.html')
 
         # get_today_tomorrow_plans возвращает словарь
-        context = get_today_tomorrow_plans(plan)
+        context.update(get_today_tomorrow_plans(cur_plan))
+        context['cur_plan'] = cur_plan
         # устанавливаем current_yn
         user.set_current_plan(plan_id)
 
-        return render_to_response('templates_for_ajax/today_tomorrow.html', context)
+        return render_to_response('templates_for_ajax/right_content_home.html', context)
 
 
 def switch_plan_plan_ajax(request):
@@ -548,43 +550,89 @@ def profile_settings(request):
         return render_to_response('myprofile.html', {})
 
 
+def main_content(request):
+    """
+       Функция собирает основной контент расписания, чтобы без дублирования кода
+       выводить эту информацию на страницах home.html, plan.html
+     """
+    user = CustomUser.objects.get(username=request.user.username)
+    all_plans = UserPlans.objects.select_related().filter(user_id=user.id)
+
+    context = dict()
+    context['user'] = user
+    context['all_plans'] = all_plans
+
+    cur_plan = UserPlans.objects.select_related().filter(user_id=user.id, current_yn='y')
+
+    if cur_plan.count() == 0:
+        if all_plans.count() == 0:
+            return render_to_response('plan_empty.html', context)
+        else:
+            context['select_flag'] = True
+            return render_to_response('plan_empty.html', context)
+
+    cur_plan = cur_plan[0]
+    day_of_weeks = DaysOfWeek.objects.all()
+    start_date = cur_plan.plan.start_date
+    start_date = datetime.strftime(start_date, "%d.%m.%y")
+
+    context['cur_plan'] = cur_plan
+    context['day_of_weeks'] = day_of_weeks
+    context['start_date'] = start_date
+
+    return context
+
+
+def get_right_home_context(request):
+    user = CustomUser.objects.get(username=request.user.username)
+
+    context = dict()
+    context['user'] = user
+
+    cur_plan = UserPlans.objects.select_related().filter(user_id=user.id, current_yn='y')
+
+    day_of_weeks = DaysOfWeek.objects.all()
+    start_date = cur_plan.plan.start_date
+    start_date = datetime.strftime(start_date, "%d.%m.%y")
+
+    context['cur_plan'] = cur_plan
+    context['day_of_weeks'] = day_of_weeks
+    context['start_date'] = start_date
+
+    context.update(get_today_tomorrow_plans(context['cur_plan']))
+
+    return context
+
+
+def get_left_context(request):
+    user = CustomUser.objects.get(username=request.user.username)
+    all_plans = UserPlans.objects.select_related().filter(user_id=user.id)
+    cur_plan = UserPlans.objects.select_related().filter(user_id=user.id, current_yn='y')
+
+    context = dict()
+    context['user'] = user
+    context['cur_plan'] = cur_plan
+    context['all_plans'] = all_plans
+
+    return context
+
+
 def home_view(request):
     """
         Функция отображения главной страницы сайта
         с расписанием на сегодня
     """
     if request.user.is_authenticated():
-        user = CustomUser.objects.get(username=request.user.username)
-        context = {'user': user}
+        context = dict()
+        context.update(main_content(request))
 
-        all_plans = UserPlans.objects.select_related().filter(user_id=user.id)
-        context['all_plans'] = all_plans
+        # get_today_tomorrow_plans возвращает словарь
+        context.update(get_today_tomorrow_plans(context['cur_plan']))
 
-        cur_plan = UserPlans.objects.select_related().filter(user_id=user.id, current_yn='y')
+        return render_to_response('home.html', context)
 
-        if cur_plan.count() == 0:
-            if all_plans.count() == 0:
-                return render_to_response('plan_empty.html', context)
-            else:
-                context['select_flag'] = True
-                return render_to_response('plan_empty.html', context)
-
-        # выбираем текущее расписание юзера
-        try:
-            cur_plan = UserPlans.objects.select_related().get(user_id=user.id, current_yn='y')
-        except (IndexError, ObjectDoesNotExist):
-            cur_plan = all_plans[0]
-
-            context['cur_plan'] = cur_plan
-            # объединяем контексты
-            context_td_tm = get_today_tomorrow_plans(cur_plan)
-            context.update(context_td_tm)
-
-            return render_to_response('home.html', context)
-        else:
-            return render_to_response('home.html', context)
     else:
-        return HttpResponseRedirect("/login")
+        return HttpResponseRedirect("/login", {})
 
 
 def plan_view(request):
@@ -594,33 +642,12 @@ def plan_view(request):
        Поэтому, функция выводит всю информацию расписания на весь год, разбитых по дням недели.
    """
     if request.user.is_authenticated():
-        user = CustomUser.objects.get(username=request.user.username)
-        all_plans = UserPlans.objects.select_related().filter(user_id=user.id)
-
         context = dict()
-        context['user'] = user
-        context['all_plans'] = all_plans
-        context['is_plan_page'] = True
-
-        cur_plan = UserPlans.objects.select_related().filter(user_id=user.id, current_yn='y')
-
-        if cur_plan.count() == 0:
-            if all_plans.count() == 0:
-                return render_to_response('plan_empty.html', context)
-            else:
-                context['select_flag'] = True
-                return render_to_response('plan_empty.html', context)
-
-        cur_plan = cur_plan[0]
-        plan_rows = PlanRows.objects.select_related().filter(plan_id=cur_plan.plan.id).order_by('start_week')
-        day_of_weeks = DaysOfWeek.objects.all()
-        start_date = cur_plan.plan.start_date
-        start_date = datetime.strftime(start_date, "%d.%m.%y")
-
-        context['cur_plan'] = cur_plan
-        context['day_of_weeks'] = day_of_weeks
+        context.update(main_content(request))
+        plan_rows = PlanRows.objects.select_related().filter(plan_id=context['cur_plan'].plan.id).order_by('start_week')
         context['plan_rows'] = plan_rows
-        context['start_date'] = start_date
+        # для появления кнопки добавления расписания
+        context['is_plan_page'] = True
 
         return render_to_response('plan.html', context)
 
