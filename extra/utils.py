@@ -105,9 +105,6 @@ def get_today_tomorrow_plans(plan):
     """
     context = {}
 
-    # количество участников
-    count = UserPlans.objects.filter(plan_id=plan.plan.id).count()
-
     today = timezone.make_aware(datetime.now())          # опр сегодняшнюю дату
     tomorrow = today + timedelta(1)                      # завтрашняя дата
     td_weekday = datetime.weekday(today)                 # день недели сегодня
@@ -146,10 +143,6 @@ def get_today_tomorrow_plans(plan):
         'plan_rows': tomorrow_plan
     }
 
-    # инфа о текущем расписании
-    context['cur_plan_info'] = [plan.plan.title, plan.plan.description, plan.plan.id]
-    # добавляем кол-во участников
-    context['cur_plan_info'] += [members_amount_suffix(count)]
     # разделитель между неделями
     context['separator'] = True if cur_week1 != cur_week2 else False
 
