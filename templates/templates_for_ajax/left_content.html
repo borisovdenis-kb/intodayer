@@ -1,43 +1,48 @@
 {% block left_content %}
+
+    <!--Изменить аву можно только на странице /plan-->
+    {% if is_plan_page %}
         <div class="ava_cover">
             <div class="ava_cover_text">
                 <p>Загрузить фото</p>
             </div>
         </div>
+    {% endif %}
 
-        <div class="ava_content" style="background-image: url({{ cur_plan.plan.get_image_url }});">
-            <p style="display: none">{{ cur_plan.plan.id }}</p>
-        </div>
+    <div class="ava_content" style="background-image: url({{ cur_plan.plan.get_image_url }});">
+        <p style="display: none">{{ cur_plan.plan.id }}</p>
+    </div>
 
-        {% if is_invitation != True %}
-            <div class="plan_selector">
-                <label id="plan_selector_title">Мои расписания</label>
-                <ul class="plan_list">
-                    {% for plan in all_plans %}
-                        <li>
-                            <a plan_id="{{ plan.plan.id }}"
-                                    {% if plan.current_yn == 'y' %}
-                               style="background-color: #000000; color: #ffffff"
-                                    {% endif %}
-                            >
-                                {{ plan.plan.title }}
 
-                            </a>
-                        </li>
-                    {% endfor %}
+    {% if is_invitation != True %}
+        <div class="plan_selector">
+            <label id="plan_selector_title">Мои расписания</label>
+            <ul class="plan_list">
+                {% for plan in all_plans %}
+                    <li>
+                        <a plan_id="{{ plan.plan.id }}"
+                                {% if plan.current_yn == 'y' %}
+                           style="background-color: #000000; color: #ffffff"
+                                {% endif %}
+                        >
+                            {{ plan.plan.title }}
+
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+
+            <!--Добавить расписание можно только на странице /plan-->
+            {% if is_plan_page %}
+                <ul class="create_plan">
+                    <li>
+                        <a></a>
+                    </li>
                 </ul>
+            {% endif %}
 
-                {% if is_plan_page %}
-                    <!--Выводится только на странице /plan-->
-                    <ul class="create_plan">
-                        <li>
-                            <a></a>
-                        </li>
-                    </ul>
-                {% endif %}
-
-            </div>
-        {% else %}
-            {% block invitation %}{% endblock %}
-        {% endif %}
+        </div>
+    {% else %}
+        {% block invitation %}{% endblock %}
+    {% endif %}
 {% endblock %}

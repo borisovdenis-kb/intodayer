@@ -42,6 +42,17 @@ body
     a, input
       text-align: center
 
+  &.str_plus
+    cursor: default
+    background: $alpha_zero
+    padding: 0 0 5px 0
+    margin:
+      top: 10px
+  .change
+    &:nth-child(2)
+      margin:
+        top: 5px
+
 .plus_button_form
   margin: auto
   width: 25px
@@ -63,20 +74,9 @@ body
   opacity: 0.5
   cursor: pointer
 
-.str_plan
-  &.str_plus
-    cursor: default
-    background: $alpha_zero
-    padding: 0 0 5px 0
-    margin:
-      top: 10px
-  .change
-    &:nth-child(2)
-      margin:
-        top: 5px
-
 .checkbox_wrap
   @include set-flex(center)
+  border-right: 1px solid rgba(230, 230, 230, 1)
   float: left
   width: 40px
   padding:

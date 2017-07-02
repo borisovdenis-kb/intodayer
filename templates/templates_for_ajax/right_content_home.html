@@ -6,7 +6,7 @@
     <div class="title_content" plan_id="{{ cur_plan.plan.id }}">
         <div class="setting_left"></div>
         <div id="plan_title">
-            <input id='title_edit_input' type="text" value="{{ cur_plan.plan.title }}">
+            <input id='title_edit_input' disabled="disabled" type="text" value="{{ cur_plan.plan.title }}">
             <div id="count_title">{{ cur_plan.plan.count_of_users }}</div>
         </div>
         <div class="setting_right">
@@ -14,7 +14,7 @@
     </div>
 
     <!-- Сегодня -->
-    {% block settings %}
+    <div class="page_content">
         <div class="plan_content">
             <div class="plan_window">
                 <div class="content_day_title">
@@ -78,5 +78,5 @@
                 </div>
             </div>
         </div>
-    {% endblock %}
+    </div>
 {% endblock %}

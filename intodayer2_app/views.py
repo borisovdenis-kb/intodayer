@@ -20,28 +20,14 @@ from extra.plan_settings_api import *
 
 # TODO: Сделать аутентификацию по почте, а не по логину. Значит нужно сделать и подтверждение email
 
-# {
-# TODO: Переписать функции переключения расписания.
-# Теперь нужно, что бы сервер в ответе выдавал не отрендеренную html разметку,
-# а данные в формате json. А на стороне клиента уже данные бы вставлялись куда надо.
-# Предполагается повышение эффективности.
-# }
 
 ###################################################################################
 #                          ОБРАБОТКА AJAX ЗАПРОСОВ                                #
 ###################################################################################
 
-# def setting_plan_ajax(request):
-#     if request.is_ajax():
-#         user = CustomUser.objects.get(username=request.user.username)
-#         response = HttpResponse()
-#         response['Content-Type'] = 'text/javascript'
-#     try:
-#         plan_id = int(request.POST['plan_id'])
-#         UserPlans.objects.get(user_id=user.id, plan_id=plan_id)
-#     except (ValueError, ObjectDoesNotExist):
-#         response.write(json.dumps({'success': 0}))
-#         return response
+
+def settings_plan(request):
+    return render_to_response('templates_for_ajax/settings_ajax.html', {})
 
 
 def delete_plan_ajax(request):
@@ -286,6 +272,31 @@ def switch_plan_home_ajax(request):
         return render_to_response('templates_for_ajax/right_content_home.html', context)
 
 
+def right_plan_content_only(request):
+    """
+        Загружает правый контент (без учёта Title блока), только контент расписания
+    """
+    if request.is_ajax:
+        user = CustomUser.objects.get(username=request.user.username)
+        context = dict()
+
+        try:
+            plan_id = int(request.POST['plan_id'])
+            context.update(get_cur_plan(request, plan_id))
+        except ValueError:
+            return render_to_response('templates_for_ajax/content_errors.html')
+        except IndexError:
+            return render_to_response('templates_for_ajax/content_errors.html')
+
+        context.update(get_dates_info(context['cur_plan']))
+        # устанавливаем current_yn
+        user.set_current_plan(plan_id)
+        plan_rows = PlanRows.objects.select_related().filter(plan_id=plan_id).order_by('start_week')
+        context['plan_rows'] = plan_rows
+
+        return render_to_response('templates_for_ajax/right_content_plan.html', context)
+
+
 def switch_plan_plan_ajax(request):
     """
         Функция для переключения между расписаниями со страницы /plan
@@ -310,7 +321,7 @@ def switch_plan_plan_ajax(request):
         plan_rows = PlanRows.objects.select_related().filter(plan_id=plan_id).order_by('start_week')
         context['plan_rows'] = plan_rows
 
-        return render_to_response('templates_for_ajax/plan_for_ajax.html', context)
+        return render_to_response('templates_for_ajax/right_content_plan_general.html', context)
 
 
 def get_invitations_ajax(request):

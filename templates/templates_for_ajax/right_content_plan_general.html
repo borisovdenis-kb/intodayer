@@ -1,0 +1,29 @@
+{% block right_content %}
+    <div class="plan_load_progres">
+        <div class="plan_load_progres_indicator"></div>
+    </div>
+
+    <div class="title_content" plan_id="{{ cur_plan.plan.id }}">
+        <div class="setting_left">
+
+        </div>
+
+        <div id="plan_title">
+            <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
+                <input id='title_edit_input' disabled="disabled" type="text" value="{{ cur_plan.plan.title }}">
+            </div>
+            <div id="count_title">{{ cur_plan.plan.count_of_users }}</div>
+        </div>
+        <div class="setting_right">
+            <div class="icon_setting_content">
+                <span class="plan_settings glyphicon glyphicon-pencil"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Вывод всех дней недели -->
+    <!-- и информации о расписании, относящейся к каждому дню -->
+    <div class="plan_content">
+        {% include "templates_for_ajax/right_content_plan.html" %}
+    </div>
+{% endblock %}

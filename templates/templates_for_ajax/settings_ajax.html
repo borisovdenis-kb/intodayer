@@ -1,1 +1,33 @@
-<div>Hello!</div>
+{% block right_content %}
+    {#    <div class="button_style"></div>#}
+    <div class="st-inner-content">
+        <div class="st-top-panel">
+            <div class="btn btn-default return_button">
+                <span class="glyphicon glyphicon-chevron-left"></span>
+                <div>Return</div>
+            </div>
+        </div>
+
+
+        <div class="datepicker_content">
+
+            <label>Date of start plan</label>
+
+            <div class='input-group date' id='datetimepicker'>
+                <input type='text' class="form-control"/>
+                <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(function () {
+            $('#datetimepicker').datetimepicker({
+                locale: 'ru'
+            });
+        });
+    </script>
+
+{% endblock %}

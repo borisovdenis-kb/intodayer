@@ -1,0 +1,46 @@
+.return_button.btn:hover {
+  border-color: #e6e6e6; }
+.return_button.btn:active {
+  box-shadow: none;
+  border-color: rgba(255, 255, 255, 0); }
+
+.plan_content {
+  background: white;
+  border: 1px solid #e6e6e6;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  -khtml-border-radius: 4px;
+  border-radius: 4px;
+  -ms-border-radius: 4px;
+  padding-bottom: 10px; }
+
+.st-inner-content {
+  margin-top: 15px;
+  margin-left: 25px; }
+
+.return_button.btn {
+  width: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  height: 50px;
+  border: 1px solid #e6e6e6;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  -khtml-border-radius: 4px;
+  border-radius: 4px;
+  -ms-border-radius: 4px;
+  margin-bottom: 15px; }
+  .return_button.btn span {
+    font-size: 1.2em;
+    color: #e6e6e6;
+    padding-right: 5px;
+    padding-bottom: 3px; }
+  .return_button.btn:hover span {
+    color: #323232; }
+
+.datepicker_content {
+  width: 200px; }
+
+/*# sourceMappingURL=settings_plan.css.map */
