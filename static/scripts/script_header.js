@@ -1,10 +1,6 @@
-
-
 $(document).ready(function () {
     setCurrentMenu();
 });
-
-
 
 var $droplist = $('.droplist');
 var FLAG_DROPLIST = false;

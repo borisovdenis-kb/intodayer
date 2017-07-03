@@ -1,7 +1,7 @@
 {% block left_content %}
 
     <!--Изменить аву можно только на странице /plan-->
-    {% if is_plan_page %}
+    {% if is_plan_page == True %}
         <div class="ava_cover">
             <div class="ava_cover_text">
                 <p>Загрузить фото</p>
@@ -43,6 +43,8 @@
 
         </div>
     {% else %}
-        {% block invitation %}{% endblock %}
     {% endif %}
+
+
 {% endblock %}
+

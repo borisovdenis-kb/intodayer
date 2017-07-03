@@ -240,9 +240,8 @@ def left_content_load_ajax(request):
         context = dict()
         context['user'] = user
         context['all_plans'] = all_plans
-        context['is_plan_page'] = True
 
-        return render_to_response('templates_for_ajax/left_content.html', context)
+        return render_to_response('content_pages/left_content.html', context)
 
 
 def switch_plan_home_ajax(request):
@@ -269,7 +268,7 @@ def switch_plan_home_ajax(request):
         plan_id = context['cur_plan'].plan_id
         user.set_current_plan(plan_id)
 
-        return render_to_response('templates_for_ajax/right_content_home.html', context)
+        return render_to_response('content_pages/right_content_home.html', context)
 
 
 def right_plan_content_only(request):
@@ -294,7 +293,7 @@ def right_plan_content_only(request):
         plan_rows = PlanRows.objects.select_related().filter(plan_id=plan_id).order_by('start_week')
         context['plan_rows'] = plan_rows
 
-        return render_to_response('templates_for_ajax/right_content_plan.html', context)
+        return render_to_response('content_pages/right_content_plan.html', context)
 
 
 def switch_plan_plan_ajax(request):
@@ -321,7 +320,7 @@ def switch_plan_plan_ajax(request):
         plan_rows = PlanRows.objects.select_related().filter(plan_id=plan_id).order_by('start_week')
         context['plan_rows'] = plan_rows
 
-        return render_to_response('templates_for_ajax/right_content_plan_general.html', context)
+        return render_to_response('content_pages/right_content_plan_general.html', context)
 
 
 def get_invitations_ajax(request):
@@ -649,6 +648,7 @@ def plan_view(request):
         context['plan_rows'] = plan_rows
         # для появления кнопки добавления расписания
         context['is_plan_page'] = True
+        print(context['is_plan_page'])
 
         return render_to_response('plan.html', context)
 

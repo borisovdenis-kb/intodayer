@@ -1,7 +1,5 @@
 $(document).ready(function () {
     setListenersLeftContent();
-    loadLeftContent();
-    avatarEditAccess({plan_id: $('.ava_content p').text()});
 });
 
 
@@ -15,7 +13,8 @@ function loadLeftContent() {
     // при загрузке левого конетнта, правый должен быть именно такого размера
     $('.right_content').css({
         'width': 'calc(100% - 188px)'
-    })
+    });
+    avatarEditAccess({plan_id: +$('.ava_content p').text()});
 }
 
 function setListenersLeftContent() {

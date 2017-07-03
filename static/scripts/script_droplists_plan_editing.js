@@ -4,8 +4,6 @@
 
 // TODO: Сделать фичу. При выборе предмета, должен предлагаться соответсвующий препод.
 
-var $this;
-
 
 function createDropLst($thisField) {
     $('.drop_list').remove();

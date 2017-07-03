@@ -2,9 +2,9 @@
 {% load staticfiles %}
 
 {% block styles %}
-    <link rel="stylesheet" type="text/css" href={% static "css/plan_styles_new.css" %}>
+    <link rel="stylesheet" type="text/css" href={% static "css/plan_content.css" %}>
     {#    подключаем стили всех страниц, которые задействованы в открытии ajax запросов#}
-    <link rel="stylesheet" type="text/css" href={% static "css/settings_plan.css" %}>
+    <link rel="stylesheet" type="text/css" href={% static "css/plan_settings.css" %}>
     <link rel="stylesheet" type="text/css"
           href={% static "plug-ins/bootstrap-datetimepicker-master/build/css/bootstrap-datetimepicker.css" %}>
 {% endblock %}
@@ -15,10 +15,10 @@
 {% endblock %}
 
 {% block scripts_bottom %}
-    <script type="text/javascript" src={% static "scripts/script_right_plan_content.js" %}></script>
-    <script type="text/javascript" src={% static "scripts/script_right_plan_settings.js" %}></script>
+    <script type="text/javascript" src={% static "scripts/script_plan_editing.js" %}></script>
+    <script type="text/javascript" src={% static "scripts/script_plan_settings.js" %}></script>
+    <script type="text/javascript" src={% static "scripts/script_droplists_plan_editing.js" %}></script>
     <script type="text/javascript" src={% static "scripts/script_mailing.js" %}></script>
-    <script type="text/javascript" src={% static "scripts/script_drop_lists_plan.js" %}></script>
     <script type="text/javascript" src={% static "library/device.js" %}></script>
     <script type="text/javascript"
             src={% static "plug-ins/bootstrap-datetimepicker-master/build/js/bootstrap-datetimepicker.min.js" %}></script>
@@ -43,7 +43,11 @@
 
 {#правый контент теперь тут#}
 {% block right_content %}
-    {% include "templates_for_ajax/right_content_plan_general.html" %}
+    {% include "content_pages/right_content_plan_general.html" %}
+{% endblock %}
+
+{% block left_content %}
+    {% include "content_pages/left_content.html" %}
 {% endblock %}
 
 {% block mailing %}
