@@ -17,9 +17,15 @@ ul
   list-style: none
   margin: 0 auto
 
-a
+%a
   text-decoration: none
   transition: .2s linear
+a
+  @extend %a
+  &:active
+    @extend %a
+  &:link
+    @extend %a
 
 button
   background: none

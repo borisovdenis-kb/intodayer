@@ -27,7 +27,9 @@ from extra.plan_settings_api import *
 
 
 def settings_plan(request):
-    return render_to_response('templates_for_ajax/settings_ajax.html', {})
+    context = dict()
+    context.update(get_cur_plan(request))
+    return render_to_response('templates_for_ajax/settings_ajax.html', context)
 
 
 def delete_plan_ajax(request):
@@ -585,13 +587,14 @@ def get_cur_plan(request, plan_id=None):
 
     if cur_plan.count() == 0:
         if all_plans.count() == 0:
-            return render_to_response('plan_empty.html', context)
+            context['cur_plan'] = 0
         else:
             context['select_flag'] = True
-            return render_to_response('plan_empty.html', context)
+            context['cur_plan'] = 0
 
-    cur_plan = cur_plan[0]
-    context['cur_plan'] = cur_plan
+    else:
+        cur_plan = cur_plan[0]
+        context['cur_plan'] = cur_plan
 
     return context
 
@@ -612,6 +615,24 @@ def get_dates_info(cur_plan):
     return context
 
 
+def get_this_user(request):
+    """
+        Возвращает контекст с текущим пользователем
+    """
+    user = CustomUser.objects.get(username=request.user.username)
+    context = dict()
+    context['user'] = user
+    return context
+
+#
+# def set_current_plan(request):
+#     if request.is_ajax():
+#         user = CustomUser.objects.get(username=request.user.username)
+#
+#         cur_id = request.POST['cur_id']
+
+
+
 def home_view(request):
     """
         Функция отображения главной страницы сайта
@@ -619,8 +640,11 @@ def home_view(request):
     """
     if request.user.is_authenticated():
         context = dict()
+        context.update(get_this_user(request))
         context.update(get_all_plans(request))
         context.update(get_cur_plan(request))
+        if context['cur_plan'] == 0:
+            return render_to_response('plan_empty.html', context)
         context.update(get_dates_info(context['cur_plan']))
 
         # get_today_tomorrow_plans возвращает словарь
@@ -632,6 +656,9 @@ def home_view(request):
         return HttpResponseRedirect("/login", {})
 
 
+# def plan_empty(request):
+#     return render_to_response()
+
 def plan_view(request):
     """
        Функция, которая выводит таблицу редактирования текущего (выбранного) расписания.
@@ -640,10 +667,13 @@ def plan_view(request):
    """
     if request.user.is_authenticated():
         context = dict()
+        context.update(get_this_user(request))
         context.update(get_all_plans(request))
         context.update(get_cur_plan(request))
-        context.update(get_dates_info(context['cur_plan']))
+        if context['cur_plan'] == 0:
+            return render_to_response('plan_empty.html', context)
 
+        context.update(get_dates_info(context['cur_plan']))
         plan_rows = PlanRows.objects.select_related().filter(plan_id=context['cur_plan'].plan.id).order_by('start_week')
         context['plan_rows'] = plan_rows
         # для появления кнопки добавления расписания

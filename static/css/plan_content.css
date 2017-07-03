@@ -2,6 +2,12 @@ body {
   overflow-y: scroll;
   min-width: 600px; }
 
+.plan_window, .plan_window:first-child {
+  margin-top: 5px; }
+
+.plan_window:last-child {
+  margin-bottom: 20px; }
+
 .day_title {
   padding: 5px 0 10px 0; }
 
@@ -81,22 +87,23 @@ body {
   .str_title .checkbox_wrap {
     border-right: 1px solid rgba(91, 178, 102, 0.4); }
 
+.tools_panel ul li button {
+  width: 100%;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  color: rgba(0, 0, 0, 0.2);
+  font-weight: 700;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -khtml-border-radius: 3px;
+  border-radius: 3px;
+  -ms-border-radius: 3px; }
+
 .tools_panel ul {
   height: 30px; }
   .tools_panel ul li {
     display: inline-flex;
     height: 100%;
     width: 80px; }
-    .tools_panel ul li button {
-      width: 100%;
-      border: 2px solid rgba(0, 0, 0, 0.1);
-      color: rgba(0, 0, 0, 0.2);
-      font-weight: 700;
-      -moz-border-radius: 3px;
-      -webkit-border-radius: 3px;
-      -khtml-border-radius: 3px;
-      border-radius: 3px;
-      -ms-border-radius: 3px; }
 .tools_panel.left {
   min-width: 170px;
   width: 35%; }
@@ -203,4 +210,4 @@ body {
   background: url("../images/progress_indicator.gif") no-repeat center;
   background-size: contain; }
 
-/*# sourceMappingURL=plan_styles_new.css.map */
+/*# sourceMappingURL=plan_content.css.map */
