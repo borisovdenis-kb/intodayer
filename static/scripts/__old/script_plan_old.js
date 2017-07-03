@@ -290,7 +290,7 @@ function setGeneralCheckBoxListeners($this_str, $general_checkbox) {
 
 // удаляет поле галочки в заголовке для пустых дней
 function deleteTopCheckboxInEmptyDays() {
-    var $days_content = $('.plan_content');
+    var $days_content = $('.plan_settings_content-1');
     $days_content.each(function () {
         var $str_plans = $(this).find('.str_plan ul');
         if ($str_plans.length == 1) {
@@ -916,7 +916,7 @@ var time_color = 200;
 // устанвалвает цвет для нечётных строк таблицы расписания
 function setColorStr($this_str) {
     if (!$this_str) {
-        $('.plan_content').each(function () {
+        $('.plan_settings_content-1').each(function () {
             $(this).find('.str_plan.change').each(function (i) {
 
                 if (i % 2 == 0) {

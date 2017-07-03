@@ -1,5 +1,4 @@
 $(document).ready(function () {
-    setListenersEmptyPlan();
     setInvitationsListeners();
     setAvatarFrameListeners();
 
@@ -99,16 +98,6 @@ function setInvitationsListeners() {
     });
 }
 
-function setListenersEmptyPlan() {
-    $('.create_plan_first').click(function () {
-        createPlan();
-        setScrollTop();
-    });
-
-    $('.create_plan li a').click(function () {
-        createPlan($(this).parents('li'));
-    });
-}
 
 
 function setInputCursorToEnd($this_input) {

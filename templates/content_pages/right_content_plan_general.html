@@ -3,6 +3,8 @@
         <div class="plan_load_progres_indicator"></div>
     </div>
 
+    <div class="setting_info_block"></div>
+
     <div class="title_content" plan_id="{{ cur_plan.plan.id }}">
         <div class="setting_left">
 
@@ -23,7 +25,7 @@
 
     <!-- Вывод всех дней недели -->
     <!-- и информации о расписании, относящейся к каждому дню -->
-    <div class="plan_content">
+{#    <div class="plan_content">#}
         {% include "content_pages/right_content_plan.html" %}
-    </div>
+{#    </div>#}
 {% endblock %}

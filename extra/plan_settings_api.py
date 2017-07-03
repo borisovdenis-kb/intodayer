@@ -29,19 +29,20 @@ class PlanSettings():
 
     def delete_plan(self):
         plan = PlanLists.objects.filter(id=self.plan_id)
+        plan = plan[0]
 
-        if plan.owner.id == self.user_id:  # если user, удаляющий расп. - создатель
+        if plan.owner_id == self.user_id:  # если user, удаляющий расп. - создатель
             # прощальное сообщение
             farewell_message = "Староста удалил это расписание.\n" \
                                "Данное расписание будет удалено из Вашего списка расписаний."
 
-            mailing = IntodayerMailing(
-                self.user_id,
-                self.plan_id,
-                text=farewell_message,
-            )
-            # совершаем рассылку
-            mailing.send()
+            # mailing = IntodayerMailing(
+            #     self.user_id,
+            #     self.plan_id,
+            #     text=farewell_message,
+            # )
+            # # совершаем рассылку
+            # mailing.send()
 
             # удаляем расписание из plan_list, после этого в базе сработает триггер,
             # который удалит всю существующую инфу. о данном расписании в базе.

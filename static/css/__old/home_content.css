@@ -119,7 +119,7 @@ body {
     line-height: 20px;
     padding: 10px 0px 10px 10px;
     background-color: #f4f3f8;
-    background: url("../images/plus.png") center no-repeat;
+    background: url("../../images/plus.png") center no-repeat;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -317,13 +317,15 @@ body {
 }
 
 
-.plan_content {
+.plan_settings_content-1 {
     margin-top: 10px;
 }
 
-.plan_content:last-child {
+.plan_settings_content-1:last-child {
     margin-bottom: 300px;
 }
+
+/*$border-color-split-line: */
 
 .content_day_title {
     display: flex;
@@ -333,7 +335,6 @@ body {
     padding-top: 5px;
     /*background: green;*/
     width: calc(100% - 40px);
-
     margin: auto;
     border-bottom: 1px solid rgba(210, 210, 210, 1);
 }
@@ -492,7 +493,7 @@ textarea::-webkit-input-placeholder {
 textarea:-moz-placeholder {
     padding-top: 1px;
     color: #b9b9b9;
-    color: red;
+    /*color: red;*/
     text-align: center;
 }
 

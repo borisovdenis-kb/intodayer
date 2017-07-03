@@ -3,16 +3,15 @@
 
 {% block styles %}
     <link rel="stylesheet" type="text/css" href={% static "css/plan_empty.css" %}>
-    <link rel="stylesheet" type="text/css" href={% static "css/plan_styles_new.css" %}>
+    <link rel="stylesheet" type="text/css" href={% static "css/plan_content.css" %}>
 {% endblock %}
 
 {% block scripts_bottom %}
     <script type="text/javascript" src={% static "library/device.js" %}></script>
-    <script type="text/javascript" src={% static "scripts/script_right_plan_content.js" %}></script>
+    <script type="text/javascript" src={% static "scripts/script_plan_empty.js" %}></script>
 {% endblock %}
 
 {% block left_content %}
-    <div class="upload_left"></div>
 {% endblock %}
 {% block right_content %}
 

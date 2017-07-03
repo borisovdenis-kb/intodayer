@@ -1,8 +1,11 @@
 @import "mixins"
+@import "plan_content"
 $alpha-color: rgba(255, 255, 255, 0)
 $border-color: rgba(230, 230, 230, 1)
 $border-style-frames: 1px solid #{$border-color}
 $glyphicon-color: rgba(30, 30, 30, 1)
+
+$border-color-split-line: rgba(210, 210, 210, 1)
 
 $button-return-height: 50px
 $button-return-padding: 15px
@@ -14,29 +17,79 @@ $button-return-padding: 15px
     box-shadow: none
     border-color: $alpha-color
 
-.plan_content
-  background: white
-  border: $border-style-frames
+.plan_settings_layouts
+  display: flex
+  flex-direction: row
+
+.setting_msg
+  display: none
+  font-size: 1em
+  padding: 10px
   @include border-radius(4px)
-  padding-bottom: 10px
+  margin-bottom: 4px
+
+$margin-panel: 3px
+
+@for $i from 1 through 4
+  .plan_settings_content-#{$i}
+    background: white
+    width: calc(50% - #{$margin-panel})
+    border: $border-style-frames
+    @include border-radius(4px)
+    padding-bottom: 10px
+    margin-top: 5px
+
+    @if $i == 1
+      margin-right: $margin-panel
+    @if $i == 2
+      margin-left: $margin-panel
 
 
 .st-inner-content
-  margin:
+  width: calc(100% - 30px)
+  padding:
     top: 15px
+    bottom: 10px
     left: 25px
 
-.return_button.btn
-  width: 100px
-  @include set-flex(center)
-  height: $button-return-height
-  border: $border-style-frames
-  //background: $border-color-frames
+  //background: blue
+
+h4
+  margin-top: 0px
+
+#remove_plan
+  margin-top: 2px
+
+.plan_info_content
+  li
+    &:first-child
+      margin: 0
+    margin:
+      top: 10px
+
+.plan_info
+  padding: 15px
+  background: rgba(230,230,230,1)
   @include border-radius(4px)
-  margin-bottom: 15px
+
+.split-line
+  border-top: 1px solid $border-color-split-line
+
+  margin:
+    top: 10px
+    bottom: 10px
+
+
+.return_button.btn
+  @extend %tools_button
+  width: 100px
+  height: $tools-button-height
+  @include set-flex(center)
+  @include border-radius(4px)
+
 
   span
-    font-size: 1.2em
+    font-size: 0.9em
     color: $border-color
     padding:
       right: 5px
@@ -46,4 +99,28 @@ $button-return-padding: 15px
   @extend %bootstrap-button-style
 
 .datepicker_content
-  width: 200px
+  width: 80%
+
+#modal_ok_cancel
+  .modal-dialog
+    width: 400px
+  .close
+    margin-left: 100px
+  .modal_cancel, .modal_ok
+    &:active, &:focus, &:link
+      outline: none
+
+@media (max-width: 768px)
+  .plan_settings_layouts
+    flex-direction: column
+  @for $i from 1 through 4
+    .plan_settings_content-#{$i}
+      width: 100%
+      @if $i == 1
+        margin-right: 0
+      @if $i == 2
+        margin:
+          left: 0
+          top: 10px
+
+

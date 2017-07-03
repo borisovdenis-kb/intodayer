@@ -1,5 +1,8 @@
 $(document).ready(function () {
+
     setListenersLeftContent();
+
+
 });
 
 
@@ -20,11 +23,15 @@ function loadLeftContent() {
 function setListenersLeftContent() {
     // для страницы empty
     $(".select_plan").click(function () {
+        // :TODO тут нужно сделать чтобы просто поменялось current_plan и потом перебрасывало на plan.html
         switchPlan($(this));
     });
 
     $('.plan_list li a').click(function () {
         switchPlan($(this));
+    });
+    $('.create_plan li a').click(function () {
+        createPlan($(this).parents('li'));
     });
 }
 

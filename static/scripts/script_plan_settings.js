@@ -1,45 +1,76 @@
 $(document).ready(function () {
     setListenersTitleBlock();
-
 });
 
 
 function setListenersTitleBlock() {
     $('.plan_settings').click(function () {
-        openSettings($(this));
+        openSettings();
     });
 }
 
 
-function openSettings($this_button) {
+function startDatePicker() {
+    $('#datetimepicker').datetimepicker({
+        locale: 'ru'
+    });
+}
+
+function openSettings() {
     /*
      Открывает панель настроек при нажатии
      */
-    var button_setting = $this_button;
-    if (button_setting.hasClass("select_settings")) {
-        button_setting.removeClass("select_settings");
+    if ($('.setting_msg').length > 0) {
         deactivateSettingsTitle();
         deactivateSettingContent();
-        return true;
     }
     else {
         activeSettingsTitle();
         activeSettingsContent();
-        button_setting.addClass('select_settings');
-
     }
 }
 
 
+function removePlan() {
+    var plan_id = +$('.title_content').attr('plan_id');
+    // alert(plan_id);
+    $.ajax({
+        url: '/delete_plan',
+        success: function (response) {
+            alert("Удалено");
+        },
+        method: 'POST',
+        data: {plan_id: plan_id},
+        dataType: 'json'
+    });
+}
+
 function activeSettingsContent() {
-    $('.plan_content').load('/plan/settings_plan', {}, function () {
+    $('.setting_info_block').append($('<div class="setting_msg alert-success">Setting your select plan</div>'));
+    $('.setting_msg').slideDown(250);
+    $('.right_content_only').load('/plan/settings_plan', {}, function () {
+
+        startDatePicker();
+        $('.return_button').unbind();
+        $('.return_button').click(function () {
+            openSettings();
+        });
+        $('#remove_plan').unbind();
+        $('#remove_plan').click(function () {
+            $('#modal_ok_cancel').modal();
+            $('.modal_ok').click(function () {
+                removePlan();
+            });
+        });
     });
 
 }
 
 function deactivateSettingContent() {
+    $('.setting_msg').remove();
     var data = {plan_id: $('.title_content').attr('plan_id')};
-    $('.plan_content').load('/plan/plan_content_only', data, function () {
+    $('.right_content_only').load('/plan/plan_content_only', data, function () {
+        setListenersRightContent();
     });
 }
 
