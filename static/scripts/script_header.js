@@ -1,6 +1,6 @@
-/**
- * Created by Alexey on 12.03.2017.
- */
+$(document).ready(function () {
+    setCurrentMenu();
+});
 
 var $droplist = $('.droplist');
 var FLAG_DROPLIST = false;
@@ -103,4 +103,32 @@ function hide_droplist(event, hide) {
         FLAG_DROPLIST = false;
     }
 
+}
+
+
+function setCurrentMenu() {
+    /*
+     Эта функция подсвечивает текущее выбранное меню
+     */
+    var this_url = document.location.href;
+    if (this_url.match('/home/')) {
+        $('.today_bt a').css({
+            "color": "#1E90FF",
+        })
+    }
+    if (this_url.match('/plan/')) {
+        $('.plan_bt a').css({
+            "color": "#1E90FF",
+        })
+    }
+    if (this_url.match('/statistics/')) {
+        $('.statistic_bt a').css({
+            "color": "#1E90FF",
+        })
+    }
+    if (this_url.match('/group/')) {
+        $('.group_bt a').css({
+            "color": "#1E90FF",
+        })
+    }
 }

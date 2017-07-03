@@ -1,0 +1,49 @@
+@import "mixins"
+$alpha-color: rgba(255, 255, 255, 0)
+$border-color: rgba(230, 230, 230, 1)
+$border-style-frames: 1px solid #{$border-color}
+$glyphicon-color: rgba(30, 30, 30, 1)
+
+$button-return-height: 50px
+$button-return-padding: 15px
+
+%bootstrap-button-style
+  &:hover
+    border-color: $border-color
+  &:active
+    box-shadow: none
+    border-color: $alpha-color
+
+.plan_content
+  background: white
+  border: $border-style-frames
+  @include border-radius(4px)
+  padding-bottom: 10px
+
+
+.st-inner-content
+  margin:
+    top: 15px
+    left: 25px
+
+.return_button.btn
+  width: 100px
+  @include set-flex(center)
+  height: $button-return-height
+  border: $border-style-frames
+  //background: $border-color-frames
+  @include border-radius(4px)
+  margin-bottom: 15px
+
+  span
+    font-size: 1.2em
+    color: $border-color
+    padding:
+      right: 5px
+      bottom: 3px
+  &:hover span
+    color: $glyphicon-color + rgba(20,20,20,1)
+  @extend %bootstrap-button-style
+
+.datepicker_content
+  width: 200px

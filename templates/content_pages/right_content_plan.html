@@ -1,0 +1,89 @@
+{% for day in day_of_weeks %}
+    <div class="plan_window" day_num="{{ day }}">
+        <div class="content_day_title">
+            <div class="tools_panel left">
+                <ul>
+                    <li>
+                        <button class="delete_row">Del</button>
+                    </li>
+                    <li>
+                        <button class="clone_row">Clone</button>
+                    </li>
+                </ul>
+            </div>
+            <div class="day_title_container">
+                <div class="day_title">{{ day.name }}</div>
+            </div>
+            <div class="tools_panel right">
+                <ul>
+                    <li>
+                        <div class=share_button>
+                            <div class="second_layer"></div>
+                            <div class="first_layer">Share</div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+        <div class="day_plan_content">
+            <div class="str_plan str_title">
+                <div class="checkbox_wrap general_checkbox" flag_active="false">
+                    <div class="checkbox_container" style="opacity: 0"></div>
+                </div>
+                <ul>
+                    <li><a>Недели</a></li>
+                    <li><a>Время</a></li>
+                    <li><a>Предмет</a></li>
+                    <li><a>Преподаватель</a></li>
+                    <li><a>Место</a></li>
+                    <li><a>Чётность</a></li>
+
+                </ul>
+            </div>
+
+            {% for row in plan_rows %}
+                {% if row.day_of_week.id == day.id %}
+
+                    <div class="str_plan change" id="{{ row.id }}">
+                        <div class="checkbox_wrap">
+                            <div class="checkbox_container row"></div>
+                        </div>
+                        <ul>
+                            <li><textarea class="weeks"
+                                          num="1">{{ row.start_week }}-{{ row.end_week }}</textarea></li>
+                            <li><textarea class="time" num="2">{{ row.time.get_format_time }}</textarea>
+                            </li>
+                            <li><textarea class="subject" num="3">{{ row.subject.name }}</textarea></li>
+                            <li><textarea class="teacher" num="4">{{ row.teacher.name_short }}</textarea>
+                            </li>
+                            <li><textarea class="place" num="5">{{ row.place.name }}</textarea></li>
+                            {% if row.parity == None %}
+                                <li class="last"><input class="parity drop_button" type="button" value="Все"
+                                                        num="6"></li>
+                            {% endif %}
+                            {% if row.parity == 0 %}
+                                <li class="last"><input class="parity drop_button" type="button" value="Чет"
+                                                        num="6"></li>
+                            {% endif %}
+                            {% if row.parity == 1 %}
+                                <li class="last"><input class="parity drop_button" type="button"
+                                                        value="Нечет" num="6"></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                {% endif %}
+            {% endfor %}
+            {% if is_invitation != True %}
+                <div class="str_plan str_plus">
+                    <div class="plus_button_form">
+                        <div class="plus_button"></div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        <div class="info_checkboxes" count=0 flag_general_checkbox="false" tools_flag="false"
+             style="display: none; position: absolute; width: 0; height: 0; top:0; left:0;">
+        </div>
+    </div>
+{% endfor %}

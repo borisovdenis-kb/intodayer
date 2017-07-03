@@ -270,16 +270,19 @@ body {
     /*background-color: #2b542c;*/
 }
 
-.plan_settings{
-    width: 30px;
-    height: 100%;
+
+.icon_setting_content{
+    display: flex;
+    align-items: center;
+    align-content: center;
+    justify-content: flex-end;
     margin-right: 20px;
     float: right;
-    background: url("../images/35.png") center no-repeat;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: contain;
+    height: 100%;
+}
+
+.plan_settings{
+    font-size: 1.5em;
     cursor: pointer;
 }
 

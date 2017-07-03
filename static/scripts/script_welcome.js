@@ -1,10 +1,14 @@
-$(window).ready(function() {
-   showWelcome();
-    // setInvisible();
+$(window).ready(function () {
+    showWelcome();
+    startAllFunctions();
+    setTimeout(function () {
+        startAllFunctions();
+    }, 200);
+
 });
 
 
-function setInvisible(){
+function setInvisible() {
     $('.bottom_text').css('opacity', '0');
     $('.welcome_text').css('opacity', '0');
     $('.buttons_row').css('opacity', '0');
@@ -95,4 +99,25 @@ function sing_in_Action() {
     });
 }
 
+$(window).on('resize', function () {
+    startAllFunctions();
+});
+
+
+function startAllFunctions() {
+    setContentToCenter();
+}
+
+
+// когда высота страницы становится маленькой, выравнивает весь контент
+// в точности по центру (а обычно контент чуть выше центра)
+var trueHeightBlock = $('.fill-space-bottom');
+function setContentToCenter() {
+    if ($(window).height() < 800) {
+        trueHeightBlock.css('display', 'none');
+    }
+    else {
+        trueHeightBlock.css('display', 'block');
+    }
+}
 
