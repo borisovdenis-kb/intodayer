@@ -1,0 +1,62 @@
+
+@import mixins
+
+%panels_styles
+  display: block
+  margin:
+    top: 30px
+  border: 1px solid rgba(200,200,200,1)
+  @include border-radius(4px)
+  input
+    @include border-radius(4px)
+    margin: 0
+    &[type='button'], &[type='submit'], &[type='button']:active, &[type='submit']:active
+      outline: none
+      @include box-shadow(none)
+
+h2
+  margin-top: 30px
+
+.panel_reg
+  @extend %panels_styles
+  max-width: 800px
+  text-align: left
+
+.panel_auth
+  @extend %panels_styles
+  max-width: 600px
+  text-align: center
+  .buttons_row
+    a
+      margin: 0
+
+.buttonEnter
+  background: #5cb85c
+  transition: 0.1s all ease
+  &:hover
+    background: #56aa56
+  &:active
+    background: #4e9b4e
+
+#buttonBack
+  background: rgba(255, 255, 255, 1)
+  border: 1px solid rgba(200,200,200,1)
+  transition: 0.1s all ease
+  &:hover
+    background: rgba(245, 245, 245, 1)
+  &:active
+    transition: none
+    background: rgba(235, 235, 235, 1)
+
+.buttonHelp
+  text-decoration: none
+  color: cornflowerblue
+  &:active
+    color: #6375cd
+
+#sign_in
+  &:hover
+    border-color: rgba(50, 50, 50, 1)
+
+.pswd_equal_pswd_confirm
+  background-color: #fff5a1

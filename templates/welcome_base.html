@@ -7,9 +7,9 @@
     <meta http-equiv="Content-type" content="text/html" charset="UTF-8">
 
     {#Импорт фрэймворков#}
-        <script type="text/javascript" src={% static "library/jquery-3.1.1.js" %}></script>
+    <script type="text/javascript" src={% static "library/jquery-3.1.1.js" %}></script>
     <link rel="stylesheet" type="text/css" href={% static "library/bootstrap-3.3.2-dist/css/bootstrap.css" %}>
-{#    <script src="http://code.jquery.com/jquery-latest.js"></script>#}
+    {#    <script src="http://code.jquery.com/jquery-latest.js"></script>#}
     <script type="text/javascript" src={% static "library/jquery.animate-colors.js" %}></script>
     <script type="text/javascript" src={% static "library/bootstrap-3.3.2-dist/js/bootstrap.js" %}></script>
 
@@ -22,7 +22,7 @@
     {#Общее#}
     <link rel="stylesheet" type="text/css" href={% static "css/__old/fonts_optimizate.css" %}>
     <link rel="stylesheet" type="text/css" href={% static "css/__old/../static/css/home_top.css" %}>
-    <link rel="stylesheet" type="text/css" href={% static "css/general_style.css" %}>
+    <link rel="stylesheet" type="text/css" href={% static "css/__old/general_style.css" %}>
 
     <!--Добавление в наследующие шаблоны новых скриптов-->
     {% block scripts_top %}{% endblock %}
@@ -39,11 +39,11 @@
     </div>
 {% endblock %}
 
- <div class="center_page">
-        <div class="center_table">
-{% block content_page %}{% endblock %}
-        </div>
- </div>
+<div class="center_page">
+    <div class="center_table">
+        {% block content_page %}{% endblock %}
+    </div>
+</div>
 
 
 {% block footer %}

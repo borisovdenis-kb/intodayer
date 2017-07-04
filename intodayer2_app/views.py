@@ -512,7 +512,7 @@ def registration_view(request):
         form = CustomUserCreationForm()
 
     context = {'form': form}
-    return render_to_response('reg_tst.html', context)
+    return render_to_response('reg.html', context)
 
 
 def login_view(request):

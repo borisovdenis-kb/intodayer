@@ -1,0 +1,101 @@
+/*Для панели авторизации*/
+.panel_auth, .panel_reg {
+    display: block;
+    margin-top: 30px;
+    border: 1px solid rgba(200, 200, 200, 1);
+    border-radius: 4px;
+
+}
+.panel_reg {
+  max-width: 800px;
+}
+.panel_auth{
+    max-width: 600px;
+}
+
+h2 {
+    margin-top: 30px;
+}
+
+.panel_auth input, .panel_reg input {
+    border-radius: 4px;
+    margin: 0;
+}
+
+.panel_auth {
+    text-align: center;
+}
+
+.panel_reg {
+    text-align: left;
+    /*height: auto;*/
+}
+
+
+
+.panel_reg input[type='button'], .panel_reg input[type='submit'], .panel_reg input[type='button']:active, .panel_reg input[type='submit']:active,
+.panel_auth input[type='button'], .panel_auth input[type='submit'], .panel_auth input[type='button']:active, .panel_auth input[type='submit']:active
+{
+
+    outline: none;
+    box-shadow: none;
+}
+
+.buttonEnter{
+    background-color: #5cb85c;
+    transition: all 0.1s ease;
+}
+
+.buttonEnter:hover {
+    background: #56aa56;
+}
+
+.buttonEnter:active {
+    /*transition: none;*/
+    background: #4e9b4e;
+}
+
+#buttonBack{
+    background: rgba(255, 255, 255, 1);
+    border: 1px solid rgba(200, 200, 200, 1);
+    transition: all 0.1s ease;
+}
+
+#buttonBack:hover {
+    background: rgba(245, 245, 245, 1);
+}
+
+#buttonBack:active {
+    transition: none;
+    background: rgba(235, 235, 235, 1);
+}
+
+
+.buttonHelp {
+    text-decoration: none;
+    color: cornflowerblue;
+}
+
+.buttonHelp:hover {
+    text-decoration: underline;
+}
+
+.buttonHelp:active {
+    color: #6375cd;
+}
+
+.panel_auth .buttons_row a {
+    margin: 0;
+}
+
+#sign_in {
+    border: 1px solid rgba(80, 80, 80, 1);
+}
+
+#sign_in:hover {
+    border-color: rgba(50, 50, 50, 1);
+}
+
+.pswd_equal_pswd_confirm {
+    background-color: #fff5a1;
+}

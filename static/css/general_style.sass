@@ -1,0 +1,328 @@
+$background_body: rgba(244, 243, 248, 1)
+$min-width-body: 368px
+
+@import "mixins"
+
+body
+  margin: 0 auto
+  background: $background_body
+  min-width: $min-width-body
+
+.logo a
+  color: black
+
+ul
+  list-style: none
+  margin: 0 auto
+  padding-left: 0
+
+a
+  text-decoration: none
+  color: black
+
+  &:hover
+    text-decoration: none
+    color: black
+
+input
+  @include border-radius(4px)
+
+button
+  background: none
+  border: none
+  &:hover, &:focus, &:active, &:link
+    outline: none
+
+.for_invitations
+  display: flex
+  flex-direction: column
+  justify-content: flex-end
+  position: fixed
+  width: 300px
+  right: 0
+  bottom: 5px
+  margin:
+    right: 5px
+  z-index: 10001
+
+.invitation
+  flex: 0 0 auto
+  display: flex
+  flex-direction: row
+  justify-content: flex-end
+  height: 70px
+  margin: 5px
+  background: white
+  border: 1px solid rgba(230, 230, 230, 1)
+  @include box-shadow(0px 0px 10px 1px rgba(0, 0, 0, 0.2))
+  @include border-radius(4px)
+
+.fua_wrap
+  @include border-radius(4px)
+  width: 70px
+  padding:
+    top: 5px
+    left: 15px
+
+.from_user_avatar
+  right: 5px
+  width: 60px
+  height: 60px
+  margin:
+    top: 5px
+    right: 5px
+  @include background-size(cover)
+  @include border-radius(2px)
+  &:hover
+    cursor: pointer
+
+.message_wrap
+  @include border-radius(4px)
+  width: 225px
+  color: black
+
+.message
+  padding:
+    top: 10px
+    left: 10px
+  font-family: 'Arial', serif
+  opacity: 0.8
+
+.message_sep
+  height: 1px
+  width: 90%
+  background: #e8e8e8
+  margin:
+    top: 5px
+    left: 10px
+
+.show_plan
+  @include border-radius(4px)
+  height: 20px
+  margin-left: 60px
+  padding:
+    left: 10px
+    right: 10px
+
+.show_plan
+  a
+    color: #8b1deb
+
+.inv_description
+  width: 170px
+
+.confirmation
+  display: flex
+  flex-direction: column
+  height: 100px
+  width: 170px
+  margin: 15px 0 0 15px
+  @include border-radius(4px)
+
+.conf_fixed
+  top: 0
+  position: fixed
+
+%accept_reject_style
+  margin:
+    top: 5px
+  padding: 8px
+  height: 20px
+  @include border-radius(4px)
+  text-align: center
+  font-family: "Cyntho Pro" !important
+  background-position: center
+  @include background-size(contain)
+  overflow: hidden
+  transition: 0.2s
+  cursor: pointer
+  &:hover
+    cursor: pointer
+
+.accept
+  @extend %accept_reject_style
+  border: solid 1px rgba(103, 198, 97, 0.9)
+
+.reject
+  @extend %accept_reject_style
+  border: 1px solid #eb6b66
+
+.accept_img
+  background: rgba(103, 198, 97, 0.9) url('../images/accept.png')
+
+.reject_img
+  background: #eb6b66 url('../images/reject.png')
+
+.cover_all
+  display: none
+  position: fixed
+  z-index: 10200
+  width: 100%
+  height: 100%
+  top: 0
+  left: 0
+  background: white
+  opacity: 0.8
+  p
+    color: black
+    text-align: center
+    font-size: 100px
+  a
+    display: none
+    margin-left: 49%
+    color: #8b1deb
+    font-size: 50px
+
+.choose_avatar_wrap, .mailing_wrap
+  display: none
+  position: fixed
+  top: 0
+  $width-ava-wrap: 500px
+  width: $width-ava-wrap
+  overflow: hidden
+  @include border-radius(4px)
+  margin:
+    left: calc(50% - #{$width-ava-wrap} / 2)
+    top: 170px
+  z-index: 10201
+  @include box-shadow(0px 0px 10px 1px rgba(0, 0, 0, 0.2))
+
+.choose_avatar, .mailing
+  display: none
+  align-items: center
+  justify-content: center
+  width: 100%
+  height: 165px
+  background: rgba(244, 243, 248, 1)
+
+.choose_avatar_header, .mailing_header
+  display: flex
+  height: 30px
+  background: #8b1deb
+  font-family: "Cyntho Pro" !important
+
+.choose_avatar_footer, .mailing_footer
+  width: 100%
+  height: 40px
+  color: black
+  font-family: "Cyntho Pro" !important
+  p
+    display: flex
+    align-content: center
+    align-items: center
+    margin-left: 10px
+    height: 100%
+
+.mailing_footer
+  @include set-flex(center)
+
+.close, .mailing_close
+  width: 30px
+  height: 30px
+  cursor: pointer
+
+  background: url('../images/reject.png') no-repeat right
+  @include background-size(contain)
+
+.close, .mailing_close
+  @include set-flex(center)
+  height: 100%
+  margin-left: auto
+  margin-right: 5px
+
+.choose_avatar_text, .mailing_text
+  @include set-flex(center)
+  height: 100%
+  margin-left: 10px
+
+.send_button
+  display: none
+  width: 150px
+
+.file_upload
+  width: 100px
+
+//для правильного отображения кнопки закрыть
+[hidden]
+  display: none !important
+
+.file_info
+  background: #eb6b66
+
+.btn_mail_content
+  @include set-flex(center)
+  height: 100%
+
+.do_mailing_button
+  margin: 0 auto
+  //top: 5px
+  width: 100px
+  line-height: 30px
+  text-align: center
+  border: 1px solid rgba(220, 220, 220, 1)
+  user-select: none
+  @include border-radius(4px)
+  &:hover
+    cursor: pointer
+
+.mailing
+  textarea
+    width: 480px
+    height: 140px
+    background: white
+    border: 1px solid rgb(216, 215, 220)
+    padding: 5px
+    @include border-radius(4px)
+    font-family: "Cyntho Pro" !important
+    font-size: 16px
+    cursor: text
+    outline: none
+    -moz-appearance: none
+    overflow: auto
+    resize: none
+    &:hover
+      cursor: text
+
+    $padding: 279px
+    &::-webkit-input-placeholder
+      padding-right: $padding
+    &::-moz-placeholder
+      padding-right: $padding
+    &:-ms-input-placeholder
+      padding-right: $padding
+
+.progress
+  display: none
+  position: absolute
+  align-items: center
+  justify-content: center
+  width: 500px
+  height: 165px
+  background: rgba(255, 255, 255, 0.8)
+  z-index: 10202
+  a
+    display: flex
+    margin-left: 5px
+    color: #8b1deb
+    cursor: pointer
+
+.progress_indicator
+  display: none
+  width: 60px
+  margin:
+    left: auto
+    right: auto
+  background: url("../images/progress_indicator.gif") no-repeat center
+  @include background-size(contain)
+
+.errors_wrap
+  text-align: center
+  font-size: 20px
+  @include set-flex(center)
+
+.reload_page
+  text-align: center
+  font-size: 20px
+  a
+    color: #8b1deb
+    cursor: pointer

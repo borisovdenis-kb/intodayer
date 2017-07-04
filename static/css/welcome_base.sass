@@ -1,0 +1,67 @@
+
+@import "mixins"
+
+html, body
+  height: 100%
+  margin: 0 auto
+
+@mixin set-height($val)
+  min-height: calc(100% - #{$val})
+  height: auto !important /* cross-browser */
+  height: calc(100% - #{$val}) /* cross-browser */
+
+.fill-height
+  @include set-height(100px)
+
+.center_page
+  @include set-height(100px)
+  min-width: 100%
+  display: table
+
+.center_table
+  display: table-cell
+  vertical-align: middle
+
+.vertical-center-row
+  display: flex
+  flex-direction: column
+  justify-content: center
+
+.big-h1
+  font-size: 3.5em
+
+h2
+  margin-top: 5px
+
+blockquote
+  border-width: 0
+
+.buttons_row
+  a
+    display: inline-block
+    line-height: 40px
+    font-size: 1.2em
+    margin: 3px
+    min-width: 200px
+    text-decoration: none
+
+#sign_in
+  border-color: rgba(80, 80, 80, 1)
+  background: rgba(80, 80, 80, 1)
+  color: white
+  &:hover
+    border-color: rgba(50, 50, 50, 1)
+    background-color: rgba(50, 50, 50, 1)
+
+.fill-space-bottom
+  height: 100px
+
+.footer
+  flex: 0 0 auto
+  margin-top: 20px
+  height: 60px
+  padding: 10px 0 10px 0
+  border-top: 2px solid white
+  color: rgba(220,220,220,1)
+  background: #3c177d
+

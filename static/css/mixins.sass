@@ -41,6 +41,20 @@
   -moz-hyphens: auto
   -webkit-hyphens: auto
 
+
+@mixin opacity($val)
+  /* IE 8 */
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=#{$val})"
+  /* IE 5-7 */
+  filter: alpha(opacity=$val)
+  /* Netscape */
+  -moz-opacity: $val
+  /* Safari 1.x */
+  -khtml-opacity: $val
+  /* Good browsers */
+  opacity: $val
+
+
 // центрирует flex блок по вертикали и горизонтали
 @mixin set-flex($type)
   display: flex
