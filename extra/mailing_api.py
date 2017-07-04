@@ -35,12 +35,11 @@ class IntodayerMailing:
         self.plan_id = plan_id
         self.sender_id = sender_id
 
-        # add missing padding
-        miss_pad = len(image) % 4
-        if miss_pad != 0:
-            image += '=' * (4 - miss_pad)
-
-        self.image = image.split('base64,')[1]
+        if image:
+            miss_pad = len(image) % 4  # add missing padding
+            if miss_pad != 0:
+                image += '=' * (4 - miss_pad)
+            self.image = image.split('base64,')[1]
 
     def set_sender_name(self):
         """

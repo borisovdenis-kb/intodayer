@@ -1,19 +1,14 @@
-import random
-import json
-
-from intodayer2_app.models import *
 from django.contrib.auth.models import *
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.utils import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.http import HttpResponseBadRequest
 from django.shortcuts import render_to_response
+from apis.planSettingsApi import *
+from extra.stripes_api import *
+from extra.utils import *
 from intodayer2_app.forms import *
 from intodayer2_app.send_sms import *
-from extra.utils import *
-from extra.stripes_api import *
-from extra.mailing_api import *
-from extra.plan_settings_api import *
 
 
 # TODO: Сделать в выводе расписания в /plan сортировку по времени, а не по неделям
@@ -24,35 +19,6 @@ from extra.plan_settings_api import *
 ###################################################################################
 #                          ОБРАБОТКА AJAX ЗАПРОСОВ                                #
 ###################################################################################
-
-
-def settings_plan(request):
-    context = dict()
-    context.update(get_cur_plan(request))
-    return render_to_response('templates_for_ajax/settings_ajax.html', context)
-
-
-def delete_plan_ajax(request):
-    if request.is_ajax():
-        user = CustomUser.objects.get(username=request.user.username)
-
-        response = HttpResponse()
-        response['Content-Type'] = 'application/json'
-
-        try:
-            plan_id = int(request.POST['plan_id'])
-            UserPlans.objects.get(user_id=user.id, plan_id=plan_id)
-        except (ValueError, ObjectDoesNotExist):
-            response.write(json.dumps({'success': 0}))
-            return response
-
-        settings = PlanSettings(user.id, plan_id)
-        settings.delete_plan()
-
-        response.write(json.dumps({'success': 1}))
-
-        return response
-
 
 def create_new_plan_ajax(request):
     if request.is_ajax():
@@ -66,31 +32,11 @@ def create_new_plan_ajax(request):
         return response
 
 
-def update_plan_title_ajax(request):
-    if request.is_ajax():
-        user = CustomUser.objects.get(username=request.user.username)
-
-        response = HttpResponse()
-        response['Content-Type'] = 'application/json'
-
-        try:
-            plan_id = int(request.POST['plan_id'])
-            plan = UserPlans.objects.select_related().get(user_id=user.id, plan_id=plan_id)
-
-            if plan.plan.owner != user:
-                raise ValueError
-
-        except (ValueError, ObjectDoesNotExist):
-            response.write(json.dumps({'success': 0}))
-
-            return response
-
-        plan.plan.title = request.POST['new_title']
-        plan.plan.save()
-
-        response.write(json.dumps({'success': 1}))
-
-        return response
+# Почему-то не получается перенести эту функцию в planSettingsApi
+def get_settings_plan_html(request):
+    context = dict()
+    context.update(get_cur_plan(request))
+    return render_to_response('templates_for_ajax/settings_ajax.html', context)
 
 
 def get_drop_list_ajax(request):
@@ -273,31 +219,6 @@ def switch_plan_home_ajax(request):
         return render_to_response('content_pages/right_content_home.html', context)
 
 
-def right_plan_content_only(request):
-    """
-        Загружает правый контент (без учёта Title блока), только контент расписания
-    """
-    if request.is_ajax:
-        user = CustomUser.objects.get(username=request.user.username)
-        context = dict()
-
-        try:
-            plan_id = int(request.POST['plan_id'])
-            context.update(get_cur_plan(request, plan_id))
-        except ValueError:
-            return render_to_response('templates_for_ajax/content_errors.html')
-        except IndexError:
-            return render_to_response('templates_for_ajax/content_errors.html')
-
-        context.update(get_dates_info(context['cur_plan']))
-        # устанавливаем current_yn
-        user.set_current_plan(plan_id)
-        plan_rows = PlanRows.objects.select_related().filter(plan_id=plan_id).order_by('start_week')
-        context['plan_rows'] = plan_rows
-
-        return render_to_response('content_pages/right_content_plan.html', context)
-
-
 def switch_plan_plan_ajax(request):
     """
         Функция для переключения между расписаниями со страницы /plan
@@ -323,6 +244,31 @@ def switch_plan_plan_ajax(request):
         context['plan_rows'] = plan_rows
 
         return render_to_response('content_pages/right_content_plan_general.html', context)
+
+
+def right_plan_content_only(request):
+    """
+        Загружает правый контент (без учёта Title блока), только контент расписания
+    """
+    if request.is_ajax:
+        user = CustomUser.objects.get(username=request.user.username)
+        context = dict()
+
+        try:
+            plan_id = int(request.POST['plan_id'])
+            context.update(get_cur_plan(request, plan_id))
+        except ValueError:
+            return render_to_response('templates_for_ajax/content_errors.html')
+        except IndexError:
+            return render_to_response('templates_for_ajax/content_errors.html')
+
+        context.update(get_dates_info(context['cur_plan']))
+        # устанавливаем current_yn
+        user.set_current_plan(plan_id)
+        plan_rows = PlanRows.objects.select_related().filter(plan_id=plan_id).order_by('start_week')
+        context['plan_rows'] = plan_rows
+
+        return render_to_response('content_pages/right_content_plan.html', context)
 
 
 def get_invitations_ajax(request):
@@ -569,6 +515,7 @@ def get_all_plans(request):
     return context
 
 
+# TODO: Какая-то стремная функция зачем она вообще нужна??
 def get_cur_plan(request, plan_id=None):
     """
         Возвращает контекст с текущим выбранным расписанием

@@ -1,3 +1,4 @@
+
 $(document).ready(function () {
     setListenersTitleBlock();
 });
@@ -155,8 +156,6 @@ function updatePlanTitle() {
             $title_input.parent().text('Ошибка');
             $title_input.parent().append('<a href="/plan">Перезагрузите страницу.</a>');
         }
-
-
     });
 }
 
