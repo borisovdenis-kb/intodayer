@@ -34,9 +34,10 @@ def create_new_plan_ajax(request):
 
 # Почему-то не получается перенести эту функцию в planSettingsApi
 def get_settings_plan_html(request):
-    context = dict()
-    context.update(get_cur_plan(request))
-    return render_to_response('templates_for_ajax/settings_ajax.html', context)
+    if request.is_ajax():
+        context = dict()
+        context.update(get_cur_plan(request))
+        return render_to_response('templates_for_ajax/settings_ajax.html', context)
 
 
 def get_drop_list_ajax(request):
@@ -538,7 +539,6 @@ def get_cur_plan(request, plan_id=None):
         else:
             context['select_flag'] = True
             context['cur_plan'] = 0
-
     else:
         cur_plan = cur_plan[0]
         context['cur_plan'] = cur_plan
