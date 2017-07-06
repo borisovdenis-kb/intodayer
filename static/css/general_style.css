@@ -383,4 +383,34 @@ button {
     color: #8b1deb;
     cursor: pointer; }
 
+.footer {
+  flex: 0 0 auto;
+  margin-top: 20px;
+  height: 60px;
+  padding: 10px 0 10px 0;
+  border-top: 2px solid white;
+  background: #3c177d; }
+
+.center_page {
+  min-height: calc(100% - 100px);
+  height: auto !important;
+  height: calc(100% - 100px);
+  min-width: 100%;
+  display: table; }
+
+.center_table {
+  display: table-cell;
+  vertical-align: middle; }
+
+.footer {
+  flex: 0 0 auto;
+  margin-top: 200px;
+  height: 60px;
+  padding: 10px 0 10px 0;
+  border-top: 2px solid white;
+  color: gainsboro;
+  background: #3c177d; }
+
+/*# sourceMappingURL=welcome_base_new.css.map */
+
 /*# sourceMappingURL=general_style.css.map */

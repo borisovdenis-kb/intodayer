@@ -1,4 +1,4 @@
-{% extends 'home.html' %}
+{% extends "base.html" %}
 {% load staticfiles %}
 
 {% block title %}
@@ -7,9 +7,9 @@
 
 {% block styles %}
     <link rel="stylesheet" type="text/css" href={% static "css/plan_content.css" %}>
-    {#    подключаем стили всех страниц, которые задействованы в открытии ajax запросов#}
     <link rel="stylesheet" type="text/css" href={% static "css/plan_settings.css" %}>
     <link rel="stylesheet" type="text/css"
+            {#          плагины#}
           href={% static "plug-ins/bootstrap-datetimepicker-master/build/css/bootstrap-datetimepicker.css" %}>
 {% endblock %}
 
@@ -26,7 +26,6 @@
     <script type="text/javascript" src={% static "library/device.js" %}></script>
     <script type="text/javascript"
             src={% static "plug-ins/bootstrap-datetimepicker-master/build/js/bootstrap-datetimepicker.min.js" %}></script>
-
 {% endblock %}
 
 {% block invitation %}

@@ -1,12 +1,20 @@
-{% extends 'welcome_base.html' %}
+{% extends 'base.html' %}
 {% load staticfiles %}
-
 
 {% block scripts_top %}
     <link rel="stylesheet" type="text/css" href={% static "css/welcome_base.css" %}>
     <link rel="stylesheet" type="text/css" href={% static "css/header.css" %}>
 {% endblock %}
 
+{% block header %}
+    <div class="container-fluid">
+        <div class="row top-block">
+            <div class="col-xs-12 top">
+                <div class="logo"><a href="/home">IntoDayer</a></div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
 
 
 {% block content_page %}
@@ -51,10 +59,8 @@
 {% endblock %}
 
 
-
 {% block scripts_bottom %}
     <script type="text/javascript" src={% static "scripts/script_welcome.js" %}></script>
-    <script type="text/javascript" src={% static "scripts/script_welcome_utils.js" %}></script>
 {% endblock %}
 
 

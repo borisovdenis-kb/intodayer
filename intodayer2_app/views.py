@@ -92,7 +92,6 @@ def update_plan_title_ajax(request):
 
         return response
 
-
 def get_drop_list_ajax(request):
     """
         Функция собирает в html список все доступные у пользователя
@@ -531,7 +530,7 @@ def login_view(request):
         else:
             return HttpResponse('Invalid Login or Password')
     else:
-        return render_to_response('auth.html')
+        return render_to_response('login.html')
 
 
 def logout_view(request):

@@ -9,6 +9,7 @@ function createDropLst($thisField) {
     $('.drop_list').remove();
     if (!$thisField.hasClass('weeks')) {
         $('body').append('<div class="drop_list"></div>');
+
         loadData($thisField);
     }
 }
@@ -42,27 +43,28 @@ function loadData($thisField) {
             '<li><a>Нечет</a></li>' +
             '</ul>'
         );
+
     }
 
     if (!$thisField.hasClass('parity')) {
         // вставляем даные из базы в div drop_list
+        var $droplist = $('.drop_list');
+
         $('.drop_list').load('/get_drop_list', data, function () {
-            var count_li = $('.drop_list').find('li').length;
+            var count_li = $droplist.find('li').length;
+            console.log($('.drop_list').length);
             if (!count_li) {
                 $('.drop_list').remove();
                 return false;
             }
-            setStyleDropList($thisField);
-        });
+        })
     }
-    else {
-        setStyleDropList($thisField);
-    }
+    setStyleDropList($thisField, $('.drop_list').first());
+
 }
 
-function setStyleDropList($thisField) {
+function setStyleDropList($thisField, $droplist) {
     var $bruceLi = $thisField.parent();
-    var $droplist = $('.drop_list');
     $droplist.find('ul li a').on('mousedown touchstart', function (e) {
         $thisField.val($(this).text());
 

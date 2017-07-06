@@ -5,22 +5,11 @@ html, body
   height: 100%
   margin: 0 auto
 
-@mixin set-height($val)
-  min-height: calc(100% - #{$val})
-  height: auto !important /* cross-browser */
-  height: calc(100% - #{$val}) /* cross-browser */
 
 .fill-height
   @include set-height(100px)
 
-.center_page
-  @include set-height(100px)
-  min-width: 100%
-  display: table
 
-.center_table
-  display: table-cell
-  vertical-align: middle
 
 .vertical-center-row
   display: flex
@@ -56,12 +45,4 @@ blockquote
 .fill-space-bottom
   height: 100px
 
-.footer
-  flex: 0 0 auto
-  margin-top: 20px
-  height: 60px
-  padding: 10px 0 10px 0
-  border-top: 2px solid white
-  color: rgba(220,220,220,1)
-  background: #3c177d
 
