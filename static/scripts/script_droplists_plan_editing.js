@@ -52,12 +52,12 @@ function loadData($thisField) {
 
         $('.drop_list').load('/get_drop_list', data, function () {
             var count_li = $droplist.find('li').length;
-            console.log($('.drop_list').length);
+            // console.log($('.drop_list').length);
             if (!count_li) {
                 $('.drop_list').remove();
                 return false;
             }
-        })
+        });
     }
     setStyleDropList($thisField, $('.drop_list').first());
 

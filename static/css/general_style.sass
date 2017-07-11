@@ -337,12 +337,6 @@ button
   background: #3c177d
 
 
-@mixin set-height($val)
-  min-height: calc(100% - #{$val})
-  height: auto !important /* cross-browser */
-  height: calc(100% - #{$val}) /* cross-browser */
-
-
 .center_page
   @include set-height(100px)
   min-width: 100%

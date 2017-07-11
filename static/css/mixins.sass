@@ -66,3 +66,8 @@
     align-items: flex-start
     justify-content: flex-start
     align-content: flex-start
+
+@mixin set-height($val)
+  min-height: calc(100% - #{$val})
+  height: auto !important /* cross-browser */
+  height: calc(100% - #{$val}) /* cross-browser */

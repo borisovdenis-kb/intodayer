@@ -396,11 +396,11 @@ function openTextareaDropList($this_field) {
     }
     else {
         $this_field.addClass('drop_is', 'drop_is');
-
+        $.getScript("/static/scripts/script_droplists_plan_editing.js", function () {
             // ипорт функции для выпадающих списков у полей.
             // делаем услования, чтобы дроп лист больше не открывался при 2 клике на поле
             createDropLst($this_field);
-
+        });
     }
 }
 
