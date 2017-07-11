@@ -39,7 +39,6 @@ def get_settings_plan_html(request):
         context.update(get_cur_plan(request))
         return render_to_response('templates_for_ajax/settings_ajax.html', context)
 
-
 def get_drop_list_ajax(request):
     """
         Функция собирает в html список все доступные у пользователя
@@ -459,7 +458,7 @@ def registration_view(request):
         form = CustomUserCreationForm()
 
     context = {'form': form}
-    return render_to_response('reg_tst.html', context)
+    return render_to_response('reg.html', context)
 
 
 def login_view(request):
@@ -478,7 +477,7 @@ def login_view(request):
         else:
             return HttpResponse('Invalid Login or Password')
     else:
-        return render_to_response('auth.html')
+        return render_to_response('login.html')
 
 
 def logout_view(request):

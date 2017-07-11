@@ -1,0 +1,69 @@
+.panel_reg, .panel_auth {
+  display: block;
+  margin-top: 30px;
+  border: 1px solid #c8c8c8;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  -khtml-border-radius: 4px;
+  border-radius: 4px;
+  -ms-border-radius: 4px; }
+  .panel_reg input, .panel_auth input {
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -khtml-border-radius: 4px;
+    border-radius: 4px;
+    -ms-border-radius: 4px;
+    margin: 0; }
+    .panel_reg input[type='button'], .panel_auth input[type='button'], .panel_reg input[type='submit'], .panel_auth input[type='submit'], .panel_reg input[type='button']:active, .panel_auth input[type='button']:active, .panel_reg input[type='submit']:active, .panel_auth input[type='submit']:active {
+      outline: none;
+      -webkit-box-shadow: none;
+      -moz-box-shadow: none;
+      box-shadow: none;
+      -ms-box-shadow: none;
+      -o-box-shadow: none;
+      -khtml-box-shadow: none; }
+
+h2 {
+  margin-top: 30px; }
+
+.panel_reg {
+  max-width: 800px;
+  text-align: left; }
+
+.panel_auth {
+  max-width: 600px;
+  text-align: center; }
+  .panel_auth .buttons_row a {
+    margin: 0; }
+
+.buttonEnter {
+  background: #5cb85c;
+  transition: 0.1s all ease; }
+  .buttonEnter:hover {
+    background: #56aa56; }
+  .buttonEnter:active {
+    background: #4e9b4e; }
+
+#buttonBack {
+  background: white;
+  border: 1px solid #c8c8c8;
+  transition: 0.1s all ease; }
+  #buttonBack:hover {
+    background: whitesmoke; }
+  #buttonBack:active {
+    transition: none;
+    background: #ebebeb; }
+
+.buttonHelp {
+  text-decoration: none;
+  color: cornflowerblue; }
+  .buttonHelp:active {
+    color: #6375cd; }
+
+#sign_in:hover {
+  border-color: #323232; }
+
+.pswd_equal_pswd_confirm {
+  background-color: #fff5a1; }
+
+/*# sourceMappingURL=login_reg.css.map */

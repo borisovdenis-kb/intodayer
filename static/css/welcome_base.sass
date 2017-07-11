@@ -1,0 +1,47 @@
+
+@import "mixins"
+
+html, body
+  height: 100%
+  margin: 0 auto
+
+
+.fill-height
+  @include set-height(100px)
+
+
+.vertical-center-row
+  display: flex
+  flex-direction: column
+  justify-content: center
+
+.big-h1
+  font-size: 3.5em
+
+h2
+  margin-top: 5px
+
+blockquote
+  border-width: 0
+
+.buttons_row
+  a
+    display: inline-block
+    line-height: 40px
+    font-size: 1.2em
+    margin: 3px
+    min-width: 200px
+    text-decoration: none
+
+#sign_in
+  border-color: rgba(80, 80, 80, 1)
+  background: rgba(80, 80, 80, 1)
+  color: white
+  &:hover
+    border-color: rgba(50, 50, 50, 1)
+    background-color: rgba(50, 50, 50, 1)
+
+.fill-space-bottom
+  height: 100px
+
+

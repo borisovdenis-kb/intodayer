@@ -28,13 +28,11 @@ body
 
 .content
   margin: auto
+    top: 10px
   background: $background_body
   width: 100%
   max-width: $max-width-page
   padding: 0 8px 0 8px
-
-  .left_content, .right_content
-    margin-top: 10px
 
 .left_content
   display: flex
@@ -44,10 +42,13 @@ body
   float: left
   margin:
     right: 8px
+    top: 10px
 
 .right_content
   float: left
   width: $width-right-content
+  margin:
+    top: 10px
 
 @media (max-width: 767px)
   .right_content
@@ -78,7 +79,10 @@ body
 
 .ava_cover_text
   @extend %ava_styles
-  @include set-flex(center)
+  display: flex
+  justify-content: center
+  align-items: center
+  //@include set-flex(center)
   p
     &:hover
       cursor: pointer
@@ -122,7 +126,7 @@ body
       line-height: 20px
       padding: 10px 0 10px 10px
       background: #f4f3f8 url("../images/plus.png") center no-repeat
-      @include background-size(cover)
+      @include background-size(contain)
       cursor: pointer
 
 .user_image
@@ -165,6 +169,7 @@ body
 
 #plan_title
   @include set-flex(center)
+  flex-direction: column
   width: 100%
   cursor: default
 
@@ -213,7 +218,9 @@ body
   height: 100%
   float: left
   margin-left: 25px
-  @include set-flex(center)
+  display: flex
+  align-items: center
+  justify-content: center
 
 .start_date
   margin-bottom: 2px
@@ -223,10 +230,26 @@ body
 
 .setting_left
   width: 40%
-  @include set-flex(center)
+  display: flex
+  /*background: blue;*/
+  align-items: center
+  align-content: center
+//@include set-flex(center)
+
+.setting_right
+  width: 40%
+
+.plan_settings_content-1
+  margin-top: 10px
+  &:last-child
+    margin-bottom: 300px
 
 .content_day_title
-  @include set-flex(center)
+  //@include set-flex(center)
+  display: flex
+  justify-content: center
+  flex-direction: column
+  align-items: center
   padding:
     top: 5px
   width: calc(100% - 40px)
@@ -295,6 +318,7 @@ body
         cursor: pointer
       textarea
         /*убрать крестик очистки*/
+        height: 32px
         &::-ms-clear
           display: none
         &:focus
@@ -302,11 +326,29 @@ body
           cursor: auto
           border: 2px solid rgba(139, 29, 235, 0.4)
 
-textarea
-  &::-webkit-input-placeholder, &::-moz-placeholder
-    padding-top: 1px
-    color: #b9b9b9
-    text-align: center
+//%placeholder_settings
+//  padding-top: 10px
+//  color: #b9b9b9
+//  text-align: center
+//  text-overflow: ellipsis
+//
+//textarea::-webkit-input-placeholder
+//  @extend %placeholder_settings
+//
+//textarea:-moz-placeholder
+//  @extend %placeholder_settings
+
+textarea::-webkit-input-placeholder
+  padding-top: 1px
+  color: #c3c3c3
+  text-align: center
+  text-overflow: ellipsis
+
+textarea:-moz-placeholder
+  padding-top: 1px
+  color: #c3c3c3
+  text-align: center
+  text-overflow: ellipsis
 
 .str_title
   background: rgba(103, 198, 97, 0.9)
@@ -314,6 +356,8 @@ textarea
   margin:
     top: 10px
   min-height: 30px
+  &:first-child li
+    border-right: 1px solid rgba(91, 178, 102, 0.4)
 
 #plan_title_input
   text-align: center

@@ -18,6 +18,9 @@ from intodayer2_app import views
 from django.conf import settings
 from apis import planSettingsApi
 from django.conf.urls.static import static
+from django.views.generic.base import RedirectView
+
+# favicon_view = RedirectView.as_view(url='favicon.ico', permanent=True)
 
 
 urlpatterns = [
@@ -53,6 +56,8 @@ urlpatterns = [
     # подгрузка контентов
     url(r'^left_content', views.left_content_load_ajax),
     url(r'^plan/plan_content_only', views.right_plan_content_only),
+    # url(r'^favicon\.ico$', favicon_view),
+
 
     # настройки расписания
     url(r'^delete_plan', planSettingsApi.delete_plan),

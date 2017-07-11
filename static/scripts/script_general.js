@@ -19,7 +19,7 @@ function setAvatarFrameListeners() {
         $('.cover_all').delay(400).fadeOut(800);
         $('.file_upload').css({'display': 'block'});
         $('.send_button').css({'display': 'none'});
-        $('.choose_avatar_footer').text('Изображение можно загузить в формате jpg, png или gif.');
+        $('.choose_avatar_footer p').text('Изображение можно загузить в формате jpg, png или gif.');
     });
 
     $('.send_button').click(function () {
@@ -218,8 +218,8 @@ function getFileName() {
         dots = '...';
     }
 
-    $('.choose_avatar_footer').text('Выбранный файл: ' + dots + fileName.slice(-30));
-    $('.choose_avatar_footer').css({'color': '#000000'});
+    $('.choose_avatar_footer p').text('Выбранный файл: ' + dots + fileName.slice(-30));
+    $('.choose_avatar_footer p').css({'color': '#000000'});
     $('.file_upload').css({'display': 'none'});
     $('.send_button').css({'display': 'block'});
 }
@@ -273,15 +273,15 @@ function sendFile(form, address, update_avatar) {
         } else {
             $('.file_upload').css({'display': 'block'});
             $('.send_button').css({'display': 'none'});
-            $('.choose_avatar_footer').css({'color': '#FF6068'});
-            $('.choose_avatar_footer').text('Разрешено загружать файлы размером не больше 2 Мб!');
+            $('.choose_avatar_footer p').css({'color': '#FF6068'});
+            $('.choose_avatar_footer p').text('Разрешено загружать файлы размером не больше 2 Мб!');
             $('#send_avatar_form')[0].reset();
         }
     } else {
         $('.file_upload').css({'display': 'block'});
         $('.send_button').css({'display': 'none'});
-        $('.choose_avatar_footer').css({'color': '#FF6068'});
-        $('.choose_avatar_footer').text('Изображение можно загрузить в формате jpg, png или gif.');
+        $('.choose_avatar_footer p').css({'color': '#FF6068'});
+        $('.choose_avatar_footer p').text('Изображение можно загрузить в формате jpg, png или gif.');
         $('#send_avatar_form')[0].reset();
     }
 }

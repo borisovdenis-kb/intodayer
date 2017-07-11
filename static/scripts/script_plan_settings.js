@@ -37,12 +37,13 @@ function removePlan() {
     // alert(plan_id);
     $.ajax({
         url: '/delete_plan',
-        success: function (response) {
-            alert("Удалено");
-        },
         method: 'POST',
         data: {plan_id: plan_id},
-        dataType: 'json'
+        dataType: 'json',
+        success: function (response) {
+            alert("Удалено");
+        }
+
     });
 }
 
