@@ -179,7 +179,9 @@ function createPlan($plus_button) {
         type: 'GET',
         dataType: 'json',
         success: function (msg) {
-            // создаем новую кнопку
+            if (!$plus_button) {
+                location.href = "/plan";
+            }
             $('.plan_list').append('<li style="display: none; opacity: 0"><a>No name</a></li>');
 
             $new_plan_li = $('.plan_list li').last();
@@ -298,6 +300,15 @@ function blurElement(element, size) {
         '-webkit-transition': 'all 0.2s ease-out',
         '-moz-transition': 'all 0.2s ease-out',
         '-o-transition': 'all 0.2s ease-out'
+    });
+}
+
+function showFlexCenter($elem) {
+    $elem.css({
+        'display': 'flex',
+        'align-items': 'center',
+        'align-content': 'center',
+        'justify-content': 'center'
     });
 }
 

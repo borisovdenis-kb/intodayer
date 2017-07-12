@@ -1,0 +1,49 @@
+$size_frame: 300px
+$opacity-frame: 0.95
+$color_frame: rgba(240, 240, 240, $opacity-frame)
+$shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.45)
+$circle-width: 90px
+
+@import "../mixins"
+
+.success_frame
+  //@include set-flex(center)
+  width: $size_frame
+  height: $size_frame
+  position: absolute
+  top: calc(45% - #{$size_frame} / 2)
+  left: calc(50% - #{$size_frame} / 2)
+  background: $color_frame
+  z-index: 10
+  //@include border-radius(8px)
+  @include border-radius(8px)
+  @include box-shadow($shadow)
+  display: none
+  opacity: 0
+  filter: blur(20px)
+  transition: all 2.5s
+//overflow: hidden
+
+%circle
+  @include set-flex(center)
+  @include border-radius(50%)
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#c9de96+0,8ab66b+44,398235+100;Green+3D+%233 */
+
+.success_circle_outer
+  @extend %circle
+  width: $size_frame - 50px
+  height: $size_frame - 50px
+
+  background: $color_frame - rgba(20,20,20, $opacity-frame)
+  //@include linear-gradient(-45deg, $color_frame - rgba(10,10,10, $opacity-frame), rgba(103, 198, 97, 0.9))
+  //background: rgba(54, 205, 131, 0.81)
+
+
+.success_circle_inner
+  @extend %circle
+  width: $size_frame - $circle-width
+  height: $size_frame - $circle-width
+  background: $color_frame
+
+.success_check
+  font-size: 5em

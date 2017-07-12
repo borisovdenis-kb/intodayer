@@ -234,7 +234,6 @@ body {
 
 .plan_settings_content-1 {
   background: white;
-  width: calc(50% - 3px);
   border: 1px solid #e6e6e6;
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
@@ -243,11 +242,11 @@ body {
   -ms-border-radius: 4px;
   padding-bottom: 10px;
   margin-top: 5px;
-  margin-right: 3px; }
+  margin-right: 3px;
+  width: calc(50% - 3px); }
 
 .plan_settings_content-2 {
   background: white;
-  width: calc(50% - 3px);
   border: 1px solid #e6e6e6;
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
@@ -256,11 +255,11 @@ body {
   -ms-border-radius: 4px;
   padding-bottom: 10px;
   margin-top: 5px;
+  width: calc(50% - 3px);
   margin-left: 3px; }
 
 .plan_settings_content-3 {
   background: white;
-  width: calc(50% - 3px);
   border: 1px solid #e6e6e6;
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
@@ -272,7 +271,6 @@ body {
 
 .plan_settings_content-4 {
   background: white;
-  width: calc(50% - 3px);
   border: 1px solid #e6e6e6;
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
@@ -329,8 +327,9 @@ h4 {
     font-size: 0.9em;
     color: #e6e6e6;
     padding-right: 5px;
-    padding-bottom: 3px; }
-  .return_button.btn:hover span {
+    padding-bottom: 3px;
+    color: #323232; }
+  .return_button.btn:hover {
     color: #323232; }
 
 .datepicker_content {
@@ -361,5 +360,13 @@ h4 {
 
   .plan_settings_content-4 {
     width: 100%; } }
+.settings_btns_content.row {
+  margin-top: 8px; }
+
+.btn-back.btn, .btn-okay.btn {
+  margin: 0 1px 0 1px;
+  width: 200px; }
+  .btn-back.btn:active, .btn-back.btn:focus, .btn-back.btn:link, .btn-okay.btn:active, .btn-okay.btn:focus, .btn-okay.btn:link {
+    outline: none; }
 
 /*# sourceMappingURL=plan_settings.css.map */

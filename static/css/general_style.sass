@@ -30,8 +30,10 @@ input
 button
   background: none
   border: none
+  box-sizing: border-box
   &:hover, &:focus, &:active, &:link
     outline: none
+    //box-sizing: border-box
 
 .for_invitations
   display: flex
@@ -327,16 +329,6 @@ button
     color: #8b1deb
     cursor: pointer
 
-.footer
-  flex: 0 0 auto
-  margin:
-    top: 20px
-  height: 60px
-  padding: 10px 0 10px 0
-  border-top: 2px solid white
-  background: #3c177d
-
-
 .center_page
   @include set-height(100px)
   min-width: 100%
@@ -345,14 +337,14 @@ button
 .center_table
   display: table-cell
   vertical-align: middle
-
-.footer
-  flex: 0 0 auto
-  margin-top: 200px
-  height: 60px
-  padding: 10px 0 10px 0
-  border-top: 2px solid white
-  color: rgba(220,220,220,1)
-  background: #3c177d
+//
+//.footer
+//  flex: 0 0 auto
+//  margin-top: 200px
+//  height: 60px
+//  padding: 10px 0 10px 0
+//  border-top: 2px solid white
+//  color: rgba(220,220,220,1)
+//  background: #3c177d
 
 /*# sourceMappingURL=welcome_base_new.css.map */

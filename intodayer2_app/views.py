@@ -20,6 +20,29 @@ from intodayer2_app.send_sms import *
 #                          ОБРАБОТКА AJAX ЗАПРОСОВ                                #
 ###################################################################################
 
+def switch_plan_only_set_ajax(request):
+    """" 
+    Данная функция просто меняет current_plan в БД и возвращает success
+    """
+    if request.is_ajax:
+        user = CustomUser.objects.get(username=request.user.username)
+
+        try:
+            select_id = int(request.POST['select_id'])
+        except ValueError:
+            return render_to_response('templates_for_ajax/content_errors.html')
+        except IndexError:
+            return render_to_response('templates_for_ajax/content_errors.html')
+
+        user.set_current_plan(select_id)
+
+        response = HttpResponse()
+        response['Content-Type'] = 'application/json'
+        response.write(json.dumps({}))
+
+        return response
+
+
 def create_new_plan_ajax(request):
     if request.is_ajax():
         user = CustomUser.objects.get(username=request.user.username)
@@ -38,6 +61,7 @@ def get_settings_plan_html(request):
         context = dict()
         context.update(get_cur_plan(request))
         return render_to_response('templates_for_ajax/settings_ajax.html', context)
+
 
 def get_drop_list_ajax(request):
     """
@@ -409,6 +433,11 @@ def get_avatar_ajax(request):
 #                         ОБРАБОТКА ОБЫЧНЫХ ЗАПРОСОВ                              #
 ###################################################################################
 
+# def plan_empty(request):
+#     context = dict()
+#     context.update(get_all_plans(request))
+#     return render_to_response('plan_empty.html', context)
+
 
 def statistics_view(request):
     if request.user.is_authenticated():
@@ -510,6 +539,8 @@ def get_all_plans(request):
     user = CustomUser.objects.get(username=request.user.username)
 
     all_plans = UserPlans.objects.select_related().filter(user_id=user.id)
+    if all_plans.count() > 0:
+        context['select_flag'] = True
     context['all_plans'] = all_plans
 
     return context
@@ -570,14 +601,6 @@ def get_this_user(request):
     context['user'] = user
     return context
 
-#
-# def set_current_plan(request):
-#     if request.is_ajax():
-#         user = CustomUser.objects.get(username=request.user.username)
-#
-#         cur_id = request.POST['cur_id']
-
-
 
 def home_view(request):
     """
@@ -601,9 +624,6 @@ def home_view(request):
     else:
         return HttpResponseRedirect("/login", {})
 
-
-# def plan_empty(request):
-#     return render_to_response()
 
 def plan_view(request):
     """
