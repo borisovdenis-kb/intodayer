@@ -397,7 +397,7 @@ function focusFieldWithKeys($this_field, $this_str, e) {
     }
 }
 
-
+// asdf
 function openTextareaDropList($this_field) {
     if ($this_field.hasClass('drop_is')) {
         $('.drop_list').remove();
