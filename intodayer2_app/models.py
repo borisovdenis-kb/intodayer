@@ -234,7 +234,7 @@ class PlanLists(models.Model):
     """
     title = models.CharField(max_length=256)
     description = models.TextField(max_length=1000)
-    start_date = models.DateTimeField()
+    start_date = models.DateTimeField(blank=True)
     owner = models.ForeignKey('CustomUser', models.DO_NOTHING)
     avatar = models.ImageField(upload_to='plans_avatars/', blank=True, max_length=1000)
 

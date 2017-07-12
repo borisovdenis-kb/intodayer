@@ -555,7 +555,7 @@ def get_dates_info(cur_plan):
 
     day_of_weeks = DaysOfWeek.objects.all()
     this_start_date = cur_plan.plan.start_date
-    this_start_date = datetime.strftime(this_start_date, "%d.%m.%y")
+    this_start_date = datetime.strftime(this_start_date, "%d.%m.%Y")
     context['day_of_weeks'] = day_of_weeks
     context['start_date'] = this_start_date
 
@@ -577,7 +577,6 @@ def get_this_user(request):
 #         user = CustomUser.objects.get(username=request.user.username)
 #
 #         cur_id = request.POST['cur_id']
-
 
 
 def home_view(request):
