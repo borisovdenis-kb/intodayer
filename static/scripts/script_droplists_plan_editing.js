@@ -43,7 +43,6 @@ function loadData($thisField) {
             '<li><a>Нечет</a></li>' +
             '</ul>'
         );
-
     }
 
     if (!$thisField.hasClass('parity')) {
@@ -52,14 +51,13 @@ function loadData($thisField) {
 
         $('.drop_list').load('/get_drop_list', data, function () {
             var count_li = $droplist.find('li').length;
-            // console.log($('.drop_list').length);
-            if (!count_li) {
+            if (count_li == 0) {
                 $('.drop_list').remove();
                 return false;
             }
+            setStyleDropList($thisField, $('.drop_list').first());
         });
     }
-    setStyleDropList($thisField, $('.drop_list').first());
 
 }
 

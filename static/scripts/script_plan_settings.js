@@ -121,53 +121,36 @@ function updateSettings() {
         $title_input.val("No name");
     }
 
-    var titleData = {
-        plan_id: $('.title_content').attr('plan_id'),
-        new_title: $title_input.val()
-    };
-
-    var dateInputData = {
+    var date_settings = {
         'start_date': $('#start_date').val(),
-        'plan_id': plan_id
+        'plan_id': plan_id,
+        'new_title': $title_input.val()
     };
-    // после выполнения 2 ajax запросов, фиксирует, что они оба прошли успешно
-    // и только тогда настройки закрываются
-    $.when(
-        $.ajax({
-            url: '/update_plan_title',
-            type: 'POST',
-            data: titleData,
-            dataType: 'json',
-            // TODO: подправить тут корректную обработку ошибок
-            success: function () {
-                /*
-                 * обновляет title расписания у левого контента
-                 */
-                var plan_id = $('.title_content').attr('plan_id');
-                var $cur_plan = $('.plan_list').find("a[plan_id='" + plan_id + "']");
-                $cur_plan.text($title_input.val());
-            },
-            error: function () {
-                alert("Ошибка обновления заголовка расписания. Обновите страницу.");
-            }
-        }),
-        /*
-         * обновляет дату расписания в БД
-         */
-        $.ajax(
-            {
-                url: '/set_start_date',
-                dataType: 'json',
-                method: 'POST',
-                data: dateInputData,
-                success: function () {
-                },
-                error: function () {
-                    alert("Ошибка обновления даты начала расписания. Обновите страницу.");
-                }
-            }
-        )
-    ).then(function () {
+    // после выполнения ajax запроса, фиксирует, что они оба прошли успешно
+    // и только тогда настройки закрываютс
+
+    var d1 = $.Deferred();
+
+    $.ajax({
+        url: '/update_plan_info',
+        type: 'POST',
+        data: date_settings,
+        // TODO: подправить тут корректную обработку ошибок
+        success: function () {
+            d1.resolve();
+            /*
+             * обновляет title расписания у левого контента
+             */
+            var plan_id = $('.title_content').attr('plan_id');
+            var $cur_plan = $('.plan_list').find("a[plan_id='" + plan_id + "']");
+            $cur_plan.text($title_input.val());
+        },
+        error: function () {
+            alert("Ошибка обновления информации о расписании. Обновите страницу.");
+        }
+    });
+
+    $.when(d1).then(function () {
         deactivateSettings(true);
         success_frame_animate();
     });

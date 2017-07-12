@@ -1,4 +1,4 @@
-$size_frame: 300px
+$size_frame: 250px
 $opacity-frame: 0.95
 $color_frame: rgba(240, 240, 240, $opacity-frame)
 $shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.45)
@@ -10,7 +10,7 @@ $circle-width: 90px
   //@include set-flex(center)
   width: $size_frame
   height: $size_frame
-  position: absolute
+  position: fixed
   top: calc(45% - #{$size_frame} / 2)
   left: calc(50% - #{$size_frame} / 2)
   background: $color_frame
@@ -22,7 +22,6 @@ $circle-width: 90px
   opacity: 0
   filter: blur(20px)
   transition: all 2.5s
-//overflow: hidden
 
 %circle
   @include set-flex(center)

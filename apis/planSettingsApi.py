@@ -15,6 +15,7 @@ from extra.mailing_api import *
 from django.shortcuts import render_to_response
 from django.http import HttpResponse
 from datetime import datetime
+from django.utils import timezone
 
 
 class PlanSettings():
@@ -86,7 +87,7 @@ def delete_plan(request):
         return response
 
 
-def set_plan_start_date(request):
+def update_plan_info(request):
     """
         On client side use:
             URL: /set_start_date,
@@ -96,60 +97,25 @@ def set_plan_start_date(request):
     if request.is_ajax():
         user = CustomUser.objects.get(username=request.user.username)
 
-        response = HttpResponse()
-        response['Content-Type'] = 'application/json'
-
         try:
             plan_id = int(request.POST['plan_id'])
-            date = datetime.strptime(request.POST['start_date'], '%d.%m.%Y')
+            date = timezone.datetime.strptime(request.POST['start_date'], '%d.%m.%Y')
         except ValueError:
-            response.write(json.dumps({'success': 0}))
-            return response
+            return HttpResponse(status=400)
 
         try:
-            plan = UserPlans.objects.get(user_id=user.id, plan_id=plan_id)
+            UserPlans.objects.get(user_id=user.id, plan_id=plan_id)
         except ObjectDoesNotExist:
-            response.write(json.dumps({'success': 0}))
-            return response
+            return HttpResponse(status=400)
         else:
-            if plan.plan.owner == user:
-                plan.plan.start_date = date
-                plan.plan.save()
+            plan = PlanLists.objects.get(id=plan_id)
+            if plan.owner == user:
+                plan.title = request.POST['new_title']
+                plan.start_date = date
+                plan.save()
+
             else:
-                response.write(json.dumps({'success': 0}))
-                return response
 
-        response.write(json.dumps({'success': 1}))
-        return response
+                return HttpResponse(status=403)
 
-
-def update_plan_title(request):
-    """
-        On client side use:
-            URL: /update_plan_title,
-            data: plan_id <str>, new_title <str>
-            method: POST
-    """
-    if request.is_ajax():
-        user = CustomUser.objects.get(username=request.user.username)
-
-        response = HttpResponse()
-        response['Content-Type'] = 'application/json'
-
-        try:
-            plan_id = int(request.POST['plan_id'])
-            plan = UserPlans.objects.select_related().get(user_id=user.id, plan_id=plan_id)
-        except (ValueError, ObjectDoesNotExist):
-            response.write(json.dumps({'success': 0}))
-            return response
-
-        if plan.plan.owner != user:
-            response.write(json.dumps({'success': 1}))
-            return response
-
-        plan.plan.title = request.POST['new_title']
-        plan.plan.save()
-
-        response.write(json.dumps({'success': 1}))
-
-        return response
+        return HttpResponse(status=200)

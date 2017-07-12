@@ -1,9 +1,9 @@
 .success_frame {
-  width: 300px;
-  height: 300px;
-  position: absolute;
-  top: calc(45% - 300px / 2);
-  left: calc(50% - 300px / 2);
+  width: 250px;
+  height: 250px;
+  position: fixed;
+  top: calc(45% - 250px / 2);
+  left: calc(50% - 250px / 2);
   background: rgba(240, 240, 240, 0.95);
   z-index: 10;
   -moz-border-radius: 8px;
@@ -35,13 +35,13 @@
   /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#c9de96+0,8ab66b+44,398235+100;Green+3D+%233 */ }
 
 .success_circle_outer {
-  width: 250px;
-  height: 250px;
+  width: 200px;
+  height: 200px;
   background: rgba(220, 220, 220, 0.95); }
 
 .success_circle_inner {
-  width: 210px;
-  height: 210px;
+  width: 160px;
+  height: 160px;
   background: rgba(240, 240, 240, 0.95); }
 
 .success_check {

@@ -63,8 +63,7 @@ urlpatterns = [
 
     # настройки расписания
     url(r'^delete_plan', planSettingsApi.delete_plan),
-    url(r'^set_start_date', planSettingsApi.set_plan_start_date),
-    url(r'^update_plan_title', planSettingsApi.update_plan_title),
+    url(r'^update_plan_info', planSettingsApi.update_plan_info),
     url(r'^plan/settings_plan', views.get_settings_plan_html),
 ]
 

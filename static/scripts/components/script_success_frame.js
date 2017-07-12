@@ -5,7 +5,6 @@ $(document).ready(function () {
 
 });
 
-
 var succsess_frame_background_color = $('.success_frame').css('background-color');
 function success_frame_animate() {
     var $elem = $('.success_frame');
