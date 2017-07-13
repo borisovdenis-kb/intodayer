@@ -3,6 +3,7 @@ $opacity-frame: 0.95
 $color_frame: rgba(240, 240, 240, $opacity-frame)
 $shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.45)
 $circle-width: 90px
+$border-radius: 50px
 
 @import "../mixins"
 
@@ -16,12 +17,12 @@ $circle-width: 90px
   background: $color_frame
   z-index: 10
   //@include border-radius(8px)
-  @include border-radius(8px)
+  @include border-radius($border-radius)
   @include box-shadow($shadow)
   display: none
   opacity: 0
   filter: blur(20px)
-  transition: all 2.5s
+  transition: filter, opacity, border-radius 2.5s
 
 %circle
   @include set-flex(center)

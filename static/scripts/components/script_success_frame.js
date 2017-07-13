@@ -8,8 +8,9 @@ $(document).ready(function () {
 var succsess_frame_background_color = $('.success_frame').css('background-color');
 function success_frame_animate() {
     var $elem = $('.success_frame');
+
     showFlexCenter($elem);
-    $elem.delay(100).queue(function () {
+    $elem.delay(300).queue(function () {
         blurElement($(this), 0);
         $(this).css('opacity', 0.95);
         $(this).css('border-radius', '50%');
@@ -23,7 +24,9 @@ function success_frame_animate() {
        $(this).hide();
        $(this).dequeue();
        $(this).css('background', succsess_frame_background_color);
-       $(this).css('border-radius', '8px');
+       $(this).css('border-radius', '50px');
+       $(this).clearQueue();
     });
+
 }
 
