@@ -67,24 +67,23 @@ def delete_plan(request):
             method: POST
     """
     if request.is_ajax():
-        user = CustomUser.objects.get(username=request.user.username)
+        if request.user.is_authenticated():
+            user = CustomUser.objects.get(username=request.user.username)
 
-        response = HttpResponse()
-        response['Content-Type'] = 'application/json'
+            try:
+                plan_id = int(request.POST['plan_id'])
+                UserPlans.objects.get(user_id=user.id, plan_id=plan_id)
+            except (ValueError, ObjectDoesNotExist):
+                return HttpResponse(status=400)
 
-        try:
-            plan_id = int(request.POST['plan_id'])
-            UserPlans.objects.get(user_id=user.id, plan_id=plan_id)
-        except (ValueError, ObjectDoesNotExist):
-            response.write(json.dumps({'success': 0}))
-            return response
+            settings = PlanSettings(user.id, plan_id)
+            settings.delete_plan()
 
-        settings = PlanSettings(user.id, plan_id)
-        settings.delete_plan()
-
-        response.write(json.dumps({'success': 1}))
-
-        return response
+            return HttpResponse(status=200)
+        else:
+            return HttpResponse(status=401)
+    else:
+        return HttpResponse(status=400)
 
 
 def update_plan_info(request):
@@ -94,12 +93,13 @@ def update_plan_info(request):
             data: plan_id <str>, date <str> (day.month.year)
             method: POST
     """
-    if request.is_ajax():
+    if request.user.is_authenticated():
         user = CustomUser.objects.get(username=request.user.username)
+        body = request.POST
 
         try:
-            plan_id = int(request.POST['plan_id'])
-            date = timezone.datetime.strptime(request.POST['start_date'], '%d.%m.%Y')
+            plan_id = int(body['plan_id'])
+            date = timezone.datetime.strptime(body['start_date'], '%d.%m.%Y')
         except ValueError:
             return HttpResponse(status=400)
 
@@ -110,12 +110,12 @@ def update_plan_info(request):
         else:
             plan = PlanLists.objects.get(id=plan_id)
             if plan.owner == user:
-                plan.title = request.POST['new_title']
+                plan.title = body['new_title']
                 plan.start_date = date
                 plan.save()
-
             else:
-
                 return HttpResponse(status=403)
 
         return HttpResponse(status=200)
+    else:
+        return HttpResponse(status=401)
