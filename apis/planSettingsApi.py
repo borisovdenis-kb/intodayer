@@ -66,55 +66,51 @@ def delete_plan(request):
             data: plan_id <str>
             method: POST
     """
-    if request.is_ajax():
-        if request.user.is_authenticated():
-            user = CustomUser.objects.get(username=request.user.username)
+    if request.user.is_authenticated():
+        user = CustomUser.objects.get(username=request.user.username)
 
-            try:
-                plan_id = int(request.POST['plan_id'])
-                UserPlans.objects.get(user_id=user.id, plan_id=plan_id)
-            except (ValueError, ObjectDoesNotExist):
-                return HttpResponse(status=400)
+        try:
+            plan_id = int(request.POST['plan_id'])
+            UserPlans.objects.get(user_id=user.id, plan_id=plan_id)
+        except (ValueError, ObjectDoesNotExist):
+            return HttpResponse(status=400)
 
-            settings = PlanSettings(user.id, plan_id)
-            settings.delete_plan()
+        settings = PlanSettings(user.id, plan_id)
+        settings.delete_plan()
 
-            return HttpResponse(status=200)
-        else:
-            return HttpResponse(status=401)
+        return HttpResponse(status=200)
     else:
-        return HttpResponse(status=400)
+        return HttpResponse(status=401)
 
 
 def update_plan_info(request):
     """
         On client side use:
-            URL: /set_start_date,
+            URL: /update_plan_info,
             data: plan_id <str>, date <str> (day.month.year)
             method: POST
     """
     if request.user.is_authenticated():
         user = CustomUser.objects.get(username=request.user.username)
-        body = request.POST
+        data = request.POST
 
         try:
-            plan_id = int(body['plan_id'])
-            date = timezone.datetime.strptime(body['start_date'], '%d.%m.%Y')
+            plan_id = int(data['plan_id'])
+            date = timezone.datetime.strptime(data['start_date'], '%d.%m.%Y')
+            UserPlans.objects.get(user_id=user.id, plan_id=plan_id)
         except ValueError:
             return HttpResponse(status=400)
-
-        try:
-            UserPlans.objects.get(user_id=user.id, plan_id=plan_id)
         except ObjectDoesNotExist:
-            return HttpResponse(status=400)
+            return HttpResponse(status=403)
+
+        plan = PlanLists.objects.get(id=plan_id)
+
+        if plan.owner == user:
+            plan.title = data['new_title']
+            plan.start_date = date
+            plan.save()
         else:
-            plan = PlanLists.objects.get(id=plan_id)
-            if plan.owner == user:
-                plan.title = body['new_title']
-                plan.start_date = date
-                plan.save()
-            else:
-                return HttpResponse(status=403)
+            return HttpResponse(status=403)
 
         return HttpResponse(status=200)
     else:
