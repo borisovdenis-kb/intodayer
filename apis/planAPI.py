@@ -59,11 +59,25 @@ class PlanSettings():
             user_plan_row.delete()
 
 
+def create_plan(request):
+    """
+        On client side use:
+            URL: /create_new_plan,
+            method: POST
+    """
+    if request.user.is_authenticated():
+        user = CustomUser.objects.get(username=request.user.username)
+        user.add_new_plan()
+        return HttpResponse(status=200)
+    else:
+        return HttpResponse(status=401)
+
+
 def delete_plan(request):
     """
         On client side use:
             URL: /delete_plan,
-            data: plan_id <str>
+            data: plan_id <int>
             method: POST
     """
     if request.user.is_authenticated():
@@ -72,8 +86,10 @@ def delete_plan(request):
         try:
             plan_id = int(request.POST['plan_id'])
             UserPlans.objects.get(user_id=user.id, plan_id=plan_id)
-        except (ValueError, ObjectDoesNotExist):
+        except ValueError:
             return HttpResponse(status=400)
+        except ObjectDoesNotExist:
+            return HttpResponse(status=403)
 
         settings = PlanSettings(user.id, plan_id)
         settings.delete_plan()
@@ -113,5 +129,44 @@ def update_plan_info(request):
             return HttpResponse(status=403)
 
         return HttpResponse(status=200)
+    else:
+        return HttpResponse(status=401)
+
+
+def get_drop_list_ajax(request):
+    """
+        Функция собирает в html список все доступные для текущего пользователя
+        элементы из таблицы. Имя таблицы задано в data['model']
+        On client side use:
+            URL: /get_drop_list,
+            data: plan_id <int>, model <str>
+            method: GET
+    """
+    if request.user.is_authenticated():
+        user = CustomUser.objects.get(username=request.user.username)
+        data = request.GET
+        context = {'is_error': False}
+
+        try:
+            plan_id = int(data['plan_id'])
+            plan = UserPlans.objects.select_related().get(user_id=user.id, plan_id=plan_id)
+        except ValueError:
+            return render_to_response('templates_for_ajax/drop_list_tmp.html', {'is_error': True}, status=400)
+        except ObjectDoesNotExist:
+            return render_to_response('templates_for_ajax/drop_list_tmp.html', {'is_error': True}, status=403)
+
+        if data['model'] == 'time':
+            context['time_list'] = Times.objects.filter(plan_id=plan.plan.id).order_by('hh24mm')
+
+        elif data['model'] == 'subject':
+            context['subject_list'] = Subjects.objects.filter(plan_id=plan.plan.id).order_by('name')
+
+        elif data['model'] == 'teacher':
+            context['teacher_list'] = Teachers.objects.filter(plan_id=plan.plan.id).order_by('name_short')
+
+        elif data['model'] == 'place':
+            context['place_list'] = Places.objects.filter(plan_id=plan.plan.id).order_by('name')
+
+        return render_to_response('templates_for_ajax/drop_list_tmp.html', context, status=200)
     else:
         return HttpResponse(status=401)

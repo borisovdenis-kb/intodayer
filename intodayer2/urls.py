@@ -16,7 +16,7 @@ from django.conf.urls import url
 from django.contrib import admin
 from intodayer2_app import views
 from django.conf import settings
-from apis import planSettingsApi
+from apis import planAPI
 from django.conf.urls.static import static
 from django.views.generic.base import RedirectView
 
@@ -38,8 +38,7 @@ urlpatterns = [
 
     # для ajax запросов
     url(r'^get_avatar', views.get_avatar_ajax),
-    url(r'^get_drop_list', views.get_drop_list_ajax),  # imp
-    url(r'^create_new_plan', views.create_new_plan_ajax),  # imp
+
     url(r'^get_invitations', views.get_invitations_ajax),
     url(r'^home/switch_plan', views.switch_plan_home_ajax),  # Leha...
     url(r'^plan/switch_plan', views.switch_plan_plan_ajax),  # Leha...
@@ -61,9 +60,11 @@ urlpatterns = [
     # url(r'^favicon\.ico$', favicon_view),
 
 
-    # настройки расписания
-    url(r'^delete_plan', planSettingsApi.delete_plan),  # imp
-    url(r'^update_plan_info', planSettingsApi.update_plan_info),  # imp
+    # API расписания
+    url(r'^delete_plan', planAPI.delete_plan),  # imp  # test
+    url(r'^create_new_plan', planAPI.create_plan),  # imp  # test
+    url(r'^get_drop_list', planAPI.get_drop_list_ajax),  # imp # test
+    url(r'^update_plan_info', planAPI.update_plan_info),  # imp  # test
     url(r'^plan/settings_plan', views.get_settings_plan_html),
 ]
 

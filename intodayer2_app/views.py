@@ -4,7 +4,7 @@ from django.db.utils import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.http import HttpResponseBadRequest
 from django.shortcuts import render_to_response
-from apis.planSettingsApi import *
+from apis.planAPI import *
 from extra.stripes_api import *
 from extra.utils import *
 from intodayer2_app.forms import *
@@ -43,60 +43,12 @@ def switch_plan_only_set_ajax(request):
         return response
 
 
-def create_new_plan_ajax(request):
-    if request.is_ajax():
-        if request.user.is_authenticated():
-            user = CustomUser.objects.get(username=request.user.username)
-            user.add_new_plan()
-
-            return HttpResponse(status=200)
-        else:
-            return HttpResponse(status=401)
-    else:
-        return HttpResponse(status=400)
-
-
 # Почему-то не получается перенести эту функцию в planSettingsApi
 def get_settings_plan_html(request):
     if request.is_ajax():
         context = dict()
         context.update(get_cur_plan(request))
         return render_to_response('templates_for_ajax/settings_ajax.html', context)
-
-
-def get_drop_list_ajax(request):
-    """
-        Функция собирает в html список все доступные для текущего пользователя
-        элементы из таблицы. Имя таблицы задано в body['model']
-        :param request: 
-        :return: 
-    """
-    if request.user.is_authenticated():
-        user = CustomUser.objects.get(username=request.user.username)
-        body = request.GET
-        context = {'is_error': False}
-
-        try:
-            plan_id = int(body['plan_id'])
-            plan = UserPlans.objects.select_related().get(user_id=user.id, plan_id=plan_id)
-        except (ValueError, ObjectDoesNotExist):
-            return render_to_response('templates_for_ajax/drop_list_tmp.html', {'is_error': True}, status=400)
-
-        if body['model'] == 'time':
-            context['time_list'] = Times.objects.filter(plan_id=plan.plan.id).order_by('hh24mm')
-
-        elif body['model'] == 'subject':
-            context['subject_list'] = Subjects.objects.filter(plan_id=plan.plan.id).order_by('name')
-
-        elif body['model'] == 'teacher':
-            context['teacher_list'] = Teachers.objects.filter(plan_id=plan.plan.id).order_by('name_short')
-
-        elif body['model'] == 'place':
-            context['place_list'] = Places.objects.filter(plan_id=plan.plan.id).order_by('name')
-
-        return render_to_response('templates_for_ajax/drop_list_tmp.html', context, status=200)
-    else:
-        return HttpResponse(status=401)
 
 
 def mailing_ajax(request):
