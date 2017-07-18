@@ -15,29 +15,28 @@ from extra.mailing_api import *
 from django.http import HttpResponse
 
 
-def delete_member(request):
-    if not request.is_ajax():
-        return HttpResponse(status=400)
-
+def delete_partie(request):
+    """
+        On client side use:
+            URL: /delete_partie,
+            data: plan_id <int>, partie_id <int>
+            method: POST
+    """
     if request.user.is_authenticated():
         user = CustomUser.objects.get(username=request.user.username)
+        data = request.POST
 
         try:
-            plan_id = request.POST['plan_id']
-            partie_id = request.POST['partie_id']
+            plan_id = int(data['plan_id'])
+            partie_id = int(data['partie_id'])
+            PlanLists.objects.get(id=plan_id, owner_id=user.id)  # удаляющий должен быть владельцем расп.
+            UserPlans.objects.get(plan_id=plan_id, user_id=partie_id).delete()
         except ValueError:
             return HttpResponse(status=400)
-
-        try:
-            # user, удаляющий расп. должен быть владельцем этого расписания
-            PlanLists.objects.get(id=plan_id, owner_id=user.id)
-            user_plan = UserPlans.objects.get(plan_id=plan_id, user_id=partie_id)
         except ObjectDoesNotExist:
-            return HttpResponse(status=400)
-        else:
-            user_plan.delete()
+            return HttpResponse(status=403)
 
         return HttpResponse(status=200)
-
     else:
         return HttpResponse(status=401)
+

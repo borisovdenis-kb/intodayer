@@ -17,7 +17,7 @@ from django.contrib import admin
 from intodayer2_app import views
 from django.conf import settings
 from apis import planSettingsApi
-from apis import membersApi
+from apis import participantsApi
 from django.conf.urls.static import static
 
 
@@ -62,7 +62,7 @@ urlpatterns = [
     url(r'^plan/settings_plan', views.get_settings_plan_html),
 
     # участники
-    url(r'^delete_partie', membersApi.delete_member)
+    url(r'^delete_partie', participantsApi.delete_partie)
 ]
 
 
