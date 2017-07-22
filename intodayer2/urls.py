@@ -67,6 +67,7 @@ urlpatterns = [
     url(r'^upload_plan_avatar/(\d+)$', planApi.save_plan_avatar),
 
     # API участников
+    url(r'^change_role', participantsApi.change_role),
     url(r'^delete_participant', participantsApi.delete_participant),
     url(r'^invite_participants', participantsApi.invite_participants),
 ]

@@ -216,6 +216,7 @@ class UserPlans(models.Model):
     user = models.ForeignKey('CustomUser', models.DO_NOTHING)
     plan = models.ForeignKey('PlanLists', models.DO_NOTHING)
     current_yn = models.CharField(max_length=1, blank=False)
+    role = models.CharField(max_length=12, blank=False)
 
     class Meta:
         managed = True
@@ -332,7 +333,8 @@ class CustomUser(AbstractUser):
             title='No name',
             description='No description',
             start_date=datetime.now(),
-            owner_id=self.id
+            owner_id=self.id,
+            role='elder'
         )
         new_plan.save()
 
