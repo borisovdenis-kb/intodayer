@@ -250,7 +250,7 @@ body {
   justify-content: center;
   flex-direction: column;
   align-items: center;
-  padding-top: 5px;
+  padding-top: 10px;
   width: calc(100% - 40px);
   margin: auto;
   border-bottom: 1px solid #d2d2d2; }
@@ -267,11 +267,11 @@ body {
 .str_plan {
   display: flex;
   flex-direction: row;
-  /*╨Я╤Г╨╜╨║╤В╤Л ╨▓╨╜╤Г╤В╤А╨╕ ╨║╨╛╨╜╤В╨╡╨╣╨╜╨╡╤А╨░ ╨▒╤Г╨┤╤Г╤В ╤А╨░╤Б╨┐╨╛╨╗╨░╨│╨░╤В╤М╤Б╤П ╨│╨╛╤А╨╕╨╖╨╛╨╜╤В╨░╨╗╤М╨╜╨╛ */
+  /*Пункты внутри контейнера будут располагаться горизонтально */
   align-items: stretch;
-  /*╨Я╤Г╨╜╨║╤В╤Л ╨▓╨╜╤Г╤В╤А╨╕ ╨║╨╛╨╜╤В╨╡╨╣╨╜╨╡╤А ╨▒╤Г╨┤╤Г╤В ╨┐╤А╨╕╨╜╨╕╨╝╨░╤В╤М ╨▓╤Б╤О ╨╡╨│╨╛ ╨▓╤Л╤Б╨╛╤В╤Г */
+  /*Пункты внутри контейнер будут принимать всю его высоту */
   margin-top: 3px;
-  /*╤А╨░╤Б╤Б╤В╨╛╤П╨╜╨╕╨╡ ╨╝╨╡╨╢╨┤╤Г ╤Б╤В╤А╨╛╤З╨║╨░╨╝╨╕ */
+  /*расстояние между строчками */
   margin-right: 10px;
   margin-left: 10px;
   width: calc(100% - 20px);
@@ -340,7 +340,7 @@ body {
       .str_plan ul li textarea, .str_plan ul li button {
         cursor: pointer; }
       .str_plan ul li textarea {
-        /*╤Г╨▒╤А╨░╤В╤М ╨║╤А╨╡╤Б╤В╨╕╨║ ╨╛╤З╨╕╤Б╤В╨║╨╕ */
+        /*убрать крестик очистки */
         height: 32px; }
         .str_plan ul li textarea::-ms-clear {
           display: none; }

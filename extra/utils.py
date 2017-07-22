@@ -234,13 +234,16 @@ def edit_plan_row(data, this_plan, this_id, mode):
 
     if 'day_of_week' in data:
         day_of_week = DaysOfWeek.objects.get(id=data['day_of_week'])
+
     if 'parity' in data:
+
         if data['parity'] == 'Все':
             parity = None
         elif data['parity'] == 'Чет':
             parity = 0
         elif data['parity'] == 'Нечет':
             parity = 1
+
     if 'start_week' in data:
         start_week = data['start_week']
     if 'end_week' in data:
@@ -304,6 +307,7 @@ def edit_plan_row(data, this_plan, this_id, mode):
                                 time=this_time,
                                 place=place,
                                 plan=this_plan)
+
         new_plan_row.save()
         # возвращаем новое id, чтобы записать его в html
         return new_plan_row.id

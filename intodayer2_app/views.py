@@ -150,6 +150,7 @@ def edit_plan_row_ajax(request):
             if this_id != '0':
                 try:
                     this_id = edit_plan_row(data, this_plan, this_id, UPDATE)
+
                 except (IntegrityError, ValueError):
                     response.write(json.dumps({"error": "error", 'id': this_id}))
                     return response
@@ -165,6 +166,7 @@ def edit_plan_row_ajax(request):
             else:
                 try:
                     this_id = edit_plan_row(data, this_plan, this_id, CREATE)
+
                 except (IntegrityError, ValueError):
                     response.write(json.dumps({"error": "error", 'id': this_id}))
                     return response

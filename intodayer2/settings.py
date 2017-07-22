@@ -33,6 +33,7 @@ ALLOWED_HOSTS = [
     "192.168.0.49",
     "192.168.0.8",
     "127.0.0.1",
+    "localhost"
 ]
 
 # Application definition
@@ -83,20 +84,16 @@ WSGI_APPLICATION = 'intodayer2.wsgi.application'
 
 DATABASES = {
     'default': {
-        # 'ENGINE': 'django.db.backends.sqlite3',
-        # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        # 'ENGINE': 'django.db.backends.oracle',
-        # 'NAME': db_config_oracle['NAME'],
-        # 'USER': db_config_oracle['USER'],
-        # 'PASSWORD': db_config_oracle['PASSWORD'],
-        # 'HOST': db_config_oracle['HOST'],
-        # 'PORT': db_config_oracle['PORT'],
         'ENGINE': 'django.db.backends.mysql',
         'NAME': db_config_mysql['NAME'],
         'USER': db_config_mysql['USER'],
         'PASSWORD': db_config_mysql['PASSWORD'],
         'HOST': db_config_mysql['HOST'],
         'PORT': db_config_mysql['PORT'],
+        # 'OPTIONS': {
+        #             'charset': 'latin1',
+        #             'use_unicode': True,
+        # },
     }
 }
 
