@@ -4,7 +4,7 @@ from django.db.utils import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.http import HttpResponseBadRequest
 from django.shortcuts import render_to_response
-from apis.planAPI import *
+from apis.planApi import *
 from extra.stripes_api import *
 from extra.utils import *
 from intodayer2_app.forms import *

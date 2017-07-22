@@ -1,4 +1,3 @@
-import json
 # ---------------------------------------------------------------
 # Для того, что бы тестировать django файлы
 # Вставлять обязательно перед импортом моделей!!!
@@ -8,6 +7,7 @@ import django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "intodayer2.settings")
 django.setup()
 # ---------------------------------------------------------------
+import json
 from django.core.exceptions import ObjectDoesNotExist
 from intodayer2_app.models import *
 from intodayer2_app.views import *
@@ -64,11 +64,18 @@ def create_plan(request):
         On client side use:
             URL: /create_new_plan,
             method: POST
+        return: {new_plan_id: <int>}
     """
     if request.user.is_authenticated():
         user = CustomUser.objects.get(username=request.user.username)
-        user.add_new_plan()
-        return HttpResponse(status=200)
+        response = HttpResponse(status=200)
+        response['Content-Type'] = 'application/json'
+
+        new_plan = user.add_new_plan()
+
+        response.write(json.dumps({'new_plan_id': new_plan.id}))
+
+        return response
     else:
         return HttpResponse(status=401)
 
