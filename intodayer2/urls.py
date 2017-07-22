@@ -35,6 +35,7 @@ urlpatterns = [
     url(r'^profile/$', views.profile_settings),
     url(r'^statistics/$', views.statistics_view),
     url(r'^registration/$', views.registration_view),
+    url(r'^account/$', views.profile_page),
 
     # для ajax запросов
     url(r'^get_avatar', views.get_avatar_ajax),

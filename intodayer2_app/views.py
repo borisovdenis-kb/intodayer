@@ -20,6 +20,7 @@ from intodayer2_app.send_sms import *
 #                          ОБРАБОТКА AJAX ЗАПРОСОВ                                #
 ###################################################################################
 
+
 def switch_plan_only_set_ajax(request):
     """" 
     Данная функция просто меняет current_plan в БД и возвращает success
@@ -440,6 +441,10 @@ def get_avatar_ajax(request):
 #     context.update(get_all_plans(request))
 #     return render_to_response('plan_empty.html', context)
 
+
+def profile_page(request):
+    if request.user.is_authenticated():
+        return render_to_response('my_profile.html', {})
 
 def statistics_view(request):
     if request.user.is_authenticated():
