@@ -177,7 +177,7 @@ function createPlan($plus_button) {
     $.ajax({
         url: '/create_new_plan',
         type: 'GET',
-        dataType: 'json',
+        dataType: 'text',
         success: function (msg) {
             if (!$plus_button) {
                 location.href = "/plan";

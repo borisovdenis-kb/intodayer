@@ -48,7 +48,7 @@ urlpatterns = [
     url(r'^confirm_invitation', views.confirm_invitation_ajax),
     url(r'^upload_user_avatar$', views.save_user_avatar_ajax),
     url(r'^plan/invitation/(\d+)$', views.plan_view),
-    url(r'^upload_plan_avatar/(\d+)$', views.save_plan_avatar_ajax),  # imp
+
 
     # рассылка
     url(r'^mailing', views.mailing_ajax),
@@ -66,6 +66,7 @@ urlpatterns = [
     url(r'^get_drop_list', planAPI.get_drop_list_ajax),  # imp # test
     url(r'^update_plan_info', planAPI.update_plan_info),  # imp  # test
     url(r'^plan/settings_plan', views.get_settings_plan_html),
+    url(r'^upload_plan_avatar/(\d+)$', planAPI.save_plan_avatar),  # imp
 ]
 
 

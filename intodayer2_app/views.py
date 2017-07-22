@@ -196,7 +196,7 @@ def switch_plan_home_ajax(request):
 
             context.update(get_dates_info(context['cur_plan']))
             # устанавливаем current_yn для созданного расписания
-            plan_id = context['cur_plan'].plan_id
+            # plan_id = context['cur_plan'].plan_id
             user.set_current_plan(plan_id)
 
             return render_to_response('content_pages/right_content_home.html', context, status=200)
@@ -214,7 +214,7 @@ def switch_plan_plan_ajax(request):
     """
     if request.is_ajax:
         user = CustomUser.objects.get(username=request.user.username)
-        context = dict()
+        context = {}
 
         try:
             plan_id = int(request.POST['plan_id'])
@@ -403,79 +403,7 @@ def get_avatar_ajax(request):
 #     return render_to_response('plan_empty.html', context)
 
 
-def statistics_view(request):
-    if request.user.is_authenticated():
-        user = CustomUser.objects.get(username=request.user.username)
 
-        all_plans = UserPlans.objects.select_related().filter(user_id=user.id)
-        if all_plans.count() == 0:
-            return HttpResponseRedirect("/plan")
-
-        # выбираем текущее расписание юзера
-        try:
-            cur_plan = UserPlans.objects.select_related().filter(user_id=user.id, always_yn='y')[0]
-        except IndexError:
-            cur_plan = all_plans[0]
-
-        # plan_rows = PlanRows.objects.select_related().filter(plan_id=cur_plan.plan_id)
-
-        stripes_dict = Stripes(cur_plan.plan_id)
-        stripes_dict_json = stripes_dict.get_stripes_json()
-
-        print(stripes_dict_json)
-
-        return render_to_response('statistics.html', {'data': json.loads(stripes_dict_json)})
-
-    else:
-        return HttpResponseRedirect("/login")
-
-
-def welcome_view(request):
-    if request.user.is_authenticated():
-        return HttpResponseRedirect("/home")
-    else:
-        return render_to_response('welcome.html')
-
-
-def registration_view(request):
-    if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)
-        if form.is_valid():
-            # сохраняем usr_name и pswd в таблицу auth_user
-            new_user = form.save()
-            # добавляем пользователю дефолтное расписание
-            new_user.add_new_plan()
-
-            return HttpResponseRedirect('/login')
-    else:
-        form = CustomUserCreationForm()
-
-    context = {'form': form}
-    return render_to_response('reg.html', context)
-
-
-def login_view(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-
-        user = auth.authenticate(username=username, password=password)
-
-        if user is not None:
-            if user.is_active:
-                auth.login(request, user)
-                return HttpResponseRedirect("/home")
-            else:
-                return HttpResponse('User is not active')
-        else:
-            return HttpResponse('Invalid Login or Password')
-    else:
-        return render_to_response('login.html')
-
-
-def logout_view(request):
-    auth.logout(request)
-    return HttpResponseRedirect("/")
 
 
 def profile_settings(request):
@@ -564,6 +492,81 @@ def get_this_user(request):
     context = dict()
     context['user'] = user
     return context
+
+
+def statistics_view(request):
+    if request.user.is_authenticated():
+        user = CustomUser.objects.get(username=request.user.username)
+
+        all_plans = UserPlans.objects.select_related().filter(user_id=user.id)
+        if all_plans.count() == 0:
+            return HttpResponseRedirect("/plan")
+
+        # выбираем текущее расписание юзера
+        try:
+            cur_plan = UserPlans.objects.select_related().filter(user_id=user.id, always_yn='y')[0]
+        except IndexError:
+            cur_plan = all_plans[0]
+
+        # plan_rows = PlanRows.objects.select_related().filter(plan_id=cur_plan.plan_id)
+
+        stripes_dict = Stripes(cur_plan.plan_id)
+        stripes_dict_json = stripes_dict.get_stripes_json()
+
+        print(stripes_dict_json)
+
+        return render_to_response('statistics.html', {'data': json.loads(stripes_dict_json)})
+
+    else:
+        return HttpResponseRedirect("/login")
+
+
+def welcome_view(request):
+    if request.user.is_authenticated():
+        return HttpResponseRedirect("/home")
+    else:
+        return render_to_response('welcome.html')
+
+
+def registration_view(request):
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            # сохраняем usr_name и pswd в таблицу auth_user
+            new_user = form.save()
+            # добавляем пользователю дефолтное расписание
+            new_user.add_new_plan()
+
+            return HttpResponseRedirect('/login')
+    else:
+        form = CustomUserCreationForm()
+
+    context = {'form': form}
+    return render_to_response('reg.html', context)
+
+
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+
+        user = auth.authenticate(username=username, password=password)
+
+        if user is not None:
+            if user.is_active:
+                auth.login(request, user)
+                return HttpResponseRedirect("/home")
+            else:
+                return HttpResponse('User is not active')
+        else:
+            return HttpResponse('Invalid Login or Password')
+    else:
+        return render_to_response('login.html')
+
+
+def logout_view(request):
+    auth.logout(request)
+    return HttpResponseRedirect("/")
 
 
 def home_view(request):

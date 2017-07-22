@@ -170,3 +170,30 @@ def get_drop_list_ajax(request):
         return render_to_response('templates_for_ajax/drop_list_tmp.html', context, status=200)
     else:
         return HttpResponse(status=401)
+
+
+def save_plan_avatar(request, plan_id):
+    """
+        Функция сохраняет загруженную пользователем аватарку
+        :param plan_id:
+        :param request:
+        :return:
+    """
+    if request.user.is_authenticated():
+        user = CustomUser.objects.get(username=request.user.username)
+
+        try:
+            # если user имеет права редактирования
+            plan = PlanLists.objects.get(id=plan_id, owner=user.id)
+        except ObjectDoesNotExist:
+            return HttpResponse(status=403)
+
+        # удаляем предыдущую аватарку
+        plan.avatar.delete()
+        # сохраняем новую
+        plan.avatar = request.FILES['avatar']
+        plan.save()
+
+        return HttpResponse(status=200)
+    else:
+        return HttpResponse(status=401)

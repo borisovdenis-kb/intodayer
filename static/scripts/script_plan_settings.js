@@ -22,8 +22,8 @@ function removePlan() {
         url: '/delete_plan',
         method: 'POST',
         data: {plan_id: plan_id},
-        dataType: 'json',
-        success: function (response) {
+        dataType: 'text',
+        success: function () {
             location.href = "/plan";
         }
     });
