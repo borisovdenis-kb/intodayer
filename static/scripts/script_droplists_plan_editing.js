@@ -9,6 +9,7 @@ function createDropLst($thisField) {
     $('.drop_list').remove();
     if (!$thisField.hasClass('weeks')) {
         $('body').append('<div class="drop_list"></div>');
+
         loadData($thisField);
     }
 }
@@ -46,23 +47,22 @@ function loadData($thisField) {
 
     if (!$thisField.hasClass('parity')) {
         // вставляем даные из базы в div drop_list
+        var $droplist = $('.drop_list');
+
         $('.drop_list').load('/get_drop_list', data, function () {
-            var count_li = $('.drop_list').find('li').length;
-            if (!count_li) {
+            var count_li = $droplist.find('li').length;
+            if (count_li == 0) {
                 $('.drop_list').remove();
                 return false;
             }
-            setStyleDropList($thisField);
+            setStyleDropList($thisField, $('.drop_list').first());
         });
     }
-    else {
-        setStyleDropList($thisField);
-    }
+
 }
 
-function setStyleDropList($thisField) {
+function setStyleDropList($thisField, $droplist) {
     var $bruceLi = $thisField.parent();
-    var $droplist = $('.drop_list');
     $droplist.find('ul li a').on('mousedown touchstart', function (e) {
         $thisField.val($(this).text());
 

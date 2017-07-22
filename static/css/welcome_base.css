@@ -1,84 +1,43 @@
 html, body {
-    height: 100%;
-    margin: 0 auto;
-}
+  height: 100%;
+  margin: 0 auto; }
 
 .fill-height {
-    min-height: calc(100% - 100px);
-    height:auto !important; /* cross-browser */
-    height: calc(100% - 100px); /* cross-browser */
-}
+  min-height: calc(100% - 100px);
+  height: auto !important;
+  height: calc(100% - 100px); }
 
-.center_page{
-    /*background: indianred;*/
-    height: calc(100% - 100px);
-    min-height: calc(100% - 100px);
-    height:auto !important; /* cross-browser */
-    height: calc(100% - 100px); /* cross-browser */
-    min-width: 100%;
-    display: table;
-}
-
-.center_table{
-    display: table-cell;
-    vertical-align: middle;
-    /*height: ;*/
-}
 .vertical-center-row {
-    display: flex;
-    /*height: 100%;*/
-    /*этот важный параметр регулирует js*/
-    /*min-height: 100% !important;*/
-    /*background: gray;*/
-    flex-direction: column;
-    justify-content: center;
-
-
-}
+  display: flex;
+  flex-direction: column;
+  justify-content: center; }
 
 .big-h1 {
-    font-size: 3.5em;
-}
+  font-size: 3.5em; }
 
 h2 {
-    margin-top: 5px;
-}
+  margin-top: 5px; }
 
 blockquote {
-    border-width: 0px;
-}
+  border-width: 0; }
 
 .buttons_row a {
-    display: inline-block;
-    line-height: 40px;
-    font-size: 1.2em;
-    margin: 3px 3px 3px 3px;
-    min-width: 200px;
-    text-decoration: none;
-}
+  display: inline-block;
+  line-height: 40px;
+  font-size: 1.2em;
+  margin: 3px;
+  min-width: 200px;
+  text-decoration: none; }
 
 #sign_in {
-    border-color: rgba(80, 80, 80, 1);
-    background: rgba(80, 80, 80, 1);
-    color: white;
-}
-
-#sign_in:hover {
-    border-color: rgba(50, 50, 50, 1);
-    background-color: rgba(50, 50, 50, 1);
-}
+  border-color: #505050;
+  background: #505050;
+  color: white; }
+  #sign_in:hover {
+    border-color: #323232;
+    background-color: #323232; }
 
 .fill-space-bottom {
-    height: 100px;
-}
+  height: 100px; }
 
-.footer {
-    flex: 0 0 auto;
-    margin-top: 20px;
-    height: 60px;
-    padding: 10px 0 10px 0;
-    border-top: 2px solid white;
-    color: rgba(220, 220, 220, 1);
-    background: #3c177d;
-}
-
+/*# sourceMappingURL=welcome_base.css.map */

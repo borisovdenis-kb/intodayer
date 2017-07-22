@@ -4,7 +4,7 @@ from django.db.utils import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.http import HttpResponseBadRequest
 from django.shortcuts import render_to_response
-from apis.planSettingsApi import *
+from apis.planAPI import *
 from extra.stripes_api import *
 from extra.utils import *
 from intodayer2_app.forms import *
@@ -20,14 +20,25 @@ from intodayer2_app.send_sms import *
 #                          ОБРАБОТКА AJAX ЗАПРОСОВ                                #
 ###################################################################################
 
-def create_new_plan_ajax(request):
-    if request.is_ajax():
+def switch_plan_only_set_ajax(request):
+    """" 
+        Данная функция просто меняет current_plan в БД и возвращает success
+    """
+    if request.is_ajax:
         user = CustomUser.objects.get(username=request.user.username)
-        new_plan = user.add_new_plan()
+
+        try:
+            select_id = int(request.POST['select_id'])
+        except ValueError:
+            return render_to_response('templates_for_ajax/content_errors.html')
+        except IndexError:
+            return render_to_response('templates_for_ajax/content_errors.html')
+
+        user.set_current_plan(select_id)
 
         response = HttpResponse()
         response['Content-Type'] = 'application/json'
-        response.write(json.dumps({'success': 1, 'new_plan_id': new_plan.id}))
+        response.write(json.dumps({}))
 
         return response
 
@@ -38,41 +49,6 @@ def get_settings_plan_html(request):
         context = dict()
         context.update(get_cur_plan(request))
         return render_to_response('templates_for_ajax/settings_ajax.html', context)
-
-
-def get_drop_list_ajax(request):
-    """
-        Функция собирает в html список все доступные у пользователя
-        элементы из таблицы weeks.
-        :param request: 
-        :return: 
-    """
-    if request.is_ajax():
-        user = CustomUser.objects.get(username=request.user.username)
-        context = {'is_error': False}
-
-        try:
-            plan_id = int(request.POST['plan_id'])
-            # print(request.POST)
-            plan = UserPlans.objects.select_related().get(user_id=user.id, plan_id=plan_id)
-        except (ValueError, ObjectDoesNotExist):
-            context['is_error'] = True
-            return render_to_response('templates_for_ajax/drop_list_tmp.html', context)
-
-        # в зависимости от типа поля передаем соотв. данные
-        if request.POST['model'] == 'time':
-            context['time_list'] = Times.objects.filter(plan_id=plan.plan.id).order_by('hh24mm')
-
-        elif request.POST['model'] == 'subject':
-            context['subject_list'] = Subjects.objects.filter(plan_id=plan.plan.id).order_by('name')
-
-        elif request.POST['model'] == 'teacher':
-            context['teacher_list'] = Teachers.objects.filter(plan_id=plan.plan.id).order_by('name_short')
-
-        elif request.POST['model'] == 'place':
-            context['place_list'] = Places.objects.filter(plan_id=plan.plan.id).order_by('name')
-
-        return render_to_response('templates_for_ajax/drop_list_tmp.html', context)
 
 
 def mailing_ajax(request):
@@ -184,13 +160,19 @@ def left_content_load_ajax(request):
         Функция динамически загружает левый контент сайта
     """
     if request.is_ajax():
-        user = CustomUser.objects.get(username=request.user.username)
-        all_plans = UserPlans.objects.select_related().filter(user_id=user.id)
-        context = dict()
-        context['user'] = user
-        context['all_plans'] = all_plans
+        if request.user.is_authenticated():
+            user = CustomUser.objects.get(username=request.user.username)
+            all_plans = UserPlans.objects.select_related().filter(user_id=user.id)
+            context = dict()
 
-        return render_to_response('content_pages/left_content.html', context)
+            context['user'] = user
+            context['all_plans'] = all_plans
+
+            return render_to_response('content_pages/left_content.html', context, status=200)
+        else:
+            return HttpResponse(401)
+    else:
+        return HttpResponse(400)
 
 
 def switch_plan_home_ajax(request):
@@ -200,24 +182,28 @@ def switch_plan_home_ajax(request):
         :return: Отрендеренная html разметка расписания
     """
     if request.is_ajax():
-        context = dict()
-        user = CustomUser.objects.get(username=request.user.username)
+        if request.user.is_authenticated():
+            context = dict()
+            user = CustomUser.objects.get(username=request.user.username)
 
-        # производим валидацию переданных данных со страницы
-        try:
-            plan_id = int(request.POST['plan_id'])
-            context.update(get_cur_plan(request, plan_id))
-        except ValueError:
-            return render_to_response('templates_for_ajax/content_errors.html')
-        except IndexError:
-            return render_to_response('templates_for_ajax/content_errors.html')
+            try:
+                plan_id = int(request.POST['plan_id'])
+                context.update(get_cur_plan(request, plan_id))
+            except ValueError:
+                return render_to_response('templates_for_ajax/content_errors.html')
+            except IndexError:
+                return render_to_response('templates_for_ajax/content_errors.html')
 
-        context.update(get_dates_info(context['cur_plan']))
-        # устанавливаем current_yn для созданного расписания
-        plan_id = context['cur_plan'].plan_id
-        user.set_current_plan(plan_id)
+            context.update(get_dates_info(context['cur_plan']))
+            # устанавливаем current_yn для созданного расписания
+            # plan_id = context['cur_plan'].plan_id
+            user.set_current_plan(plan_id)
 
-        return render_to_response('content_pages/right_content_home.html', context)
+            return render_to_response('content_pages/right_content_home.html', context, status=200)
+        else:
+            return HttpResponse(status=401)
+    else:
+        return HttpResponse(status=400)
 
 
 def switch_plan_plan_ajax(request):
@@ -228,7 +214,7 @@ def switch_plan_plan_ajax(request):
     """
     if request.is_ajax:
         user = CustomUser.objects.get(username=request.user.username)
-        context = dict()
+        context = {}
 
         try:
             plan_id = int(request.POST['plan_id'])
@@ -355,25 +341,26 @@ def save_plan_avatar_ajax(request, plan_id):
         :return:
     """
     if request.is_ajax():
-        user = CustomUser.objects.get(username=request.user.username)
-        plan = PlanLists.objects.get(id=plan_id, owner=user.id)
+        if request.user.is_authenticated():
+            user = CustomUser.objects.get(username=request.user.username)
 
-        response = HttpResponse()
-        response['Content-Type'] = 'application/json'
+            try:
+                # если user имеет права редактирования
+                plan = PlanLists.objects.get(id=plan_id, owner=user.id)
+            except ObjectDoesNotExist:
+                return HttpResponse(status=403)
 
-        if plan:
-            # если пользователь имеет права редактирования
             # удаляем предыдущую аватарку
             plan.avatar.delete()
             # сохраняем новую
             plan.avatar = request.FILES['avatar']
             plan.save()
 
-            response.write(json.dumps([{'success': 1}]))
+            return HttpResponse(status=200)
         else:
-            response.write(json.dumps([{'success': 0}]))
-
-        return response
+            return HttpResponse(status=401)
+    else:
+        return HttpResponse(status=400)
 
 
 def get_avatar_ajax(request):
@@ -410,80 +397,13 @@ def get_avatar_ajax(request):
 #                         ОБРАБОТКА ОБЫЧНЫХ ЗАПРОСОВ                              #
 ###################################################################################
 
-
-def statistics_view(request):
-    if request.user.is_authenticated():
-        user = CustomUser.objects.get(username=request.user.username)
-
-        all_plans = UserPlans.objects.select_related().filter(user_id=user.id)
-        if all_plans.count() == 0:
-            return HttpResponseRedirect("/plan")
-
-        # выбираем текущее расписание юзера
-        try:
-            cur_plan = UserPlans.objects.select_related().filter(user_id=user.id, always_yn='y')[0]
-        except IndexError:
-            cur_plan = all_plans[0]
-
-        # plan_rows = PlanRows.objects.select_related().filter(plan_id=cur_plan.plan_id)
-
-        stripes_dict = Stripes(cur_plan.plan_id)
-        stripes_dict_json = stripes_dict.get_stripes_json()
-
-        print(stripes_dict_json)
-
-        return render_to_response('statistics.html', {'data': json.loads(stripes_dict_json)})
-
-    else:
-        return HttpResponseRedirect("/login")
+# def plan_empty(request):
+#     context = dict()
+#     context.update(get_all_plans(request))
+#     return render_to_response('plan_empty.html', context)
 
 
-def welcome_view(request):
-    if request.user.is_authenticated():
-        return HttpResponseRedirect("/home")
-    else:
-        return render_to_response('welcome.html')
 
-
-def registration_view(request):
-    if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)
-        if form.is_valid():
-            # сохраняем usr_name и pswd в таблицу auth_user
-            new_user = form.save()
-            # добавляем пользователю дефолтное расписание
-            new_user.add_new_plan()
-
-            return HttpResponseRedirect('/login')
-    else:
-        form = CustomUserCreationForm()
-
-    context = {'form': form}
-    return render_to_response('reg_tst.html', context)
-
-
-def login_view(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-
-        user = auth.authenticate(username=username, password=password)
-
-        if user is not None:
-            if user.is_active:
-                auth.login(request, user)
-                return HttpResponseRedirect("/home")
-            else:
-                return HttpResponse('User is not active')
-        else:
-            return HttpResponse('Invalid Login or Password')
-    else:
-        return render_to_response('auth.html')
-
-
-def logout_view(request):
-    auth.logout(request)
-    return HttpResponseRedirect("/")
 
 
 def profile_settings(request):
@@ -511,6 +431,8 @@ def get_all_plans(request):
     user = CustomUser.objects.get(username=request.user.username)
 
     all_plans = UserPlans.objects.select_related().filter(user_id=user.id)
+    if all_plans.count() > 0:
+        context['select_flag'] = True
     context['all_plans'] = all_plans
 
     return context
@@ -571,13 +493,80 @@ def get_this_user(request):
     context['user'] = user
     return context
 
-#
-# def set_current_plan(request):
-#     if request.is_ajax():
-#         user = CustomUser.objects.get(username=request.user.username)
-#
-#         cur_id = request.POST['cur_id']
 
+def statistics_view(request):
+    if request.user.is_authenticated():
+        user = CustomUser.objects.get(username=request.user.username)
+
+        all_plans = UserPlans.objects.select_related().filter(user_id=user.id)
+        if all_plans.count() == 0:
+            return HttpResponseRedirect("/plan")
+
+        # выбираем текущее расписание юзера
+        try:
+            cur_plan = UserPlans.objects.select_related().filter(user_id=user.id, always_yn='y')[0]
+        except IndexError:
+            cur_plan = all_plans[0]
+
+        # plan_rows = PlanRows.objects.select_related().filter(plan_id=cur_plan.plan_id)
+
+        stripes_dict = Stripes(cur_plan.plan_id)
+        stripes_dict_json = stripes_dict.get_stripes_json()
+
+        print(stripes_dict_json)
+
+        return render_to_response('statistics.html', {'data': json.loads(stripes_dict_json)})
+
+    else:
+        return HttpResponseRedirect("/login")
+
+
+def welcome_view(request):
+    if request.user.is_authenticated():
+        return HttpResponseRedirect("/home")
+    else:
+        return render_to_response('welcome.html')
+
+
+def registration_view(request):
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            # сохраняем usr_name и pswd в таблицу auth_user
+            new_user = form.save()
+            # добавляем пользователю дефолтное расписание
+            new_user.add_new_plan()
+
+            return HttpResponseRedirect('/login')
+    else:
+        form = CustomUserCreationForm()
+
+    context = {'form': form}
+    return render_to_response('reg.html', context)
+
+
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+
+        user = auth.authenticate(username=username, password=password)
+
+        if user is not None:
+            if user.is_active:
+                auth.login(request, user)
+                return HttpResponseRedirect("/home")
+            else:
+                return HttpResponse('User is not active')
+        else:
+            return HttpResponse('Invalid Login or Password')
+    else:
+        return render_to_response('login.html')
+
+
+def logout_view(request):
+    auth.logout(request)
+    return HttpResponseRedirect("/")
 
 def home_view(request):
     """
@@ -601,9 +590,6 @@ def home_view(request):
     else:
         return HttpResponseRedirect("/login", {})
 
-
-# def plan_empty(request):
-#     return render_to_response()
 
 def plan_view(request):
     """

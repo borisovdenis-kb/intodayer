@@ -85,6 +85,13 @@ function setListenersRightContent() {
     $('.str_plan.str_title').each(function () {
         setGeneralCheckBoxListeners($(this));
     });
+
+
+    $('.share_button').each(function () {
+        $(this).click(function () {
+            shareButtonAction($(this));
+        });
+    });
 }
 
 
@@ -352,6 +359,7 @@ function resizeArea($this_textarea, minHeight, maxHeight) {
 
     // небольшой отступ, чтобы поле расширялось раньше
     $area_hidden.html(text);
+    // console.log($area_hidden.innerHTML);
 
     var height = $area_hidden.outerHeight() + 10;
 
@@ -389,14 +397,14 @@ function focusFieldWithKeys($this_field, $this_str, e) {
     }
 }
 
-
+// asdf
 function openTextareaDropList($this_field) {
     if ($this_field.hasClass('drop_is')) {
         $('.drop_list').remove();
     }
     else {
         $this_field.addClass('drop_is', 'drop_is');
-        $.getScript("/static/scripts/script_drop_lists_plan.js", function () {
+        $.getScript("/static/scripts/script_droplists_plan_editing.js", function () {
             // ипорт функции для выпадающих списков у полей.
             // делаем услования, чтобы дроп лист больше не открывался при 2 клике на поле
             createDropLst($this_field);
@@ -1553,3 +1561,33 @@ function blurSelectStr() {
 
 }
 
+function shareButtonAction() {
+    var $textarea = $('.mailing').find('textarea');
+    day = $(this).parents('plan_window').attr('day_num');
+    console.log(day);
+    storageKey = day + $('.title_content').attr('plan_id');
+
+    blurElement('.effect_blur', 4);
+    $('.cover_all').fadeIn(800);
+    $('.mailing_wrap').delay(300).fadeIn(500);
+    $('.mailing').slideToggle(800, 'easeInOutBack').css({'display': 'flex'});
+
+    if ('key' in localStorage) {
+        $textarea.val(localStorage[storageKey]);
+    }
+
+    $textarea.off();
+    $textarea.on('input', function () {
+        var thisTextArea = $(this);
+
+        localStorage.setItem(storageKey, thisTextArea.val());
+
+        var timerInputId = setInterval(function () {
+            validateTextArea(thisTextArea);
+        }, 50);
+
+        setTimeout(function () {
+            clearInterval(timerInputId);
+        }, 500);
+    });
+}

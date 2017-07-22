@@ -15,6 +15,7 @@ from extra.mailing_api import *
 from django.shortcuts import render_to_response
 from django.http import HttpResponse
 from datetime import datetime
+from django.utils import timezone
 
 
 class PlanSettings():
@@ -58,98 +59,141 @@ class PlanSettings():
             user_plan_row.delete()
 
 
+def create_plan(request):
+    """
+        On client side use:
+            URL: /create_new_plan,
+            method: POST
+    """
+    if request.user.is_authenticated():
+        user = CustomUser.objects.get(username=request.user.username)
+        user.add_new_plan()
+        return HttpResponse(status=200)
+    else:
+        return HttpResponse(status=401)
+
+
 def delete_plan(request):
     """
         On client side use:
             URL: /delete_plan,
-            data: plan_id <str>
+            data: plan_id <int>
             method: POST
     """
-    if request.is_ajax():
+    if request.user.is_authenticated():
         user = CustomUser.objects.get(username=request.user.username)
-
-        response = HttpResponse()
-        response['Content-Type'] = 'application/json'
 
         try:
             plan_id = int(request.POST['plan_id'])
             UserPlans.objects.get(user_id=user.id, plan_id=plan_id)
-        except (ValueError, ObjectDoesNotExist):
-            response.write(json.dumps({'success': 0}))
-            return response
+        except ValueError:
+            return HttpResponse(status=400)
+        except ObjectDoesNotExist:
+            return HttpResponse(status=403)
 
         settings = PlanSettings(user.id, plan_id)
         settings.delete_plan()
 
-        response.write(json.dumps({'success': 1}))
+        return HttpResponse(status=200)
+    else:
+        return HttpResponse(status=401)
 
-        return response
 
-
-def set_plan_start_date(request):
+def update_plan_info(request):
     """
         On client side use:
-            URL: /set_start_date,
+            URL: /update_plan_info,
             data: plan_id <str>, date <str> (day.month.year)
             method: POST
     """
-    if request.is_ajax():
+    if request.user.is_authenticated():
         user = CustomUser.objects.get(username=request.user.username)
-
-        response = HttpResponse()
-        response['Content-Type'] = 'application/json'
+        data = request.POST
 
         try:
-            plan_id = int(request.POST['plan_id'])
-            date = datetime.strptime(request.POST['start_date'], '%d.%m.%Y')
+            plan_id = int(data['plan_id'])
+            date = timezone.datetime.strptime(data['start_date'], '%d.%m.%Y')
+            UserPlans.objects.get(user_id=user.id, plan_id=plan_id)
         except ValueError:
-            response.write(json.dumps({'success': 0}))
-            return response
+            return HttpResponse(status=400)
+        except ObjectDoesNotExist:
+            return HttpResponse(status=403)
+
+        plan = PlanLists.objects.get(id=plan_id)
+
+        if plan.owner == user:
+            plan.title = data['new_title']
+            plan.start_date = date
+            plan.save()
+        else:
+            return HttpResponse(status=403)
+
+        return HttpResponse(status=200)
+    else:
+        return HttpResponse(status=401)
+
+
+def get_drop_list_ajax(request):
+    """
+        Функция собирает в html список все доступные для текущего пользователя
+        элементы из таблицы. Имя таблицы задано в data['model']
+        On client side use:
+            URL: /get_drop_list,
+            data: plan_id <int>, model <str>
+            method: GET
+    """
+    if request.user.is_authenticated():
+        user = CustomUser.objects.get(username=request.user.username)
+        data = request.GET
+        context = {'is_error': False}
 
         try:
-            plan = UserPlans.objects.get(user_id=user.id, plan_id=plan_id)
+            plan_id = int(data['plan_id'])
+            plan = UserPlans.objects.select_related().get(user_id=user.id, plan_id=plan_id)
+        except ValueError:
+            return render_to_response('templates_for_ajax/drop_list_tmp.html', {'is_error': True}, status=400)
         except ObjectDoesNotExist:
-            response.write(json.dumps({'success': 0}))
-            return response
-        else:
-            if plan.plan.owner == user:
-                plan.plan.start_date = date
-                plan.plan.save()
-            else:
-                response.write(json.dumps({'success': 0}))
-                return response
+            return render_to_response('templates_for_ajax/drop_list_tmp.html', {'is_error': True}, status=403)
 
-        response.write(json.dumps({'success': 1}))
-        return response
+        if data['model'] == 'time':
+            context['time_list'] = Times.objects.filter(plan_id=plan.plan.id).order_by('hh24mm')
+
+        elif data['model'] == 'subject':
+            context['subject_list'] = Subjects.objects.filter(plan_id=plan.plan.id).order_by('name')
+
+        elif data['model'] == 'teacher':
+            context['teacher_list'] = Teachers.objects.filter(plan_id=plan.plan.id).order_by('name_short')
+
+        elif data['model'] == 'place':
+            context['place_list'] = Places.objects.filter(plan_id=plan.plan.id).order_by('name')
+
+        return render_to_response('templates_for_ajax/drop_list_tmp.html', context, status=200)
+    else:
+        return HttpResponse(status=401)
 
 
-def update_plan_title(request):
+def save_plan_avatar(request, plan_id):
     """
-        On client side use:
-            URL: /update_plan_title,
-            data: plan_id <str>, new_title <str>
-            method: POST
+        Функция сохраняет загруженную пользователем аватарку
+        :param plan_id:
+        :param request:
+        :return:
     """
-    if request.is_ajax():
+    if request.user.is_authenticated():
         user = CustomUser.objects.get(username=request.user.username)
 
-        response = HttpResponse()
-        response['Content-Type'] = 'application/json'
-
         try:
-            plan_id = int(request.POST['plan_id'])
-            plan = UserPlans.objects.select_related().get(user_id=user.id, plan_id=plan_id)
-        except (ValueError, ObjectDoesNotExist):
-            response.write(json.dumps({'success': 0}))
-            return response
+            # если user имеет права редактирования
+            plan = PlanLists.objects.get(id=plan_id, owner=user.id)
+        except ObjectDoesNotExist:
+            return HttpResponse(status=403)
 
-        if plan.plan.owner != user:
-            response.write(json.dumps({'success': 1}))
-            return response
+        # удаляем предыдущую аватарку
+        plan.avatar.delete()
+        # сохраняем новую
+        plan.avatar = request.FILES['avatar']
+        plan.save()
 
-        plan.plan.title = request.POST['new_title']
-        plan.plan.save()
-
-        response.write(json.dumps({'success': 1}))
-
-        return response
+        return HttpResponse(status=200)
+    else:
+        return HttpResponse(status=401)

@@ -1,0 +1,34 @@
+<div class="cover_all">
+    <p></p>
+    <a href="/home">oк</a>
+</div>
+
+<div class="choose_avatar_wrap">
+    <div class="choose_avatar_header">
+        <p class="choose_avatar_text">
+            Загрузка аватарки
+        </p>
+
+        <div class="close"></div>
+    </div>
+
+    <div class="choose_avatar">
+
+        <label class="btn btn-default send_button btn-lg">
+            Upload
+        </label>
+
+        <form action="" method="post" enctype="multipart/form-data" id="send_avatar_form">
+            <label class="btn btn-default btn-lg file_upload">
+                Browse <input type="file" hidden id="id_image_file" onchange="getFileName()">
+            </label>
+
+        </form>
+        <div class="file_info">
+        </div>
+    </div>
+
+    <div class="choose_avatar_footer">
+        <p>Изображение можно загрузить в формате jpg, png или gif.</p>
+    </div>
+</div>

@@ -1,11 +1,16 @@
-{% extends 'home.html' %}
+{% extends "base.html" %}
 {% load staticfiles %}
+
+{% block title %}
+    <title>Intodayer | Plan</title>
+{% endblock %}
 
 {% block styles %}
     <link rel="stylesheet" type="text/css" href={% static "css/plan_content.css" %}>
-    {#    подключаем стили всех страниц, которые задействованы в открытии ajax запросов#}
+    {#    <link rel="stylesheet" type="text/css" href={% static "css/__old/pl.css" %}>#}
     <link rel="stylesheet" type="text/css" href={% static "css/plan_settings.css" %}>
     <link rel="stylesheet" type="text/css"
+            {#          плагины#}
           href={% static "plug-ins/bootstrap-datetimepicker-master/build/css/bootstrap-datetimepicker.css" %}>
 {% endblock %}
 
@@ -22,7 +27,6 @@
     <script type="text/javascript" src={% static "library/device.js" %}></script>
     <script type="text/javascript"
             src={% static "plug-ins/bootstrap-datetimepicker-master/build/js/bootstrap-datetimepicker.min.js" %}></script>
-
 {% endblock %}
 
 {% block invitation %}
@@ -51,32 +55,18 @@
 {% endblock %}
 
 {% block mailing %}
-    <div class="mailing_wrap">
-        <div class="mailing_header">
-            <div class="mailing_text">
-                Рассылка
-            </div>
-
-            <div class="mailing_close"></div>
-        </div>
-
-        <div class="progress">
-            <div class="progress_indicator"></div>
-        </div>
-
-        <div class="mailing">
-            <textarea placeholder="Ребята, у нас тут такое!!!"></textarea>
-        </div>
-
-        <div class="mailing_footer">
-            <div class="do_mailing_button">Отправить</div>
-        </div>
-    </div>
+    {% include "modal_frames/mailing_frame.html" %}
 {% endblock %}
 
 
-{% block other %}
-    <div class="KLOSS">
+{% block choose_avatar %}
+    {% include "modal_frames/choose_avatar.html" %}
+{% endblock %}
 
+
+{% block others %}
+    <div class="KLOSS"></div>
+    <div>
+        <div class="comment_text_hidden">sdafasdfasdfds</div>
     </div>
 {% endblock %}

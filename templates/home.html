@@ -1,130 +1,20 @@
+{% extends "base.html" %}
 {% load staticfiles %}
-<!DOCTYPE HTML>
-<html>
-<head>
-    {% block title %}
-        <title>Three pachans Web Site</title>
-    {% endblock %}
-    <meta http-equiv="Content-type" content="text/html" charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=0.6">
 
-    {#Импорт фрэймворков#}
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="http://code.jquery.com/jquery-latest.js" type="text/javascript"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" type="text/javascript"></script>
-
-    {#Импорт плагинов#}
-    <script type="text/javascript" src={% static "library/jquery.animate-colors.js" %}></script>
-    <script type="text/javascript" src={% static "library/jquery.easing.1.3.js" %}></script>
-    <script type="text/javascript" src={% static "library/jquery.transform2d.js" %}></script>
-    <script type="text/javascript" src={% static "library/lib_for_send_file_ajax.js" %}></script>
-
-    {#Импорт шрифтов для всего сайта#}
-    <link rel="stylesheet" href={% static 'css/fonts/cynthopro/cynthopro.css' %}>
-    <link rel="stylesheet" href={% static 'css/fonts/firasans/firasans.css' %}>
-    <link rel="stylesheet" href={% static 'css/fonts/ptsans/ptsans.css' %}>
-    <link rel="stylesheet" href={% static 'css/fonts/SegoeUI/SegoeUI.css' %}>
-
-    {#Иморт стилей и скриптов для всего сайта#}
-    <script type="text/javascript" src={% static "scripts/script_left_content.js" %}></script>
-    <link rel="stylesheet" type="text/css" href={% static "css/general_style.css" %}>
-
-    {#TODO: исправить стили home для SASS!#}
-
-    <link rel="stylesheet" type="text/css" href={% static "css/__old/home_content.css" %}>
-    <link rel="stylesheet" type="text/css" href={% static "css/header.css" %}>
-    <link rel="stylesheet" type="text/css" href={% static "css/font_optimizate_new.css" %}>
-
-    <!--Добавление в наследующие шаблоны новых стилей-->
-    {% block styles %}{% endblock %}
-    <!--Добавление в наследующие шаблоны новых скриптов-->
-    {% block scripts_top %}
-        <script type="text/javascript" src={% static "scripts/script_home.js" %}></script>
-    {% endblock %}
-</head>
-
-<body>
-
-<div class="effect_blur">
-    <div class="for_invitations">
-        <!--Сюда будут вставляться имеющиеся у данного юзера приглашения-->
-    </div>
-
-    {% include "templates_for_ajax/header.html" %}
-
-    <div class="page">
-        <div class="content">
-            <div class="left_content hidden-xs">
-                {% block left_content %}
-                    {% include "content_pages/left_content.html" %}
-                {% endblock %}
-            </div>
-
-            <div class="right_content">
-                {% block right_content %}
-                    {% include "content_pages/right_content_home.html" %}
-                {% endblock %}
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<div class="cover_all">
-    <p></p>
-    <a href="/home">oк</a>
-</div>
-
-<div class="choose_avatar_wrap">
-    <div class="choose_avatar_header">
-        <div class="choose_avatar_text">
-            Загрузка аватарки
-        </div>
-
-        <div class="close"></div>
-    </div>
-
-    <div class="choose_avatar">
-
-        <div class="send_button">
-            Загрузить
-        </div>
-
-        <form action="" method="post" enctype="multipart/form-data" id="send_avatar_form">
-            <div class="file_upload">
-                Выберите файл
-                <p><input id="id_image_file" name="image_file" type="file" onchange="getFileName();" required/></p>
-            </div>
-            <div class="file_info">
-            </div>
-        </form>
-
-    </div>
-
-    <div class="choose_avatar_footer">
-        Изображение можно загрузить в формате jpg, png или gif.
-    </div>
-</div>
-
-{% block  mailing %}
+{% block styles %}
+    <link rel="stylesheet" type="text/css" href={% static "css/base.css" %}>
 {% endblock %}
 
 
-{% block other %}
-{% endblock %}
-<div>
-    <div class="textarea_behavior comment_text_hidden">sdfasdfsd</div>
-</div>
-
-
-</body>
-
-{# Скрипты, который должены быть на всех страницах #}
-<script type="text/javascript" src={% static "scripts/script_header.js" %}></script>
-<script type="text/javascript" src={% static "scripts/script_general.js" %}></script>
-
-{% block scripts_bottom %}
+{% block left_content %}
+    {% include "content_pages/left_content.html" %}
 {% endblock %}
 
 
-</html>
+{% block right_content %}
+    {% include "content_pages/right_content_home.html" %}
+{% endblock %}
+
+{% block others %}
+{% endblock %}
+

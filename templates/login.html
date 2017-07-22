@@ -1,11 +1,10 @@
-{% extends 'welcome_base.html' %}
+{% extends 'base.html' %}
 {% load staticfiles %}
 
 
 {% block scripts_top %}
     <link rel="stylesheet" type="text/css" href={% static "css/welcome_base.css" %}>
-    <link rel="stylesheet" type="text/css" href={% static "css/auth_reg.css" %}>
-
+    <link rel="stylesheet" type="text/css" href={% static "css/login_reg.css" %}>
 {% endblock %}
 
 
@@ -88,8 +87,8 @@
 
 
 {% block scripts_bottom %}
-    <script type="text/javascript" src={% static "scripts/script_auth.js" %}></script>
-    <script type="text/javascript" src={% static "scripts/script_welcome_utils.js" %}></script>
+    <script type="text/javascript" src={% static "scripts/script_login.js" %}></script>
+    <script type="text/javascript" src={% static "scripts/script_welcome.js" %}></script>
 {% endblock %}
 
 
