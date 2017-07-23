@@ -9,6 +9,10 @@ from django.utils import timezone
 _MAX_SIZE = 300
 
 
+class ThereIsNoAction(Exception):
+    pass
+
+
 class DivToPng(models.Model):
     """
         Таблица для хранения изображений
@@ -141,6 +145,7 @@ class Invitations(models.Model):
     comment = models.TextField(blank=True, null=True)
     plan = models.ForeignKey('PlanLists', models.DO_NOTHING)
     confirmed_yn = models.CharField(max_length=1, blank=True, null=True)
+    email = models.TextField(blank=False)
 
     class Meta:
         managed = True
@@ -360,6 +365,41 @@ class CustomUser(AbstractUser):
             else:
                 row.current_yn = 'n'
                 row.save()
+
+    def has_rights(self, plan_id, action):
+        """
+            Функция показывает есть ли у данного пользователя в данном расписании
+            права на то или иное действие
+            :param plan_id: <int>
+            :param action: <str>
+            available actions
+            (
+                'edit_plan', 'leave_plan', 'delete_plan', 'invite_participants',
+                'delete_participant', 'delete_admin', 'set_role'
+            )
+            :return: True/False
+        """
+        if not action:
+            raise ThereIsNoAction
+
+        user_role = UserPlans.objects.get(user_id=self.id, plan_id=plan_id).role
+
+        if action == 'edit_plan':
+            return True if user_role in ['admin', 'elder'] else False
+        elif action == 'leave_plan':
+            return True if user_role in ['admin', 'participant'] else False
+        elif action == 'delete_plan':
+            return True if user_role == 'elder' else False
+        elif action == 'invite_participants':
+            return True if user_role in ['admin', 'elder'] else False
+        elif action == 'delete_participant':
+            return True if user_role in ['admin', 'elder'] else False
+        elif action == 'delete_admin':
+            return True if user_role in ['admin', 'elder'] else False
+        elif action == 'set_role':
+            return True if user_role in ['admin', 'elder'] else False
+        else:
+            raise ValueError
 
     def __str__(self):
         return '%s %s %s' % (

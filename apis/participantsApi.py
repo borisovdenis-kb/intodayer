@@ -1,13 +1,13 @@
 #                                                МАТRIX OF RIGHTS
-# +-------+-----------+------------+----------+-------------+----------+-----------+-----------+-------------+
-# |       | edit plan | leave plan | del plan | invite part | del part | del admin | del elder | edit rights |
-# +-------+-----------+------------+----------+-------------+----------+-----------+-----------+-------------+
-# | elder |     1     |      0     |      1   |      1      |     1    |     1     |     0     |      1      |
-# +-------+-----------+------------+----------+-------------+----------+-----------+-----------+-------------+
-# | admin |     1     |      1     |      0   |      1      |     1    |     1     |     0     |      1      |
-# +-------+-----------+------------+----------+-------------+----------+-----------+-----------+-------------+
-# | part  |     0     |      1     |      0   |      1      |     0    |     0     |     0     |      0      |
-# +-------+-----------+------------+----------+-------------+----------+-----------+-----------+-------------+
+# +-------+-----------+------------+----------+-------------+----------+-----------+-----------+----------+
+# |       | edit plan | leave plan | del plan | invite part | del part | del admin | del elder | set role |
+# +-------+-----------+------------+----------+-------------+----------+-----------+-----------+----------+
+# | elder |     1     |      0     |      1   |      1      |     1    |     1     |     0     |     1    |
+# +-------+-----------+------------+----------+-------------+----------+-----------+-----------+----------+
+# | admin |     1     |      1     |      0   |      1      |     1    |     1     |     0     |     1    |
+# +-------+-----------+------------+----------+-------------+----------+-----------+-----------+----------+
+# | part  |     0     |      1     |      0   |      0      |     0    |     0     |     0     |     0    |
+# +-------+-----------+------------+----------+-------------+----------+-----------+-----------+----------+
 
 import json
 # ---------------------------------------------------------------
@@ -20,10 +20,14 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "intodayer2.settings")
 django.setup()
 # ---------------------------------------------------------------
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.utils import IntegrityError
 from intodayer2_app.models import *
 from intodayer2_app.views import *
 from extra.mailing_api import *
 from django.http import HttpResponse
+from extra.mailing import EmailMailing, NotEnoughRecipients
+from extra.mailing_messages import invitation_message
+from django.core import serializers
 
 # TODO: Заняться оптимизацией запросов!!!
 
@@ -62,7 +66,7 @@ def delete_participant(request):
         return HttpResponse(status=401)
 
 
-def change_role(request):
+def set_role(request):
     """
         On client side use:
             URL: /change_role,
@@ -107,24 +111,103 @@ def invite_participants(request):
     """
         On client side use:
             URL: /invite_participants,
-            data: plan_id <int>, prt_email_list [<str>, ...]
+            data: plan_id <int>, email_list <list>[<str>, ...]
             method: POST
         example:
-            data: {plan_id: 244, prt_email_list: ['aelegend@rambler.ru', 'borisovdenis-kp@yandex.ru]}
+            data: {plan_id: 244, email_list: ['aelegend@rambler.ru', 'borisovdenis-kp@yandex.ru]}
+        :return:
+            invitations_states: <list>[{'email': <str>, 'state': <str>}, ...]
+            available states
+            (
+                'already_joined', 'already_invited', 'invitation_sent'
+            )
     """
     if request.user.is_authenticated():
         user = CustomUser.objects.get(username=request.user.username)
+        response = HttpResponse(status=200)
+        response['Content-Type'] = 'application/json'
         data = request.POST
 
         try:
             plan_id = int(data['plan_id'])
-            prt_email_list = json.loads(data['prt_email_list'])
+            email_list = json.loads(data['email_list'])
+            action_is_available = user.has_rights(plan_id, 'invite_participants')
         except ValueError:
             return HttpResponse(status=400)
         except ObjectDoesNotExist:
             return HttpResponse(status=403)
 
-        return HttpResponse(status=200)
+        if action_is_available:
+            invitations_states = []
+            for_mailing = []
+
+            for email in email_list:
+                try:
+                    _user = CustomUser.objects.get(email=email)
+                except ObjectDoesNotExist:
+                    # пользователя не существует
+                    if not Invitations.objects.filter(plan_id=plan_id, email=email):
+                        # пользователь не приглашен
+                        Invitations.objects.create(from_user=user, plan_id=plan_id, email=email)
+                        invitations_states.append({'email': email, 'state': 'invitation_sent'})
+                        for_mailing.append(email)
+                    else:
+                        invitations_states.append({'email': email, 'state': 'already_invited'})
+
+                    continue
+
+                if not UserPlans.objects.filter(plan_id=plan_id, user_id=_user.id):
+                    # если пользователь не присоединился
+                    if not Invitations.objects.filter(plan_id=plan_id, email=email):
+                        # если пользователь не приглашен
+                        Invitations.objects.create(from_user=user, plan_id=plan_id,  to_user=_user, email=email)
+                        invitations_states.append({'email': email, 'state': 'invitation_sent'})
+                        for_mailing.append(email)
+                    else:
+                        invitations_states.append({'email': email, 'state': 'already_invited'})
+                else:
+                    invitations_states.append({'email': email, 'state': 'already_joined'})
+
+            # TODO: тут должна быть рассылка общего вида
+
+            response.write(json.dumps({'invitation_states': invitations_states}))
+
+            return response
+        else:
+            return HttpResponse(status=403)
     else:
         return HttpResponse(status=401)
 
+
+def get_expected_participants(request):
+    """
+        On client side use:
+            URL: /get_expected_participants,
+            data: plan_id <int>
+            method: GET
+        :return: 
+            expected_participants: <list>[{'email': <str>}, ...]
+        example:
+            {
+                "expected_participants": [{"email": "borisovdenis-kb@yandex.ru"}]
+            }
+    """
+    if request.user.is_authenticated():
+        user = CustomUser.objects.get(username=request.user.username)
+        response = HttpResponse(status=200)
+        response['Content-Type'] = 'application/json'
+        data = request.GET
+
+        try:
+            plan_id = int(data['plan_id'])
+            UserPlans.objects.get(plan_id=plan_id, user_id=user.id)
+        except ValueError:
+            return HttpResponse(status=400)
+        except ObjectDoesNotExist:
+            return HttpResponse(status=403)
+
+        expected_participants = list(Invitations.objects.filter(plan_id=plan_id).values('email'))
+
+        response.write(json.dumps({'expected_participants': expected_participants}))
+
+        return response
