@@ -51,37 +51,37 @@ def do_mailing(data):
     except TypeError:
         raise TypeError('Send JSON string')
 
-    message_text = ''
-    unknown = '- ? -' + '\n'
-
-    if data['plan_info']['title']:
-        message_text += 'Расписание: ' + data['plan_info']['title'] + '\n'
-    else:
-        message_text += 'Расписание: ' + unknown
-
-    if data['plan_info']['mem_count']:
-        message_text += 'Количество участников: ' + data['plan_info']['mem_count'] + '\n'
-    else:
-        message_text += 'Количество участников: ' + unknown
-
-    if data['sender_name']:
-        message_text += 'Староста: ' + data['sender_name'] + '\n'
-    else:
-        message_text += 'Староста: ' + unknown
-
-    if data['text']:
-        message_text += '\n' + '"' + data['text'] + '"' + '\n'
-    else:
-        message_text += '\n' + '[Пустое сообщение]' + '\n'
+    # message_text = ''
+    # unknown = '- ? -' + '\n'
+    #
+    # if data['plan_info']['title']:
+    #     message_text += 'Расписание: ' + data['plan_info']['title'] + '\n'
+    # else:
+    #     message_text += 'Расписание: ' + unknown
+    #
+    # if data['plan_info']['mem_count']:
+    #     message_text += 'Количество участников: ' + data['plan_info']['mem_count'] + '\n'
+    # else:
+    #     message_text += 'Количество участников: ' + unknown
+    #
+    # if data['sender_name']:
+    #     message_text += 'Староста: ' + data['sender_name'] + '\n'
+    # else:
+    #     message_text += 'Староста: ' + unknown
+    #
+    # if data['text']:
+    #     message_text += '\n' + '"' + data['text'] + '"' + '\n'
+    # else:
+    #     message_text += '\n' + '[Пустое сообщение]' + '\n'
 
     # делаем рассылку по списку контактов
-    if data['recipients_telegram']:
-        for recp in data['recipients_telegram']:
-            bot.send_message(recp['chat_id'], message_text)
+    text = data['message']['text']
 
-            if data['image']:
-                with open(data['image'], 'rb') as f:
-                    bot.send_photo(recp['chat_id'], f)
+    for chat_id in data['recipient_list']:
+        bot.send_message(chat_id, text)
+        if data['message']['image']:
+            with open(data['message']['image'], 'rb') as f:
+                bot.send_photo(chat_id, f)
 
 
 if __name__ == '__main__':

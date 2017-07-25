@@ -157,7 +157,8 @@ class IntodayerMailing:
             fail_silently=False
         )
 
-    def do_telegram_mailing(self, mail_param):
+    @staticmethod
+    def do_telegram_mailing(mail_param):
         do_mailing(mail_param)
 
     def send(self):

@@ -22,8 +22,8 @@ function removePlan() {
         url: '/delete_plan',
         method: 'POST',
         data: {plan_id: plan_id},
-        dataType: 'json',
-        success: function (response) {
+        dataType: 'text',
+        success: function () {
             location.href = "/plan";
         }
     });
@@ -35,7 +35,7 @@ function activeSettings() {
 
     // Вставка верхнего информативного табло
     $('.setting_info_block').append($('<div class="setting_msg alert-success">Setting your select plan</div>'));
-    $('.setting_msg').slideDown(250);
+    $('.setting_msg').delay(200).slideDown(250);
 
     // Вставка всей панели настроек
     $('.right_content_only').load('/plan/settings_plan', {}, function () {
