@@ -3,11 +3,12 @@
 
 {% block styles %}
     <link rel="stylesheet" type="text/css" href={% static "css/account.css" %}>
-
+    <link rel="stylesheet" type="text/css" href={% static "css/components/intodayer_modal.css" %}>
 {% endblock %}
 
 {% block scripts_bottom %}
     <script type="text/javascript" src={% static "scripts/script_account.js" %}></script>
+    <script type="text/javascript" src={% static "scripts/components/script_intodayer_modal.js" %}></script>
 {% endblock %}
 
 
@@ -45,7 +46,7 @@
                 <div class="pr_share_block  col-lg-3 col-lg-offset-1 col-md-offset-1  col-md-3 col-sm-4 col-xs-5">
                     <label>Мгновенная рассылка</label><br>
 
-                    <input id="pr_send_telegram" type="checkbox" value="active">
+                    <input id="pr_send_telegram" type="checkbox" checked="checked">
                     <label class="share"
                            for="pr_send_telegram">Telegram
 
@@ -61,10 +62,11 @@
 
                 <div class="pr_pass_block  col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Пароль профиля</label><br>
-                    <button class="pr_pass_btn btn btn-default btn-lg col-lg-10 col-md-10 col-sm-12 col-xs-6">
-                        Изменить
-                        пароль
-                    </button>
+                    <div class="change_pass_btn">
+                        <button class="pr_pass_btn btn btn-default btn-lg col-lg-10 col-md-10 col-sm-12 col-xs-6">
+                            Изменить пароль
+                        </button>
+                    </div>
                 </div>
 
                 <div class="visible-xs col-xs-12" style="padding-top: 5px; padding-bottom: 5px"></div>
@@ -172,4 +174,8 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block others %}
+    {% include "modal_frames/intodayer_modal.html" %}
 {% endblock %}

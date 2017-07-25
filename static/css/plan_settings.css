@@ -306,11 +306,6 @@ h4 {
   border-radius: 4px;
   -ms-border-radius: 4px; }
 
-.split-line {
-  border-top: 1px solid #d2d2d2;
-  margin-top: 10px;
-  margin-bottom: 10px; }
-
 .return_button.btn {
   width: 100px;
   height: 30px;
@@ -360,13 +355,5 @@ h4 {
 
   .plan_settings_content-4 {
     width: 100%; } }
-.settings_btns_content.row {
-  margin-top: 8px; }
-
-.btn-back.btn, .btn-okay.btn {
-  margin: 0 1px 0 1px;
-  width: 200px; }
-  .btn-back.btn:active, .btn-back.btn:focus, .btn-back.btn:link, .btn-okay.btn:active, .btn-okay.btn:focus, .btn-okay.btn:link {
-    outline: none; }
 
 /*# sourceMappingURL=plan_settings.css.map */

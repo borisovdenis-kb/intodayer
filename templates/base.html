@@ -34,8 +34,11 @@
     <link rel="stylesheet" type="text/css" href={% static "css/header.css" %}>
     <link rel="stylesheet" type="text/css" href={% static "css/font_optimizate_new.css" %}>
 
-    {#    Импорт стилей компонентов#}
+    {#    Импорт стилей для компонентов#}
+    <link rel="stylesheet" type="text/css" href={% static "css/components/elements.css" %}>
     <link rel="stylesheet" type="text/css" href={% static "css/components/success_frame.css" %}>
+    <link rel="stylesheet" type="text/css" href={% static "css/components/ok_cancel_buttons.css" %}>
+
 
     <!--Добавление в наследующие шаблоны новых стилей-->
     {% block styles %}
@@ -96,13 +99,7 @@
 {% endblock %}
 
 
-<div class="success_frame">
-    <div class="success_circle_outer">
-        <div class="success_circle_inner">
-            <span class="success_check glyphicon glyphicon-ok" aria-hidden="true"></span>
-        </div>
-    </div>
-</div>
+{% include 'modal_frames/success_frame.html' %}
 
 
 {% block others %}

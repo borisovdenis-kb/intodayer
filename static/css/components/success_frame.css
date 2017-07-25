@@ -4,7 +4,7 @@
   position: fixed;
   top: calc(45% - 250px / 2);
   left: calc(50% - 250px / 2);
-  background: rgba(240, 240, 240, 0.95);
+  background: rgba(245, 245, 245, 0.95);
   z-index: 10;
   -moz-border-radius: 50px;
   -webkit-border-radius: 50px;
@@ -19,8 +19,8 @@
   -khtml-box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.45);
   display: none;
   opacity: 0;
-  filter: blur(20px);
-  transition: filter, opacity, border-radius 2.5s; }
+  transform: scale(1.1, 1.1);
+  transition: filter, opacity 0.3s ease, border-radius 0.1s ease, background 0.3s ease, transform 1.5s ease; }
 
 .success_circle_outer, .success_circle_inner {
   display: flex;
@@ -37,12 +37,12 @@
 .success_circle_outer {
   width: 200px;
   height: 200px;
-  background: rgba(220, 220, 220, 0.95); }
+  background: rgba(225, 225, 225, 0.95); }
 
 .success_circle_inner {
   width: 160px;
   height: 160px;
-  background: rgba(240, 240, 240, 0.95); }
+  background: rgba(245, 245, 245, 0.95); }
 
 .success_check {
   font-size: 5em; }

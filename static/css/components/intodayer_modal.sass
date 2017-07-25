@@ -1,0 +1,56 @@
+@import "../mixins"
+
+.in_modal_fade
+  position: fixed
+  width: 100%
+  height: 100%
+  background: rgba(0,0,0,0.4)
+  z-index: 100
+  top: 0
+  opacity: 0
+  transition: 0.3s opacity ease
+
+$modal-width: 400px
+$modal-height: 120px
+
+.in_modal_body
+  position: fixed
+  width: $modal-width
+  height: $modal-height
+  background: white
+  top: calc(50% - #{$modal-height}/2 - 10%)
+  left: calc(50% - #{$modal-width}/2)
+  transform: scale(0.9, 0.9)
+  opacity: 0
+  transition: 0.4s transform ease, 0.1s opacity ease
+  z-index: 201
+
+  @include border-radius(4px)
+
+@media (max-height: 400px)
+  .in_modal_body
+    transition: 0.3s top ease
+    top: calc(50% - #{$modal-height}/2)
+
+.in_modal_title
+  text-align: center
+  margin-top: 10px
+
+.in_modal_content
+
+  @include set-flex(center)
+  background: white
+  //height: 100%
+
+input
+  &[id=old_pass], &[id=okay].btn
+    height: 40px
+    border: none
+    text-align: center
+    &:active, &:focus
+      outline: none
+
+  &[id=old_pass]
+    margin-right: 10px
+  &[id=okay]
+    width: 70px

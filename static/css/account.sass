@@ -33,32 +33,46 @@
     @include user-select(none)
 
 
-
-
 .pr_top_content
   display: flex
   width: 100%
-  input
-    border: 2px solid rgba(217, 217, 227, 1)
-    text-align: center
-    font-family: "PT Sans" !important
+
+
+%top_input_style
+  border: 2px solid rgba(217, 217, 227, 1)
+  text-align: center
+  font-family: "PT Sans" !important
+  @include border-radius(4px)
+  transition: 0.4s border ease
+  &:focus
+    border: 2px solid rgba(139, 29, 235, 0.4)
+    outline: none
+
+input
+  &#pr_username
+    @extend %top_input_style
     font-size: 2em
-    @include border-radius(4px)
-    transition: 0.4s all ease
     margin:
-      top: 8px
+      top: 4px
       bottom: 8px
-    &:focus
-      border: 2px solid rgba(139, 29, 235, 0.4)
-      outline: none
+  &#pr_login
+    @extend %top_input_style
+    margin:
+      top: 4px
+      bottom: 0px
+    font-size: 1em
+
 
 .pr_title_content
   //width: calc(#{$profile-left-content} + 50px)
   width: 100%
+  //height: 130px
   text-align: center
   @extend %block_style
   @include set-flex(center)
   flex-direction: column
+  span
+    font-size: 1em
 
 .pr_ava_content
   margin-left: 5px
@@ -67,8 +81,8 @@
 
 
 .pr_ava_img
-  min-width: 130px
-  min-height: 130px
+  width: 130px
+  height: 130px
   @include border-radius(4px)
   background-size: contain
   background-repeat: no-repeat
@@ -91,45 +105,100 @@
     bottom: 10px
   @extend %block_style
 
+
+$text-height-size: 20px
+$ava-size: 120px
+
 .pr_plans_content
   margin: 3px
   display: inline-block
   transition: 0.2s opacity ease
+  overflow: hidden
 
   img
     @include user-select(none)
     cursor: pointer
-    width: 100px
-    height: 100px
+    width: $ava-size
+    height: $ava-size
     z-index: 1
-  &:hover .pr_img_title
-    @include opacity(0.8)
+
+  @include opacity(0.8)
+
   &:hover
-    @include opacity(0.8)
+    @include opacity(1)
+
 
 
 .pr_img_title
   font-family: "PT Sans"
-  position: relative
-  width: 100px
-  height: 20px
-  background: white
+  position: absolute
+  width: $ava-size
+  height: $text-height-size
+  background: rgba(235,235,235,1)
   color: black
-  margin-bottom: -20px
+  //top: $img-size/2 - $height-size/2px
+  top: 4px
+  left: ($ava-size - $ava-size)/2
   z-index: 10
   text-align: center
   cursor: default
   transition: 0.5s opacity ease
-  @include user-select(none)
-  @include border-radius(4px)
-  @include opacity(0.3)
 
+  @include set-ellipsis()
+  @include user-select(none)
+  @include border-radius(0px 0px 4px 4px)
+  @include opacity(1)
+
+.pr_color_type
+  position: absolute
+  height: 4px
+  width: $ava-size
+  content: ""
+  z-index: 9
+  @include border-radius(4px 4px 0px 0px)
+
+.color_elder
+  background-color: #d9534f
+.color_admin
+  background-color: #aa66cc
+.color_invited
+  background-color: #4285F4
+.color_participant
+  background-color: #2BBBAD
 
 .pr_plans_grid
-  flex: 1 1
   display: flex
   flex-wrap: wrap
 
 .btn.pr_pass_btn
   &:active, &:focus, &:link, &:hover
     outline: none
+
+.pr_content_title
+  display: inline-flex
+  justify-content: flex-start
+  span
+    margin:
+      left: 10px
+      right: 20px
+  ul
+    display: inline-flex
+    flex-direction: row
+    li
+      margin:
+        left: 1px
+        right: 1px
+      button.btn
+        &:active, &:focus, &:link, &:hover
+          outline: none
+          transition: 0.5s background-color ease
+
+        &:focus
+          border: 1px solid rgba(255,255,255,0)
+          background-color: #d9534f
+
+        &:active
+          border: 1px solid #ccc
+          background-color: #e6e6e6
+
+

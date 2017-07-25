@@ -1,59 +1,58 @@
-{% block right_content %}
-    {#    этот div класс нужен для стилизации#}
-    <div class="plan_settings_layouts">
-        <div class="plan_settings_content-1">
-            {#    <div class="button_style"></div>#}
+{#    этот div класс нужен для стилизации#}
+<div class="plan_settings_layouts">
+    <div class="plan_settings_content-1">
+        {#    <div class="button_style"></div>#}
 
-            <div class="st-inner-content">
-                <h4>Current plan info</h4>
-                <div class="split-line"></div>
+        <div class="st-inner-content">
+            <h4>Current plan info</h4>
 
-                <div class="datepicker_content">
+            <div class="split-line"></div>
 
-                    <label>Date of start plan</label>
+            <div class="datepicker_content">
 
-                    <div class='input-group date' id='datetimepicker'>
-                        <input id="start_date" type='text' class="form-control"
-                               value="{{ cur_plan.plan.start_date | date:"j m Y " }}"/>
-                        <span class="input-group-addon">
+                <label>Date of start plan</label>
+
+                <div class='input-group date' id='datetimepicker'>
+                    <input id="start_date" type='text' class="form-control"
+                           value="{{ cur_plan.plan.start_date | date:"j m Y " }}"/>
+                    <span class="input-group-addon">
                         <span class="glyphicon glyphicon-calendar"></span>
                     </span>
-                    </div>
                 </div>
-
-                <div class="split-line"></div>
-                <div>
-                    <label>You can remove this plan</label>
-                </div>
-                <div id="remove_plan" class="btn btn-danger btn-sm">Remove plan</div>
-
             </div>
-        </div>
-        <div class="plan_settings_content-2">
-            <div class="st-inner-content">
-                <h4>Current plan info</h4>
-                <div class="split-line"></div>
-                <ul class="plan_info_content">
-                    <li>
-                        <label>Title</label>
-                        <div class="plan_info">{{ cur_plan.plan.title }}</div>
-                    </li>
-                    <li>
-                        <label>Start date work</label>
-                        <div class="plan_info"> {{ cur_plan.plan.start_date | date:"j (l) F Y " }} </div>
-                    </li>
-                </ul>
 
+            <div class="split-line"></div>
 
+            <div>
+                <label>You can remove this plan</label>
             </div>
+            <div id="remove_plan" class="btn btn-danger btn-sm">Remove plan</div>
+
         </div>
     </div>
-    <div class="row settings_btns_content text-center">
-        <button class="btn-back btn btn-lg btn-primary">Назад</button>
-        <button class="btn-okay btn btn-lg btn-success">Сохранить</button>
+    <div class="plan_settings_content-2">
+        <div class="st-inner-content">
+            <h4>Current plan info</h4>
+            <div class="split-line"></div>
+            <ul class="plan_info_content">
+                <li>
+                    <label>Title</label>
+                    <div class="plan_info">{{ cur_plan.plan.title }}</div>
+                </li>
+                <li>
+                    <label>Start date work</label>
+                    <div class="plan_info"> {{ cur_plan.plan.start_date | date:"j (l) F Y " }} </div>
+                </li>
+            </ul>
+
+
+        </div>
     </div>
+</div>
+<div class="row settings_btns_content text-center">
+    <button class="btn-back btn btn-lg btn-primary">Назад</button>
+    <button class="btn-okay btn btn-lg btn-success">Сохранить</button>
+</div>
 
-
-{% endblock %}
 
 {% include "modal_frames/modal_ok_cancel.html" %}

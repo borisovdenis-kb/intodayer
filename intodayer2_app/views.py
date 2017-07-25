@@ -408,7 +408,7 @@ def get_avatar_ajax(request):
 
 def profile_page(request):
     if request.user.is_authenticated():
-        return render_to_response('my_profile.html', {})
+        return render_to_response('account.html', {})
 
 def statistics_view(request):
     if request.user.is_authenticated():

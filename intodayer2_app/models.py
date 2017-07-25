@@ -223,6 +223,7 @@ class UserPlans(models.Model):
     current_yn = models.CharField(max_length=1, blank=False)
     role = models.CharField(max_length=12, blank=False)
 
+
     class Meta:
         managed = True
         db_table = 'user_plans'

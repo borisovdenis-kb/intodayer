@@ -1,6 +1,6 @@
 $size_frame: 250px
 $opacity-frame: 0.95
-$color_frame: rgba(240, 240, 240, $opacity-frame)
+$color_frame: rgba(245, 245, 245, $opacity-frame)
 $shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.45)
 $circle-width: 90px
 $border-radius: 50px
@@ -21,8 +21,9 @@ $border-radius: 50px
   @include box-shadow($shadow)
   display: none
   opacity: 0
-  filter: blur(20px)
-  transition: filter, opacity, border-radius 2.5s
+  transform: scale(1.1,1.1)
+  //filter: blur(20px)
+  transition: filter, opacity 0.3s ease, border-radius 0.1s ease, background 0.3s ease, transform 1.5s ease
 
 %circle
   @include set-flex(center)
