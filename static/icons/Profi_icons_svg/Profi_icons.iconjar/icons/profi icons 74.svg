@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="512px" height="512px" viewBox="0 0 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 3.7.2 (28276) - http://www.bohemiancoding.com/sketch -->
+    <title>Profi_icons_74</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <circle id="path-1" cx="256" cy="256" r="222"></circle>
+        <mask id="mask-2" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="444" height="444" fill="white">
+            <use xlink:href="#path-1"></use>
+        </mask>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Profi_icons_74" stroke="#4A4A4A">
+            <use id="Oval-46" mask="url(#mask-2)" stroke-width="32" xlink:href="#path-1"></use>
+            <path d="M256,308.8 C222.862915,308.8 196,275.489985 196,234.4 C196.445312,230.738281 177.779297,212.722656 182.982422,173.443359 C188.185547,134.164063 216.59375,146.386719 216.59375,146.386719 C216.59375,146.386719 241.076167,114.517578 289.316406,131.943359 C337.556645,149.369141 326.722652,181.572265 323.871094,185.535156 C321.019536,189.498048 330.351562,213.862892 315.999996,234.400003 C316,275.489985 289.137085,308.8 256,308.8 Z" id="Oval-22" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M199.314611,316.137257 C159.64295,332.54631 128.364489,365.29533 113.845214,406.025569 M402.212269,412.218997 C388.740168,368.59403 356.280701,333.303448 314.48662,316" id="Oval-22-Copy" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"></path>
+        </g>
+    </g>
+</svg>

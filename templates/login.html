@@ -1,94 +1,75 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 
-
 {% block scripts_top %}
     <link rel="stylesheet" type="text/css" href={% static "css/welcome_base.css" %}>
+    <link rel="stylesheet" type="text/css" href={% static "css/header.css" %}>
     <link rel="stylesheet" type="text/css" href={% static "css/login_reg.css" %}>
+{% endblock %}
+
+{% block header %}
+    {% include 'templates_for_ajax/header_welcome.html' %}
 {% endblock %}
 
 
 {% block content_page %}
-    <div class="container-fluid text-center">
-        <div class="row vertical-center-row">
-             <div class="col-xs-12" style="height: 10px;"></div>
-            <div class="panel_auth col-xs-11 col-lg-7 col-md-8 col-sm-8 center-block" style="opacity:0;">
+     <div class="welcome_background">
+        <div class="welcome_background_fade">
+        </div>
+    </div>
+    <div class="auth_page container-fluid">
+
+        <div class="panel_auth col-xs-11 col-lg-7 col-md-8 col-sm-8" style="opacity:0;">
+
+            <div class="row">
+                <h2 class="hidden-xs">Sign In to Intodayer</h2>
+                <h3 class="visible-xs">Sign In to Intodayer</h3>
+            </div>
+
+            <form action="" method="post">
                 <div class="row">
-                    <div class="col-xs-12">
-                        <h2 class="hidden-xs">Sign In to Intodayer</h2>
-                        <h3 class="visible-xs">Sign In to Intodayer</h3>
-                        <div style="height: 20px;" class="visible-xs"></div>
-                        <div style="height: 30px;" class="hidden-xs"></div>
-                    </div>
-                    {#                                        тут настраивается ширина полей и кнопок#}
-                    <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2 col-lg-8 col-lg-offset-2 form-content">
-                        <form action="" method="post">
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <input type="text" name='username' class="form-control input-lg"
-                                               id="inputUsername"
-                                               placeholder="Enter username">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <input type="password" name='password' class="form-control input-lg"
-                                               id="inputPassword"
-                                               placeholder="Password">
-                                    </div>
-                                </div>
-                                <div style="height: 20px;"></div>
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-lg-6 col-xs-6" style="padding-right:3px">
-                                            <input type="button" id="buttonBack"
-                                                   class="form-control btn input-lg btn-default"
-                                                   value="Назад">
-                                        </div>
-                                        <div class="col-lg-6 col-xs-6" style="padding-left:3px">
-                                            <input type="submit" id="buttonEnter"
-                                                   class="form-control btn input-lg  btn-success"
-                                                   value="Войти">
-                                        </div>
-                                    </div>
-                                    <div style="height: 10px;"></div>
-                                    <div class="row">
-                                        <div class="col-xs-12">
-                                            <input type="button" id="buttonHelp"
-                                                   class="form-control btn input-lg  btn-link"
-                                                   value="Не можете войти?">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
+                    <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-10 col-xs-offset-1">
+                        <input type="text" name='username' class="form-control input-lg"
+                               id="inputUsername"
+                               placeholder="Enter username">
                     </div>
                 </div>
-
-            </div>
-            <div class="col-xs-12 fill-space-bottom hidden-xs"></div>
-            <div class="col-xs-12" style="height: 20px;"></div>
-            <blockquote class="bottom_text" style="opacity: 0">
-                <p>Это, несомненно, лучший сервис электронных расписаний в России </p>
-                <footer>Разработчик сервисов Вконтакте и Телеграм <cite title="Source Title">Павел Дуров</cite>
-                </footer>
-            </blockquote>
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-10 col-xs-offset-1">
+                        <input type="password" name='password' class="form-control input-lg"
+                               id="inputPassword"
+                               placeholder="Password">
+                        <div class="btn_auth_content">
+                            <input type="button" id="buttonBack"
+                                   class="btn input-lg btn-default"
+                                   value="Назад">
+                            <input type="submit" id="buttonEnter"
+                                   class="btn input-lg  btn-success"
+                                   value="Войти">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <input type="button" id="buttonHelp"
+                           class="form-control btn input-lg  btn-link"
+                           value="Не можете войти?">
+                </div>
+            </form>
         </div>
-
-
     </div>
-
 
 
 {% endblock %}
 
+{% block other_content %}
+    <div class="row fill-space-bottom">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="height: 100px"></div>
+    </div>
+{% endblock %}
 
 {% block scripts_bottom %}
     <script type="text/javascript" src={% static "scripts/script_login.js" %}></script>
-    <script type="text/javascript" src={% static "scripts/script_welcome.js" %}></script>
+{#    <script type="text/javascript" src={% static "scripts/script_welcome.js" %}></script>#}
 {% endblock %}
 
 

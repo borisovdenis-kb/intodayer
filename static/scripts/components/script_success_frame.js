@@ -5,7 +5,6 @@ $(document).ready(function () {
 
 });
 
-var success_frame_background_color = $('.success_frame').css('background-color');
 var success_html = $('.success_modal_body').html();
 function success_frame_animate() {
     $('.success_modal_body').html(success_html);

@@ -5,6 +5,9 @@ $(document).ready(function () {
 var $droplist = $('.droplist');
 var FLAG_DROPLIST = false;
 
+$droplist.unbind();
+$droplist.clearQueue();
+// $droplist.remove();
 $droplist.on('click', function (e) {
     click_on_droplist($(this), e);
 });
@@ -75,6 +78,7 @@ function click_on_droplist(this_elem, event) {
 
 
     // var offset_out = this_elem.offset().left + this_elem.outerWidth();
+     $('.droplist_click_container').clearQueue();
     $('.droplist_click_container').animate({
         top: 30,
         left: -30,
@@ -126,7 +130,7 @@ function setCurrentMenu() {
             "color": "#1E90FF",
         })
     }
-    if (this_url.match('/group/')) {
+    if (this_url.match('/participants/')) {
         $('.group_bt a').css({
             "color": "#1E90FF",
         })

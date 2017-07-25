@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="512px" height="512px" viewBox="0 0 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 3.7.2 (28276) - http://www.bohemiancoding.com/sketch -->
+    <title>Profi_icons_50</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Profi_icons_50" stroke="#4A4A4A" stroke-width="16">
+            <rect id="Rectangle-22" x="145" y="211" width="76" height="90" rx="20"></rect>
+            <path d="M245,208.654338 C245,204.514594 247.728287,199.217555 251.113054,196.809371 L320.886946,147.16686 C324.263092,144.764809 327,146.170938 327,150.316812 L327,361.6818 C327,365.823521 324.271713,367.239936 320.886946,364.831752 L251.113054,315.189241 C247.736908,312.787191 245,307.482464 245,303.344274 L245,208.654338 Z" id="Rectangle-23"></path>
+            <path d="M372,282.740115 L425.740115,229" id="Path-150"></path>
+            <path d="M372,282.740115 L425.740115,229" id="Path-150-Copy" transform="translate(398.870058, 255.870058) scale(-1, 1) translate(-398.870058, -255.870058) "></path>
+        </g>
+    </g>
+</svg>

@@ -1,5 +1,5 @@
 $(window).ready(function () {
-    showWelcome();
+    // showWelcome();
     startAllFunctions();
     setTimeout(function () {
         startAllFunctions();
@@ -17,26 +17,26 @@ function setInvisible() {
     // $('#sign_in').css('opacity', '0');
 }
 
-function showWelcome() {
-    $('.bottom_text').delay(100).fadeTo(main_time * 2, 1);
-    $('.welcome_text').delay(100).fadeTo(main_time * 1.5, 1, function () {
-        $('.buttons_row').fadeTo(main_time * 2, 1).queue(function () {
-            $('.about_service_text').fadeTo(main_time * 3, 1).queue(function () {
-                // на этом этапе анимации ставим обработчики на кнопки
-
-                $('#sign_up').on('click', function () {
-                    sing_up_Action();
-                    return false;
-                });
-
-                $('#sign_in').on('click', function () {
-                    sing_in_Action();
-                    return false;
-                });
-            });
-        });
-    });
-}
+// function showWelcome() {
+//     $('.bottom_text').delay(100).fadeTo(main_time * 2, 1);
+//     $('.welcome_text').delay(100).fadeTo(main_time * 1.5, 1, function () {
+//         $('.buttons_row').fadeTo(main_time * 2, 1).queue(function () {
+//             $('.about_service_text').fadeTo(main_time * 3, 1).queue(function () {
+//                 // на этом этапе анимации ставим обработчики на кнопки
+//
+//                 $('#sign_up').on('click', function () {
+//                     sing_up_Action();
+//                     return false;
+//                 });
+//
+//                 $('#sign_in').on('click', function () {
+//                     sing_in_Action();
+//                     return false;
+//                 });
+//             });
+//         });
+//     });
+// }
 
 var main_time = 150;
 // // анимация скрытия конента
@@ -107,17 +107,7 @@ $(window).on('resize', function () {
 function startAllFunctions() {
     setContentToCenter();
 }
-
-
-// когда высота страницы становится маленькой, выравнивает весь контент
-// в точности по центру (а обычно контент чуть выше центра)
-var trueHeightBlock = $('.fill-space-bottom');
-function setContentToCenter() {
-    if ($(window).height() < 800) {
-        trueHeightBlock.css('display', 'none');
-    }
-    else {
-        trueHeightBlock.css('display', 'block');
-    }
-}
-
+//
+//
+// // когда высота страницы становится маленькой, выравнивает весь контент
+// // в точности по центру (а обычно контент чуть выше центра)

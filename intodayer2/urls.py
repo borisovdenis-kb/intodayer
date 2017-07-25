@@ -36,12 +36,14 @@ urlpatterns = [
     url(r'^statistics/$', views.statistics_view),
     url(r'^registration/$', views.registration_view),
     url(r'^account/$', views.profile_page),
+    url(r'^participants/$', views.participant_page),
 
     # для ajax запросов
     url(r'^get_avatar', views.get_avatar_ajax),
     url(r'^get_invitations', views.get_invitations_ajax),
     url(r'^home/switch_plan', views.switch_plan_home_ajax),
     url(r'^plan/switch_plan', views.switch_plan_plan_ajax),
+    url(r'^participants/switch_plan', views.switch_plan_participants_ajax),
     url(r'^plan/edit_plan_row', views.edit_plan_row_ajax),
     url(r'^plan/update_delete', views.plan_delete_ajax),
     url(r'^confirm_invitation', views.confirm_invitation_ajax),

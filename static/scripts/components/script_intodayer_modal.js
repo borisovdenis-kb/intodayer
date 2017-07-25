@@ -80,10 +80,11 @@ function hideModalWindow(scale_size, opacity_size) {
 }
 
 
-function hideModalFade() {
+function hideModalFade(confirm_yes) {
     $(".in_modal_fade").clearQueue();
 
-    if ($(".in_modal_fade").attr('modal_type') != 'confirm_pass') {
+    // если не прошли 3 стадии изменеия пароля (оставили поле ввода пустым)
+    if (!confirm_yes) {
         setDefaultPassValues();
     }
 
@@ -121,6 +122,8 @@ function okayAction() {
 }
 
 // Вид модального окна в 3 стадиях ввода пароля
+
+// после подтверждения старого пароля
 function complete_old_pass() {
     hideModalWindow(1.5, 0.5);
     $('.in_modal_fade').attr('modal_type', 'new_pass');
@@ -142,6 +145,8 @@ function complete_old_pass() {
         $(this).dequeue();
     });
 }
+
+// после подтверждения нового пароля
 function complete_new_pass() {
     hideModalWindow(1.5, 0.5);
     $('.in_modal_fade').attr('modal_type', 'confirm_pass');
@@ -161,6 +166,8 @@ function complete_new_pass() {
         $(this).dequeue();
     });
 }
+
+// после подтверждения повтора нового пароля
 function complete_submit_pass() {
     // alert("Вы ввели: "  + old_pass + " " + new_pass + " " + re_new_pass);
     $('.pr_pass_btn').text("Сохраните изменения");
@@ -168,7 +175,7 @@ function complete_submit_pass() {
     $('.pr_pass_btn').addClass('disabled');
     $('.pr_pass_btn').addClass('btn-danger');
     hideModalWindow();
-    hideModalFade();
+    hideModalFade(true);
 }
 
 function setDefaultPassValues() {

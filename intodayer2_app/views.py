@@ -236,6 +236,26 @@ def switch_plan_plan_ajax(request):
         return render_to_response('content_pages/right_content_plan_general.html', context)
 
 
+def switch_plan_participants_ajax(request):
+
+    if request.is_ajax:
+        user = CustomUser.objects.get(username=request.user.username)
+        context = {}
+
+        try:
+            plan_id = int(request.POST['plan_id'])
+            context.update(get_cur_plan(request, plan_id))
+        except ValueError:
+            return render_to_response('templates_for_ajax/content_errors.html')
+        except IndexError:
+            return render_to_response('templates_for_ajax/content_errors.html')
+
+        # устанавливаем current_yn
+        user.set_current_plan(plan_id)
+
+        return render_to_response('content_pages/right_content_participants.html', context)
+
+
 def right_plan_content_only(request):
     """
         Загружает правый контент (без учёта Title блока), только контент расписания
@@ -406,10 +426,6 @@ def get_avatar_ajax(request):
 #     return render_to_response('plan_empty.html', context)
 
 
-def profile_page(request):
-    if request.user.is_authenticated():
-        return render_to_response('account.html', {})
-
 def statistics_view(request):
     if request.user.is_authenticated():
         user = CustomUser.objects.get(username=request.user.username)
@@ -482,7 +498,6 @@ def login_view(request):
 
 def logout_view(request):
     auth.logout(request)
-
 
 
 def profile_settings(request):
@@ -647,6 +662,7 @@ def logout_view(request):
     auth.logout(request)
     return HttpResponseRedirect("/")
 
+
 def home_view(request):
     """
         Функция отображения главной страницы сайта
@@ -695,6 +711,42 @@ def plan_view(request):
 
     else:
         return HttpResponseRedirect("/login", {})
+
+
+
+def get_participants(plan, user):
+    """
+        Возвращает всех участников расписания
+        такие как: имена дней недели, дата начала работы расписания
+    """
+    context = dict()
+    # participants = CustomUser.filter(id=plan.owner)
+
+    return context
+
+
+
+def participant_page(request):
+    if request.user.is_authenticated():
+        context = dict()
+        context.update(get_this_user(request))
+        context.update(get_all_plans(request))
+        context.update(get_cur_plan(request))
+
+        if context['cur_plan'] == 0:
+            return render_to_response('plan_empty.html', context)
+
+        context.update(get_participants(context['cur_plan'], context['user']))
+
+        return render_to_response('participants.html', context)
+
+
+def profile_page(request):
+    context = dict()
+    context.update(get_this_user(request))
+
+    if request.user.is_authenticated():
+        return render_to_response('account.html', context)
 
 
 def sort_by_start_date(row):

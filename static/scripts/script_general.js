@@ -137,7 +137,7 @@ function switchPlan($this_plan) {
     });
 
     $('.plan_load_progres_indicator').css('display', 'flex');
-
+    // alert('/' + address + '/switch_plan');
     $('.right_content').load('/' + address + '/switch_plan', data, function () {
         $('.plan_load_progres_indicator').css('display', 'none');
         // навешиваем обработчики

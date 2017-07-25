@@ -1,0 +1,30 @@
+.part_block {
+  border: 1px solid #e6e6e6;
+  padding: 10px;
+  background: white;
+  margin-top: 5px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  -khtml-border-radius: 4px;
+  border-radius: 4px;
+  -ms-border-radius: 4px;
+  display: flex;
+  align-content: center;
+  align-items: center; }
+
+.part_ava img {
+  width: 60px;
+  height: 60px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  -khtml-border-radius: 4px;
+  border-radius: 4px;
+  -ms-border-radius: 4px; }
+
+.part_username span {
+  font-family: "Fira Sans";
+  font-size: 1.4em;
+  margin-left: 20px;
+  margin-right: 10px; }
+
+/*# sourceMappingURL=participants_content.css.map */

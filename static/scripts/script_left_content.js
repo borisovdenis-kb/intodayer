@@ -5,25 +5,12 @@ $(document).ready(function () {
 
 });
 
-
-// function loadLeftContent() {
-//     /*
-//      Функция загружает левый контент
-//      */
-//     $('.left_content').load('/left_content', {}, function () {
-//         setListenersLeftContent();
-//     });
-//     // при загрузке левого конетнта, правый должен быть именно такого размера
-//     $('.right_content').css({
-//         'width': 'calc(100% - 188px)'
-//     });
-//     avatarEditAccess({plan_id: +$('.ava_content p').text()});
-// }
-
 function setListenersLeftContent() {
+    $('.plan_list li a').unbind();
     $('.plan_list li a').click(function () {
         switchPlan($(this));
     });
+    $('.create_plan li a').unbind();
     $('.create_plan li a').click(function () {
         createPlan($(this).parents('li'));
     });

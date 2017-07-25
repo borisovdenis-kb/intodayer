@@ -48,6 +48,7 @@ function beforeSendToServer() {
         "email": $('#pr_email').val(),
         "send_telegram": $('#pr_send_telegram').prop('checked'),
         "send_email": $('#pr_send_email').prop('checked'),
+        "passStatus": false
     };
     if (old_pass != "") {
         if (new_pass == re_new_pass) {
@@ -59,11 +60,9 @@ function beforeSendToServer() {
         else {
             data.passStatus = 'do not match';
             alert("Ведённые пароли не совпадают");
+            setChangePassButtonDefault();
             setDefaultPassValues();
         }
-    }
-    else {
-        data.passStatus = false;
     }
 
     // если значения хотя бы одного поля отличаются (значит отправляем для обновления на севрер)
@@ -82,6 +81,7 @@ function saveInputs() {
     inputValues.email = $('#pr_email').val();
     inputValues.send_telegram = $('#pr_send_telegram').prop('checked');
     inputValues.send_email = $('#pr_send_email').prop('checked');
+    inputValues.passStatus = false;
 }
 
 // нужно для того, чтобы также отменить индикатор кнопки "изменить пароль - сохраните изменения"
@@ -98,6 +98,10 @@ function setInputsFromDefault() {
     if (inputValues.send_email == 1)
         $('#pr_send_email').prop('checked', true);
     setDefaultPassValues();
+    setChangePassButtonDefault();
+}
+
+function setChangePassButtonDefault() {
     $('.pr_pass_btn').replaceWith(button_change_pass);
     $('.pr_pass_btn').click(function () {
         showModal('old_pass');

@@ -7,57 +7,68 @@
 {% endblock %}
 
 {% block header %}
-    <div class="container-fluid">
-        <div class="row top-block">
-            <div class="col-xs-12 top">
-                <div class="logo"><a href="/home">IntoDayer</a></div>
-            </div>
-        </div>
-    </div>
+    {% include 'templates_for_ajax/header_welcome.html' %}
 {% endblock %}
-
 
 {% block content_page %}
-    <div class="container-fluid text-center">
-        <div class="row vertical-center-row">
-            <div class="col-xs-12 hidden-xs" style="height: 30px;"></div>
-            <div class="col-xs-12 visible-xs" style="height: 10px;"></div>
-            <div class="col-xs-12">
-                <div class="welcome_text" style="opacity: 0">
-                    <h1 class="hidden-lg hidden-md hidden-sm">Welcome to Intodayer</h1>
-                    <h1 class="big-h1 visible-lg visible-md visible-sm">Welcome to Intodayer</h1>
-                    <div style="height: 5px;"></div>
-                    <h2 class="welcome_text">follow your day now</h2>
-                </div>
-            </div>
-
-            <div class="col-xs-12" style="height: 10px;"></div>
-            <div class="col-xs-12 hidden-xs" style="height: 20px;"></div>
-
-            <div class="col-xs-12 buttons_row" style="opacity: 0">
-                <a class="btn btn-success btn-lg" id="sign_up" href="/registration">Sing Up</a>
-                <a class="btn btn-default btn-lg" id="sign_in" href="/login">Sing In</a>
-            </div>
-
-            <div style="height: 10px;"></div>
-            <div style="height: 20px;" class="hidden-xs"></div>
-
-            <div class="col-xs-12 about_service_text" style="opacity: 0">
-                <h4>Создавай таблицы с учебным расписанием на весь день</h4>
-                <h5> Каждый день..</h5>
-            </div>
-
-            <div class="col-xs-12 fill-space-bottom hidden-xs"></div>
-            <blockquote class="bottom_text hidden-xs" style="opacity: 0">
-                <p>Это, несомненно, лучший сервис электронных расписаний в России </p>
-                <footer>Разработчик сервисов Вконтакте и Телеграм <cite title="Source Title">Павел Дуров</cite>
-                </footer>
-            </blockquote>
+    <div class="welcome_background">
+        <div class="welcome_background_fade">
         </div>
     </div>
+    <div class="welcome_page container-fluid text-center">
+
+        <div class="row welcome_top_content">
+            <div class="welcome_info_content col-lg-4 col-md-4 col-sm-4 col-xs-4">
+
+                <img src="../static/icons/Profi_icons_2x/Profi_icons_39@2x.png">
+                <p>Делись со всеми</p>
+
+            </div>
+            <div class="welcome_info_content col-lg-4 col-md-4  col-sm-4 c col-xs-4">
+
+                <img src="../static/icons/Profi_icons_2x/Profi_icons_66@2x.png">
+                <p>Расписание на целый год</p>
+            </div>
+
+            <div class="welcome_info_content col-lg-4 col-md-4  col-sm-4 c col-xs-4">
+
+                <img src="../static/icons/Profi_icons_2x/Profi_icons_71@2x.png">
+                <p>Легко и просто</p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="welcome_main jumbotron">
+                <div class="welcome_main_border">
+                    <h1>Welcome to Intodayer </h1>
+                    <p>Первый в России сервис удобных расписаний</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row welcome_content_bottom">
+
+            <div class="col-xs-12 buttons_row">
+                <a class="btn btn-danger btn-lg" id="sign_up" href="/registration">Регистрация</a>
+                <a class="btn btn-default btn-lg" id="sign_in" href="/login">Войти</a>
+            </div>
+
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 welcome_bottom">
+                <p>Создавай таблицы с учебным расписанием на весь день</p>
+            </div>
+        </div>
+
+    </div>
+
+
 
 {% endblock %}
 
+{% block other_content %}
+    <div class="row fill-space-bottom">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="height: 100px"></div>
+    </div>
+{% endblock %}
 
 {% block scripts_bottom %}
     <script type="text/javascript" src={% static "scripts/script_welcome.js" %}></script>

@@ -10,9 +10,3 @@ $(document).ready(function () {
 $('#buttonBack').click(function () {
     window.location.href = "/";
 });
-
-// временное действие кнопки
-// $('#submit-auth').click(function () {
-//     window.location.href = "home.html";
-//     return false;
-// });

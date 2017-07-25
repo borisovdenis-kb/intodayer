@@ -61,8 +61,8 @@
 
 <div class="center_page">
     <div class="center_table">
-            <div class="content">
-                    {% block content_page %}
+        <div class="content">
+            {% block content_page %}
                 <div class="left_content hidden-xs">
                     {% block left_content %}
                     {% endblock %}
@@ -72,8 +72,11 @@
                     {% block right_content %}
                     {% endblock %}
                 </div>
-                 {% endblock %}
-            </div>
+            {% endblock %}
+        </div>
+
+        {% block other_content %}
+        {% endblock %}
 
     </div>
 </div>
@@ -117,7 +120,6 @@
 
 {% block scripts_bottom %}
 {% endblock %}
-
 
 
 </html>

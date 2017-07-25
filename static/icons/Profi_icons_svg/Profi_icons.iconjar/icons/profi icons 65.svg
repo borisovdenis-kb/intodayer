@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="512px" height="512px" viewBox="0 0 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 3.7.2 (28276) - http://www.bohemiancoding.com/sketch -->
+    <title>Profi_icons_65</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Profi_icons_65" stroke="#4A4A4A" stroke-width="16">
+            <rect id="Rectangle-8" x="121" y="156" width="270" height="200" rx="16"></rect>
+            <polyline id="Path-96" stroke-linecap="round" stroke-linejoin="round" points="158.410156 194.550781 256.540344 292.680969 353.502975 195.718339"></polyline>
+            <path d="M158,258.257847 L219.307282,319.565128 M294.750641,317.767582 C314.198033,298.32019 353.092818,259.425405 353.092818,259.425405" id="Path-96-Copy" stroke-linecap="round" stroke-linejoin="round" transform="translate(255.546409, 288.911488) scale(1, -1) translate(-255.546409, -288.911488) "></path>
+        </g>
+    </g>
+</svg>

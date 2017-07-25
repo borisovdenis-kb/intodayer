@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="512px" height="512px" viewBox="0 0 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 3.7.2 (28276) - http://www.bohemiancoding.com/sketch -->
+    <title>Profi_icons_64</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Profi_icons_64" stroke="#4A4A4A" stroke-width="16">
+            <path d="M241.445312,361 L176.000496,361 C145.624561,361 121,336.375858 121,306.001843 L121,215.998157 C121,185.623513 145.616482,161 176.004696,161 L335.995304,161 C366.373559,161 391,185.624142 391,215.998157 L391,306.001843 C391,336.376487 366.376357,361 335.994758,361 L308.388672,361" id="Rectangle-8" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M168,168.998157 L168,168.998157 C168,138.623513 192.616482,114 223.004696,114 L359.995414,114 C403.076157,114 438,148.923102 438,192.005361 L438,259.001843 C438,289.376487 413.383518,314 382.995304,314" id="Rectangle-8-Copy"></path>
+            <polyline id="Path-100" stroke-linecap="round" stroke-linejoin="round" points="308.113281 361.589844 308.113281 427.849789 241.944606 361.681115"></polyline>
+            <path d="M179,223 L332.78447,223" id="Path-102"></path>
+            <path d="M179,263 L332.78447,263" id="Path-102-Copy"></path>
+            <path d="M179,303 L332.78447,303" id="Path-102-Copy-2"></path>
+        </g>
+    </g>
+</svg>

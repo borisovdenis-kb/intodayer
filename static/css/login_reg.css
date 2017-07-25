@@ -1,7 +1,11 @@
+html, body {
+  height: 100%;
+  margin: 0 auto; }
+
 .panel_reg, .panel_auth {
   display: block;
-  margin-top: 30px;
-  border: 1px solid #c8c8c8;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid #e6e6e6;
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
   -khtml-border-radius: 4px;
@@ -12,8 +16,7 @@
     -webkit-border-radius: 4px;
     -khtml-border-radius: 4px;
     border-radius: 4px;
-    -ms-border-radius: 4px;
-    margin: 0; }
+    -ms-border-radius: 4px; }
     .panel_reg input[type='button'], .panel_auth input[type='button'], .panel_reg input[type='submit'], .panel_auth input[type='submit'], .panel_reg input[type='button']:active, .panel_auth input[type='button']:active, .panel_reg input[type='submit']:active, .panel_auth input[type='submit']:active {
       outline: none;
       -webkit-box-shadow: none;
@@ -26,6 +29,11 @@
 h2 {
   margin-top: 30px; }
 
+.content {
+  background: none;
+  box-shadow: none;
+  border: none; }
+
 .panel_reg {
   max-width: 800px;
   text-align: left; }
@@ -33,26 +41,42 @@ h2 {
 .panel_auth {
   max-width: 600px;
   text-align: center; }
-  .panel_auth .buttons_row a {
-    margin: 0; }
 
-.buttonEnter {
+.panel_reg label, .panel_auth label {
+  margin-top: 15px; }
+.panel_reg input, .panel_auth input {
+  margin-top: 5px; }
+
+#buttonEnter {
   background: #5cb85c;
-  transition: 0.1s all ease; }
-  .buttonEnter:hover {
+  transition: 0.1s all ease;
+  margin-left: 2px; }
+  #buttonEnter:hover {
     background: #56aa56; }
-  .buttonEnter:active {
+  #buttonEnter:active {
     background: #4e9b4e; }
 
 #buttonBack {
   background: white;
   border: 1px solid #c8c8c8;
-  transition: 0.1s all ease; }
+  transition: 0.1s all ease;
+  margin-right: 2px; }
   #buttonBack:hover {
     background: whitesmoke; }
   #buttonBack:active {
     transition: none;
     background: #ebebeb; }
+
+.btn_auth_content {
+  margin-top: 5px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-content: center; }
+
+#buttonBack, #buttonEnter {
+  width: 100%; }
 
 .buttonHelp {
   text-decoration: none;
@@ -65,5 +89,11 @@ h2 {
 
 .pswd_equal_pswd_confirm {
   background-color: #fff5a1; }
+
+.auth_page, .reg_page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-content: center; }
 
 /*# sourceMappingURL=login_reg.css.map */

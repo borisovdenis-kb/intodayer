@@ -244,6 +244,7 @@ class PlanLists(models.Model):
     start_date = models.DateTimeField(blank=True)
     owner = models.ForeignKey('CustomUser', models.DO_NOTHING)
     avatar = models.ImageField(upload_to='plans_avatars/', blank=True, max_length=1000)
+    role = models.CharField(max_length=12, blank=False)
 
     class Meta:
         managed = True
