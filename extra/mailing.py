@@ -69,11 +69,11 @@ class EmailMailing(IntodayerMailing):
 
 if __name__ == '__main__':
     recipient_telegram = ['322530729']
-    recipient_email = ['borisovdenis-kb@yandex.ru']
+    recipient_email = ['maxim.semyanov@mail.ru']
     image = r'C:\Users\Denis\Desktop\Новый принт\02_nwa_color_onfence_rt.jpg'
 
-    X = TelegramMailing(recipient_telegram, text='popa', image=image)
-    X.mass_mailing()
+    # X = TelegramMailing(recipient_telegram, text='popa', image=image)
+    # X.mass_mailing()
 
     Y = EmailMailing(recipient_email, text='popa')
     Y.mass_mailing()

@@ -2,11 +2,11 @@
 # +-------+-----------+------------+----------+-------------+----------+-----------+-----------+----------+
 # |       | edit plan | leave plan | del plan | invite part | del part | del admin | del elder | set role |
 # +-------+-----------+------------+----------+-------------+----------+-----------+-----------+----------+
-# | elder |     1     |      0     |      1   |      1      |     1    |     1     |     0     |     1    |
+# | elder |     1     |      0     |     1    |      1      |     1    |     1     |     0     |     1    |
 # +-------+-----------+------------+----------+-------------+----------+-----------+-----------+----------+
-# | admin |     1     |      1     |      0   |      1      |     1    |     1     |     0     |     1    |
+# | admin |     1     |      1     |     0    |      1      |     1    |     1     |     0     |     1    |
 # +-------+-----------+------------+----------+-------------+----------+-----------+-----------+----------+
-# | part  |     0     |      1     |      0   |      0      |     0    |     0     |     0     |     0    |
+# | part  |     0     |      1     |     0    |      0      |     0    |     0     |     0     |     0    |
 # +-------+-----------+------------+----------+-------------+----------+-----------+-----------+----------+
 
 import json
@@ -46,15 +46,15 @@ def delete_participant(request):
         try:
             plan_id = int(data['plan_id'])
             participant_id = int(data['participant_id'])
-            who_delete = UserPlans.objects.get(plan_id=plan_id, user_id=user.id)
             target = UserPlans.objects.get(plan_id=plan_id, user_id=participant_id)
+            action_is_available = user.has_rights(plan_id, 'delete_participant')
         except ValueError:
             return HttpResponse(status=400)
         except ObjectDoesNotExist:
             return HttpResponse(status=403)
 
-        if who_delete.role in ['admin', 'elder']:  # удаляющий должен иметь право на удаление
-            if target.role != 'elder':             # удалить старосту должно быть невозможно!
+        if action_is_available:
+            if target.role != 'elder':
                 target.delete()
             else:
                 return HttpResponse(status=406)
@@ -81,26 +81,24 @@ def set_role(request):
             plan_id = int(data['plan_id'])
             participant_id = int(data['participant_id'])
             new_role = data['new_role']
-            who_changes = UserPlans.objects.get(user_id=user.id, plan_id=plan_id)
-            who_is_changed = UserPlans.objects.get(user_id=participant_id, plan_id=plan_id)
+            action_is_available = user.has_rights(plan_id, 'set_role')
+            UserPlans.validate_role(new_role)
+            set_role_to = UserPlans.objects.get(user_id=participant_id, plan_id=plan_id)
         except ValueError:
+            return HttpResponse(status=400)
+        except TypeError:
             return HttpResponse(status=400)
         except ObjectDoesNotExist:
             return HttpResponse(status=403)
 
-        if new_role in ['participant', 'admin']:
-
-            if who_changes.role in ['elder', 'admin']:  # если тот, кто меняет роль имеет на это право
-
-                if who_is_changed.role != 'elder':      # если тот, кому меняют роль не является старостой
-                    who_is_changed.role = new_role
-                    who_is_changed.save()
-                else:
-                    return HttpResponse(status=403)
+        if action_is_available:              # если тот, кто меняет роль имеет на это право
+            if set_role_to.role != 'elder':  # если тот, кому меняют роль не является старостой
+                set_role_to.role = new_role
+                set_role_to.save()
             else:
                 return HttpResponse(status=403)
         else:
-            return HttpResponse(status=400)
+            return HttpResponse(status=403)
 
         return HttpResponse(status=200)
     else:

@@ -228,6 +228,16 @@ class UserPlans(models.Model):
         managed = True
         db_table = 'user_plans'
 
+    @staticmethod
+    def validate_role(role):
+        if type(role) != str:
+            raise TypeError
+
+        if role not in ['participant', 'admin', 'elder']:
+            raise ValueError
+
+        return True
+
     def __str__(self):
         return '%s %s' % (
             self.user.username,
@@ -341,11 +351,10 @@ class CustomUser(AbstractUser):
             description='No description',
             start_date=datetime.now(),
             owner_id=self.id,
-            role='elder'
         )
         new_plan.save()
 
-        UserPlans(user_id=self.id, plan_id=new_plan.id).save()
+        UserPlans(user_id=self.id, plan_id=new_plan.id, role='elder').save()
         # устанавливаем это расписание текущим
         self.set_current_plan(new_plan.id)
 
