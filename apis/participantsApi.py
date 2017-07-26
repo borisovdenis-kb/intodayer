@@ -78,12 +78,13 @@ def set_role(request):
         data = request.POST
 
         try:
+            new_role = data['new_role']
             plan_id = int(data['plan_id'])
             participant_id = int(data['participant_id'])
-            new_role = data['new_role']
-            action_is_available = user.has_rights(plan_id, 'set_role')
             UserPlans.validate_role(new_role)
-            set_role_to = UserPlans.objects.get(user_id=participant_id, plan_id=plan_id)
+
+            target = UserPlans.objects.get(user_id=participant_id, plan_id=plan_id)
+            action_is_available = user.has_rights(plan_id, 'set_role')
         except ValueError:
             return HttpResponse(status=400)
         except TypeError:
@@ -91,12 +92,12 @@ def set_role(request):
         except ObjectDoesNotExist:
             return HttpResponse(status=403)
 
-        if action_is_available:              # если тот, кто меняет роль имеет на это право
-            if set_role_to.role != 'elder':  # если тот, кому меняют роль не является старостой
-                set_role_to.role = new_role
-                set_role_to.save()
+        if action_is_available:
+            if target.role != 'elder':
+                target.role = new_role
+                target.save()
             else:
-                return HttpResponse(status=403)
+                return HttpResponse(status=406)
         else:
             return HttpResponse(status=403)
 

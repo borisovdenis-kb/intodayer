@@ -13,6 +13,10 @@ class ThereIsNoAction(Exception):
     pass
 
 
+class InvalidRoleValue(Exception):
+    pass
+
+
 class DivToPng(models.Model):
     """
         Таблица для хранения изображений
@@ -223,20 +227,16 @@ class UserPlans(models.Model):
     current_yn = models.CharField(max_length=1, blank=False)
     role = models.CharField(max_length=12, blank=False)
 
-
     class Meta:
         managed = True
         db_table = 'user_plans'
 
     @staticmethod
     def validate_role(role):
-        if type(role) != str:
-            raise TypeError
-
-        if role not in ['participant', 'admin', 'elder']:
-            raise ValueError
-
-        return True
+        if role in ['participant', 'admin', 'elder']:
+            return True
+        else:
+            raise InvalidRoleValue
 
     def __str__(self):
         return '%s %s' % (
