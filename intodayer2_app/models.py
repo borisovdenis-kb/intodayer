@@ -14,7 +14,17 @@ class ThereIsNoAction(Exception):
 
 
 class InvalidRoleValue(Exception):
-    pass
+    error_message = 'role must be of: participant, admin, or elder'
+
+
+class MissingArgumentError(Exception):
+    error_message = 'called function missing 1 argument target_id'
+
+
+class InvalidActionValue(Exception):
+    error_message = 'argument "action" must be of:\n' \
+                    'edit_plan, leave_plan, delete_plan, invite_participants, ' \
+                    'delete_participant, delete_admin or set_role'
 
 
 class DivToPng(models.Model):
@@ -236,7 +246,7 @@ class UserPlans(models.Model):
         if role in ['participant', 'admin', 'elder']:
             return True
         else:
-            raise InvalidRoleValue
+            raise InvalidRoleValue(InvalidRoleValue.error_message)
 
     def __str__(self):
         return '%s %s' % (
@@ -376,10 +386,11 @@ class CustomUser(AbstractUser):
                 row.current_yn = 'n'
                 row.save()
 
-    def has_rights(self, plan_id, action):
+    def has_rights(self, plan_id, action, target_id=None):
         """
             Функция показывает есть ли у данного пользователя в данном расписании
             права на то или иное действие
+            :param target_id: <int>
             :param plan_id: <int>
             :param action: <str>
             available actions
@@ -396,20 +407,29 @@ class CustomUser(AbstractUser):
 
         if action == 'edit_plan':
             return True if user_role in ['admin', 'elder'] else False
+
         elif action == 'leave_plan':
             return True if user_role in ['admin', 'participant'] else False
+
         elif action == 'delete_plan':
             return True if user_role == 'elder' else False
+
         elif action == 'invite_participants':
             return True if user_role in ['admin', 'elder'] else False
-        elif action == 'delete_participant':
-            return True if user_role in ['admin', 'elder'] else False
-        elif action == 'delete_admin':
-            return True if user_role in ['admin', 'elder'] else False
-        elif action == 'set_role':
-            return True if user_role in ['admin', 'elder'] else False
+
+        elif action in ['delete_participant', 'set_role', 'delete_admin']:
+            if not target_id:
+                raise MissingArgumentError(MissingArgumentError.error_message)
+
+            target_role = UserPlans.objects.get(user_id=target_id, plan_id=plan_id).role
+
+            if user_role in ['admin', 'elder'] and target_role != 'elder':
+                return True
+            else:
+                return False
+
         else:
-            raise ValueError
+            raise InvalidActionValue(InvalidActionValue.error_message)
 
     def __str__(self):
         return '%s %s %s' % (

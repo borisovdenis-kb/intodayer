@@ -45,19 +45,16 @@ def delete_participant(request):
 
         try:
             plan_id = int(data['plan_id'])
-            participant_id = int(data['participant_id'])
-            target = UserPlans.objects.get(plan_id=plan_id, user_id=participant_id)
-            action_is_available = user.has_rights(plan_id, 'delete_participant')
+            target_id = int(data['participant_id'])
+            action_is_available = user.has_rights(plan_id, 'delete_participant', target_id)
         except ValueError:
             return HttpResponse(status=400)
         except ObjectDoesNotExist:
             return HttpResponse(status=403)
 
         if action_is_available:
-            if target.role != 'elder':
-                target.delete()
-            else:
-                return HttpResponse(status=406)
+            target = UserPlans.objects.get(plan_id=plan_id, user_id=target_id)
+            target.delete()
         else:
             return HttpResponse(status=403)
 
@@ -80,20 +77,18 @@ def set_role(request):
         try:
             new_role = data['new_role']
             plan_id = int(data['plan_id'])
-            participant_id = int(data['participant_id'])
+            target_id = int(data['participant_id'])
             UserPlans.validate_role(new_role)
 
-            target = UserPlans.objects.get(user_id=participant_id, plan_id=plan_id)
-            action_is_available = user.has_rights(plan_id, 'set_role')
+            target = UserPlans.objects.get(user_id=target_id, plan_id=plan_id)
+            action_is_available = user.has_rights(plan_id, 'set_role', target_id)
         except ValueError:
-            return HttpResponse(status=400)
-        except TypeError:
             return HttpResponse(status=400)
         except ObjectDoesNotExist:
             return HttpResponse(status=403)
 
         if action_is_available:
-            if target.role != 'elder':
+            if new_role != 'elder':
                 target.role = new_role
                 target.save()
             else:
