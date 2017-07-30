@@ -14,7 +14,6 @@ from intodayer2_app.views import *
 from extra.mailing_api import *
 from django.shortcuts import render_to_response
 from django.http import HttpResponse
-from datetime import datetime
 from django.utils import timezone
 
 
@@ -39,8 +38,8 @@ class PlanSettings():
 
         if plan.owner_id == self.user_id:  # если user, удаляющий расп. - создатель
             # прощальное сообщение
-            farewell_message = "Староста удалил это расписание.\n" \
-                               "Данное расписание будет удалено из Вашего списка расписаний."
+            # farewell_message = "Староста удалил это расписание.\n" \
+            #                   "Данное расписание будет удалено из Вашего списка расписаний."
 
             # mailing = IntodayerMailing(
             #     self.user_id,

@@ -20,14 +20,10 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "intodayer2.settings")
 django.setup()
 # ---------------------------------------------------------------
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.utils import IntegrityError
 from intodayer2_app.models import *
 from intodayer2_app.views import *
 from extra.mailing_api import *
 from django.http import HttpResponse
-from extra.mailing import EmailMailing, NotEnoughRecipients
-from extra.mailing_messages import invitation_message
-from django.core import serializers
 
 # TODO: Заняться оптимизацией запросов!!!
 
@@ -157,7 +153,7 @@ def invite_participants(request):
                     # если пользователь не присоединился
                     if not Invitations.objects.filter(plan_id=plan_id, email=email):
                         # если пользователь не приглашен
-                        Invitations.objects.create(from_user=user, plan_id=plan_id,  to_user=_user, email=email)
+                        Invitations.objects.create(from_user=user, plan_id=plan_id, to_user=_user, email=email)
                         invitations_states.append({'email': email, 'state': 'invitation_sent'})
                         for_mailing.append(email)
                     else:
@@ -182,7 +178,7 @@ def get_expected_participants(request):
             URL: /get_expected_participants,
             data: plan_id <int>
             method: GET
-        :return: 
+        :return:
             expected_participants: <list>[{'email': <str>}, ...]
         example:
             {
