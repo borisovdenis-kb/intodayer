@@ -1,0 +1,57 @@
+.about_page {
+    width: 70%;
+    margin: auto;
+}
+
+@media (max-width: 768px) {
+    .about_page {
+        width: 100%;
+    }
+}
+
+h1, h2 {
+    font-family: "Cyntho Pro";
+    text-align: center;
+}
+
+h1 {
+    margin-bottom: 15px;
+    font-size: 30px;
+    font-weight: 500;
+}
+
+h2 {
+    margin-top: 0px;
+    font-size: 25px;
+    font-weight: 400;
+}
+
+.about_page p {
+    font-family: "PT Sans";
+    font-size: 20px;
+    font-weight: 200;
+}
+
+.about_content {
+    background-color: #ffffff;
+    word-wrap: break-word;
+    padding: 10px;
+    margin-top: 10px;
+    border: solid 1px #e6e6e6;
+    border-radius: 4px;
+    text-align: center;
+    opacity: 0;
+    transition: 1s all ease;
+}
+
+.in_txt2 {
+    font-family: "Cyntho Pro";
+    font-size: 20px;
+    font-weight: 200;
+
+}
+
+.in_txt {
+    color: #8b1deb;
+
+}

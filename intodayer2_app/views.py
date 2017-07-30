@@ -713,7 +713,21 @@ def plan_view(request):
         return HttpResponseRedirect("/login", {})
 
 
+def about_service_view(request):
+    if request.user.is_authenticated():
+        user = CustomUser.objects.get(username=request.user.username)
+        context = {'user': user}
 
+        print(context)
+        return render_to_response('about_service.html', context)
+
+
+# ЛЕХ!!!!
+# Ты просто послушай.
+# функция get_participants возвращает всех участников расписания
+# такие как: ИМЕНА ДНЕЙ НЕДЕЛИ, ДАТА НАЧАЛА РАБОТЫ РАСПАСАНИЯ"
+# Это просто шок.
+# Бредовее комментария я еще не видел.
 def get_participants(plan, user):
     """
         Возвращает всех участников расписания
@@ -723,7 +737,6 @@ def get_participants(plan, user):
     # participants = CustomUser.filter(id=plan.owner)
 
     return context
-
 
 
 def participant_page(request):
@@ -749,5 +762,6 @@ def profile_page(request):
         return render_to_response('account.html', context)
 
 
+# TODO: Вообще нигде не используется
 def sort_by_start_date(row):
     return row.start_week

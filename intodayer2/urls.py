@@ -33,10 +33,11 @@ urlpatterns = [
     url(r'^login/$', views.login_view),
     url(r'^logout/$', views.logout_view),
     url(r'^profile/$', views.profile_settings),
+    url(r'^account/$', views.profile_page),
     url(r'^statistics/$', views.statistics_view),
     url(r'^registration/$', views.registration_view),
-    url(r'^account/$', views.profile_page),
     url(r'^participants/$', views.participant_page),
+    url(r'^about_service/$', views.about_service_view),
 
     # для ajax запросов
     url(r'^get_avatar', views.get_avatar_ajax),
