@@ -8,7 +8,7 @@
 # +-------+-----------+------------+----------+-------------+----------+-----------+-----------+----------+
 # | part  |     0     |      1     |     0    |      0      |     0    |     0     |     0     |     0    |
 # +-------+-----------+------------+----------+-------------+----------+-----------+-----------+----------+
-
+# P.S. in the REST API del participant and del admin union into one action
 import json
 # ---------------------------------------------------------------
 # Для того, что бы тестировать django файлы
@@ -45,16 +45,18 @@ def delete_participant(request):
 
         try:
             plan_id = int(data['plan_id'])
-            target_id = int(data['participant_id'])
-            action_is_available = user.has_rights(plan_id, 'delete_participant', target_id)
+            participant_id = int(data['participant_id'])
+
+            params = {'plan_id': plan_id, 'participant_id': participant_id}
+            action_is_available = user.has_rights(action='delete_participant', **params)
         except ValueError:
             return HttpResponse(status=400)
         except ObjectDoesNotExist:
             return HttpResponse(status=403)
 
         if action_is_available:
-            target = UserPlans.objects.get(plan_id=plan_id, user_id=target_id)
-            target.delete()
+            participant = UserPlans.objects.get(plan_id=plan_id, user_id=participant_id)
+            participant.delete()
         else:
             return HttpResponse(status=403)
 
@@ -75,24 +77,23 @@ def set_role(request):
         data = request.POST
 
         try:
-            new_role = data['new_role']
             plan_id = int(data['plan_id'])
-            target_id = int(data['participant_id'])
-            UserPlans.validate_role(new_role)
+            participant_id = int(data['participant_id'])
+            new_role = UserPlans.validate_role(data['new_role'])
 
-            target = UserPlans.objects.get(user_id=target_id, plan_id=plan_id)
-            action_is_available = user.has_rights(plan_id, 'set_role', target_id)
+            params = {'plan_id': plan_id, 'participant_id': participant_id, 'new_role': new_role}
+            action_is_available = user.has_rights(action='set_role', **params)
         except ValueError:
             return HttpResponse(status=400)
         except ObjectDoesNotExist:
             return HttpResponse(status=403)
+        except UnacceptableNewRoleValue:
+            return HttpResponse(status=406)
 
         if action_is_available:
-            if new_role != 'elder':
-                target.role = new_role
-                target.save()
-            else:
-                return HttpResponse(status=406)
+            participant = UserPlans.objects.get(user_id=participant_id, plan_id=plan_id)
+            participant.role = new_role
+            participant.save()
         else:
             return HttpResponse(status=403)
 
@@ -125,7 +126,9 @@ def invite_participants(request):
         try:
             plan_id = int(data['plan_id'])
             email_list = json.loads(data['email_list'])
-            action_is_available = user.has_rights(plan_id, 'invite_participants')
+
+            params = {'plan_id': plan_id}
+            action_is_available = user.has_rights(action='invite_participants', **params)
         except ValueError:
             return HttpResponse(status=400)
         except ObjectDoesNotExist:

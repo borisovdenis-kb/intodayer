@@ -13,18 +13,18 @@ class ThereIsNoAction(Exception):
     pass
 
 
-class InvalidRoleValue(Exception):
-    error_message = 'role must be of: participant, admin, or elder'
+class ArgumentError(Exception):
+    error_message = 'called function missing 1 argument "%s"'
 
 
-class MissingArgumentError(Exception):
-    error_message = 'called function missing 1 argument target_id'
+class UnacceptableNewRoleValue(Exception):
+    error_message = 'argument new_role must be of: participant or admin, not elder'
 
 
 class InvalidActionValue(Exception):
     error_message = 'argument "action" must be of:\n' \
-                    'edit_plan, leave_plan, delete_plan, invite_participants, ' \
-                    'delete_participant, delete_admin or set_role'
+                           'edit_plan, leave_plan, delete_plan, invite_participants, ' \
+                           'delete_participant, delete_admin or set_role'
 
 
 class DivToPng(models.Model):
@@ -244,9 +244,9 @@ class UserPlans(models.Model):
     @staticmethod
     def validate_role(role):
         if role in ['participant', 'admin', 'elder']:
-            return True
+            return role
         else:
-            raise InvalidRoleValue(InvalidRoleValue.error_message)
+            raise ValueError('role must be of: participant, admin or elder')
 
     def __str__(self):
         return '%s %s' % (
@@ -386,24 +386,29 @@ class CustomUser(AbstractUser):
                 row.current_yn = 'n'
                 row.save()
 
-    def has_rights(self, plan_id, action, target_id=None):
+    def has_rights(self, action=None, **params):
         """
             Функция показывает есть ли у данного пользователя в данном расписании
             права на то или иное действие
-            :param target_id: <int>
-            :param plan_id: <int>
             :param action: <str>
-            available actions
-            (
-                'edit_plan', 'leave_plan', 'delete_plan', 'invite_participants',
-                'delete_participant', 'delete_admin', 'set_role'
-            )
+                available actions
+                (
+                    'edit_plan', 'leave_plan', 'delete_plan', 'invite_participants',
+                    'delete_participant', 'delete_admin', 'set_role'
+                )
+            :param params:
+                all possible params
+                * - necessary parameter
+                {
+                    plan_id: <int>, *
+                    participant_id: <int>,
+                }
             :return: True/False
         """
         if not action:
-            raise ThereIsNoAction
+            raise ArgumentError(ArgumentError.error_message % 'action')
 
-        user_role = UserPlans.objects.get(user_id=self.id, plan_id=plan_id).role
+        user_role = UserPlans.objects.get(user_id=self.id, plan_id=params['plan_id']).role
 
         if action == 'edit_plan':
             return True if user_role in ['admin', 'elder'] else False
@@ -417,13 +422,28 @@ class CustomUser(AbstractUser):
         elif action == 'invite_participants':
             return True if user_role in ['admin', 'elder'] else False
 
-        elif action in ['delete_participant', 'set_role', 'delete_admin']:
-            if not target_id:
-                raise MissingArgumentError(MissingArgumentError.error_message)
+        elif action == 'set_role':
 
-            target_role = UserPlans.objects.get(user_id=target_id, plan_id=plan_id).role
+            cur_part_role = UserPlans.objects.get(
+                user_id=params['participant_id'],
+                plan_id=params['plan_id']
+            ).role
 
-            if user_role in ['admin', 'elder'] and target_role != 'elder':
+            if params['new_role'] != 'elder':
+                if user_role in ['admin', 'elder'] and cur_part_role != 'elder':
+                    return True
+                else:
+                    return False
+            else:
+                raise UnacceptableNewRoleValue(UnacceptableNewRoleValue.error_message)
+
+        elif action in 'delete_participant':
+            participant_role = UserPlans.objects.get(
+                user_id=params['participant_id'],
+                plan_id=params['plan_id']
+            ).role
+
+            if user_role in ['admin', 'elder'] and participant_role != 'elder':
                 return True
             else:
                 return False
