@@ -1,9 +1,7 @@
 import os
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from PIL import Image
 from datetime import *
-from django.utils import timezone
 
 
 _MAX_SIZE = 300
@@ -23,8 +21,8 @@ class UnacceptableNewRoleValue(Exception):
 
 class InvalidActionValue(Exception):
     error_message = 'argument "action" must be of:\n' \
-                           'edit_plan, leave_plan, delete_plan, invite_participants, ' \
-                           'delete_participant, delete_admin or set_role'
+                    'edit_plan, leave_plan, delete_plan, invite_participants, ' \
+                    'delete_participant, delete_admin or set_role'
 
 
 class DivToPng(models.Model):
@@ -300,6 +298,44 @@ class PlanLists(models.Model):
         return '%s %s' % (
             self.title,
             self.owner.username,
+        )
+
+
+class UserMailingChannels(models.Model):
+    """
+        Таблица, показывающая какими каналами пользователь желает 
+        получать рассылку. Подразумевается, что пользователь может 
+        пользоваться более, чем одним каналом. Если появится новый канал, 
+        то нужно добавить в таблицу новое поле <some_channel>_yn.
+    """
+    user = models.ForeignKey('CustomUser', models.DO_NOTHING)
+    email_yn = models.CharField(max_length=1, blank=True)
+    telegram_yn = models.CharField(max_length=1, blank=True)
+
+    class Meta:
+        managed = True
+
+    @staticmethod
+    def get_telegram_recipients(plan_id):
+        user_ids = UserPlans.objects.filter(plan_id=plan_id).values('user_id')
+        user_ids = UserMailingChannels.objects.filter(telegram_yn='y', user_id__in=user_ids).values('user_id')
+        recipients_telegram = list(CustomUser.objects.filter(id__in=user_ids).values('chat_id'))
+
+        return recipients_telegram
+
+    @staticmethod
+    def get_email_recipients(plan_id):
+        user_ids = UserPlans.objects.filter(plan_id=plan_id).values('user_id')
+        user_ids = UserMailingChannels.objects.filter(email_yn='y', user_id__in=user_ids).values('user_id')
+        recipients_telegram = list(CustomUser.objects.filter(id__in=user_ids).values('email'))
+
+        return recipients_telegram
+
+    def __str__(self):
+        return '%s telegram(%s) email(%s)' % (
+            ' '.join(self.user.get_name()),
+            self.telegram_yn,
+            self.email_yn
         )
 
 

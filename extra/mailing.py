@@ -10,70 +10,101 @@ django.setup()
 # ---------------------------------------------------------------
 from intodayer_bot import bot
 from django.core.mail import send_mail
-
-
-FROM_EMAIL = 'intodayer@yandex.ru'
-
-
-class NotEnoughRecipients(Exception):
-    pass
+from intodayer2_app.models import *
+from base64 import b64decode
+from django.core.files.base import ContentFile
+from intodayer2 import config
 
 
 class IntodayerMailing:
-    def __init__(self, recipient_list, subject='', text='', image=None):
+    def __init__(self, text='', subject=None, image=None):
         """
         :param recipient_list: list of email or telegram chat id or user objects
         :param text: some string
         :param image: path to image file
         """
-        self.subject = subject
-        self.image = image
         self.text = text
+        self.subject = subject
 
-        if len(recipient_list) >= 1:
-            self.recipient_list = recipient_list
-        else:
-            raise NotEnoughRecipients
+        if image:
+            if os.path.exists(image):
+                # либо image - путь к файлу
+                self.image = image
+            else:
+                # либо image - base64 str, тогда сохраняем это изображение
+                self.image = IntodayerMailing.save_image_png(image)
 
-
-class TelegramMailing(IntodayerMailing):
-    def mass_mailing(self):
+    def send_via_telegram(self, recipient_list):
         """
-            Совершает рассылку через telegram бота
-            По всем chat_id в recipient_list
+        Sends the message that was set when the instance was created 
+        via telegram to all chat_id in recipient_list.
+        :param recipient_list: [{chat_id: sum_number}, ...]
         """
         mailing_attrs = {
             'message': {'text': self.text, 'image': self.image},
-            'recipient_list': self.recipient_list
+            'recipient_list': recipient_list
         }
 
         mailing_attrs = json.dumps(mailing_attrs, ensure_ascii=False, indent=2)
 
         bot.do_mailing(mailing_attrs)
 
+    def send_via_email(self, recipient_list):
+        """
+            Sends the message that was set when the instance was created 
+            via email to all email in recipient_list.
+            :param recipient_list: [{email: some@email.com}, ...]
+        """
+        recipient_list = [recp['email'] for recp in recipient_list]
 
-class EmailMailing(IntodayerMailing):
-    def mass_mailing(self):
-        """
-            Совершает рассылку через электронную почту
-            По всем email в recipient_list
-        """
         send_mail(
             self.subject,
             self.text,
-            FROM_EMAIL,
-            self.recipient_list,
+            config.PROJECT_EMAIL,
+            recipient_list,
             fail_silently=False
         )
 
+    def send_by_plan(self, plan_id):
+        """
+            Sends the message that was set when the instance was created 
+            via all channels to all users in plan
+            :param plan_id: <int>
+        """
+        telegram_recipients = UserMailingChannels.get_telegram_recipients(plan_id)
+        email_recipients = UserMailingChannels.get_email_recipients(plan_id)
+
+        self.send_via_telegram(telegram_recipients)
+        self.send_via_email(email_recipients)
+
+    @staticmethod
+    def save_image_png(image):
+        miss_pad = len(image) % 4  # add missing padding
+
+        if miss_pad != 0:
+            image += '=' * (4 - miss_pad)
+
+        image = image.split('base64,')[1]
+
+        img_data = b64decode(image)
+        filename = '%s.png' % hash(image)
+        image = ContentFile(img_data, filename)
+
+        new_img = DivToPng(image=image)
+        new_img.save()
+
+        return new_img.image.path
+
 
 if __name__ == '__main__':
-    recipient_telegram = ['322530729']
-    recipient_email = ['maxim.semyanov@mail.ru']
+    recipient_telegram = [{'chat_id': '322530729'}]
+    recipient_email = [{'email': 'borisovdenis-kb@yandex.ru'}]
+
     image = r'C:\Users\Denis\Desktop\Новый принт\02_nwa_color_onfence_rt.jpg'
 
     # X = TelegramMailing(recipient_telegram, text='popa', image=image)
     # X.mass_mailing()
 
-    Y = EmailMailing(recipient_email, text='popa')
-    Y.mass_mailing()
+    Z = IntodayerMailing(text='popa', image=image)
+    Z.send_via_telegram(recipient_telegram)
+    Z.send_via_email(recipient_email)

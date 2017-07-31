@@ -7,6 +7,7 @@ from django.shortcuts import render_to_response
 from apis.planApi import *
 from extra.stripes_api import *
 from extra.utils import *
+from extra.mailing import IntodayerMailing
 from intodayer2_app.forms import *
 from intodayer2_app.send_sms import *
 
@@ -59,7 +60,7 @@ def mailing_ajax(request):
         :param request:
         :return:
     """
-    # TODO: Где Валидация, Денис?!?!
+    # TODO: Функция пока, что просто для просто для тестирования
     if request.is_ajax():
         user = CustomUser.objects.get(username=request.user.username)
 
@@ -67,13 +68,11 @@ def mailing_ajax(request):
         response['Content-Type'] = 'application/json'
 
         mailing = IntodayerMailing(
-            user.id,
-            request.POST['plan_id'],
-            request.POST['image'],
-            request.POST['text'],
+            text=request.POST['text'],
+            image=request.POST['image']
         )
         # совершаем рассылку
-        mailing.send()
+        mailing.send_by_plan(request.POST['plan_id'])
 
         response.write(json.dumps({'success': 1}))
 

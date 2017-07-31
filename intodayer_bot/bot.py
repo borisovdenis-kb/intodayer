@@ -29,7 +29,7 @@ def say_welcome(message):
         bot.send_message(message.chat.id, login_text)
 
 
-@bot.message_handler(func=lambda message: is_logging(message.chat.id) == True)
+@bot.message_handler(func=lambda message: is_logging(message.chat.id) is True)
 def user_login(message):
     db = MySQLer(config.db_config_pymysql)
     user_id = db.get_user_by_username(message.text)
@@ -77,11 +77,11 @@ def do_mailing(data):
     # делаем рассылку по списку контактов
     text = data['message']['text']
 
-    for chat_id in data['recipient_list']:
-        bot.send_message(chat_id, text)
+    for recp in data['recipient_list']:
+        bot.send_message(recp['chat_id'], text)
         if data['message']['image']:
             with open(data['message']['image'], 'rb') as f:
-                bot.send_photo(chat_id, f)
+                bot.send_photo(recp['chat_id'], f)
 
 
 if __name__ == '__main__':

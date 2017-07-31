@@ -8,6 +8,14 @@ ignore =
     #
     F403,
     # name may be undefined, or defined from star imports: module
-    F405
+    F405,
+    # trailing whitespace
+    W291,
+    # local variable is assigned to but never used
+    F841,
+    # redefinition of unused
+    F811,
+    # indentation is not a multiple of four
+    E111
 
-max-complexity = 10
+max-complexity = 12
