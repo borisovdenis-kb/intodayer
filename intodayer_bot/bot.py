@@ -1,9 +1,11 @@
-from intodayer_bot.utils import *
-from intodayer_bot.work_with_db import *
+# from intodayer_bot.utils import *
+from intodayer_bot.utils import set_user_state, is_logging
+# from intodayer_bot.work_with_db import *
 import telebot
-import intodayer_bot.config as config
+from intodayer2 import config
 import json
 
+from intodayer_bot.work_with_db import MySQLer
 
 bot = telebot.TeleBot(config.token)
 

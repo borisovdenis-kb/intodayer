@@ -19,7 +19,6 @@ function loadData($thisField) {
      *  Функция подгружает с сервера уже отрендеренный выподающий список
      *  и вставляет его под тем инпутом, на который кликнули.
      */
-
     var data = {plan_id: $('.title_content').attr('plan_id')};
 
     if ($thisField.hasClass('time')) {
@@ -48,7 +47,6 @@ function loadData($thisField) {
     if (!$thisField.hasClass('parity')) {
         // вставляем даные из базы в div drop_list
         var $droplist = $('.drop_list');
-
         $('.drop_list').load('/get_drop_list', data, function () {
             var count_li = $droplist.find('li').length;
             if (count_li == 0) {

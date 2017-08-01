@@ -8,4 +8,5 @@ def validate_yn_filed(value):
 
 def validate_name_filed(value):
     if len(value) < 1:
+        print('Called')
         raise ValidationError('Fields first_name and last_name must be >= 1')

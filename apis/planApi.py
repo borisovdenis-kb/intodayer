@@ -106,7 +106,7 @@ def update_plan_info(request):
         return HttpResponse(status=401)
 
 
-def get_drop_list_ajax(request):
+def get_drop_list(request):
     """
         Функция собирает в html список все доступные для текущего пользователя
         элементы из таблицы. Имя таблицы задано в data['model']
@@ -117,7 +117,7 @@ def get_drop_list_ajax(request):
     """
     if request.user.is_authenticated():
         user = CustomUser.objects.get(username=request.user.username)
-        data = request.GET
+        data = request.POST
         context = {'is_error': False}
 
         try:

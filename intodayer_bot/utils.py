@@ -1,4 +1,4 @@
-import intodayer_bot.config as config
+from intodayer2 import config
 import shelve
 
 

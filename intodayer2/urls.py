@@ -62,7 +62,7 @@ urlpatterns = [
 
     # API расписания
     url(r'^delete_plan', planApi.delete_plan),
-    url(r'^get_drop_list', planApi.get_drop_list_ajax),
+    url(r'^get_drop_list', planApi.get_drop_list),
     url(r'^create_new_plan', planApi.create_plan),
     url(r'^update_plan_info', planApi.update_plan_info),
     url(r'^plan/settings_plan', views.get_settings_plan_html),

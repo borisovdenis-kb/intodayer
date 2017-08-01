@@ -7,7 +7,7 @@ import django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "intodayer2.settings")
 django.setup()
 # ---------------------------------------------------------------
-from intodayer2_app.models import *
+from intodayer2_app.models import CustomUser, UserMailingChannels
 from django.http import HttpResponse
 
 

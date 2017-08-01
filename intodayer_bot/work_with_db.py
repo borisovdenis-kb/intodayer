@@ -1,4 +1,4 @@
-import intodayer_bot.config as config
+from intodayer2 import config
 import pymysql
 
 
@@ -58,4 +58,3 @@ if __name__ == '__main__':
         print(X.get_user_by_username('Denis'))
 
         print(X.chat_is_exist('pipa'))
-

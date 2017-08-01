@@ -1,8 +1,6 @@
-/intodayer2/config.py
 /.idea/*
 /.idea/
 /media/
-
 
 
 # Byte-compiled / optimized / DLL files
@@ -104,3 +102,8 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+/intodayer2/config.py
+/intodayer_bot/shelve.db.bak
+/intodayer_bot/shelve.db.dat
+/intodayer_bot/shelve.db.dir
