@@ -25,7 +25,26 @@ class InvalidActionValue(Exception):
                     'delete_participant, delete_admin or set_role'
 
 
-class DivToPng(models.Model):
+class UpdateMixin:
+    """
+        Примесь, которая позволяет добавить метод update
+        для любой модели. потем наследования.
+        class ModelName(models.Model, UpdateMixin):
+            ...
+        obj = ModelName.objects.get(...)
+        obj.update(**{field1: value1, ...})
+    """
+    def update(self, **kwargs):
+        if self._state.adding:
+            raise self.DoesNotExist
+
+        for field, value in kwargs.items():
+            setattr(self, field, value)
+
+        self.save()
+
+
+class DivToPng(models.Model, UpdateMixin):
     """
         Таблица для хранения изображений
         полученных при конвертации div блоков с расписанием
@@ -37,7 +56,7 @@ class DivToPng(models.Model):
         db_table = 'div_to_png'
 
 
-class DaysOfWeek(models.Model):
+class DaysOfWeek(models.Model, UpdateMixin):
     """
         Таблица дней недели
     """
@@ -51,7 +70,7 @@ class DaysOfWeek(models.Model):
         return self.name
 
 
-class Places(models.Model):
+class Places(models.Model, UpdateMixin):
     """
         Таблица аудиторий
         Фишка будет заключаться в том,
@@ -72,7 +91,7 @@ class Places(models.Model):
         )
 
 
-class Subjects(models.Model):
+class Subjects(models.Model, UpdateMixin):
     """
         Таблица предметов
         Фишка будет заключаться в том,
@@ -90,7 +109,7 @@ class Subjects(models.Model):
         return self.name
 
 
-class Teachers(models.Model):
+class Teachers(models.Model, UpdateMixin):
     """
         Таблица преподавателей
         Фишка будет заключаться в том,
@@ -109,7 +128,7 @@ class Teachers(models.Model):
         return self.name_short
 
 
-class Times(models.Model):
+class Times(models.Model, UpdateMixin):
     """
         Таблице хранения времени
         Фишка будет заключаться в том,
@@ -131,7 +150,7 @@ class Times(models.Model):
         return str(self.hh24mm)
 
 
-class Invitations(models.Model):
+class Invitations(models.Model, UpdateMixin):
     """
         Таблица приглашений
         Эта таблица нужна, когда один пользователь захочет
@@ -173,7 +192,7 @@ class Invitations(models.Model):
         )
 
 
-class PlanRows(models.Model):
+class PlanRows(models.Model, UpdateMixin):
     """
         Таблица, в которой будет храниться основная информация
         необходимая для рассписания
@@ -200,7 +219,7 @@ class PlanRows(models.Model):
         )
 
 
-class PlanRowsTemporal(models.Model):
+class PlanRowsTemporal(models.Model, UpdateMixin):
     """
         Таблица для временного изменения расписания
     """
@@ -225,7 +244,7 @@ class PlanRowsTemporal(models.Model):
         )
 
 
-class UserPlans(models.Model):
+class UserPlans(models.Model, UpdateMixin):
     """
         Таблица для связи многие-ко-многим
         между юзерами и рассписаниями
@@ -253,7 +272,7 @@ class UserPlans(models.Model):
         )
 
 
-class PlanLists(models.Model):
+class PlanLists(models.Model, UpdateMixin):
     """
         Таблица с описанием рассписания
     """
@@ -301,7 +320,7 @@ class PlanLists(models.Model):
         )
 
 
-class UserMailingChannels(models.Model):
+class UserMailingChannels(models.Model, UpdateMixin):
     """
         Таблица, показывающая какими каналами пользователь желает 
         получать рассылку. Подразумевается, что пользователь может 
@@ -339,7 +358,7 @@ class UserMailingChannels(models.Model):
         )
 
 
-class CustomUser(AbstractUser):
+class CustomUser(AbstractUser, UpdateMixin):
     """
         Расширение стандартного юзера
         Добавлено:
