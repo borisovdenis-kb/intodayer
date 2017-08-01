@@ -52,9 +52,8 @@ class MySQLer:
 
 
 if __name__ == '__main__':
-    if __name__ == '__main__':
-        X = MySQLer(config.db_config)
+    X = MySQLer(config.db_config)
 
-        print(X.get_user_by_username('Denis'))
+    print(X.get_user_by_username('Denis'))
 
-        print(X.chat_is_exist('pipa'))
+    print(X.chat_is_exist('pipa'))
