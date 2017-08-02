@@ -176,7 +176,7 @@ function createPlan($plus_button) {
     }
 
     $.ajax({
-        url: '/create_new_plan',
+        url: '/create_plan',
         type: 'GET',
         dataType: 'json',
         success: function (msg) {

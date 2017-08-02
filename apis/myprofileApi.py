@@ -1,3 +1,4 @@
+import json
 # ---------------------------------------------------------------
 # Для того, что бы тестировать django файлы
 # Вставлять обязательно перед импортом моделей!!!
@@ -9,35 +10,27 @@ django.setup()
 # ---------------------------------------------------------------
 from intodayer2_app.models import CustomUser, UserMailingChannels
 from django.http import HttpResponse
+from django.core.exceptions import ValidationError
 
 
-def update_user_profile_info(request):
+def update_user_info(request):
     """
-        On client side use:
-            URL: /update_user_profile_info,
-            data: {
-                channels: {
-                    telegram: y/n,
-                    email: y/n
-                },
-                user: {
-                    first_name: <str>,
-                    last_name: <str>
-                }
-            }
-            method: POST
+        This endpoint to update user profile info.
+
+        --> For more detailed documentation see Postman.
     """
     if request.user.is_authenticated():
         user = CustomUser.objects.get(username=request.user.username)
-        user_channels = UserMailingChannels.objects.get(user_id=user.id)
-        data = request.POST
 
-        data_is_correct = all([data['first_name'], data['last_name']])
+        try:
+            data = json.loads(request.body)
+            user_channels = UserMailingChannels.objects.get(user_id=user.id)
 
-        if data_is_correct:
             user.update(**data['user'])
             user_channels.update(**data['channels'])
-        else:
+        except ValidationError:
             return HttpResponse(status=400)
+
+        return HttpResponse(status=200)
     else:
         return HttpResponse(status=401)

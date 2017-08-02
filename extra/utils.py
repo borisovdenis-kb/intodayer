@@ -10,12 +10,17 @@ import django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "intodayer2.settings")
 django.setup()
 # ---------------------------------------------------------------
-from intodayer2_app.models import *
+# from intodayer2_app.models import *
 # from PIL import Image
 # from io import BytesIO
 from base64 import b64decode
 from django.core.files.base import ContentFile
 from django.utils import timezone
+from datetime import timedelta, datetime
+from intodayer2_app.models import (
+    DivToPng, PlanRows, Subjects, Teachers, Times, Places, DaysOfWeek
+)
+
 # from datetime import timezone
 
 
@@ -85,7 +90,7 @@ def get_today_tomorrow_plans(plan):
     context = {}
 
     today = timezone.make_aware(datetime.now())          # опр сегодняшнюю дату
-    tomorrow = today + timedelta(1)                      # завтрашняя дата
+    tomorrow = today + timedelta(1)             # завтрашняя дата
     td_weekday = datetime.weekday(today)                 # день недели сегодня
     tm_weekday = datetime.weekday(tomorrow)              # день дедели завтра
     start_date = plan.plan.start_date                    # c какого числа действует расп.

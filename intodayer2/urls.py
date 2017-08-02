@@ -16,8 +16,8 @@ from django.conf.urls import url
 from django.contrib import admin
 from intodayer2_app import views
 from django.conf import settings
-from apis import planApi, participantsApi
 from django.conf.urls.static import static
+from apis import planApi, participantsApi, myprofileApi
 
 # favicon_view = RedirectView.as_view(url='favicon.ico', permanent=True)
 
@@ -63,7 +63,7 @@ urlpatterns = [
     # API расписания
     url(r'^delete_plan', planApi.delete_plan),
     url(r'^get_drop_list', planApi.get_drop_list),
-    url(r'^create_new_plan', planApi.create_plan),
+    url(r'^create_plan', planApi.create_plan),
     url(r'^update_plan_info', planApi.update_plan_info),
     url(r'^plan/settings_plan', views.get_settings_plan_html),
     url(r'^upload_plan_avatar', planApi.upload_plan_avatar),
@@ -74,6 +74,9 @@ urlpatterns = [
     url(r'^delete_participant', participantsApi.delete_participant),
     url(r'^invite_participants', participantsApi.invite_participants),
     url(r'^get_expected_participants', participantsApi.get_expected_participants),
+
+    # API моего профиля
+    url(r'^update_user_info', myprofileApi.update_user_info),
 ]
 
 

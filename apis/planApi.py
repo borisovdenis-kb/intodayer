@@ -20,10 +20,9 @@ from intodayer2_app.models import (
 
 def create_plan(request):
     """
-        On client side use:
-            URL: /create_new_plan,
-            method: POST
-        return: {new_plan_id: <int>}
+        This endpoint to create plan for user.
+
+        --> For more detailed documentation see Postman.
     """
     if request.user.is_authenticated():
         user = CustomUser.objects.get(username=request.user.username)
@@ -41,11 +40,10 @@ def create_plan(request):
 
 def delete_plan(request):
     """
-        This controller delete plan from PlanLists.
-        On client side use:
-            URL: /delete_plan,
-            data: plan_id <int>
-            method: POST
+        This endpoint to delete plan from plan_lists.
+        All information in DB related to this plan also will be deleted.
+
+        --> For more detailed documentation see Postman.
     """
     if request.user.is_authenticated():
         user = CustomUser.objects.get(username=request.user.username)
@@ -75,10 +73,12 @@ def delete_plan(request):
 
 def update_plan_info(request):
     """
-        On client side use:
-            URL: /update_plan_info,
-            data: plan_id <str>, date <str> (day.month.year)
-            method: POST
+        This endpoint to update plan information.
+        Information such as:
+            - title
+            - start_date
+
+        --> For more detailed documentation see Postman.
     """
     if request.user.is_authenticated():
         user = CustomUser.objects.get(username=request.user.username)
@@ -108,16 +108,18 @@ def update_plan_info(request):
 
 def get_drop_list(request):
     """
-        Функция собирает в html список все доступные для текущего пользователя
-        элементы из таблицы. Имя таблицы задано в data['model']
-        On client side use:
-            URL: /get_drop_list,
-            data: plan_id <int>, model <str>
-            method: GET
+        This endpoint to get list of objects related with some plan.
+        Objects such as:
+            Teachers
+            Subjects
+            Times
+            Places
+
+        --> For more detailed documentation see Postman.
     """
     if request.user.is_authenticated():
         user = CustomUser.objects.get(username=request.user.username)
-        data = request.POST
+        data = request.GET
         context = {'is_error': False}
 
         try:
@@ -147,10 +149,9 @@ def get_drop_list(request):
 
 def upload_plan_avatar(request):
     """
-        On client side use:
-            URL: /upload_plan_avatar,
-            data: plan_id <int>, avatar <file>
-            method: GET
+        This endpoint to set avatar to some plan.
+
+        --> For more detailed documentation see Postman.
     """
     if request.user.is_authenticated():
         user = CustomUser.objects.get(username=request.user.username)
@@ -184,7 +185,7 @@ def mailing_test(request):
         except ValueError:
             return HttpResponse(status=400)
 
-        mailing = IntodayerMailing(text='TEST')
+        mailing = IntodayerMailing(text='TEST TEST TEST')
         mailing.send_by_plan(plan_id=plan_id)
 
         return HttpResponse(status=200)

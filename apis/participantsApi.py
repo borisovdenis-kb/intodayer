@@ -29,10 +29,9 @@ from intodayer2_app.models import CustomUser, UserPlans, Invitations
 
 def delete_participant(request):
     """
-        On client side use:
-            URL: /delete_participant,
-            data: plan_id <int>, participant_id <int>
-            method: POST
+        This endpoint to delete participant from some plan.
+
+        --> For more detailed documentation see Postman.
     """
     if request.user.is_authenticated():
         user = CustomUser.objects.get(username=request.user.username)
@@ -62,10 +61,9 @@ def delete_participant(request):
 
 def set_role(request):
     """
-        On client side use:
-            URL: /change_role,
-            data: plan_id <int>, participant_id <int>, new_role <str>
-            method: POST
+        This endpoint to change role of participant in some plan.
+
+        --> For more detailed documentation see Postman.
     """
     if request.user.is_authenticated():
         user = CustomUser.objects.get(username=request.user.username)
@@ -96,18 +94,9 @@ def set_role(request):
 
 def invite_participants(request):
     """
-        On client side use:
-            URL: /invite_participants,
-            data: plan_id <int>, email_list <list>[<str>, ...]
-            method: POST
-        example:
-            data: {plan_id: 244, email_list: ['aelegend@rambler.ru', 'borisovdenis-kp@yandex.ru]}
-        :return:
-            invitations_states: <list>[{'email': <str>, 'state': <str>}, ...]
-            available states
-            (
-                'already_joined', 'already_invited', 'invitation_sent'
-            )
+        This endpoint to invite participants by the email to some plan.
+
+        --> For more detailed documentation see Postman.
     """
     if request.user.is_authenticated():
         user = CustomUser.objects.get(username=request.user.username)
@@ -170,16 +159,10 @@ def invite_participants(request):
 
 def get_expected_participants(request):
     """
-        On client side use:
-            URL: /get_expected_participants,
-            data: plan_id <int>
-            method: GET
-        :return:
-            expected_participants: <list>[{'email': <str>}, ...]
-        example:
-            {
-                "expected_participants": [{"email": "borisovdenis-kb@yandex.ru"}]
-            }
+        This endpoint to get participants wich was invited in some plan, 
+        but they din't confirmed invitation yet.
+
+        --> For more detailed documentation see Postman.
     """
     if request.user.is_authenticated():
         user = CustomUser.objects.get(username=request.user.username)
