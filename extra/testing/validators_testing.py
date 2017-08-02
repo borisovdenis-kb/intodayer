@@ -45,7 +45,7 @@ class MyTestCase(unittest.TestCase):
             'invitations': {'email': 'adfafa', 'confirmed_yn': 'b'},
             'plan_rows': {'parity': 3, 'start_week': -11, 'end_week': -11},
             'times': {'hh24mm': '12:99'},
-            'day_of_week': {'name': 'Воскреaсенье'}
+            'day_of_week': {'name': 'uaasdfahh'}
         }
 
         for model_name, model_obj in models.items():
