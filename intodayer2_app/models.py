@@ -4,7 +4,9 @@ from django.contrib.auth.models import AbstractUser
 from datetime import datetime
 from extra.validators import (
     validate_yn_filed, validate_not_empty_filed, validate_day_of_week_field,
-    validate_time_field, validate_email_field
+    validate_role_field, validate_weeks_duration_field, validate_date_field,
+    validate_time_field, validate_email_field, validate_parity_field,
+    validate_telegram_chat_id_field, validate_phone_field
 )
 
 
@@ -199,15 +201,15 @@ class PlanRows(models.Model, UpdateMixin):
         Таблица, в которой будет храниться основная информация
         необходимая для рассписания
     """
-    parity = models.IntegerField(models.DO_NOTHING, null=True)
+    parity = models.IntegerField(models.DO_NOTHING, blank=True, null=True, validators=[validate_parity_field])
     day_of_week = models.ForeignKey(DaysOfWeek, models.DO_NOTHING)
     time = models.ForeignKey(Times, models.DO_NOTHING)
     subject = models.ForeignKey(Subjects, models.DO_NOTHING)
     teacher = models.ForeignKey(Teachers, models.DO_NOTHING)
     place = models.ForeignKey(Places, models.DO_NOTHING)
-    start_week = models.IntegerField()
-    end_week = models.IntegerField()
-    comment = models.CharField(max_length=256)
+    start_week = models.IntegerField(validators=[validate_weeks_duration_field])
+    end_week = models.IntegerField(validators=[validate_weeks_duration_field])
+    comment = models.CharField(max_length=256, blank=True)
     plan = models.ForeignKey('PlanLists', models.DO_NOTHING)
     # subgroup = models.IntegerField(models.DO_NOTHING)
 
@@ -225,14 +227,14 @@ class PlanRowsTemporal(models.Model, UpdateMixin):
     """
         Таблица для временного изменения расписания
     """
-    parity = models.BooleanField()
+    parity = models.BooleanField(validators=[validate_parity_field])
     day_of_week = models.ForeignKey(DaysOfWeek, models.DO_NOTHING)
     time = models.ForeignKey(Times, models.DO_NOTHING)
     subject = models.ForeignKey(Subjects, models.DO_NOTHING)
     teacher = models.ForeignKey(Teachers, models.DO_NOTHING)
     place = models.ForeignKey(Places, models.DO_NOTHING)
-    start_week = models.IntegerField()
-    end_week = models.IntegerField()
+    start_week = models.IntegerField(validators=[validate_weeks_duration_field])
+    end_week = models.IntegerField(validators=[validate_weeks_duration_field])
     comment = models.CharField(max_length=256)
     plan = models.ForeignKey('PlanLists', models.DO_NOTHING)
 
@@ -254,7 +256,7 @@ class UserPlans(models.Model, UpdateMixin):
     user = models.ForeignKey('CustomUser', models.DO_NOTHING)
     plan = models.ForeignKey('PlanLists', models.DO_NOTHING)
     current_yn = models.CharField(max_length=1, blank=False, validators=[validate_yn_filed])
-    role = models.CharField(max_length=12, blank=False)
+    role = models.CharField(max_length=12, blank=False, validators=[validate_role_field])
 
     class Meta:
         managed = True
@@ -278,9 +280,9 @@ class PlanLists(models.Model, UpdateMixin):
     """
         Таблица с описанием рассписания
     """
-    title = models.CharField(max_length=256, validators=[validate_not_empty_filed])
+    title = models.CharField(max_length=256, blank=False, validators=[validate_not_empty_filed])
     description = models.TextField(max_length=1000)
-    start_date = models.DateTimeField(blank=True)
+    start_date = models.DateTimeField(blank=True, validators=[validate_date_field])
     owner = models.ForeignKey('CustomUser', models.DO_NOTHING)
     avatar = models.ImageField(upload_to='plans_avatars/', blank=True, max_length=1000)
 
@@ -335,8 +337,8 @@ class UserMailingChannels(models.Model, UpdateMixin):
         то нужно добавить в таблицу новое поле <some_channel>_yn.
     """
     user = models.ForeignKey('CustomUser', models.DO_NOTHING)
-    email_yn = models.CharField(max_length=1, blank=True, validators=[validate_yn_filed])
-    telegram_yn = models.CharField(max_length=1, blank=True, validators=[validate_yn_filed])
+    email_yn = models.CharField(max_length=1, blank=False, validators=[validate_yn_filed])
+    telegram_yn = models.CharField(max_length=1, blank=False, validators=[validate_yn_filed])
 
     class Meta:
         managed = True
@@ -372,14 +374,14 @@ class CustomUser(AbstractUser, UpdateMixin):
         --- Номер телефона
         --- Аватар
     """
-    first_name = models.CharField(max_length=30, blank=True, validators=[validate_not_empty_filed])
-    last_name = models.CharField(max_length=30, blank=True, validators=[validate_not_empty_filed])
-    email = models.EmailField(blank=True, validators=[validate_email_field])
+    first_name = models.CharField(max_length=30, blank=False, validators=[validate_not_empty_filed])
+    last_name = models.CharField(max_length=30, blank=False, validators=[validate_not_empty_filed])
+    email = models.EmailField(blank=False, validators=[validate_email_field])
     avatar = models.ImageField(upload_to='users_avatars/', blank=True, max_length=1000)
     # телефон хранится в формате +7*********
-    phone = models.CharField(max_length=12, blank=True)
+    phone = models.CharField(max_length=12, blank=True, validators=[validate_phone_field])
     # id чата с ботом в телеграме
-    chat_id = models.CharField(max_length=15, blank=True)
+    chat_id = models.CharField(max_length=15, blank=True, validators=[validate_telegram_chat_id_field])
 
     class Meta:
         managed = True

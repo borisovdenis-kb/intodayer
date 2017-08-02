@@ -38,21 +38,25 @@ class MyTestCase(unittest.TestCase):
         }
 
         model_data = {
-            'custom_user': {'first_name': '', 'last_name': '', 'email': 'dsfaf.afda', 'phone': '999a', 'chat_id': 'afda'},
-            'plan_list': {'title': '', 'start_date': '002.40.2017'},
-            'user_plan': {'current_yn': 'o', 'role': 'partpcipant'},
+            'custom_user': {'first_name': '', 'last_name': '', 'email': 'asaf@adsa', 'phone': '999a', 'chat_id': 'ada1'},
+            'plan_list': {'title': '', 'start_date': '2017.01.01'},
+            'user_plan': {'current_yn': '0', 'role': 'afadre3'},
             'user_mailing_channels': {'email_yn': 'a', 'telegram_yn': 'p'},
             'invitations': {'email': 'adfafa', 'confirmed_yn': 'b'},
-            'plan_rows': {'parity': 7, 'start_week': 333, 'end_week': 444},
-            'times': {'hh24mm': '12:66'},
-            'day_of_week': {'name': 'Панидельник'}
+            'plan_rows': {'parity': 3, 'start_week': -11, 'end_week': -11},
+            'times': {'hh24mm': '12:99'},
+            'day_of_week': {'name': 'Воскреaсенье'}
         }
 
         for model_name, model_obj in models.items():
             try:
                 model_obj.update(**model_data[model_name])
             except ValidationError as e:
-                print(e.message)
+                print('--->', model_name)
+                print(e)
+                print()
+                continue
+            continue
 
 
 if __name__ == '__main__':
