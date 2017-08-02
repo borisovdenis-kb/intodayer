@@ -33,6 +33,8 @@ class IntodayerMailing:
             else:
                 # либо image - base64 str, тогда сохраняем это изображение
                 self.image = IntodayerMailing.save_image_png(image)
+        else:
+            self.image = image
 
     def send_via_telegram(self, recipient_list):
         """

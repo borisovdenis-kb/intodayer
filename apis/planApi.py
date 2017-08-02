@@ -11,7 +11,7 @@ import json
 from django.core.exceptions import ObjectDoesNotExist
 from intodayer2_app.models import *
 from intodayer2_app.views import *
-from extra.mailing_api import *
+from extra.mailing import IntodayerMailing
 from django.shortcuts import render_to_response
 from django.http import HttpResponse
 from django.utils import timezone
@@ -40,6 +40,7 @@ def create_plan(request):
 
 def delete_plan(request):
     """
+        This controller delete plan from PlanLists.
         On client side use:
             URL: /delete_plan,
             data: plan_id <int>
@@ -60,8 +61,9 @@ def delete_plan(request):
             return HttpResponse(status=403)
 
         if action_is_available:
-            plan = PlanLists.objects.get(plan_id=plan_id)
-            plan.delete_with_message(message='Some message')
+            plan = PlanLists.objects.get(id=plan_id)
+            # plan.delete_with_message(message='Some message')
+            plan.delete()
         else:
             return HttpResponse(status=403)
 
@@ -84,18 +86,17 @@ def update_plan_info(request):
         try:
             plan_id = int(data['plan_id'])
             date = timezone.datetime.strptime(data['start_date'], '%d.%m.%Y')
-            UserPlans.objects.get(user_id=user.id, plan_id=plan_id)
+
+            params = {'plan_id': plan_id}
+            action_is_available = user.has_rights(action='edit_plan', **params)
         except ValueError:
             return HttpResponse(status=400)
         except ObjectDoesNotExist:
             return HttpResponse(status=403)
 
-        plan = PlanLists.objects.get(id=plan_id)
-
-        if plan.owner == user:
-            plan.title = data['new_title']
-            plan.start_date = date
-            plan.save()
+        if action_is_available:
+            plan = PlanLists.objects.get(id=plan_id)
+            plan.update(**{'start_date': date, 'title': data['new_title']})
         else:
             return HttpResponse(status=403)
 
@@ -143,28 +144,48 @@ def get_drop_list_ajax(request):
         return HttpResponse(status=401)
 
 
-def save_plan_avatar(request, plan_id):
+def upload_plan_avatar(request):
     """
-        Функция сохраняет загруженную пользователем аватарку
-        :param plan_id:
-        :param request:
-        :return:
+        On client side use:
+            URL: /upload_plan_avatar,
+            data: plan_id <int>, avatar <file>
+            method: GET
     """
     if request.user.is_authenticated():
         user = CustomUser.objects.get(username=request.user.username)
+        data = request.POST
 
         try:
-            # если user имеет права редактирования
-            plan = PlanLists.objects.get(id=plan_id, owner=user.id)
+            plan_id = int(data['plan_id'])
+
+            params = {'plan_id': plan_id}
+            action_is_available = user.has_rights(action='edit_plan', **params)
         except ObjectDoesNotExist:
             return HttpResponse(status=403)
 
-        # удаляем предыдущую аватарку
-        plan.avatar.delete()
-        # сохраняем новую
-        plan.avatar = request.FILES['avatar']
-        plan.save()
+        if action_is_available:
+            plan = PlanLists.objects.get(id=plan_id)
+            plan.avatar.delete()                                # удаляем предыдущую аватарку
+            plan.update(**{'avatar': request.FILES['avatar']})  # сохраняем новую
 
         return HttpResponse(status=200)
     else:
         return HttpResponse(status=401)
+
+
+def mailing_test(request):
+    if request.user.is_authenticated():
+        user = CustomUser.objects.get(username=request.user.username)
+        data = request.POST
+
+        try:
+            plan_id = int(data['plan_id'])
+        except ValueError:
+            return HttpResponse(status=400)
+
+        mailing = IntodayerMailing(text='TEST')
+        mailing.send_by_plan(plan_id=plan_id)
+
+        return HttpResponse(status=200)
+    else:
+        return HttpResponse(status=403)

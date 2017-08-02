@@ -18,7 +18,6 @@ from intodayer2_app import views
 from django.conf import settings
 from apis import planApi, participantsApi
 from django.conf.urls.static import static
-from django.views.generic.base import RedirectView
 
 # favicon_view = RedirectView.as_view(url='favicon.ico', permanent=True)
 
@@ -52,7 +51,6 @@ urlpatterns = [
     url(r'^switch_plan_only_set', views.switch_plan_only_set_ajax),
     url(r'^plan/invitation/(\d+)$', views.plan_view),
 
-
     # рассылка
     url(r'^mailing', views.mailing_ajax),
 
@@ -68,7 +66,8 @@ urlpatterns = [
     url(r'^create_new_plan', planApi.create_plan),
     url(r'^update_plan_info', planApi.update_plan_info),
     url(r'^plan/settings_plan', views.get_settings_plan_html),
-    url(r'^upload_plan_avatar/(\d+)$', planApi.save_plan_avatar),
+    url(r'^upload_plan_avatar', planApi.upload_plan_avatar),
+    url(r'^test_mailing', planApi.mailing_test),
 
     # API участников
     url(r'^change_role', participantsApi.set_role),

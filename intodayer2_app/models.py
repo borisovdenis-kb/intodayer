@@ -2,7 +2,7 @@ import os
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from datetime import *
-from extra.mailing import IntodayerMailing
+# from extra.mailing import IntodayerMailing
 
 
 class ThereIsNoAction(Exception):
@@ -285,8 +285,8 @@ class PlanLists(models.Model, UpdateMixin):
         db_table = 'plan_lists'
 
     def delete_with_message(self, message=None):
-        mailing = IntodayerMailing(text=message)
-        mailing.send_by_plan(plan_id=self.id)
+        # mailing = IntodayerMailing(text=message)
+        # mailing.send_by_plan(plan_id=self.id)
         self.delete()
 
     def get_image_url(self):
@@ -407,15 +407,15 @@ class CustomUser(AbstractUser, UpdateMixin):
             res = [self.username]
             return res
 
-    def add_new_plan(self):
+    def add_new_plan(self, title='No name', description='No description'):
         """
             Эта функцию нужна для того, чтобы добавить пользователю новое пустое
             расписание.
             :return: plan_list object
         """
         new_plan = PlanLists(
-            title='No name',
-            description='No description',
+            title=title,
+            description=description,
             start_date=datetime.now(),
             owner_id=self.id,
         )
