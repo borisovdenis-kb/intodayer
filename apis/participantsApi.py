@@ -21,10 +21,8 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "intodayer2.settings")
 django.setup()
 # ---------------------------------------------------------------
 from django.core.exceptions import ObjectDoesNotExist
-from intodayer2_app.models import *
-from intodayer2_app.views import *
-from extra.mailing_api import *
 from django.http import HttpResponse
+from intodayer2_app.models import CustomUser, UserPlans, Invitations
 
 # TODO: Заняться оптимизацией запросов!!!
 
@@ -84,8 +82,6 @@ def set_role(request):
             return HttpResponse(status=400)
         except ObjectDoesNotExist:
             return HttpResponse(status=403)
-        except UnacceptableNewRoleValue:
-            return HttpResponse(status=406)
 
         if action_is_available:
             participant = UserPlans.objects.get(user_id=participant_id, plan_id=plan_id)

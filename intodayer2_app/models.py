@@ -2,6 +2,7 @@ import os
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from datetime import *
+from extra.validators import validate_yn_filed, validate_name_filed
 # from extra.mailing import IntodayerMailing
 
 
@@ -39,6 +40,7 @@ class UpdateMixin:
         for field, value in kwargs.items():
             setattr(self, field, value)
 
+        self.clean_fields()
         self.save()
 
 
@@ -331,8 +333,8 @@ class UserMailingChannels(models.Model, UpdateMixin):
         то нужно добавить в таблицу новое поле <some_channel>_yn.
     """
     user = models.ForeignKey('CustomUser', models.DO_NOTHING)
-    email_yn = models.CharField(max_length=1, blank=True)
-    telegram_yn = models.CharField(max_length=1, blank=True)
+    email_yn = models.CharField(max_length=1, blank=True, validators=[validate_yn_filed])
+    telegram_yn = models.CharField(max_length=1, blank=True, validators=[validate_yn_filed])
 
     class Meta:
         managed = True
@@ -368,6 +370,9 @@ class CustomUser(AbstractUser, UpdateMixin):
         --- Номер телефона
         --- Аватар
     """
+    first_name = models.CharField(max_length=30, blank=True, validators=[validate_name_filed])
+    last_name = models.CharField(max_length=30, blank=True, validators=[validate_name_filed])
+    email = models.EmailField(blank=True)
     avatar = models.ImageField(upload_to='users_avatars/', blank=True, max_length=1000)
     # телефон хранится в формате +7*********
     phone = models.CharField(max_length=12, blank=True)

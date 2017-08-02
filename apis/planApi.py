@@ -9,12 +9,13 @@ django.setup()
 # ---------------------------------------------------------------
 import json
 from django.core.exceptions import ObjectDoesNotExist
-from intodayer2_app.models import *
-from intodayer2_app.views import *
-from extra.mailing import IntodayerMailing
+from extra.mailing import IntodayerMailing, PlanLists
 from django.shortcuts import render_to_response
 from django.http import HttpResponse
 from django.utils import timezone
+from intodayer2_app.models import (
+    CustomUser, UserPlans, Times, Subjects, Teachers, Places
+)
 
 
 def create_plan(request):
