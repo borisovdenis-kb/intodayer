@@ -25,7 +25,8 @@ function setAvatarFrameListeners() {
     $('.send_button').click(function () {
         sendFile(
             '#id_image_file',
-            '/upload_plan_avatar/' + $('.ava_content p').text(),
+            '/upload_plan_avatar',
+            $('.ava_content p').text(),
             '.ava_content'
         );
     });
@@ -237,7 +238,7 @@ function getFileSize(inputFileId) {
     return fileInput.files[0].size;
 }
 
-function sendFile(form, address, update_avatar) {
+function sendFile(form, address, plan_id, update_avatar) {
     /*
      *  Функция посылает на сервер выбранную пользователем аватарку.
      *  Перед отправкой приозводит валидацию на тип и размер файла.
@@ -257,6 +258,7 @@ function sendFile(form, address, update_avatar) {
             var get_ava_data = {plan_id: $(update_avatar).find('p').text()};
 
             data.append('avatar', $(form).prop('files')[0]);
+            data.append('plan_id', plan_id);
 
             $.ajax({
                 url: address,

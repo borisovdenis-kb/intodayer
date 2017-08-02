@@ -89,8 +89,7 @@ def set_role(request):
 
         if action_is_available:
             participant = UserPlans.objects.get(user_id=participant_id, plan_id=plan_id)
-            participant.role = new_role
-            participant.save()
+            participant.update(**{'role': new_role})
         else:
             return HttpResponse(status=403)
 

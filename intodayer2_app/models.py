@@ -2,9 +2,7 @@ import os
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from datetime import *
-
-
-_MAX_SIZE = 300
+# from extra.mailing import IntodayerMailing
 
 
 class ThereIsNoAction(Exception):
@@ -25,7 +23,26 @@ class InvalidActionValue(Exception):
                     'delete_participant, delete_admin or set_role'
 
 
-class DivToPng(models.Model):
+class UpdateMixin:
+    """
+        Примесь, которая позволяет добавить метод update
+        для любой модели. потем наследования.
+        class ModelName(models.Model, UpdateMixin):
+            ...
+        obj = ModelName.objects.get(...)
+        obj.update(**{field1: value1, ...})
+    """
+    def update(self, **kwargs):
+        if self._state.adding:
+            raise self.DoesNotExist
+
+        for field, value in kwargs.items():
+            setattr(self, field, value)
+
+        self.save()
+
+
+class DivToPng(models.Model, UpdateMixin):
     """
         Таблица для хранения изображений
         полученных при конвертации div блоков с расписанием
@@ -37,7 +54,7 @@ class DivToPng(models.Model):
         db_table = 'div_to_png'
 
 
-class DaysOfWeek(models.Model):
+class DaysOfWeek(models.Model, UpdateMixin):
     """
         Таблица дней недели
     """
@@ -51,7 +68,7 @@ class DaysOfWeek(models.Model):
         return self.name
 
 
-class Places(models.Model):
+class Places(models.Model, UpdateMixin):
     """
         Таблица аудиторий
         Фишка будет заключаться в том,
@@ -72,7 +89,7 @@ class Places(models.Model):
         )
 
 
-class Subjects(models.Model):
+class Subjects(models.Model, UpdateMixin):
     """
         Таблица предметов
         Фишка будет заключаться в том,
@@ -90,7 +107,7 @@ class Subjects(models.Model):
         return self.name
 
 
-class Teachers(models.Model):
+class Teachers(models.Model, UpdateMixin):
     """
         Таблица преподавателей
         Фишка будет заключаться в том,
@@ -109,7 +126,7 @@ class Teachers(models.Model):
         return self.name_short
 
 
-class Times(models.Model):
+class Times(models.Model, UpdateMixin):
     """
         Таблице хранения времени
         Фишка будет заключаться в том,
@@ -131,7 +148,7 @@ class Times(models.Model):
         return str(self.hh24mm)
 
 
-class Invitations(models.Model):
+class Invitations(models.Model, UpdateMixin):
     """
         Таблица приглашений
         Эта таблица нужна, когда один пользователь захочет
@@ -173,7 +190,7 @@ class Invitations(models.Model):
         )
 
 
-class PlanRows(models.Model):
+class PlanRows(models.Model, UpdateMixin):
     """
         Таблица, в которой будет храниться основная информация
         необходимая для рассписания
@@ -200,7 +217,7 @@ class PlanRows(models.Model):
         )
 
 
-class PlanRowsTemporal(models.Model):
+class PlanRowsTemporal(models.Model, UpdateMixin):
     """
         Таблица для временного изменения расписания
     """
@@ -225,7 +242,7 @@ class PlanRowsTemporal(models.Model):
         )
 
 
-class UserPlans(models.Model):
+class UserPlans(models.Model, UpdateMixin):
     """
         Таблица для связи многие-ко-многим
         между юзерами и рассписаниями
@@ -253,7 +270,7 @@ class UserPlans(models.Model):
         )
 
 
-class PlanLists(models.Model):
+class PlanLists(models.Model, UpdateMixin):
     """
         Таблица с описанием рассписания
     """
@@ -267,9 +284,14 @@ class PlanLists(models.Model):
         managed = True
         db_table = 'plan_lists'
 
+    def delete_with_message(self, message=None):
+        # mailing = IntodayerMailing(text=message)
+        # mailing.send_by_plan(plan_id=self.id)
+        self.delete()
+
     def get_image_url(self):
         """
-            Returns the URL of the image assoc1iated with this Object.
+            Returns the URL of the image associated with this Object.
             If an image hasn't been uploaded yet, it returns a stock image
             :returns: str -- the image url
         """
@@ -301,7 +323,7 @@ class PlanLists(models.Model):
         )
 
 
-class UserMailingChannels(models.Model):
+class UserMailingChannels(models.Model, UpdateMixin):
     """
         Таблица, показывающая какими каналами пользователь желает 
         получать рассылку. Подразумевается, что пользователь может 
@@ -339,7 +361,7 @@ class UserMailingChannels(models.Model):
         )
 
 
-class CustomUser(AbstractUser):
+class CustomUser(AbstractUser, UpdateMixin):
     """
         Расширение стандартного юзера
         Добавлено:
@@ -385,15 +407,15 @@ class CustomUser(AbstractUser):
             res = [self.username]
             return res
 
-    def add_new_plan(self):
+    def add_new_plan(self, title='No name', description='No description'):
         """
             Эта функцию нужна для того, чтобы добавить пользователю новое пустое
             расписание.
             :return: plan_list object
         """
         new_plan = PlanLists(
-            title='No name',
-            description='No description',
+            title=title,
+            description=description,
             start_date=datetime.now(),
             owner_id=self.id,
         )
@@ -422,7 +444,7 @@ class CustomUser(AbstractUser):
                 row.current_yn = 'n'
                 row.save()
 
-    def has_rights(self, action=None, **params):
+    def has_rights(self, action=None, **kwargs):
         """
             Функция показывает есть ли у данного пользователя в данном расписании
             права на то или иное действие
@@ -432,7 +454,7 @@ class CustomUser(AbstractUser):
                     'edit_plan', 'leave_plan', 'delete_plan', 'invite_participants',
                     'delete_participant', 'delete_admin', 'set_role'
                 )
-            :param params:
+            :param kwargs:
                 all possible params
                 * - necessary parameter
                 {
@@ -444,7 +466,7 @@ class CustomUser(AbstractUser):
         if not action:
             raise ArgumentError(ArgumentError.error_message % 'action')
 
-        user_role = UserPlans.objects.get(user_id=self.id, plan_id=params['plan_id']).role
+        user_role = UserPlans.objects.get(user_id=self.id, plan_id=kwargs['plan_id']).role
 
         if action == 'edit_plan':
             return True if user_role in ['admin', 'elder'] else False
@@ -461,11 +483,11 @@ class CustomUser(AbstractUser):
         elif action == 'set_role':
 
             cur_part_role = UserPlans.objects.get(
-                user_id=params['participant_id'],
-                plan_id=params['plan_id']
+                user_id=kwargs['participant_id'],
+                plan_id=kwargs['plan_id']
             ).role
 
-            if params['new_role'] != 'elder':
+            if kwargs['new_role'] != 'elder':
                 if user_role in ['admin', 'elder'] and cur_part_role != 'elder':
                     return True
                 else:
@@ -475,8 +497,8 @@ class CustomUser(AbstractUser):
 
         elif action in 'delete_participant':
             participant_role = UserPlans.objects.get(
-                user_id=params['participant_id'],
-                plan_id=params['plan_id']
+                user_id=kwargs['participant_id'],
+                plan_id=kwargs['plan_id']
             ).role
 
             if user_role in ['admin', 'elder'] and participant_role != 'elder':

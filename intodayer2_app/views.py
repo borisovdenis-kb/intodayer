@@ -10,6 +10,7 @@ from extra.utils import *
 from extra.mailing import IntodayerMailing
 from intodayer2_app.forms import *
 from intodayer2_app.send_sms import *
+from datetime import datetime
 
 
 # TODO: Сделать в выводе расписания в /plan сортировку по времени, а не по неделям
