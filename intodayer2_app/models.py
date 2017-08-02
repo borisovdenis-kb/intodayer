@@ -1,9 +1,11 @@
 import os
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from datetime import *
-from extra.validators import validate_yn_filed, validate_name_filed
-# from extra.mailing import IntodayerMailing
+from datetime import datetime
+from extra.validators import (
+    validate_yn_filed, validate_not_empty_filed, validate_day_of_week_field,
+    validate_time_field, validate_email_field
+)
 
 
 class ThereIsNoAction(Exception):
@@ -60,7 +62,7 @@ class DaysOfWeek(models.Model, UpdateMixin):
     """
         Таблица дней недели
     """
-    name = models.CharField(max_length=50, blank=True, null=True)
+    name = models.CharField(max_length=50, blank=True, null=True, validators=[validate_day_of_week_field])
 
     class Meta:
         managed = True
@@ -135,7 +137,7 @@ class Times(models.Model, UpdateMixin):
         чтобы при вторичном создании/редактировании расписания
         предлагать пользователю введенное до этого время.
     """
-    hh24mm = models.TimeField()
+    hh24mm = models.TimeField(validators=[validate_time_field])
     plan = models.ForeignKey('PlanLists', models.DO_NOTHING, blank=True)
 
     class Meta:
@@ -175,8 +177,8 @@ class Invitations(models.Model, UpdateMixin):
     )
     comment = models.TextField(blank=True, null=True)
     plan = models.ForeignKey('PlanLists', models.DO_NOTHING)
-    confirmed_yn = models.CharField(max_length=1, blank=True, null=True)
-    email = models.TextField(blank=False)
+    confirmed_yn = models.CharField(max_length=1, blank=True, null=True, validators=[validate_yn_filed])
+    email = models.TextField(blank=False, validators=[validate_email_field])
 
     class Meta:
         managed = True
@@ -251,7 +253,7 @@ class UserPlans(models.Model, UpdateMixin):
     """
     user = models.ForeignKey('CustomUser', models.DO_NOTHING)
     plan = models.ForeignKey('PlanLists', models.DO_NOTHING)
-    current_yn = models.CharField(max_length=1, blank=False)
+    current_yn = models.CharField(max_length=1, blank=False, validators=[validate_yn_filed])
     role = models.CharField(max_length=12, blank=False)
 
     class Meta:
@@ -276,7 +278,7 @@ class PlanLists(models.Model, UpdateMixin):
     """
         Таблица с описанием рассписания
     """
-    title = models.CharField(max_length=256)
+    title = models.CharField(max_length=256, validators=[validate_not_empty_filed])
     description = models.TextField(max_length=1000)
     start_date = models.DateTimeField(blank=True)
     owner = models.ForeignKey('CustomUser', models.DO_NOTHING)
@@ -370,9 +372,9 @@ class CustomUser(AbstractUser, UpdateMixin):
         --- Номер телефона
         --- Аватар
     """
-    first_name = models.CharField(max_length=30, blank=True, validators=[validate_name_filed])
-    last_name = models.CharField(max_length=30, blank=True, validators=[validate_name_filed])
-    email = models.EmailField(blank=True)
+    first_name = models.CharField(max_length=30, blank=True, validators=[validate_not_empty_filed])
+    last_name = models.CharField(max_length=30, blank=True, validators=[validate_not_empty_filed])
+    email = models.EmailField(blank=True, validators=[validate_email_field])
     avatar = models.ImageField(upload_to='users_avatars/', blank=True, max_length=1000)
     # телефон хранится в формате +7*********
     phone = models.CharField(max_length=12, blank=True)
