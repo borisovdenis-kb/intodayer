@@ -100,11 +100,7 @@ if __name__ == '__main__':
     recipient_telegram = [{'chat_id': '322530729'}]
     recipient_email = [{'email': 'borisovdenis-kb@yandex.ru'}]
 
-    image = r'C:\Users\Denis\Desktop\Новый принт\02_nwa_color_onfence_rt.jpg'
-
-    # X = TelegramMailing(recipient_telegram, text='popa', image=image)
-    # X.mass_mailing()
+    image = r'C:\Users\Denis\Desktop\perelman.jpg'
 
     Z = IntodayerMailing(text='popa', image=image)
-    Z.send_via_telegram(recipient_telegram)
-    Z.send_via_email(recipient_email)
+    Z.send_by_plan(248)
