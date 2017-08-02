@@ -20,8 +20,10 @@ def update_user_profile_info(request):
                     telegram: y/n,
                     email: y/n
                 },
-                first_name: <str>,
-                last_name: <str>
+                user: {
+                    first_name: <str>,
+                    last_name: <str>
+                }
             }
             method: POST
     """
@@ -33,13 +35,8 @@ def update_user_profile_info(request):
         data_is_correct = all([data['first_name'], data['last_name']])
 
         if data_is_correct:
-            user.first_name = data['first_name']
-            user.last_name = data['last_name']
-            user.save()
-
-            user_channels.telegram_yn = data['channels']['telegram']
-            user_channels.email_yn = data['channels']['email']
-            user_channels.save()
+            user.update(**data['user'])
+            user_channels.update(**data['channels'])
         else:
             return HttpResponse(status=400)
     else:

@@ -2,9 +2,7 @@ import os
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from datetime import *
-
-
-_MAX_SIZE = 300
+from extra.mailing import IntodayerMailing
 
 
 class ThereIsNoAction(Exception):
@@ -286,9 +284,14 @@ class PlanLists(models.Model, UpdateMixin):
         managed = True
         db_table = 'plan_lists'
 
+    def delete_with_message(self, message=None):
+        mailing = IntodayerMailing(text=message)
+        mailing.send_by_plan(plan_id=self.id)
+        self.delete()
+
     def get_image_url(self):
         """
-            Returns the URL of the image assoc1iated with this Object.
+            Returns the URL of the image associated with this Object.
             If an image hasn't been uploaded yet, it returns a stock image
             :returns: str -- the image url
         """
@@ -441,7 +444,7 @@ class CustomUser(AbstractUser, UpdateMixin):
                 row.current_yn = 'n'
                 row.save()
 
-    def has_rights(self, action=None, **params):
+    def has_rights(self, action=None, **kwargs):
         """
             Функция показывает есть ли у данного пользователя в данном расписании
             права на то или иное действие
@@ -451,7 +454,7 @@ class CustomUser(AbstractUser, UpdateMixin):
                     'edit_plan', 'leave_plan', 'delete_plan', 'invite_participants',
                     'delete_participant', 'delete_admin', 'set_role'
                 )
-            :param params:
+            :param kwargs:
                 all possible params
                 * - necessary parameter
                 {
@@ -463,7 +466,7 @@ class CustomUser(AbstractUser, UpdateMixin):
         if not action:
             raise ArgumentError(ArgumentError.error_message % 'action')
 
-        user_role = UserPlans.objects.get(user_id=self.id, plan_id=params['plan_id']).role
+        user_role = UserPlans.objects.get(user_id=self.id, plan_id=kwargs['plan_id']).role
 
         if action == 'edit_plan':
             return True if user_role in ['admin', 'elder'] else False
@@ -480,11 +483,11 @@ class CustomUser(AbstractUser, UpdateMixin):
         elif action == 'set_role':
 
             cur_part_role = UserPlans.objects.get(
-                user_id=params['participant_id'],
-                plan_id=params['plan_id']
+                user_id=kwargs['participant_id'],
+                plan_id=kwargs['plan_id']
             ).role
 
-            if params['new_role'] != 'elder':
+            if kwargs['new_role'] != 'elder':
                 if user_role in ['admin', 'elder'] and cur_part_role != 'elder':
                     return True
                 else:
@@ -494,8 +497,8 @@ class CustomUser(AbstractUser, UpdateMixin):
 
         elif action in 'delete_participant':
             participant_role = UserPlans.objects.get(
-                user_id=params['participant_id'],
-                plan_id=params['plan_id']
+                user_id=kwargs['participant_id'],
+                plan_id=kwargs['plan_id']
             ).role
 
             if user_role in ['admin', 'elder'] and participant_role != 'elder':
