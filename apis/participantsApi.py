@@ -21,7 +21,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "intodayer2.settings")
 django.setup()
 # ---------------------------------------------------------------
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from intodayer2_app.models import CustomUser, UserPlans, Invitations
 
 # TODO: Заняться оптимизацией запросов!!!
@@ -159,27 +159,28 @@ def invite_participants(request):
 
 def get_expected_participants(request):
     """
-        This endpoint to get participants wich was invited in some plan, 
+        This endpoint to get participants which was invited in some plan, 
         but they din't confirmed invitation yet.
 
         --> For more detailed documentation see Postman.
     """
     if request.user.is_authenticated():
         user = CustomUser.objects.get(username=request.user.username)
-        response = HttpResponse(status=200)
-        response['Content-Type'] = 'application/json'
         data = request.GET
 
         try:
-            plan_id = int(data['plan_id'])
-            UserPlans.objects.get(plan_id=plan_id, user_id=user.id)
+            UserPlans.objects.get(
+                plan_id=data['plan_id'],
+                user_id=user.id,
+                role__in=['admin', 'elder']
+            )
+
+            expected_participants = list(
+                Invitations.objects.filter(plan_id=data['plan_id']).values('email')
+            )
         except ValueError:
             return HttpResponse(status=400)
         except ObjectDoesNotExist:
             return HttpResponse(status=403)
 
-        expected_participants = list(Invitations.objects.filter(plan_id=plan_id).values('email'))
-
-        response.write(json.dumps({'expected_participants': expected_participants}))
-
-        return response
+        return JsonResponse({'expected_participants': expected_participants}, status=200)
