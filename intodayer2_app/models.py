@@ -31,7 +31,7 @@ class InvalidActionValue(Exception):
 class UpdateMixin:
     """
         Примесь, которая позволяет добавить метод update
-        для любой модели. потем наследования.
+        для любой модели. Путем наследования.
         class ModelName(models.Model, UpdateMixin):
             ...
         obj = ModelName.objects.get(...)
