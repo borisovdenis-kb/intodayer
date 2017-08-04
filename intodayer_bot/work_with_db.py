@@ -3,12 +3,16 @@ import pymysql
 
 
 class MySQLer:
+    """
+        To connect use:
+            db = MySQLer(config.db_config_pymysql)
+    """
     def __init__(self, database):
         self.connection = pymysql.connect(**database)
 
-    def get_user_by_username(self, username):
-        query = 'SELECT id FROM intodayer2_app_customuser ' \
-                'WHERE username = "%s";' % username
+    def get_user_by_email(self, email):
+        query = 'SELECT * FROM intodayer2_app_customuser ' \
+                'WHERE email = "%s";' % email
 
         with self.connection.cursor() as cursor:
             cursor.execute(query)
@@ -17,7 +21,7 @@ class MySQLer:
         self.connection.commit()
 
         try:
-            return res[0][0]
+            return res[0]
         except IndexError:
             return None
 
@@ -52,8 +56,8 @@ class MySQLer:
 
 
 if __name__ == '__main__':
-    X = MySQLer(config.db_config)
+    X = MySQLer(config.db_config_pymysql)
 
-    print(X.get_user_by_username('Denis'))
+    print(X.get_user_by_email('borisovdenis-kb@yandex.ru'))
 
-    print(X.chat_is_exist('pipa'))
+    # print(X.chat_is_exist('pipa'))

@@ -1,9 +1,19 @@
+# ---------------------------------------------------------------
+# Для того, что бы тестировать django файлы
+# Вставлять обязательно перед импортом моделей!!!
+import os
+import django
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "intodayer2.settings")
+django.setup()
+# ---------------------------------------------------------------
+from django.contrib.auth.hashers import check_password
+from intodayer_bot.work_with_db import MySQLer
 from intodayer2 import config
 import shelve
 
 
 def set_user_state(chat_id, state=False):
-    """ Записываем юзера в игроки и правильный ответ в текущей игре"""
     with shelve.open(config.shelve_name) as storage:
         storage[str(chat_id)] = state
 
@@ -17,5 +27,17 @@ def is_logging(chat_id):
             return None
 
 
+def login(email, password):
+    db = MySQLer(config.db_config_pymysql)
+    user = db.get_user_by_email(email)
+    if user:
+        # user[1] - password
+        if check_password(password, user[1]):
+            return user[0]  # user id
+    else:
+        return None
+
+
 if __name__ == '__main__':
-    print(is_logging('322530729'))
+    # print(is_logging('322530729'))
+    print(login('borisovdenis-kb@yandex.ru', 'Denis8783212293'))

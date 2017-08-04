@@ -1,5 +1,5 @@
 # from intodayer_bot.utils import *
-from intodayer_bot.utils import set_user_state, is_logging
+from intodayer_bot.utils import set_user_state, is_logging, login
 # from intodayer_bot.work_with_db import *
 import telebot
 from intodayer2 import config
@@ -20,8 +20,9 @@ def say_welcome(message):
     db = MySQLer(config.db_config_pymysql)
 
     username = message.chat.first_name
-    welcome_text = 'Здравствуйте, %s!\nIntoDayerBot чертовски рад Вас видеть :)' % username
-    login_text = 'Пожалуйста введите логин от своей учетной записи intodayer.'
+    welcome_text = 'Здравствуйте, %s!\nIntodayerBot чертовски рад Вас видеть :)' % username
+    login_text = 'Пожалуйста, введите через пробел логин и пароль от своей учетной записи Intodayer.\n' \
+                 'Пример: neo zEoN@1999'
 
     bot.send_message(message.chat.id, welcome_text)
 
@@ -34,15 +35,22 @@ def say_welcome(message):
 @bot.message_handler(func=lambda message: is_logging(message.chat.id) is True)
 def user_login(message):
     db = MySQLer(config.db_config_pymysql)
-    user_id = db.get_user_by_username(message.text)
+    error_message = "Попробуйте еще раз.\nПример: neo matrix777"
+    success_message = "Поздравляем, все прошло успешно!"
 
-    if user_id:
-        db.set_chat_id(message.chat.id, user_id)
-        # выводим пользователя из режима log in
-        set_user_state(False)
-        bot.reply_to(message, "Поздравляем, все прошло успешно!")
-    else:
-        bot.reply_to(message, "Попробуйте еще раз")
+    try:
+        email, password = message.text.split()
+        user_id = login(email, password)
+
+        if user_id:
+            db.set_chat_id(message.chat.id, user_id)
+            # выводим пользователя из режима log in
+            set_user_state(False)
+            bot.send_message(message.chat.id, success_message)
+        else:
+            bot.send_message(message.chat.id, error_message)
+    except ValueError:
+        bot.send_message(message.chat.id, error_message)
 
 
 def do_mailing(data):
