@@ -77,6 +77,8 @@ urlpatterns = [
 
     # API моего профиля
     url(r'^update_user_info', myprofileApi.update_user_info),
+    url(r'^check_old_password', myprofileApi.check_old_password),
+    url(r'^make_new_password', myprofileApi.make_new_password),
 ]
 
 

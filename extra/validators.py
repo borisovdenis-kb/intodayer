@@ -128,4 +128,18 @@ def validate_phone_field(value):
     pass
 
 
+def validate_password(value):
+    """
+        Not for model
+        Password requirements: 
+            lower case, upper case, digit, special symbols, length >= 8
+    """
+    password_pattern = re.compile('(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$')
+    match = password_pattern.match(value)
+
+    if not match:
+        raise ValidationError('Password field must contain: lower case, upper case, digits, ' \
+                              'special symbols. And be minimum 8 symbols length.')
+
+
 # TODO: validate_avatar_field, validate_phone_field
