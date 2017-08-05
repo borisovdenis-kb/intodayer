@@ -45,7 +45,7 @@ def user_login(message):
         if user_id:
             db.set_chat_id(message.chat.id, user_id)
             # выводим пользователя из режима log in
-            set_user_state(False)
+            set_user_state(message.chat.id, False)
             bot.send_message(message.chat.id, success_message)
         else:
             bot.send_message(message.chat.id, error_message)
