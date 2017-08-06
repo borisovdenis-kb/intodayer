@@ -22,7 +22,7 @@ def say_welcome(message):
     username = message.chat.first_name
     welcome_text = 'Здравствуйте, %s!\nIntodayerBot чертовски рад Вас видеть :)' % username
     login_text = 'Пожалуйста, введите через пробел логин и пароль от своей учетной записи Intodayer.\n' \
-                 'Пример: neo zEoN@1999'
+                 'Пример: neo@matrix.com ma7tr7ix7#'
 
     bot.send_message(message.chat.id, welcome_text)
 
@@ -35,7 +35,7 @@ def say_welcome(message):
 @bot.message_handler(func=lambda message: is_logging(message.chat.id) is True)
 def user_login(message):
     db = MySQLer(config.db_config_pymysql)
-    error_message = "Попробуйте еще раз.\nПример: neo matrix777"
+    error_message = "Попробуйте еще раз.\nПример: morpheus@zeon.com zeOn1999*"
     success_message = "Поздравляем, все прошло успешно!"
 
     try:
