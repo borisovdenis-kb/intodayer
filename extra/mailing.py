@@ -10,18 +10,18 @@ django.setup()
 # ---------------------------------------------------------------
 from intodayer_bot import bot
 from django.core.mail import send_mail
-from intodayer2_app.models import *
 from base64 import b64decode
 from django.core.files.base import ContentFile
 from intodayer2 import config
+from intodayer2_app.models import UserMailingChannels, DivToPng
 
 
 class IntodayerMailing:
     def __init__(self, text='', subject=None, image=None):
         """
-        :param recipient_list: list of email or telegram chat id or user objects
         :param text: some string
-        :param image: path to image file
+        :param subject: some string
+        :param image: path to image file or string in base64
         """
         self.text = text
         self.subject = subject
@@ -38,9 +38,9 @@ class IntodayerMailing:
 
     def send_via_telegram(self, recipient_list):
         """
-        Sends the message that was set when the instance was created 
-        via telegram to all chat_id in recipient_list.
-        :param recipient_list: [{chat_id: sum_number}, ...]
+            Sends the message that was set when the instance was created 
+            via telegram to all chat_id in recipient_list.
+            :param recipient_list: [{chat_id: sum_number}, ...]
         """
         mailing_attrs = {
             'message': {'text': self.text, 'image': self.image},

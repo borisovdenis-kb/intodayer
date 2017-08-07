@@ -30,8 +30,9 @@ class InvalidActionValue(Exception):
 
 class UpdateMixin:
     """
-        Примесь, которая позволяет добавить метод update
-        для любой модели. Путем наследования.
+        An mixin that allows you to add a method for any model. 
+        By inheritance.
+
         class ModelName(models.Model, UpdateMixin):
             ...
         obj = ModelName.objects.get(...)
@@ -50,8 +51,8 @@ class UpdateMixin:
 
 class DivToPng(models.Model, UpdateMixin):
     """
-        Таблица для хранения изображений
-        полученных при конвертации div блоков с расписанием
+        Table for storing images obtained by 
+        converting div blocks with a plan.
     """
     image = models.ImageField(upload_to='div_to_png/', blank=True, max_length=1000)
 
@@ -62,7 +63,8 @@ class DivToPng(models.Model, UpdateMixin):
 
 class DaysOfWeek(models.Model, UpdateMixin):
     """
-        Таблица дней недели
+        Table that stores days of week
+        in Russian (Понедельник, ..., Воскресенье) and in English (Monday, ..., Sunday)
     """
     name = models.CharField(max_length=50, blank=True, null=True, validators=[validate_day_of_week_field])
 
@@ -76,10 +78,9 @@ class DaysOfWeek(models.Model, UpdateMixin):
 
 class Places(models.Model, UpdateMixin):
     """
-        Таблица аудиторий
-        Фишка будет заключаться в том,
-        чтобы при вторичном создании/редактировании расписания
-        предлагать пользователю введенное до этого расположение аудитории.
+        Table that stores the audience.
+        It is necessary to output previously entered audiences 
+        when editing the plan.
     """
     name = models.CharField(max_length=100)
     plan = models.ForeignKey('PlanLists', models.DO_NOTHING, blank=True)
@@ -97,10 +98,9 @@ class Places(models.Model, UpdateMixin):
 
 class Subjects(models.Model, UpdateMixin):
     """
-        Таблица предметов
-        Фишка будет заключаться в том,
-        чтобы при вторичном создании/редактировании расписания
-        предлагать пользователю введенное до этого название предмета.
+        Table that stores subjects.
+        It is necessary to output previously entered subjects
+        when editing the plan.
     """
     name = models.CharField(max_length=100, blank=True, null=True)
     plan = models.ForeignKey('PlanLists', models.DO_NOTHING, blank=True)
@@ -115,10 +115,9 @@ class Subjects(models.Model, UpdateMixin):
 
 class Teachers(models.Model, UpdateMixin):
     """
-        Таблица преподавателей
-        Фишка будет заключаться в том,
-        чтобы при вторичном создании/редактировании расписания
-        предлагать пользователю введенное до этого имя преподавателя.
+        Table that stores teachers.
+        It is necessary to output previously entered teachers
+        when editing the plan.
     """
     name_short = models.CharField(max_length=255, blank=True, null=True)
     name_full = models.CharField(max_length=255, blank=True, null=True)
@@ -134,10 +133,9 @@ class Teachers(models.Model, UpdateMixin):
 
 class Times(models.Model, UpdateMixin):
     """
-        Таблице хранения времени
-        Фишка будет заключаться в том,
-        чтобы при вторичном создании/редактировании расписания
-        предлагать пользователю введенное до этого время.
+        Table that stores times.
+        It is necessary to output previously entered times
+        when editing the plan.
     """
     hh24mm = models.TimeField(validators=[validate_time_field])
     plan = models.ForeignKey('PlanLists', models.DO_NOTHING, blank=True)
@@ -156,14 +154,9 @@ class Times(models.Model, UpdateMixin):
 
 class Invitations(models.Model, UpdateMixin):
     """
-        Таблица приглашений
-        Эта таблица нужна, когда один пользователь захочет
-        расшарить свое расписание другому пользователю.
-        Пользователю, которому расшарили расписание,
-        будет приходить уведомление вида:
-        --- от какого Юзера пришло приглашение
-        --- ссылка на рассписание, которым с ним делятся
-        --- и комментарий
+        Table that stores invitations.
+        This table is needed when one user wants 
+        to share the created schedule with another user.
     """
     from_user = models.ForeignKey(
         'CustomUser',
@@ -198,8 +191,7 @@ class Invitations(models.Model, UpdateMixin):
 
 class PlanRows(models.Model, UpdateMixin):
     """
-        Таблица, в которой будет храниться основная информация
-        необходимая для рассписания
+        Table that stores the basic information for plan.
     """
     parity = models.IntegerField(models.DO_NOTHING, blank=True, null=True, validators=[validate_parity_field])
     day_of_week = models.ForeignKey(DaysOfWeek, models.DO_NOTHING)
@@ -225,7 +217,8 @@ class PlanRows(models.Model, UpdateMixin):
 
 class PlanRowsTemporal(models.Model, UpdateMixin):
     """
-        Таблица для временного изменения расписания
+        Do we need this table? 
+        It is absolutely not used at all.
     """
     parity = models.BooleanField(validators=[validate_parity_field])
     day_of_week = models.ForeignKey(DaysOfWeek, models.DO_NOTHING)
@@ -250,8 +243,7 @@ class PlanRowsTemporal(models.Model, UpdateMixin):
 
 class UserPlans(models.Model, UpdateMixin):
     """
-        Таблица для связи многие-ко-многим
-        между юзерами и рассписаниями
+        Table that stores many2many relation of users and plans.
     """
     user = models.ForeignKey('CustomUser', models.DO_NOTHING)
     plan = models.ForeignKey('PlanLists', models.DO_NOTHING)
@@ -278,7 +270,7 @@ class UserPlans(models.Model, UpdateMixin):
 
 class PlanLists(models.Model, UpdateMixin):
     """
-        Таблица с описанием рассписания
+        Table that stores plan's info.
     """
     title = models.CharField(max_length=256, blank=False, validators=[validate_not_empty_filed])
     description = models.TextField(max_length=1000)
@@ -331,10 +323,9 @@ class PlanLists(models.Model, UpdateMixin):
 
 class UserMailingChannels(models.Model, UpdateMixin):
     """
-        Таблица, показывающая какими каналами пользователь желает 
-        получать рассылку. Подразумевается, что пользователь может 
-        пользоваться более, чем одним каналом. Если появится новый канал, 
-        то нужно добавить в таблицу новое поле <some_channel>_yn.
+        Table showing which channels the user wants to receive the mailing. 
+        It is understood that the user can use more than one channel.
+        If a new channel appears, then you need to add a new field <some_channel>_yn to the table.
     """
     user = models.ForeignKey('CustomUser', models.DO_NOTHING)
     email_yn = models.CharField(max_length=1, blank=False, validators=[validate_yn_filed])
@@ -345,6 +336,12 @@ class UserMailingChannels(models.Model, UpdateMixin):
 
     @staticmethod
     def get_telegram_recipients(plan_id):
+        """
+            The function for some plan returns list of users(chat_id) 
+            who have chosen mailing via telegram.
+            :param plan_id: id of plan
+            :return: list [{'chat_id': 423232334}, {'chat_id': 23283732}, ...]
+        """
         user_ids = UserPlans.objects.filter(plan_id=plan_id).values('user_id')
         user_ids = UserMailingChannels.objects.filter(telegram_yn='y', user_id__in=user_ids).values('user_id')
         recipients_telegram = list(CustomUser.objects.filter(id__in=user_ids).values('chat_id'))
@@ -353,6 +350,12 @@ class UserMailingChannels(models.Model, UpdateMixin):
 
     @staticmethod
     def get_email_recipients(plan_id):
+        """
+            The function for some plan returns list of users(email) 
+            who have chosen mailing via telegram.
+            :param plan_id: id of plan
+            :return: list [{'email': morpheus@zeon.com}, {'email':trinity@matrix.com}, ...]
+        """
         user_ids = UserPlans.objects.filter(plan_id=plan_id).values('user_id')
         user_ids = UserMailingChannels.objects.filter(email_yn='y', user_id__in=user_ids).values('user_id')
         recipients_telegram = list(CustomUser.objects.filter(id__in=user_ids).values('email'))
@@ -369,10 +372,10 @@ class UserMailingChannels(models.Model, UpdateMixin):
 
 class CustomUser(AbstractUser, UpdateMixin):
     """
-        Расширение стандартного юзера
-        Добавлено:
-        --- Номер телефона
-        --- Аватар
+        Extension of standard user model.
+        Added:
+        --- phone number
+        --- avatar
     """
     first_name = models.CharField(max_length=30, blank=False, validators=[validate_not_empty_filed])
     last_name = models.CharField(max_length=30, blank=False, validators=[validate_not_empty_filed])
@@ -418,9 +421,8 @@ class CustomUser(AbstractUser, UpdateMixin):
 
     def add_new_plan(self, title='No name', description='No description'):
         """
-            Эта функцию нужна для того, чтобы добавить пользователю новое пустое
-            расписание.
-            :return: plan_list object
+            Function that needed to add new empty plan to user.
+            :return: PlanLists object
         """
         new_plan = PlanLists(
             title=title,
@@ -438,8 +440,8 @@ class CustomUser(AbstractUser, UpdateMixin):
 
     def set_current_plan(self, plan_id):
         """
-            Функция для данного юзера усатанавливает текущее расписание,
-            при этом снимая метку current_yn у предыдущего текущего.
+            Function for this user sets the current plan, 
+            and remove the current_yn label from the previous one.
             :param plan_id: 
             :return: 
         """
@@ -455,8 +457,7 @@ class CustomUser(AbstractUser, UpdateMixin):
 
     def has_rights(self, action=None, **kwargs):
         """
-            Функция показывает есть ли у данного пользователя в данном расписании
-            права на то или иное действие
+            The function shows user has rights or not in this plan for some action.
             :param action: <str>
                 available actions
                 (
@@ -464,11 +465,12 @@ class CustomUser(AbstractUser, UpdateMixin):
                     'delete_participant', 'delete_admin', 'set_role'
                 )
             :param kwargs:
-                all possible params
+                all possible kwargs
                 * - necessary parameter
                 {
                     plan_id: <int>, *
                     participant_id: <int>,
+                    new_role: str [participant, admin, elder]
                 }
             :return: True/False
         """
