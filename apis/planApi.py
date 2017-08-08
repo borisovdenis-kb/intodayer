@@ -9,11 +9,11 @@ django.setup()
 # ---------------------------------------------------------------
 import json
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
-from extra.mailing import IntodayerMailing, PlanLists
+from extra.mailing import IntodayerMailing
 from django.shortcuts import render_to_response
 from django.http import JsonResponse, HttpResponse
 from intodayer2_app.models import (
-    CustomUser, UserPlans, Times, Subjects, Teachers, Places
+    CustomUser, UserPlans, Times, Subjects, Teachers, Places, PlanLists
 )
 
 
