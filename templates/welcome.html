@@ -4,6 +4,7 @@
 {% block scripts_top %}
     <link rel="stylesheet" type="text/css" href={% static "css/welcome_base.css" %}>
     <link rel="stylesheet" type="text/css" href={% static "css/header.css" %}>
+    <script type="text/javascript" src={% static "library/particles/particles.js" %}></script>
 {% endblock %}
 
 {% block header %}
@@ -11,7 +12,14 @@
 {% endblock %}
 
 {% block content_page %}
-    <div class="welcome_background">
+{#    <div id="particles-js">#}
+{##}
+{#    </div>#}
+{#    <div class="welcome_background">#}
+{#        <div class="welcome_background_fade">#}
+{#        </div>#}
+{#    </div>#}
+    <div id="particles-js">
         <div class="welcome_background_fade">
         </div>
     </div>
