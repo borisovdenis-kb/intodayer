@@ -287,7 +287,7 @@ class PlanLists(models.Model, UpdateMixin):
         # mailing.send_by_plan(plan_id=self.id)
         self.delete()
 
-    def get_image_url(self):
+    def get_avatar_url(self):
         """
             Returns the URL of the image associated with this Object.
             If an image hasn't been uploaded yet, it returns a stock image
@@ -389,7 +389,7 @@ class CustomUser(AbstractUser, UpdateMixin):
     class Meta:
         managed = True
 
-    def get_image_url(self):
+    def get_avatar_url(self):
         """
             Returns the URL of the image associated with this Object.
             If an image hasn't been uploaded yet or dose not exist on server

@@ -47,7 +47,6 @@ urlpatterns = [
     url(r'^plan/edit_plan_row', views.edit_plan_row_ajax),
     url(r'^plan/update_delete', views.plan_delete_ajax),
     url(r'^confirm_invitation', views.confirm_invitation_ajax),
-    url(r'^upload_user_avatar$', views.save_user_avatar_ajax),
     url(r'^switch_plan_only_set', views.switch_plan_only_set_ajax),
     url(r'^plan/invitation/(\d+)$', views.plan_view),
 
@@ -79,6 +78,8 @@ urlpatterns = [
     url(r'^update_user_info', myprofileApi.update_user_info),
     url(r'^check_old_password', myprofileApi.check_old_password),
     url(r'^make_new_password', myprofileApi.make_new_password),
+    url(r'^upload_user_avatar', myprofileApi.upload_user_avatar),
+    url(r'^get_user_plans', myprofileApi.get_user_plans),
 ]
 
 
