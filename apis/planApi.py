@@ -149,9 +149,8 @@ def upload_plan_avatar(request):
                 plan.update(**{'avatar': request.FILES['avatar']})
             else:
                 return HttpResponse(status=403)
-
         except (ValueError, ValidationError):
-            return HttpResponse(status=200)
+            return HttpResponse(status=400)
         except ObjectDoesNotExist:
             return HttpResponse(status=403)
 

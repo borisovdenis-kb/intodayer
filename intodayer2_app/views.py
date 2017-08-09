@@ -1,16 +1,20 @@
-from django.contrib.auth.models import *
+import json
+from django.contrib.auth.models import auth
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.utils import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
-from django.http import HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest
 from django.shortcuts import render_to_response
-from apis.planApi import *
-from extra.stripes_api import *
-from extra.utils import *
+from extra.stripes_api import Stripes
 from extra.mailing import IntodayerMailing
-from intodayer2_app.forms import *
-from intodayer2_app.send_sms import *
 from datetime import datetime
+from intodayer2_app.forms import SetAvatarForm, CustomUserCreationForm
+from extra.utils import (
+    edit_plan_row, CloneError, UPDATE, CREATE, get_today_tomorrow_plans
+)
+from intodayer2_app.models import (
+    UserPlans, Invitations, PlanLists, PlanRows, DaysOfWeek,
+    CustomUser
+)
 
 
 # TODO: Сделать в выводе расписания в /plan сортировку по времени, а не по неделям
@@ -395,7 +399,7 @@ def get_avatar_ajax(request):
 
         try:
             if request.GET['user_id']:
-                response.write(json.dumps({'url': user.get_image_url()}))
+                response.write(json.dumps({'url': user.get_avatar_url()}))
                 return response
         except KeyError:
             pass
@@ -406,7 +410,7 @@ def get_avatar_ajax(request):
                 plan = PlanLists.objects.get(id=request.GET['plan_id'])
 
                 response.write(json.dumps({
-                    'url': plan.get_image_url(),
+                    'url': plan.get_avatar_url(),
                     'isOwner': True if plan.owner == user else False
                 }))
                 return response
@@ -498,23 +502,6 @@ def login_view(request):
 
 def logout_view(request):
     auth.logout(request)
-
-
-def profile_settings(request):
-    if request.user.is_authenticated():
-        if request.method == 'POST':
-            user = User.objects.get(username=request.user.username)
-
-            # обновляем поля пользователя
-            user.username = request.POST['username']
-            user.myuser.phone = request.POST['phone']
-            user.save()
-            sendHelloSMS(request.POST['phone'])
-            return HttpResponseRedirect('/home')
-        else:
-            return render_to_response('myprofile.html', {})
-    else:
-        return render_to_response('myprofile.html', {})
 
 
 def get_all_plans(request):

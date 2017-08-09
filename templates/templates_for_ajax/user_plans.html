@@ -1,0 +1,9 @@
+{% for plan in user_plans %}
+    <div class="pr_plans_content" plan_role={{ plan.role }}>
+        <div style="position: relative">
+            <div class="pr_color_type color_elder"></div>
+            <div class="pr_img_title">{{ plan.plan.title }}</div>
+            <img src={{ plan.plan.get_avatar_url }} alt="..." class="img-rounded">
+        </div>
+    </div>
+{% endfor %}
