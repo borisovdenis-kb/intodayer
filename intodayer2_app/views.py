@@ -2,15 +2,17 @@ import json
 from django.contrib.auth.models import auth
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.utils import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest
 from django.shortcuts import render_to_response
 from extra.stripes_api import Stripes
 from extra.mailing import IntodayerMailing
 from datetime import datetime
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest
 from intodayer2_app.forms import SetAvatarForm, CustomUserCreationForm
+
 from extra.utils import (
     edit_plan_row, CloneError, UPDATE, CREATE, get_today_tomorrow_plans
 )
+
 from intodayer2_app.models import (
     UserPlans, Invitations, PlanLists, PlanRows, DaysOfWeek,
     CustomUser

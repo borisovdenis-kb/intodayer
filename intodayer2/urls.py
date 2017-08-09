@@ -31,7 +31,6 @@ urlpatterns = [
     url(r'^plan/$', views.plan_view),
     url(r'^login/$', views.login_view),
     url(r'^logout/$', views.logout_view),
-    url(r'^profile/$', views.profile_settings),
     url(r'^account/$', views.profile_page),
     url(r'^statistics/$', views.statistics_view),
     url(r'^registration/$', views.registration_view),
