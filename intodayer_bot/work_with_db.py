@@ -1,4 +1,3 @@
-from intodayer2 import config
 import pymysql
 
 
@@ -7,8 +6,8 @@ class MySQLer:
         To connect use:
             db = MySQLer(config.db_config_pymysql)
     """
-    def __init__(self, database):
-        self.connection = pymysql.connect(**database)
+    def __init__(self, database_params):
+        self.connection = pymysql.connect(**database_params)
 
     def get_user_by_email(self, email):
         query = 'SELECT * FROM intodayer2_app_customuser ' \
@@ -53,11 +52,3 @@ class MySQLer:
             cursor.execute(query)
 
         self.connection.commit()
-
-
-if __name__ == '__main__':
-    X = MySQLer(config.db_config_pymysql)
-
-    print(X.get_user_by_email('borisovdenis-kb@yandex.ru'))
-
-    # print(X.chat_is_exist('pipa'))

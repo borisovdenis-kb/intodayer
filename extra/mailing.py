@@ -12,7 +12,7 @@ from intodayer_bot import bot
 from django.core.mail import send_mail
 from base64 import b64decode
 from django.core.files.base import ContentFile
-from intodayer2 import config
+from decouple import config
 from intodayer2_app.models import UserMailingChannels, DivToPng
 
 
@@ -62,7 +62,7 @@ class IntodayerMailing:
         send_mail(
             self.subject,
             self.text,
-            config.PROJECT_EMAIL,
+            config('PROJECT_EMAIL'),
             recipient_list,
             fail_silently=False
         )

@@ -1,13 +1,15 @@
 # from intodayer_bot.utils import *
-from intodayer_bot.utils import set_user_state, is_logging, login
 # from intodayer_bot.work_with_db import *
 import telebot
-from intodayer2 import config
 import json
-
+from intodayer_bot import config
 from intodayer_bot.work_with_db import MySQLer
+from intodayer_bot.utils import (
+    set_user_state, is_logging, login
+)
 
-bot = telebot.TeleBot(config.token)
+
+bot = telebot.TeleBot(config.TOKEN)
 
 
 @bot.message_handler(commands=['start'])
@@ -17,7 +19,7 @@ def say_welcome(message):
         :param message:
         :return:
     """
-    db = MySQLer(config.db_config_pymysql)
+    db = MySQLer(config.DB_PYMYSQL_PARAMS)
 
     username = message.chat.first_name
     welcome_text = 'Здравствуйте, %s!\nIntodayerBot чертовски рад Вас видеть :)' % username
@@ -34,7 +36,7 @@ def say_welcome(message):
 
 @bot.message_handler(func=lambda message: is_logging(message.chat.id) is True)
 def user_login(message):
-    db = MySQLer(config.db_config_pymysql)
+    db = MySQLer(config.DB_PYMYSQL_PARAMS)
     error_message = "Попробуйте еще раз.\nПример: morpheus@zeon.com zeOn1999*"
     success_message = "Поздравляем, все прошло успешно!"
 
@@ -56,33 +58,8 @@ def user_login(message):
 def do_mailing(data):
     try:
         data = json.loads(data)
-    except ValueError:
+    except (ValueError, TypeError):
         raise ValueError('Send JSON string')
-    except TypeError:
-        raise TypeError('Send JSON string')
-
-    # message_text = ''
-    # unknown = '- ? -' + '\n'
-    #
-    # if data['plan_info']['title']:
-    #     message_text += 'Расписание: ' + data['plan_info']['title'] + '\n'
-    # else:
-    #     message_text += 'Расписание: ' + unknown
-    #
-    # if data['plan_info']['mem_count']:
-    #     message_text += 'Количество участников: ' + data['plan_info']['mem_count'] + '\n'
-    # else:
-    #     message_text += 'Количество участников: ' + unknown
-    #
-    # if data['sender_name']:
-    #     message_text += 'Староста: ' + data['sender_name'] + '\n'
-    # else:
-    #     message_text += 'Староста: ' + unknown
-    #
-    # if data['text']:
-    #     message_text += '\n' + '"' + data['text'] + '"' + '\n'
-    # else:
-    #     message_text += '\n' + '[Пустое сообщение]' + '\n'
 
     # делаем рассылку по списку контактов
     text = data['message']['text']

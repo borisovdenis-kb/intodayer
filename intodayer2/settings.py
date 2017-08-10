@@ -11,7 +11,8 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
-from intodayer2 import config
+from decouple import config
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -82,11 +83,11 @@ WSGI_APPLICATION = 'intodayer2.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': config.db_config_mysql['NAME'],
-        'USER': config.db_config_mysql['USER'],
-        'PASSWORD': config.db_config_mysql['PASSWORD'],
-        'HOST': config.db_config_mysql['HOST'],
-        'PORT': config.db_config_mysql['PORT'],
+        'NAME': config('DB_MYSQL_NAME'),
+        'USER': config('DB_MYSQL_USER'),
+        'PASSWORD': config('DB_MYSQL_PASSWORD'),
+        'HOST': config('DB_MYSQL_HOST'),
+        'PORT': config('DB_MYSQL_PORT'),
         # 'OPTIONS': {
         #             'charset': 'latin1',
         #             'use_unicode': True,
@@ -144,5 +145,5 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_PORT = 465
 EMAIL_USE_SSL = True
-EMAIL_HOST_USER = config.PROJECT_EMAIL
-EMAIL_HOST_PASSWORD = config.PROJECT_EMAIL_PSWD
+EMAIL_HOST_USER = config('PROJECT_EMAIL')
+EMAIL_HOST_PASSWORD = config('PROJECT_EMAIL_PSWD')
