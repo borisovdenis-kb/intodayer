@@ -3,7 +3,7 @@
  */
 $(document).ready(function () {
     $(".about_content").each(function (i) {
-        console.log(i);
+        console.log("--->", i);
         $(this).delay(300 * i).fadeTo(1, 200);
     });
 });
