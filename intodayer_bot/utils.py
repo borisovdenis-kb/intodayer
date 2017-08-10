@@ -9,17 +9,17 @@ django.setup()
 # ---------------------------------------------------------------
 from django.contrib.auth.hashers import check_password
 from intodayer_bot.work_with_db import MySQLer
-from intodayer2 import config
+from intodayer_bot import config
 import shelve
 
 
 def set_user_state(chat_id, state=False):
-    with shelve.open(config.shelve_name) as storage:
+    with shelve.open(config.SHELVE_NAME) as storage:
         storage[str(chat_id)] = state
 
 
 def is_logging(chat_id):
-    with shelve.open(config.shelve_name) as storage:
+    with shelve.open(config.SHELVE_NAME) as storage:
         try:
             state = storage[str(chat_id)]
             return state
@@ -28,7 +28,7 @@ def is_logging(chat_id):
 
 
 def login(email, password):
-    db = MySQLer(config.db_config_pymysql)
+    db = MySQLer(config.DB_PYMYSQL_PARAMS)
     user = db.get_user_by_email(email)
     if user:
         # user[1] - password
