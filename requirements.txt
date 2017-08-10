@@ -26,4 +26,5 @@ pytz==2017.2
 requests==2.13.0
 six==1.10.0
 sympy==1.0
+whitenoise==3.3.0
 wrapt==1.10.10
