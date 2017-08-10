@@ -4,7 +4,6 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.utils import IntegrityError
 from django.shortcuts import render_to_response
 from extra.stripes_api import Stripes
-from extra.mailing import IntodayerMailing
 from datetime import datetime
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest
 from intodayer2_app.forms import SetAvatarForm, CustomUserCreationForm
@@ -58,32 +57,6 @@ def get_settings_plan_html(request):
         context = dict()
         context.update(get_cur_plan(request))
         return render_to_response('templates_for_ajax/settings_ajax.html', context)
-
-
-def mailing_ajax(request):
-    """
-        Функция получается данные от клиента и вызывает функцию расслыки
-        do_mailing
-        :param request:
-        :return:
-    """
-    # TODO: Функция пока, что просто для просто для тестирования
-    if request.is_ajax():
-        user = CustomUser.objects.get(username=request.user.username)
-
-        response = HttpResponse()
-        response['Content-Type'] = 'application/json'
-
-        mailing = IntodayerMailing(
-            text=request.POST['text'],
-            image=request.POST['image']
-        )
-        # совершаем рассылку
-        mailing.send_by_plan(request.POST['plan_id'])
-
-        response.write(json.dumps({'success': 1}))
-
-        return response
 
 
 def edit_plan_row_ajax(request):
@@ -240,26 +213,6 @@ def switch_plan_plan_ajax(request):
         context['plan_rows'] = plan_rows
 
         return render_to_response('content_pages/right_content_plan_general.html', context)
-
-
-def switch_plan_participants_ajax(request):
-
-    if request.is_ajax:
-        user = CustomUser.objects.get(username=request.user.username)
-        context = {}
-
-        try:
-            plan_id = int(request.POST['plan_id'])
-            context.update(get_cur_plan(request, plan_id))
-        except ValueError:
-            return render_to_response('templates_for_ajax/content_errors.html')
-        except IndexError:
-            return render_to_response('templates_for_ajax/content_errors.html')
-
-        # устанавливаем current_yn
-        user.set_current_plan(plan_id)
-
-        return render_to_response('content_pages/right_content_participants.html', context)
 
 
 def right_plan_content_only(request):
@@ -717,14 +670,16 @@ def about_service_view(request):
 # такие как: ИМЕНА ДНЕЙ НЕДЕЛИ, ДАТА НАЧАЛА РАБОТЫ РАСПАСАНИЯ"
 # Это просто шок.
 # Бредовее комментария я еще не видел.
-def get_participants(plan, user):
+def get_participants(plan):
     """
         Возвращает всех участников расписания
         такие как: имена дней недели, дата начала работы расписания
     """
     context = dict()
-    # participants = CustomUser.filter(id=plan.owner)
+    # TODO: exclude role = elder
+    participant_list = UserPlans.objects.select_related().filter(plan_id=plan.plan.id)
 
+    context['participants'] = participant_list
     return context
 
 
@@ -738,9 +693,13 @@ def participant_page(request):
         if context['cur_plan'] == 0:
             return render_to_response('plan_empty.html', context)
 
-        context.update(get_participants(context['cur_plan'], context['user']))
+        context.update(get_participants(context['cur_plan']))
+
+        print(context)
 
         return render_to_response('participants.html', context)
+    else:
+        return HttpResponseRedirect("/")
 
 
 def profile_page(request):

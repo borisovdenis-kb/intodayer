@@ -4,6 +4,8 @@
 import os
 import django
 
+from intodayer2_app.views import get_cur_plan, get_dates_info
+
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "intodayer2.settings")
 django.setup()
 # ---------------------------------------------------------------
@@ -13,8 +15,8 @@ from extra.mailing import IntodayerMailing
 from django.shortcuts import render_to_response
 from django.http import JsonResponse, HttpResponse
 from intodayer2_app.models import (
-    CustomUser, UserPlans, Times, Subjects, Teachers, Places, PlanLists
-)
+    CustomUser, UserPlans, Times, Subjects, Teachers, Places, PlanLists,
+    PlanRows)
 
 
 def create_plan(request):
@@ -173,3 +175,32 @@ def mailing_test(request):
         return HttpResponse(status=200)
     else:
         return HttpResponse(status=403)
+
+
+def switch_plan_plan(request):
+    """
+        I don't sure that this is RESTfull endpoint...
+
+        --> For more detailed documentation see Postman.
+    """
+    if request.user.is_authenticated():
+        user = CustomUser.objects.get(username=request.user.username)
+        context = {}
+
+        try:
+            plan_id = int(request.POST['plan_id'])
+            context.update(get_cur_plan(request, plan_id))
+        except ValueError:
+            return render_to_response('templates_for_ajax/content_errors.html')
+        except IndexError:
+            return render_to_response('templates_for_ajax/content_errors.html')
+
+        context.update(get_dates_info(context['cur_plan']))
+        # устанавливаем current_yn
+        user.set_current_plan(plan_id)
+        plan_rows = PlanRows.objects.select_related().filter(plan_id=plan_id).order_by('start_week')
+        context['plan_rows'] = plan_rows
+
+        return render_to_response('content_pages/right_content_plan_general.html', context)
+    else:
+        return HttpResponse(status=401)

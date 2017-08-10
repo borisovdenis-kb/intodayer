@@ -8,6 +8,8 @@ import django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "intodayer2.settings")
 django.setup()
 # ---------------------------------------------------------------
+from intodayer2_app.views import get_participants
+from django.shortcuts import render_to_response
 from django.http import HttpResponse, JsonResponse
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from intodayer2_app.models import CustomUser, UserPlans, Invitations, UnacceptableNewRoleValue
@@ -154,5 +156,33 @@ def get_expected_participants(request):
             return HttpResponse(status=403)
 
         return JsonResponse({'expected_participants': expected_participants}, status=200)
+    else:
+        return HttpResponse(status=401)
+
+
+def switch_plan_participants(request):
+    """
+        I don't sure that this is RESTfull endpoint...
+
+        --> For more detailed documentation see Postman.
+    """
+    if request.user.is_authenticated():
+        user = CustomUser.objects.get(username=request.user.username)
+        data = request.POST
+        context = {}
+
+        try:
+            plan = UserPlans.objects.select_related().get(plan_id=data['plan_id'], user_id=user.id)
+            context['cur_plan'] = plan
+            context.update(get_participants(plan))
+        except ValueError:
+            return render_to_response('templates_for_ajax/content_errors.html', status=400)
+        except ObjectDoesNotExist:
+            return render_to_response('templates_for_ajax/content_errors.html', status=403)
+
+        # устанавливаем current_yn
+        user.set_current_plan(data['plan_id'])
+
+        return render_to_response('content_pages/right_content_participants.html', context, status=200)
     else:
         return HttpResponse(status=401)

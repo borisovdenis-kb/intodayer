@@ -25,17 +25,21 @@
     </div>
 
     <div class="part_content">
+        {% for participant in participants %}
+            <div class="part_block">
+                <div class="part_ava">
+                    <img src={{ participant.user.get_avatar_url }} class="img-rounded">
+                </div>
+                <div class="part_username">
+                    <span>
+                        {{ participant.user.get_name.first_name }} {{ participant.user.get_name.last_name }}
+                    </span>
+                </div>
+                <div class="rights">
 
-        <div class="part_block">
-            <div class="part_ava">
-                <img src="../../static/DSC00598.psd_Comp_1111_00000.jpg" class="img-rounded">
+                </div>
             </div>
-            <div class="part_username">
-                <span>Alexey Kroktov</span>
-            </div>
-            <div class="rights"></div>
-        </div>
-
+        {% endfor %}
     </div>
 
 

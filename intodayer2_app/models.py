@@ -302,7 +302,7 @@ class PlanLists(models.Model, UpdateMixin):
             return '/static/images/plan_avatar_default.png'
 
     def count_of_users(self):
-        n = UserPlans.objects.filter(user_id=self.id).count()
+        n = UserPlans.objects.filter(plan_id=self.id).count()
 
         if (n % 10) in [0, 5, 6, 7, 8, 9]:
             res = '%s участников' % n
@@ -364,7 +364,7 @@ class UserMailingChannels(models.Model, UpdateMixin):
 
     def __str__(self):
         return '%s telegram(%s) email(%s)' % (
-            ' '.join(self.user.get_name()),
+            ' '.join(self.user.get_name().values()),
             self.telegram_yn,
             self.email_yn
         )
@@ -407,17 +407,10 @@ class CustomUser(AbstractUser, UpdateMixin):
 
     def get_name(self):
         """
-            Returns user's first name and last name if exist.
-            Else return username.
-            To construct name use ' '.join()
-            :return: str -- username (first_name + last_name or username)
+            Returns user's first name and last name.
+            :return: dict -- {'first_name': some_str, 'last_name': some_str}
         """
-        if self.first_name and self.last_name:
-            res = [self.first_name, self.last_name]
-            return res
-        else:
-            res = [self.username]
-            return res
+        return {'first_name': self.first_name, 'last_name': self.last_name}
 
     def add_new_plan(self, title='No name', description='No description'):
         """

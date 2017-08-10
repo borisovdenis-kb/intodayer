@@ -41,16 +41,11 @@ urlpatterns = [
     url(r'^get_avatar', views.get_avatar_ajax),
     url(r'^get_invitations', views.get_invitations_ajax),
     url(r'^home/switch_plan', views.switch_plan_home_ajax),
-    url(r'^plan/switch_plan', views.switch_plan_plan_ajax),
-    url(r'^participants/switch_plan', views.switch_plan_participants_ajax),
     url(r'^plan/edit_plan_row', views.edit_plan_row_ajax),
     url(r'^plan/update_delete', views.plan_delete_ajax),
     url(r'^confirm_invitation', views.confirm_invitation_ajax),
     url(r'^switch_plan_only_set', views.switch_plan_only_set_ajax),
     url(r'^plan/invitation/(\d+)$', views.plan_view),
-
-    # рассылка
-    url(r'^mailing', views.mailing_ajax),
 
     # подгрузка контентов
     url(r'^left_content', views.left_content_load_ajax),
@@ -60,25 +55,27 @@ urlpatterns = [
 
     # API расписания
     url(r'^delete_plan', planApi.delete_plan),
-    url(r'^get_drop_list', planApi.get_drop_list),
     url(r'^create_plan', planApi.create_plan),
-    url(r'^update_plan_info', planApi.update_plan_info),
-    url(r'^plan/settings_plan', views.get_settings_plan_html),
-    url(r'^upload_plan_avatar', planApi.upload_plan_avatar),
     url(r'^test_mailing', planApi.mailing_test),
+    url(r'^get_drop_list', planApi.get_drop_list),
+    url(r'^update_plan_info', planApi.update_plan_info),
+    url(r'^plan/switch_plan', planApi.switch_plan_plan),
+    url(r'^upload_plan_avatar', planApi.upload_plan_avatar),
+    url(r'^plan/settings_plan', views.get_settings_plan_html),
 
     # API участников
     url(r'^change_role', participantsApi.set_role),
     url(r'^delete_participant', participantsApi.delete_participant),
     url(r'^invite_participants', participantsApi.invite_participants),
+    url(r'^participants/switch_plan', participantsApi.switch_plan_participants),
     url(r'^get_expected_participants', participantsApi.get_expected_participants),
 
     # API моего профиля
+    url(r'^get_user_plans', myprofileApi.get_user_plans),
     url(r'^update_user_info', myprofileApi.update_user_info),
-    url(r'^check_old_password', myprofileApi.check_old_password),
     url(r'^make_new_password', myprofileApi.make_new_password),
     url(r'^upload_user_avatar', myprofileApi.upload_user_avatar),
-    url(r'^get_user_plans', myprofileApi.get_user_plans),
+    url(r'^check_old_password', myprofileApi.check_old_password),
 ]
 
 
