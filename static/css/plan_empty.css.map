@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AACA,gCAAgC;EAC9B,SAAS,EAAE,KAAK;EAChB,WAAW,EAAE,GAAG;EAChB,MAAM,EAAE,WAAW;;AAErB,cAAc;EACZ,KAAK,EAAE,IAAI",
+"sources": ["plan_empty.sass"],
+"names": [],
+"file": "plan_empty.css"
+}

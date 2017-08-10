@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAAA,0BAA0B;EACxB,UAAU,EAAE,GAAG;;AAEjB,4BAA4B;EAC1B,MAAM,EAAE,WAAW;EACnB,KAAK,EAAE,KAAK;EAGZ,4HAAyB;IACvB,OAAO,EAAE,IAAI",
+"sources": ["ok_cancel_buttons.sass"],
+"names": [],
+"file": "ok_cancel_buttons.css"
+}

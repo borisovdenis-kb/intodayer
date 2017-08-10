@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 
 import os
 from intodayer2 import config
-from intodayer2.config import *
+from intodayer2 import config
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -33,6 +33,7 @@ ALLOWED_HOSTS = [
     "192.168.0.49",
     "192.168.0.8",
     "127.0.0.1",
+    "localhost"
 ]
 
 # Application definition
@@ -51,7 +52,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    #'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -83,20 +84,16 @@ WSGI_APPLICATION = 'intodayer2.wsgi.application'
 
 DATABASES = {
     'default': {
-        # 'ENGINE': 'django.db.backends.sqlite3',
-        # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        # 'ENGINE': 'django.db.backends.oracle',
-        # 'NAME': db_config_oracle['NAME'],
-        # 'USER': db_config_oracle['USER'],
-        # 'PASSWORD': db_config_oracle['PASSWORD'],
-        # 'HOST': db_config_oracle['HOST'],
-        # 'PORT': db_config_oracle['PORT'],
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': db_config_mysql['NAME'],
-        'USER': db_config_mysql['USER'],
-        'PASSWORD': db_config_mysql['PASSWORD'],
-        'HOST': db_config_mysql['HOST'],
-        'PORT': db_config_mysql['PORT'],
+        'NAME': config.db_config_mysql['NAME'],
+        'USER': config.db_config_mysql['USER'],
+        'PASSWORD': config.db_config_mysql['PASSWORD'],
+        'HOST': config.db_config_mysql['HOST'],
+        'PORT': config.db_config_mysql['PORT'],
+        # 'OPTIONS': {
+        #             'charset': 'latin1',
+        #             'use_unicode': True,
+        # },
     }
 }
 

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="512px" height="512px" viewBox="0 0 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 3.7.2 (28276) - http://www.bohemiancoding.com/sketch -->
+    <title>Profi_icons_70</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Profi_icons_70" stroke="#4A4A4A" stroke-width="16">
+            <circle id="Oval-34" cx="256" cy="256" r="137"></circle>
+            <polyline id="Path-100" points="256.335938 158.90625 256.335938 255.46731 324.535464 255.46731"></polyline>
+            <g id="Group" transform="translate(79.000000, 41.000000)">
+                <path d="M112.765958,76.5957446 C112.765958,47.2188962 88.9513166,23.4042553 59.5744682,23.4042553 C30.1976198,23.4042553 6.38297888,47.2188962 6.38297888,76.5957446 C6.38297888,76.5957455 112.765959,76.5957455 112.765958,76.5957446 Z" id="Oval-36" transform="translate(59.574468, 50.000000) rotate(-30.000000) translate(-59.574468, -50.000000) "></path>
+                <path d="M346.597096,76.2240799 C346.597096,46.8472315 322.782455,23.0325905 293.405607,23.0325905 C264.028758,23.0325905 240.214117,46.8472315 240.214117,76.2240799 L346.597096,76.2240799 Z" id="Oval-36-Copy" transform="translate(293.405607, 49.628335) scale(-1, 1) rotate(-30.000000) translate(-293.405607, -49.628335) "></path>
+            </g>
+            <path d="M183.079812,365.909677 L139.851976,410.377029" id="Path-101"></path>
+            <path d="M327.924094,366.247106 L371.151931,410.714459" id="Path-101-Copy"></path>
+        </g>
+    </g>
+</svg>

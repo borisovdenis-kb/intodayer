@@ -1,0 +1,129 @@
+@import "mixins"
+@import "plan_content"
+$alpha-color: rgba(255, 255, 255, 0)
+$border-color: rgba(230, 230, 230, 1)
+$border-style-frames: 1px solid #{$border-color}
+$glyphicon-color: rgba(30, 30, 30, 1)
+
+$border-color-split-line: rgba(210, 210, 210, 1)
+
+$button-return-height: 50px
+$button-return-padding: 15px
+
+%bootstrap-button-style
+  &:hover
+    border-color: $border-color
+  &:active
+    box-shadow: none
+    border-color: $alpha-color
+
+.plan_settings_layouts
+  display: flex
+  flex-direction: row
+
+.setting_msg
+  display: none
+  font-size: 1em
+  padding: 10px
+  @include border-radius(4px)
+  margin-bottom: 4px
+
+$margin-panel: 3px
+
+//.plan_settings_content
+@for $i from 1 through 4
+  .plan_settings_content-#{$i}
+    background: white
+    border: $border-style-frames
+    @include border-radius(4px)
+    padding-bottom: 10px
+    margin-top: 5px
+
+    @if $i == 1
+      margin-right: $margin-panel
+      width: calc(50% - #{$margin-panel})
+    @if $i == 2
+      width: calc(50% - #{$margin-panel})
+      margin-left: $margin-panel
+
+
+.st-inner-content
+  width: calc(100% - 30px)
+  padding:
+    top: 15px
+    bottom: 10px
+    left: 25px
+
+  //background: blue
+
+h4
+  margin-top: 0px
+
+#remove_plan
+  margin-top: 2px
+
+.plan_info_content
+  li
+    &:first-child
+      margin: 0
+    margin:
+      top: 10px
+
+.plan_info
+  padding: 15px
+  background: rgba(230,230,230,1)
+  @include border-radius(4px)
+
+
+
+
+.return_button.btn
+  @extend %tools_button
+  width: 100px
+  height: $tools-button-height
+  @include set-flex(center)
+  @include border-radius(4px)
+
+
+  span
+    font-size: 0.9em
+    color: $border-color
+    padding:
+      right: 5px
+      bottom: 3px
+    color: $glyphicon-color + rgba(20,20,20,1)
+  &:hover
+    color: $glyphicon-color + rgba(20,20,20,1)
+
+  @extend %bootstrap-button-style
+
+.datepicker_content
+  width: 80%
+
+#modal_ok_cancel
+  .modal-dialog
+    width: 400px
+  .close
+    margin-left: 100px
+  .modal_cancel, .modal_ok
+    &:active, &:focus, &:link
+      outline: none
+
+//.plan_settings_content
+@media (max-width: 768px)
+  .plan_settings_layouts
+    flex-direction: column
+  @for $i from 1 through 4
+    .plan_settings_content-#{$i}
+      width: 100%
+      @if $i == 1
+        margin-right: 0
+      @if $i == 2
+        margin:
+          left: 0
+          top: 5px
+
+
+
+//.btn-back.btn
+//  @extend %tools_button

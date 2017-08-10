@@ -1,4 +1,7 @@
-import json
+# ---------------------------------------------------------------------------------- #
+#             В ЭТОМ МОДУЛЕ БУДУТ ХРАНИТЬСЯ ВСЯКИЕ ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ           #
+# ---------------------------------------------------------------------------------- #
+
 # ---------------------------------------------------------------
 # для того, что бы тестировать django файлы
 import os
@@ -7,19 +10,19 @@ import django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "intodayer2.settings")
 django.setup()
 # ---------------------------------------------------------------
-from django.utils import timezone
-from intodayer2_app.models import *
-from PIL import Image
-from io import BytesIO
+# from intodayer2_app.models import *
+# from PIL import Image
+# from io import BytesIO
 from base64 import b64decode
 from django.core.files.base import ContentFile
-from datetime import datetime, timedelta
-from datetime import datetime as datetime_lib
+from django.utils import timezone
+from datetime import timedelta, datetime
+from intodayer2_app.models import (
+    DivToPng, PlanRows, Subjects, Teachers, Times, Places, DaysOfWeek
+)
 
+# from datetime import timezone
 
-######################################################################################
-#             В ЭТОМ МОДУЛЕ БУДУТ ХРАНИТЬСЯ ВСЯКИЕ ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ           #
-######################################################################################
 
 CREATE = 'CREATE'
 UPDATE = 'UPDATE'
@@ -41,25 +44,6 @@ def save_div_png(base64_str, filename):
     new_img.save()
 
     return new_img.image.path
-
-
-def members_amount_suffix(n):
-    """
-        Функция определяет нужно окончание в слове участник
-        для заданного n
-        :param n: целое число
-        :return res: строка
-    """
-    res = ''
-
-    if (n % 10) in [0, 5, 6, 7, 8, 9]:
-        res = '%s участников' % n
-    elif (n % 10) in [2, 3, 4]:
-        res = '%s участника' % n
-    else:
-        res = '%s участник' % n
-
-    return res
 
 
 def weeks_from(start, end):
@@ -84,7 +68,7 @@ def get_week_scale(start_date, n):
         [24.04, 01.05, 08.05]    
         :return: list
     """
-    delta = timedelta(7)
+    delta = datetime.timedelta(7)
     scale = [start_date.strftime('%b, %d')]
 
     for i in range(n):
@@ -105,11 +89,8 @@ def get_today_tomorrow_plans(plan):
     """
     context = {}
 
-    # количество участников
-    count = UserPlans.objects.filter(plan_id=plan.plan.id).count()
-
     today = timezone.make_aware(datetime.now())          # опр сегодняшнюю дату
-    tomorrow = today + timedelta(1)                      # завтрашняя дата
+    tomorrow = today + timedelta(1)             # завтрашняя дата
     td_weekday = datetime.weekday(today)                 # день недели сегодня
     tm_weekday = datetime.weekday(tomorrow)              # день дедели завтра
     start_date = plan.plan.start_date                    # c какого числа действует расп.
@@ -146,43 +127,11 @@ def get_today_tomorrow_plans(plan):
         'plan_rows': tomorrow_plan
     }
 
-    # инфа о текущем расписании
-    context['cur_plan_info'] = [plan.plan.title, plan.plan.description, plan.plan.id]
-    # добавляем кол-во участников
-    context['cur_plan_info'] += [members_amount_suffix(count)]
     # разделитель между неделями
     context['separator'] = True if cur_week1 != cur_week2 else False
 
     return context
 
-
-def get_rows_by_weekday(rows):
-    """
-        Задача этой функции в том, чтобы распределить
-        строки рассписания по дням недели, отсортировав
-        их по времени
-        :param rows: строки рассписания, заранее выбранный из таблицы
-        :return: days
-    """
-    days = [[i] for i in range(7)]
-
-    for row in rows:
-        if row.day_of_week.name == 'Понедельник':
-            days[0].append(row)
-        elif row.day_of_week.name == 'Вторник':
-            days[1].append(row)
-        elif row.day_of_week.name == 'Среда':
-            days[2].append(row)
-        elif row.day_of_week.name == 'Четверг':
-            days[3].append(row)
-        elif row.day_of_week.name == 'Пятница':
-            days[4].append(row)
-        elif row.day_of_week.name == 'Суббота':
-            days[5].append(row)
-        elif row.day_of_week.name == 'Воскресенье':
-            days[6].append(row)
-
-    return days
 
 ##################################################################################################
 # ЛЕХА!!!!!!!!! ЛЕХА!!!!!!!!!!!
@@ -221,7 +170,7 @@ def edit_plan_row(data, this_plan, this_id, mode):
 
     # есть ли уже такое время в расписании
     if 'time' in data:
-        dt = datetime_lib.strptime(data['time'], "%H:%M")
+        dt = datetime.strptime(data['time'], "%H:%M")
         times_objects = Times.objects.select_related().filter(plan_id=this_plan, hh24mm=dt)
         times_objects = Times.objects.select_related().filter(plan_id=this_plan, hh24mm=dt)
         if times_objects.count() == 0:
@@ -241,13 +190,16 @@ def edit_plan_row(data, this_plan, this_id, mode):
 
     if 'day_of_week' in data:
         day_of_week = DaysOfWeek.objects.get(id=data['day_of_week'])
+
     if 'parity' in data:
+
         if data['parity'] == 'Все':
             parity = None
         elif data['parity'] == 'Чет':
             parity = 0
         elif data['parity'] == 'Нечет':
             parity = 1
+
     if 'start_week' in data:
         start_week = data['start_week']
     if 'end_week' in data:
@@ -311,9 +263,11 @@ def edit_plan_row(data, this_plan, this_id, mode):
                                 time=this_time,
                                 place=place,
                                 plan=this_plan)
+
         new_plan_row.save()
         # возвращаем новое id, чтобы записать его в html
         return new_plan_row.id
+
 
 if __name__ == '__main__':
     start_date = datetime(2017, 4, 1)

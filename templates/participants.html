@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block title %}
+    <title>Intodayer | Participants</title>
+{% endblock %}
+
+{% block styles %}
+    <link rel="stylesheet" type="text/css" href={% static "css/plan_content.css" %}>
+    <link rel="stylesheet" type="text/css" href={% static "css/participants_content.css" %}>
+{% endblock %}
+
+
+{% block scripts_bottom %}
+    <script type="text/javascript" src={% static "scripts/script_participants.js" %}></script>
+{% endblock %}
+
+{% block invitation %}
+    <div class="inv_description">
+        <div class="comment_from_user">
+            {{ invitation.comment }}
+        </div>
+    </div>
+    <div class="confirmation">
+        <div class="accept">
+            Принять
+        </div>
+        <div class="reject">
+            Оклонить
+        </div>
+    </div>
+{% endblock %}
+
+{#правый контент теперь тут#}
+{% block right_content %}
+    {% include "content_pages/right_content_participants.html" %}
+{% endblock %}
+
+{% block left_content %}
+    {% include "content_pages/left_content.html" %}
+{% endblock %}
+
+{% block choose_avatar %}
+    {% include "modal_frames/choose_avatar.html" %}
+{% endblock %}
+

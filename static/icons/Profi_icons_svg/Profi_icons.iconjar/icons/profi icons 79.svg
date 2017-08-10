@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="512px" height="512px" viewBox="0 0 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 3.7.2 (28276) - http://www.bohemiancoding.com/sketch -->
+    <title>Profi_icons_79</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="Profi_icons_79" stroke="#4A4A4A" stroke-width="16">
+            <path d="M256,263.8 C222.862915,263.8 196,230.489985 196,189.4 C196.445312,185.738281 177.779297,167.722656 182.982422,128.443359 C188.185547,89.1640625 216.59375,101.386719 216.59375,101.386719 C216.59375,101.386719 241.076167,69.5175779 289.316406,86.9433594 C337.556645,104.369141 326.722652,136.572265 323.871094,140.535156 C321.019536,144.498048 330.351562,168.862892 315.999996,189.400003 C316,230.489985 289.137085,263.8 256,263.8 Z" id="Oval-22"></path>
+            <path d="M256,298.52 C233.452568,298.52 212.885706,288.005007 197.314611,270.713863 C141.99814,293.593947 103,348.242721 103,412 L409,412 C409,348.215309 369.968318,293.546956 314.48662,270.576606 C298.764354,289.1962 279.203056,298.52 256,298.52 Z" id="Oval-22-Copy"></path>
+        </g>
+    </g>
+</svg>

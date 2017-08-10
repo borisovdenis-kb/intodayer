@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="512px" height="512px" viewBox="0 0 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 3.7.2 (28276) - http://www.bohemiancoding.com/sketch -->
+    <title>Profi_icons_24</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="96" y="176" width="320" height="160" rx="100"></rect>
+        <mask id="mask-2" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="320" height="160" fill="white">
+            <use xlink:href="#path-1"></use>
+        </mask>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Profi_icons_24" stroke="#4A4A4A">
+            <circle id="Oval-31" stroke-width="16" cx="179" cy="256" r="40"></circle>
+            <use id="Rectangle-13" mask="url(#mask-2)" stroke-width="32" xlink:href="#path-1"></use>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,376 @@
+@import "mixins"
+@import "global_vars"
+
+
+
+// левый контент
+$avatar-size: 180px
+
+body
+  overflow-y: scroll
+  min-width: $min-width-page
+
+.page
+  clear: both
+
+.plan_window
+  background: white
+  border: 1px solid rgba(230, 230, 230, 1)
+  @include border-radius(4px)
+  padding:
+    bottom: 10px
+  &:first-child
+    margin-top: 0
+
+.content
+  margin: auto
+    top: 10px
+  background: $background_body
+  width: 100%
+  max-width: $max-width-page
+  padding: 0 8px 0 8px
+
+.left_content
+  display: flex
+  flex-direction: column
+  align-items: center
+  width: $width-left-content
+  float: left
+  margin:
+    right: 8px
+    top: 10px
+
+.right_content
+  float: left
+  width: $width-right-content
+  margin:
+    top: 10px
+
+@media (max-width: 767px)
+  .right_content
+    width: 100%
+
+%ava_styles
+  width: $avatar-size
+  height: $avatar-size
+  cursor: default
+  @include border-radius(4px)
+
+.ava_content
+  @extend %ava_styles
+  border: 1px solid rgba(230, 230, 230, 1)
+  background: center no-repeat
+  background-size: cover
+  overflow: hidden
+  transition: 0.2s
+
+.ava_cover
+  @extend %ava_styles
+  position: absolute
+  background: white
+  opacity: 0
+  transition: 0.3s
+  &:hover
+    opacity: 0.8
+
+.ava_cover_text
+  @extend %ava_styles
+  display: flex
+  justify-content: center
+  align-items: center
+  //@include set-flex(center)
+  p
+    &:hover
+      cursor: pointer
+      color: #8b1deb
+
+%plan_selector_styles
+  width: 100%
+  @include border-radius(4px)
+  overflow: hidden
+
+.plan_selector
+  @extend %plan_selector_styles
+  &:hover
+    cursor: default
+  ul
+    li
+      border: 1px solid rgb(220, 220, 220)
+      @include border-radius(4px)
+      margin:
+        top: 5px
+      overflow: hidden
+      a
+        display: block
+        padding: 10px 0 10px 10px
+        line-height: 20px
+        width: 100%
+        cursor: pointer
+      p
+        display: none
+
+#plan_selector_title
+  display: block
+  margin: 10px 0 15px 10px
+
+.create_plan
+  li
+    a
+      display: block
+      height: 35px
+      width: 100%
+      line-height: 20px
+      padding: 10px 0 10px 10px
+      background: #f4f3f8 url("../images/plus.png") center no-repeat
+      @include background-size(contain)
+      cursor: pointer
+
+.user_image
+  margin-left: 10px
+  float: left
+  height: 30px
+  width: 30px
+  @include border-radius(4px)
+  background: center no-repeat
+  @include background-size(cover)
+
+.title_content
+  display: flex
+  @include border-radius(4px)
+  background: white
+  padding: 10px 0 10px 0
+  text-align: center
+  border: 1px solid rgba(230, 230, 230, 1)
+  transition: 0.3s all
+
+  h2
+    padding: 10px 0 10px 0
+    margin: 0
+
+.buttons_setting
+  margin-top: 10px
+
+.setting_success
+  margin:
+    right: 2px
+
+.setting_cancel
+  margin:
+    left: 2px
+
+.form-group
+  margin: 0
+    left: 25px
+  padding: 0
+
+#plan_title
+  @include set-flex(center)
+  flex-direction: column
+  width: 100%
+  cursor: default
+
+#title_edit_input
+  width: 100%
+  font-size: 2em
+  border: 1px solid white
+  text-align: center
+  transition: 0.3s
+  text-overflow: ellipsis
+
+  &:focus
+    outline: none
+    cursor: auto
+    border: 1px solid rgb(217, 217, 227)
+  &:hover
+    outline: none
+    cursor: pointer
+  &:disabled
+    background: rgba(255, 255, 255, 0)
+    cursor: default
+
+#count_title
+  margin:
+    top: 5px
+  padding:
+    top: 1px
+  font-size: 1em
+
+.title_wrap
+  background: gray
+
+.icon_setting_content
+  @include set-flex(center)
+  justify-content: flex-end
+  margin:
+    right: 20px
+  float: right
+  height: 100%
+
+.plan_settings
+  font-size: 1.5em
+  cursor: pointer
+
+.data_work
+  height: 100%
+  float: left
+  margin-left: 25px
+  display: flex
+  align-items: center
+  justify-content: center
+
+.start_date
+  margin-bottom: 2px
+
+.end_date
+  margin-top: 2px
+
+.setting_left
+  width: 40%
+  display: flex
+  align-items: center
+  align-content: center
+
+
+.setting_right
+  width: 40%
+
+.plan_settings_content-1
+  margin-top: 5px
+  &:last-child
+    margin-bottom: 300px
+
+.content_day_title
+  display: flex
+  justify-content: center
+  flex-direction: column
+  align-items: center
+  padding:
+    top: 10px
+    //bottom: 0px
+  width: calc(100% - 40px)
+  margin: auto
+  border-bottom: 1px solid rgba(210, 210, 210, 1)
+  a
+    display: none
+
+.day_data
+  padding: 0 0 10px 0
+
+.day_plan_content
+  margin: auto
+  width: calc(100% - 20px)
+
+.str_plan
+  display: flex
+  flex-direction: row
+  /*Пункты внутри контейнера будут располагаться горизонтально */
+  align-items: stretch
+  /*Пункты внутри контейнер будут принимать всю его высоту*/
+  margin:
+    top: 3px
+    /*расстояние между строчками*/
+    right: 10px
+    left: 10px
+  width: calc(100% - 20px)
+  background: white
+  @include border-radius(4px)
+  cursor: default
+  ul
+    display: flex
+    min-height: 32px
+    text-align: center
+    border: 2px solid rgba(3, 96, 255, 0.0)
+    @include border-radius(4px)
+    width: 100%
+    background: rgba(255, 255, 255, 0)
+    li
+      position: relative
+      @include set-flex(center)
+      width: 30%
+      border-right: 1px solid rgba(230, 230, 230, 1)
+      &:first-child
+        width: 20%
+        padding-left: 0
+      &:last-child
+        width: 20%
+        padding-right: 0
+        border-right: none
+      a, textarea, input
+        @include word-break-full()
+        @include border-radius(4px)
+        width: 100%
+        min-height: 32px
+        text-align: center
+        border: 2px solid rgba(100, 149, 237, 0.0)
+        cursor: default
+        background: none
+        outline: none
+        -moz-appearance: none
+        overflow-y: hidden
+        resize: none
+        transition: 0.1s all
+      textarea, button
+        cursor: pointer
+      textarea
+        /*убрать крестик очистки*/
+        height: 32px
+        &::-ms-clear
+          display: none
+        &:focus
+          outline: none
+          cursor: auto
+          border: 2px solid rgba(139, 29, 235, 0.4)
+
+//%placeholder_settings
+//  padding-top: 10px
+//  color: #b9b9b9
+//  text-align: center
+//  text-overflow: ellipsis
+//
+//textarea::-webkit-input-placeholder
+//  @extend %placeholder_settings
+//
+//textarea:-moz-placeholder
+//  @extend %placeholder_settings
+
+textarea::-webkit-input-placeholder
+  padding-top: 1px
+  color: #c3c3c3
+  text-align: center
+  text-overflow: ellipsis
+
+textarea:-moz-placeholder
+  padding-top: 1px
+  color: #c3c3c3
+  text-align: center
+  text-overflow: ellipsis
+
+.str_title
+  background: rgba(103, 198, 97, 0.9)
+  @include border-radius(4px)
+  margin:
+    top: 10px
+  min-height: 30px
+  &:first-child li
+    border-right: 1px solid rgba(91, 178, 102, 0.4)
+
+#plan_title_input
+  text-align: center
+
+.comment_text_hidden
+  visibility: hidden
+  //width: 100px
+  //height: 100px;
+  position: absolute
+  display: block
+  background: red
+  @include word-break-full()
+
+
+
+
+
+
+
+
+

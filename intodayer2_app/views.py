@@ -1,158 +1,62 @@
-import random
 import json
-
-from intodayer2_app.models import *
-from django.contrib.auth.models import *
+from django.contrib.auth.models import auth
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.utils import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
-from django.http import HttpResponseBadRequest
 from django.shortcuts import render_to_response
-from intodayer2_app.forms import *
-from intodayer2_app.send_sms import *
-from extra.utils import *
-from extra.stripes_api import *
-from extra.mailing_api import *
-from extra.plan_settings_api import *
+from extra.stripes_api import Stripes
+from datetime import datetime
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest
+from intodayer2_app.forms import SetAvatarForm, CustomUserCreationForm
+
+from extra.utils import (
+    edit_plan_row, CloneError, UPDATE, CREATE, get_today_tomorrow_plans
+)
+
+from intodayer2_app.models import (
+    UserPlans, Invitations, PlanLists, PlanRows, DaysOfWeek,
+    CustomUser
+)
 
 
 # TODO: Сделать в выводе расписания в /plan сортировку по времени, а не по неделям
 
 # TODO: Сделать аутентификацию по почте, а не по логину. Значит нужно сделать и подтверждение email
 
-# {
-# TODO: Переписать функции переключения расписания.
-# Теперь нужно, что бы сервер в ответе выдавал не отрендеренную html разметку,
-# а данные в формате json. А на стороне клиента уже данные бы вставлялись куда надо.
-# Предполагается повышение эффективности.
-# }
 
 ###################################################################################
 #                          ОБРАБОТКА AJAX ЗАПРОСОВ                                #
 ###################################################################################
 
-def delete_plan_ajax(request):
-    if request.is_ajax():
-        user = CustomUser.objects.get(username=request.user.username)
 
-        response = HttpResponse()
-        response['Content-Type'] = 'text/javascript'
+def switch_plan_only_set_ajax(request):
+    """" 
+        Данная функция просто меняет current_plan в БД и возвращает success
+    """
+    if request.is_ajax:
+        user = CustomUser.objects.get(username=request.user.username)
 
         try:
-            plan_id = int(request.POST['plan_id'])
-            UserPlans.objects.get(user_id=user.id, plan_id=plan_id)
-        except (ValueError, ObjectDoesNotExist):
-            response.write(json.dumps({'success': 0}))
-            return response
+            select_id = int(request.POST['select_id'])
+        except ValueError:
+            return render_to_response('templates_for_ajax/content_errors.html')
+        except IndexError:
+            return render_to_response('templates_for_ajax/content_errors.html')
 
-        settings = PlanSettings(user.id, plan_id)
-        settings.delete_plan()
-
-        response.write(json.dumps({'success': 1}))
-
-        return response
-
-
-def create_new_plan_ajax(request):
-    if request.is_ajax():
-        user = CustomUser.objects.get(username=request.user.username)
-        new_plan = user.add_new_plan()
+        user.set_current_plan(select_id)
 
         response = HttpResponse()
-        response['Content-Type'] = 'text/javascript'
-        response.write(json.dumps({'success': 1, 'new_plan_id': new_plan.id}))
+        response['Content-Type'] = 'application/json'
+        response.write(json.dumps({}))
 
         return response
 
 
-def update_plan_title_ajax(request):
+# Почему-то не получается перенести эту функцию в planSettingsApi
+def get_settings_plan_html(request):
     if request.is_ajax():
-        user = CustomUser.objects.get(username=request.user.username)
-
-        response = HttpResponse()
-        response['Content-Type'] = 'text/javascript'
-
-        try:
-            plan_id = int(request.POST['plan_id'])
-            plan = UserPlans.objects.select_related().get(user_id=user.id, plan_id=plan_id)
-
-            if plan.plan.owner != user:
-                raise ValueError
-
-        except (ValueError, ObjectDoesNotExist):
-            response.write(json.dumps({'success': 0}))
-
-            return response
-
-        plan.plan.title = request.POST['new_title']
-        plan.plan.save()
-
-        response.write(json.dumps({'success': 1}))
-
-        return response
-
-
-def get_drop_list_ajax(request):
-    """
-        Функция собирает в html список все доступные у пользователя
-        элементы из таблицы weeks.
-        :param request: 
-        :return: 
-    """
-    if request.is_ajax():
-        user = CustomUser.objects.get(username=request.user.username)
-        context = {'is_error': False}
-
-        try:
-            plan_id = int(request.POST['plan_id'])
-            # print(request.POST)
-            plan = UserPlans.objects.select_related().get(user_id=user.id, plan_id=plan_id)
-        except (ValueError, ObjectDoesNotExist):
-            context['is_error'] = True
-            return render_to_response('templates_for_ajax/drop_list_tmp.html', context)
-
-        # в зависимости от типа поля передаем соотв. данные
-        if request.POST['model'] == 'time':
-            context['time_list'] = Times.objects.filter(plan_id=plan.plan.id).order_by('hh24mm')
-
-        elif request.POST['model'] == 'subject':
-            context['subject_list'] = Subjects.objects.filter(plan_id=plan.plan.id).order_by('name')
-
-        elif request.POST['model'] == 'teacher':
-            context['teacher_list'] = Teachers.objects.filter(plan_id=plan.plan.id).order_by('name_short')
-
-        elif request.POST['model'] == 'place':
-            context['place_list'] = Places.objects.filter(plan_id=plan.plan.id).order_by('name')
-
-        return render_to_response('templates_for_ajax/drop_list_tmp.html', context)
-
-
-def mailing_ajax(request):
-    """
-        Функция получается данные от клиента и вызывает функцию расслыки
-        do_mailing
-        :param request:
-        :return:
-    """
-    # TODO: Где Валидация, Денис?!?!
-    if request.is_ajax():
-        user = CustomUser.objects.get(username=request.user.username)
-
-        response = HttpResponse()
-        response['Content-Type'] = 'text/javascript'
-
-        mailing = IntodayerMailing(
-            user.id,
-            request.POST['plan_id'],
-            request.POST['image'],
-            request.POST['text'],
-        )
-        # совершаем рассылку
-        mailing.send()
-
-        response.write(json.dumps({'success': 1}))
-
-        return response
+        context = dict()
+        context.update(get_cur_plan(request))
+        return render_to_response('templates_for_ajax/settings_ajax.html', context)
 
 
 def edit_plan_row_ajax(request):
@@ -170,7 +74,7 @@ def edit_plan_row_ajax(request):
         data = request.POST
         this_plan = plan_list.plan
         response = HttpResponse()
-        response['Content-Type'] = 'text/javascript'
+        response['Content-Type'] = 'application/json'
 
         if 'id' in data:
             this_id = data['id']
@@ -179,6 +83,7 @@ def edit_plan_row_ajax(request):
             if this_id != '0':
                 try:
                     this_id = edit_plan_row(data, this_plan, this_id, UPDATE)
+
                 except (IntegrityError, ValueError):
                     response.write(json.dumps({"error": "error", 'id': this_id}))
                     return response
@@ -194,6 +99,7 @@ def edit_plan_row_ajax(request):
             else:
                 try:
                     this_id = edit_plan_row(data, this_plan, this_id, CREATE)
+
                 except (IntegrityError, ValueError):
                     response.write(json.dumps({"error": "error", 'id': this_id}))
                     return response
@@ -231,6 +137,26 @@ def plan_delete_ajax(request):
         return HttpResponseBadRequest()
 
 
+def left_content_load_ajax(request):
+    """
+        Функция динамически загружает левый контент сайта
+    """
+    if request.is_ajax():
+        if request.user.is_authenticated():
+            user = CustomUser.objects.get(username=request.user.username)
+            all_plans = UserPlans.objects.select_related().filter(user_id=user.id)
+            context = dict()
+
+            context['user'] = user
+            context['all_plans'] = all_plans
+
+            return render_to_response('content_pages/left_content.html', context, status=200)
+        else:
+            return HttpResponse(401)
+    else:
+        return HttpResponse(400)
+
+
 def switch_plan_home_ajax(request):
     """
         Функция для переключения между расписаниями со страницы /home
@@ -238,22 +164,28 @@ def switch_plan_home_ajax(request):
         :return: Отрендеренная html разметка расписания
     """
     if request.is_ajax():
-        user = CustomUser.objects.get(username=request.user.username)
-        # производим валидацию переданных данных со страницы
-        try:
-            plan_id = int(request.POST['plan_id'])
-            plan = UserPlans.objects.select_related().filter(user_id=user.id, plan_id=plan_id)[0]
-        except ValueError:
-            return render_to_response('templates_for_ajax/content_errors.html')
-        except IndexError:
-            return render_to_response('templates_for_ajax/content_errors.html')
+        if request.user.is_authenticated():
+            context = dict()
+            user = CustomUser.objects.get(username=request.user.username)
 
-        # get_today_tomorrow_plans возвращает словарь
-        context = get_today_tomorrow_plans(plan)
-        # устанавливаем current_yn
-        user.set_current_plan(plan_id)
+            try:
+                plan_id = int(request.POST['plan_id'])
+                context.update(get_cur_plan(request, plan_id))
+            except ValueError:
+                return render_to_response('templates_for_ajax/content_errors.html')
+            except IndexError:
+                return render_to_response('templates_for_ajax/content_errors.html')
 
-        return render_to_response('templates_for_ajax/today_tomorrow.html', context)
+            context.update(get_dates_info(context['cur_plan']))
+            # устанавливаем current_yn для созданного расписания
+            # plan_id = context['cur_plan'].plan_id
+            user.set_current_plan(plan_id)
+
+            return render_to_response('content_pages/right_content_home.html', context, status=200)
+        else:
+            return HttpResponse(status=401)
+    else:
+        return HttpResponse(status=400)
 
 
 def switch_plan_plan_ajax(request):
@@ -268,25 +200,44 @@ def switch_plan_plan_ajax(request):
 
         try:
             plan_id = int(request.POST['plan_id'])
-            plan = UserPlans.objects.select_related().filter(user_id=user.id, plan_id=plan_id)[0]
+            context.update(get_cur_plan(request, plan_id))
         except ValueError:
             return render_to_response('templates_for_ajax/content_errors.html')
         except IndexError:
             return render_to_response('templates_for_ajax/content_errors.html')
 
-        plan_rows = PlanRows.objects.select_related().filter(plan_id=plan.plan.id).order_by('start_week')
-        count = UserPlans.objects.filter(plan_id=plan.plan.id).count()
-        day_of_weeks = DaysOfWeek.objects.all()
+        context.update(get_dates_info(context['cur_plan']))
         # устанавливаем current_yn
         user.set_current_plan(plan_id)
-
-        context['cur_plan'] = plan
-        context['plan_info'] = [plan.plan.title, plan.plan.description, members_amount_suffix(count)]
-        context['day_of_weeks'] = day_of_weeks
+        plan_rows = PlanRows.objects.select_related().filter(plan_id=plan_id).order_by('start_week')
         context['plan_rows'] = plan_rows
 
-        print('YES')
-        return render_to_response('templates_for_ajax/plan_for_ajax.html', context)
+        return render_to_response('content_pages/right_content_plan_general.html', context)
+
+
+def right_plan_content_only(request):
+    """
+        Загружает правый контент (без учёта Title блока), только контент расписания
+    """
+    if request.is_ajax:
+        user = CustomUser.objects.get(username=request.user.username)
+        context = dict()
+
+        try:
+            plan_id = int(request.POST['plan_id'])
+            context.update(get_cur_plan(request, plan_id))
+        except ValueError:
+            return render_to_response('templates_for_ajax/content_errors.html')
+        except IndexError:
+            return render_to_response('templates_for_ajax/content_errors.html')
+
+        context.update(get_dates_info(context['cur_plan']))
+        # устанавливаем current_yn
+        user.set_current_plan(plan_id)
+        plan_rows = PlanRows.objects.select_related().filter(plan_id=plan_id).order_by('start_week')
+        context['plan_rows'] = plan_rows
+
+        return render_to_response('content_pages/right_content_plan.html', context)
 
 
 def get_invitations_ajax(request):
@@ -335,7 +286,7 @@ def confirm_invitation_ajax(request):
         inv.delete()
 
         response = HttpResponse()
-        response['Content-Type'] = 'text/javascript'
+        response['Content-Type'] = 'application/json'
         response.write(json.dumps([{'success': 1}]))
 
         return response
@@ -350,7 +301,7 @@ def save_user_avatar_ajax(request):
     if request.is_ajax():
         form = SetAvatarForm(request.POST, request.FILES)
         response = HttpResponse()
-        response['Content-Type'] = 'text/javascript'
+        response['Content-Type'] = 'application/json'
 
         if form.is_valid():
             user = CustomUser(username=request.user.username)
@@ -372,25 +323,26 @@ def save_plan_avatar_ajax(request, plan_id):
         :return:
     """
     if request.is_ajax():
-        user = CustomUser.objects.get(username=request.user.username)
-        plan = PlanLists.objects.get(id=plan_id, owner=user.id)
+        if request.user.is_authenticated():
+            user = CustomUser.objects.get(username=request.user.username)
 
-        response = HttpResponse()
-        response['Content-Type'] = 'text/javascript'
+            try:
+                # если user имеет права редактирования
+                plan = PlanLists.objects.get(id=plan_id, owner=user.id)
+            except ObjectDoesNotExist:
+                return HttpResponse(status=403)
 
-        if plan:
-            # если пользователь имеет права редактирования
             # удаляем предыдущую аватарку
             plan.avatar.delete()
             # сохраняем новую
             plan.avatar = request.FILES['avatar']
             plan.save()
 
-            response.write(json.dumps([{'success': 1}]))
+            return HttpResponse(status=200)
         else:
-            response.write(json.dumps([{'success': 0}]))
-
-        return response
+            return HttpResponse(status=401)
+    else:
+        return HttpResponse(status=400)
 
 
 def get_avatar_ajax(request):
@@ -398,11 +350,11 @@ def get_avatar_ajax(request):
         user = CustomUser.objects.get(username=request.user.username)
 
         response = HttpResponse()
-        response['Content-Type'] = 'text/javascript'
+        response['Content-Type'] = 'application/json'
 
         try:
             if request.GET['user_id']:
-                response.write(json.dumps({'url': user.get_image_url()}))
+                response.write(json.dumps({'url': user.get_avatar_url()}))
                 return response
         except KeyError:
             pass
@@ -413,7 +365,7 @@ def get_avatar_ajax(request):
                 plan = PlanLists.objects.get(id=request.GET['plan_id'])
 
                 response.write(json.dumps({
-                    'url': plan.get_image_url(),
+                    'url': plan.get_avatar_url(),
                     'isOwner': True if plan.owner == user else False
                 }))
                 return response
@@ -426,6 +378,11 @@ def get_avatar_ajax(request):
 ###################################################################################
 #                         ОБРАБОТКА ОБЫЧНЫХ ЗАПРОСОВ                              #
 ###################################################################################
+
+# def plan_empty(request):
+#     context = dict()
+#     context.update(get_all_plans(request))
+#     return render_to_response('plan_empty.html', context)
 
 
 def statistics_view(request):
@@ -476,7 +433,7 @@ def registration_view(request):
         form = CustomUserCreationForm()
 
     context = {'form': form}
-    return render_to_response('reg_tst.html', context)
+    return render_to_response('reg.html', context)
 
 
 def login_view(request):
@@ -495,29 +452,157 @@ def login_view(request):
         else:
             return HttpResponse('Invalid Login or Password')
     else:
-        return render_to_response('auth.html')
+        return render_to_response('login.html')
+
+
+def logout_view(request):
+    auth.logout(request)
+
+
+def get_all_plans(request):
+    """
+    Возвращает контекст со списком всех расписаний
+    """
+    context = dict()
+    user = CustomUser.objects.get(username=request.user.username)
+
+    all_plans = UserPlans.objects.select_related().filter(user_id=user.id)
+    if all_plans.count() > 0:
+        context['select_flag'] = True
+    context['all_plans'] = all_plans
+
+    return context
+
+
+# TODO: Какая-то стремная функция зачем она вообще нужна??
+def get_cur_plan(request, plan_id=None):
+    """
+        Возвращает контекст с текущим выбранным расписанием
+        или формирует страницу, если такой отсутствует
+    """
+    context = dict()
+    user = CustomUser.objects.get(username=request.user.username)
+
+    # если расписание уже существует
+    if not plan_id:
+        cur_plan = UserPlans.objects.select_related().filter(user_id=user.id, current_yn='y')
+    # если мы переключаем расписание то делаем текущим на который нажали (при помощи plan_id)
+    else:
+        cur_plan = UserPlans.objects.select_related().filter(user_id=user.id, plan_id=plan_id)
+    all_plans = UserPlans.objects.select_related().filter(user_id=user.id)
+
+    if cur_plan.count() == 0:
+        if all_plans.count() == 0:
+            context['cur_plan'] = 0
+        else:
+            context['select_flag'] = True
+            context['cur_plan'] = 0
+    else:
+        cur_plan = cur_plan[0]
+        context['cur_plan'] = cur_plan
+
+    return context
+
+
+def get_dates_info(cur_plan):
+    """
+        Возвращает контекст с другими информационными данными
+        такие как: имена дней недели, дата начала работы расписания
+    """
+    context = dict()
+
+    day_of_weeks = DaysOfWeek.objects.all()
+    this_start_date = cur_plan.plan.start_date
+    this_start_date = datetime.strftime(this_start_date, "%d.%m.%Y")
+    context['day_of_weeks'] = day_of_weeks
+    context['start_date'] = this_start_date
+
+    return context
+
+
+def get_this_user(request):
+    """
+        Возвращает контекст с текущим пользователем
+    """
+    user = CustomUser.objects.get(username=request.user.username)
+    context = dict()
+    context['user'] = user
+    return context
+
+
+def statistics_view(request):
+    if request.user.is_authenticated():
+        user = CustomUser.objects.get(username=request.user.username)
+
+        all_plans = UserPlans.objects.select_related().filter(user_id=user.id)
+        if all_plans.count() == 0:
+            return HttpResponseRedirect("/plan")
+
+        # выбираем текущее расписание юзера
+        try:
+            cur_plan = UserPlans.objects.select_related().filter(user_id=user.id, always_yn='y')[0]
+        except IndexError:
+            cur_plan = all_plans[0]
+
+        # plan_rows = PlanRows.objects.select_related().filter(plan_id=cur_plan.plan_id)
+
+        stripes_dict = Stripes(cur_plan.plan_id)
+        stripes_dict_json = stripes_dict.get_stripes_json()
+
+        print(stripes_dict_json)
+
+        return render_to_response('statistics.html', {'data': json.loads(stripes_dict_json)})
+
+    else:
+        return HttpResponseRedirect("/login")
+
+
+def welcome_view(request):
+    if request.user.is_authenticated():
+        return HttpResponseRedirect("/home")
+    else:
+        return render_to_response('welcome.html')
+
+
+def registration_view(request):
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            # сохраняем usr_name и pswd в таблицу auth_user
+            new_user = form.save()
+            # добавляем пользователю дефолтное расписание
+            new_user.add_new_plan()
+
+            return HttpResponseRedirect('/login')
+    else:
+        form = CustomUserCreationForm()
+
+    context = {'form': form}
+    return render_to_response('reg.html', context)
+
+
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+
+        user = auth.authenticate(username=username, password=password)
+
+        if user is not None:
+            if user.is_active:
+                auth.login(request, user)
+                return HttpResponseRedirect("/home")
+            else:
+                return HttpResponse('User is not active')
+        else:
+            return HttpResponse('Invalid Login or Password')
+    else:
+        return render_to_response('login.html')
 
 
 def logout_view(request):
     auth.logout(request)
     return HttpResponseRedirect("/")
-
-
-def profile_settings(request):
-    if request.user.is_authenticated():
-        if request.method == 'POST':
-            user = User.objects.get(username=request.user.username)
-
-            # обновляем поля пользователя
-            user.username = request.POST['username']
-            user.myuser.phone = request.POST['phone']
-            user.save()
-            sendHelloSMS(request.POST['phone'])
-            return HttpResponseRedirect('/home')
-        else:
-            return render_to_response('myprofile.html', {})
-    else:
-        return render_to_response('myprofile.html', {})
 
 
 def home_view(request):
@@ -526,33 +611,21 @@ def home_view(request):
         с расписанием на сегодня
     """
     if request.user.is_authenticated():
-        user = CustomUser.objects.get(username=request.user.username)
-        context = {'user': user}
+        context = dict()
+        context.update(get_this_user(request))
+        context.update(get_all_plans(request))
+        context.update(get_cur_plan(request))
+        if context['cur_plan'] == 0:
+            return render_to_response('plan_empty.html', context)
+        context.update(get_dates_info(context['cur_plan']))
 
-        all_plans = UserPlans.objects.select_related().filter(user_id=user.id)
+        # get_today_tomorrow_plans возвращает словарь
+        context.update(get_today_tomorrow_plans(context['cur_plan']))
 
-        if all_plans.count() == 0:
-            return HttpResponseRedirect("/plan")
+        return render_to_response('home.html', context)
 
-        # выбираем текущее расписание юзера
-        try:
-            cur_plan = UserPlans.objects.select_related().get(user_id=user.id, current_yn='y')
-        except (IndexError, ObjectDoesNotExist):
-            cur_plan = all_plans[0]
-
-        if all_plans:
-            context['all_plans'] = all_plans
-            context['cur_plan'] = cur_plan
-
-            # объединяем контексты
-            context_td_tm = get_today_tomorrow_plans(cur_plan)
-            context.update(context_td_tm)
-
-            return render_to_response('home.html', context)
-        else:
-            return render_to_response('home.html', context)
     else:
-        return HttpResponseRedirect("/login")
+        return HttpResponseRedirect("/login", {})
 
 
 def plan_view(request):
@@ -562,30 +635,19 @@ def plan_view(request):
        Поэтому, функция выводит всю информацию расписания на весь год, разбитых по дням недели.
    """
     if request.user.is_authenticated():
-        user = CustomUser.objects.get(username=request.user.username)
-        all_plans = UserPlans.objects.select_related().filter(user_id=user.id)
-
         context = dict()
-        context['user'] = user
-        context['all_plans'] = all_plans
-        context['is_plan_page'] = True
+        context.update(get_this_user(request))
+        context.update(get_all_plans(request))
+        context.update(get_cur_plan(request))
+        if context['cur_plan'] == 0:
+            return render_to_response('plan_empty.html', context)
 
-        cur_plan = UserPlans.objects.select_related().filter(user_id=user.id, current_yn='y')
-
-        if cur_plan.count() == 0:
-            if all_plans.count() == 0:
-                return render_to_response('plan_empty.html', context)
-            else:
-                context['select_flag'] = True
-                return render_to_response('plan_empty.html', context)
-
-        cur_plan = cur_plan[0]
-        plan_rows = PlanRows.objects.select_related().filter(plan_id=cur_plan.plan.id).order_by('start_week')
-        day_of_weeks = DaysOfWeek.objects.all()
-
-        context['cur_plan'] = cur_plan
-        context['day_of_weeks'] = day_of_weeks
+        context.update(get_dates_info(context['cur_plan']))
+        plan_rows = PlanRows.objects.select_related().filter(plan_id=context['cur_plan'].plan.id).order_by('start_week')
         context['plan_rows'] = plan_rows
+        # для появления кнопки добавления расписания
+        context['is_plan_page'] = True
+        print(context['is_plan_page'])
 
         return render_to_response('plan.html', context)
 
@@ -593,5 +655,61 @@ def plan_view(request):
         return HttpResponseRedirect("/login", {})
 
 
+def about_service_view(request):
+    if request.user.is_authenticated():
+        user = CustomUser.objects.get(username=request.user.username)
+        context = {'user': user}
+
+        print(context)
+        return render_to_response('about_service.html', context)
+
+
+# ЛЕХ!!!!
+# Ты просто послушай.
+# функция get_participants возвращает всех участников расписания
+# такие как: ИМЕНА ДНЕЙ НЕДЕЛИ, ДАТА НАЧАЛА РАБОТЫ РАСПАСАНИЯ"
+# Это просто шок.
+# Бредовее комментария я еще не видел.
+def get_participants(plan):
+    """
+        Возвращает всех участников расписания
+        такие как: имена дней недели, дата начала работы расписания
+    """
+    context = dict()
+    # TODO: exclude role = elder
+    participant_list = UserPlans.objects.select_related().filter(plan_id=plan.plan.id)
+
+    context['participants'] = participant_list
+    return context
+
+
+def participant_page(request):
+    if request.user.is_authenticated():
+        context = dict()
+        context.update(get_this_user(request))
+        context.update(get_all_plans(request))
+        context.update(get_cur_plan(request))
+
+        if context['cur_plan'] == 0:
+            return render_to_response('plan_empty.html', context)
+
+        context.update(get_participants(context['cur_plan']))
+
+        print(context)
+
+        return render_to_response('participants.html', context)
+    else:
+        return HttpResponseRedirect("/")
+
+
+def profile_page(request):
+    context = dict()
+    context.update(get_this_user(request))
+
+    if request.user.is_authenticated():
+        return render_to_response('account.html', context)
+
+
+# TODO: Вообще нигде не используется
 def sort_by_start_date(row):
     return row.start_week

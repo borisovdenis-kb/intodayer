@@ -12,6 +12,7 @@ CREATE TRIGGER clean_planinfo_before_delete_planlist_trigger BEFORE DELETE ON pl
 		DELETE FROM places WHERE plan_id = OLD.id;
 		DELETE FROM subjects WHERE plan_id = OLD.id;
 		DELETE FROM teachers WHERE plan_id = OLD.id;
+		DELETE FROM invitations WHERE plan_id = OLD.id;
 	END|
 
 DELIMITER ;

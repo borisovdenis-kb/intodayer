@@ -1,0 +1,47 @@
+{% extends 'home.html' %}
+{% load staticfiles %}
+
+
+{% block scripts_top %}
+    <link rel="stylesheet" type="text/css" href={% static "css/about_service.css" %}>
+    <script type="text/javascript" src={% static "scripts/script_about_service.js" %}></script>
+{% endblock %}
+
+{% block right_content %}
+{% endblock %}
+
+{% block left_content %}
+{% endblock %}
+
+
+{% block center_page %}
+    <div class="about_page">
+
+        <h1>Что такое <span class="in_txt">Intodayer</span></h1>
+
+        <div class="about_content">
+            <p><span class="in_txt2">Intodayer</span> - новый, простой и удобный сервис.</p>
+        </div>
+
+        <div class="about_content">
+            <h2>Удобство</h2>
+            <p>Создание и редактирование расписаний в несколько кликов.</p>
+        </div>
+
+        <div class="about_content">
+            <h2>Время</h2>
+            <p>Мгновенный вывод расписания на экран.</p>
+        </div>
+
+        <div class="about_content">
+            <h2>Мобильность</h2>
+            <p>Удобное использование на всех гаджетах.</p>
+        </div>
+
+        <div class="about_content">
+            <h2>Рассылка</h2>
+            <p>Возможность массовой рассылки сообщений.</p>
+        </div>
+
+    </div>
+{% endblock %}

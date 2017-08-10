@@ -9,17 +9,17 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "intodayer2.settings")
 django.setup()
 # ---------------------------------------------------------------
 
-from intodayer2_app.models import *
+# from intodayer2_app.models import *
 from django.db.models import Max
 from extra import utils
+from intodayer2_app.models import PlanRows, PlanLists, Subjects
 
 
 # TODO: Сделать двумерный массив.
 
 class Stripes:
     """
-        Класс для формирования json Полосок
-        для клиента.
+        Класс для формирования json Полосок для клиента.
         Во view нужно сделать следующее.
         X = Stripes(plan_id)
         X.get_stripes_json()
@@ -82,9 +82,9 @@ class Stripes:
             for i in range(row.start_week, row.end_week + 1):
                 if row.parity is not None:
                     if i % 2 == row.parity:
-                        self.stripes[subj][day][i-1] += 1
+                        self.stripes[subj][day][i - 1] += 1
                 else:
-                    self.stripes[subj][day][i-1] += 1
+                    self.stripes[subj][day][i - 1] += 1
 
     def get_stripes_json(self):
         self.set_max_len()

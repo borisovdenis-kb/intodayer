@@ -1,0 +1,28 @@
+
+@import "global_vars"
+@import "mixins"
+
+.part_block
+  border: $gl_block_border
+  padding: $gl_block_padding
+  background: white
+  margin-top: 5px
+  @include border-radius(4px)
+  display: flex
+  align-content: center
+  align-items: center
+
+
+.part_ava
+  img
+    width: 60px
+    height: 60px
+    @include border-radius(4px)
+
+.part_username
+  span
+    font-family: "Fira Sans"
+    font-size: 1.4em
+    margin:
+      left: 20px
+      right: 10px

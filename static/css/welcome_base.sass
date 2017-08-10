@@ -1,0 +1,111 @@
+@import "mixins"
+@import "global_vars"
+@import "header"
+
+html, body
+  height: 100%
+  margin: 0 auto
+
+.content
+  background: none
+  @include box-shadow(none)
+  border: none
+//z-index: 10
+//padding: 0
+//@include border-radius(4px)
+//background-color: rgba(255,255,255,0.6)
+//overflow: hidden
+//@include box-shadow(  0px 0px 10px 0px rgba(128,128,128,0.5))
+
+
+.welcome_top_content
+  @include border-radius(4px 4px 0 0)
+  overflow: hidden
+
+.welcome_content_bottom
+  padding-top: 20px
+  background-color: rgba(255, 255, 255, 0.6)
+
+
+  @include border-radius(0 0 4px 4px)
+
+
+
+
+
+.welcome_background
+  position: fixed
+  background-image: url("../../static/stock-photo-219594423.jpg")
+  width: 100%
+  height: 100%
+  z-index: -1
+  top: 0
+  left: 0
+  filter: blur(10px)
+  transform: scale(1.1, 1.1)
+
+.welcome_background_fade
+  width: 100%
+  height: 100%
+  background: rgba(255, 255, 255, 0.5)
+
+.buttons_row
+  a
+    display: inline-block
+    line-height: 40px
+    font-size: 1.2em
+    margin: 3px
+    min-width: 200px
+    text-decoration: none
+
+#sign_in
+  border-color: rgba(80, 80, 80, 1)
+  background: rgba(80, 80, 80, 1)
+  color: white
+  &:hover
+    border-color: rgba(50, 50, 50, 1)
+    background-color: rgba(50, 50, 50, 1)
+
+.fill-space-bottom
+  height: 100px
+
+.welcome_bottom
+  p
+    //background: green
+    margin:
+      top: 20px
+      bottom: 20px
+
+.welcome_info_content
+
+  //width: 33%
+  height: 100px
+
+  background: rgb(47, 179, 112)
+  color: white
+  //@include border-radius(4px 4px 0px 0px )
+  p
+    font-family: "Fira Sans"
+    text-align: center
+    font-size: 0.9em
+
+  img
+    filter: brightness(0) invert(1)
+    text-align: center
+  &:first-child
+    border-right: 2px solid rgba(230, 230, 230, 1)
+    img
+      padding-left: 10px
+  &:last-child
+    border-left: 2px solid rgba(230, 230, 230, 1)
+
+.welcome_main.jumbotron
+  background: white
+  margin-bottom: 0px
+  //@include border-radius(0 0 4px 4px)
+
+  @include border-radius(0px 0px 0px 0px)
+
+@media (max-height: 900px)
+  .fill-space-bottom
+    display: none

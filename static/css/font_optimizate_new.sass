@@ -1,0 +1,53 @@
+$IM: !important
+//привет
+@mixin set_fonts()
+  body
+    font-family: "PT Sans" $IM
+    a
+      font-family: "Cyntho Pro" $IM
+
+    h1,h2,h3
+      font-family: "Cyntho Pro" $IM
+    .top
+      a
+        font-family: "PT Sans" $IM
+      ul
+        font-size: 18px
+    .logo
+      a
+        font-family: "Cyntho Pro" $IM
+    .plan_selector, .users_online
+      label
+        font-family: "PT Sans" $IM
+        font-size: 1.1em
+
+    .droplist
+      a
+        font-family: "Fira Sans" $IM
+        font-size: 0.9em
+    .droplist_click
+      ul li a
+        font-family: "Cyntho Pro" $IM
+        font-size: 0.8em
+        font-weight: 400
+    .day_title
+      font-size: 1.5em
+
+    .str_plan
+      ul li
+        a, textarea, input
+          font-family: "Cyntho Pro" $IM
+          font-size: 16px
+    .comment_text_hidden
+      font-family: "Cyntho Pro" $IM
+      font-size: 16px
+    .welcome_text
+      font-family: "Segoe UL Light" $IM
+    .about_service_text
+      font-size: "Cyntho Pro" $IM
+
+@media all
+  @include set_fonts()
+
+@-moz-document url-prefix()
+  @include set_fonts()

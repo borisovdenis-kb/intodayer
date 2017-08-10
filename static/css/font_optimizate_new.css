@@ -1,0 +1,72 @@
+@media all {
+  body {
+    font-family: "PT Sans" !important; }
+    body a {
+      font-family: "Cyntho Pro" !important; }
+    body h1, body h2, body h3 {
+      font-family: "Cyntho Pro" !important; }
+    body .top a {
+      font-family: "PT Sans" !important; }
+    body .top ul {
+      font-size: 18px; }
+    body .logo a {
+      font-family: "Cyntho Pro" !important; }
+    body .plan_selector label, body .users_online label {
+      font-family: "PT Sans" !important;
+      font-size: 1.1em; }
+    body .droplist a {
+      font-family: "Fira Sans" !important;
+      font-size: 0.9em; }
+    body .droplist_click ul li a {
+      font-family: "Cyntho Pro" !important;
+      font-size: 0.8em;
+      font-weight: 400; }
+    body .day_title {
+      font-size: 1.5em; }
+    body .str_plan ul li a, body .str_plan ul li textarea, body .str_plan ul li input {
+      font-family: "Cyntho Pro" !important;
+      font-size: 16px; }
+    body .comment_text_hidden {
+      font-family: "Cyntho Pro" !important;
+      font-size: 16px; }
+    body .welcome_text {
+      font-family: "Segoe UL Light" !important; }
+    body .about_service_text {
+      font-size: "Cyntho Pro" !important; } }
+@-moz-document url-prefix() {
+  body {
+    font-family: "PT Sans" !important; }
+    body a {
+      font-family: "Cyntho Pro" !important; }
+    body h1, body h2, body h3 {
+      font-family: "Cyntho Pro" !important; }
+    body .top a {
+      font-family: "PT Sans" !important; }
+    body .top ul {
+      font-size: 18px; }
+    body .logo a {
+      font-family: "Cyntho Pro" !important; }
+    body .plan_selector label, body .users_online label {
+      font-family: "PT Sans" !important;
+      font-size: 1.1em; }
+    body .droplist a {
+      font-family: "Fira Sans" !important;
+      font-size: 0.9em; }
+    body .droplist_click ul li a {
+      font-family: "Cyntho Pro" !important;
+      font-size: 0.8em;
+      font-weight: 400; }
+    body .day_title {
+      font-size: 1.5em; }
+    body .str_plan ul li a, body .str_plan ul li textarea, body .str_plan ul li input {
+      font-family: "Cyntho Pro" !important;
+      font-size: 16px; }
+    body .comment_text_hidden {
+      font-family: "Cyntho Pro" !important;
+      font-size: 16px; }
+    body .welcome_text {
+      font-family: "Segoe UL Light" !important; }
+    body .about_service_text {
+      font-size: "Cyntho Pro" !important; } }
+
+/*# sourceMappingURL=font_optimizate_new.css.map */

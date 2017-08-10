@@ -1,0 +1,90 @@
+@mixin set-ellipsis()
+  text-overflow: ellipsis
+  white-space: nowrap
+  overflow: hidden
+
+@mixin border-radius($val)
+  -moz-border-radius: $val
+  -webkit-border-radius: $val
+  -khtml-border-radius: $val
+  border-radius: $val
+  -ms-border-radius: $val
+
+@mixin box-shadow($val)
+  -webkit-box-shadow: $val
+  -moz-box-shadow: $val
+  box-shadow: $val
+  -ms-box-shadow: $val
+  -o-box-shadow: $val
+  -khtml-box-shadow: $val
+
+@mixin user-select($val)
+  -webkit-touch-callout: $val /* iOS Safari */
+  -webkit-user-select: $val /* Safari */
+  -khtml-user-select: $val /* Konqueror HTML */
+  -moz-user-select: $val /* Firefox */
+  -ms-user-select: $val /* Internet Explorer/Edge */
+  user-select: $val /* Non-pre */
+
+@mixin background-size($val)
+  -webkit-background-size: $val
+  -moz-background-size: $val
+  -o-background-size: $val
+  background-size: $val
+
+
+@mixin word-break-full()
+  overflow-wrap: break-word
+  word-wrap: break-word
+  -ms-word-break: break-all
+  /* This is the dangerous one in WebKit, as it breaks things wherever */
+  word-break: break-all
+  /* Instead use this non-standard one: */
+  word-break: break-word
+  /* Adds a hyphen where the word breaks, if supported (No Blink) */
+  -ms-hyphens: auto
+  -moz-hyphens: auto
+  -webkit-hyphens: auto
+
+
+@mixin opacity($val)
+  /* IE 8 */
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=#{$val})"
+  /* IE 5-7 */
+  filter: alpha(opacity=$val)
+  /* Netscape */
+  -moz-opacity: $val
+  /* Safari 1.x */
+  -khtml-opacity: $val
+  /* Good browsers */
+  opacity: $val
+
+
+// центрирует flex блок по вертикали и горизонтали
+@mixin set-flex($type)
+  display: flex
+  @if $type == center
+    align-items: center
+    justify-content: center
+    align-content: center
+  @else
+    align-items: flex-start
+    justify-content: flex-start
+    align-content: flex-start
+
+@mixin set-height($val)
+  min-height: calc(100% - #{$val})
+  height: auto !important /* cross-browser */
+  height: calc(100% - #{$val}) /* cross-browser */
+
+
+/// Mixin printing a linear-gradient
+/// as well as a plain color fallback
+/// and the `-webkit-` prefixed declaration
+/// @access public
+/// @param {Keyword | Angle} $direction - Linear gradient direction
+/// @param {Arglist} $color-stops - List of color-stops composing the gradient
+@mixin linear-gradient($direction, $color-stops...)
+  background: nth(nth($color-stops, 1), 1)
+  background: -webkit-linear-gradient(legacy-direction($direction), $color-stops)
+  background: linear-gradient($direction, $color-stops)

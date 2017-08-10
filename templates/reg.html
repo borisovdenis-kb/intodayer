@@ -1,217 +1,112 @@
-{% extends 'welcome_base.html' %}
+{% extends 'base.html' %}
 {% load staticfiles %}
 
 
 {% block scripts_top %}
-    <link rel="stylesheet" type="text/css" href={% static "css/welcome_base.css" %}>
-    <link rel="stylesheet" type="text/css" href={% static "css/auth_reg.css" %}>
 
+    <link rel="stylesheet" type="text/css" href={% static "css/header.css" %}>
+    <link rel="stylesheet" type="text/css" href={% static "css/welcome_base.css" %}>
+     <link rel="stylesheet" type="text/css" href={% static "css/login_reg.css" %}>
 {% endblock %}
 
 
 {% block content_page %}
-
-    <div class="container-fluid text-center">
-        <div class="row vertical-center-row">
-            <div class="col-xs-12 hidden-xs" style="height: 10px;"></div>
-            <div class="panel_reg col-xs-11 col-lg-7 col-md-8 col-sm-8 center-block" style="opacity: 0;e ">
-                <div class="row">
-                    <div class="col-xs-12">
-                        <h2 class="hidden-xs text-center">Sign Up to Intodayer Now!</h2>
-                        <h3 class="visible-xs text-center">Sign Up to Intodayer Now!</h3>
-                        <div style="height: 20px;" class="visible-xs"></div>
-                        <div style="height: 30px;" class="hidden-xs"></div>
-                    </div>
-                </div>
-
-                <div class="col-xs-12 col-xs-offset-0 col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2 form-content">
-                    <form action="" method="post">
-                        <div class="form-group">
-                            <div class="row">
-                                <div class="col-xs-12 col-lg-9 col-md-9">
-                                    <label for="inputUsername">Введите уникальное имя для входа</label>
-                                    <input type="text" name='username' class="form-control input-lg"
-                                           id="inputUsername"
-                                           placeholder="Enter username">
-                                    <span class="help-block">Ваш уникальный логин, которое будет использоваться для входа на сайт. Его будете знать только вы.</span>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="row">
-                                <div class="col-xs-12 col-lg-9  col-md-9">
-                                    <label for="inputPassword">Придумайте обалденный хороший пароль.</label>
-                                    <input type="password" name='password' class="form-control input-lg"
-                                           id="inputPassword"
-                                           placeholder="Password">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="row">
-                                <div class="col-xs-12 col-lg-9 col-md-9">
-                                    <input type="password" class="form-control input-lg"
-                                           id="inputPassword_re" placeholder="Confirm password">
-                                    <span class="help-block">Пароль должен быть не меньше чем 8 символов и содержать хотя бы одну букву другого регистра.</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="row">
-                                <div class="col-xs-12 col-lg-9 col-md-9">
-
-                                    <label for="inputEmail">Введите свою почту для рассылки</label>
-                                    <input type="email" name='email' class="form-control input-lg"
-                                           id="inputEmail"
-                                           placeholder="Enter email">
-                                    <span class="help-block">Мы будем рассказывать вам только о важных новостях и нововведенях сервиса Intodayer.</span>
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label>Нажимая на кнопку "Регистрация" вы соглашаетесь с политикой использования сервиса
-                                "Intodayer".</label>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="row">
-                                <div class="col-xs-6" style="padding-right:3px">
-                                    <input type="button"
-                                           id="buttonBack"
-                                           class="form-control btn input-lg btn-default"
-                                           value="Назад">
-                                </div>
-                                <div class="col-xs-6" style="padding-left:3px">
-                                    <input type="submit"
-                                           id="buttonEnter"
-                                           class="form-control btn input-lg  btn-success"
-                                           value="Регистрация">
-                                </div>
-                            </div>
-
-                            <div style="height: 10px;"></div>
-                            <div class="row">
-                                <div class="col-xs-8 col-xs-offset-2">
-                                    <input id="buttonHelp" type="button"
-                                           class="form-control btn input-lg btn-link text-center"
-                                           value="Уже есть аккаунт? Войдите">
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <div class="col-xs-12 fill-space-bottom hidden-xs"></div>
-            <div class="col-xs-12" style="height: 30px;"></div>
+    <div class="welcome_background">
+        <div class="welcome_background_fade">
         </div>
     </div>
+    <div class="reg_page container-fluid text-center">
 
+        <div class="panel_reg col-xs-11 col-lg-7 col-md-8 col-sm-8 center-block" style="opacity: 0;">
+            <div class="row">
+                <h2 class="col-xs-12 hidden-xs text-center">Sign Up to Intodayer Now!</h2>
+                <h3 class="col-xs-12 visible-xs text-center">Sign Up to Intodayer Now!</h3>
+            </div>
 
+            <div class="col-xs-12 col-xs-offset-0 col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2 form-content">
+                <form action="" method="post">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-xs-12 col-lg-10 col-md-9">
+                                <label for="inputUsername">Введите уникальное имя для входа</label>
+                                {{ form.username }}
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-xs-12 col-lg-10  col-md-9">
+                                <label for="inputPassword">Придумайте хороший пароль</label>
+                                {{ form.password1 }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-xs-12 col-lg-10 col-md-9">
+                                {{ form.password2 }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-xs-12 col-lg-10 col-md-9">
+
+                                <label for="inputEmail">Введите свою почту для рассылки</label>
+                                {{ form.email }}
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Нажимая на кнопку "Регистрация" вы соглашаетесь с политикой использования сервиса
+                            "Intodayer".</label>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-xs-6" style="padding-right:3px">
+                                <input type="button"
+                                       id="buttonBack"
+                                       class="form-control btn input-lg btn-default"
+                                       value="Назад">
+                            </div>
+                            <div class="col-xs-6" style="padding-left:3px">
+                                <input type="submit"
+                                       id="buttonEnter"
+                                       class="form-control btn input-lg  btn-success"
+                                       value="Регистрация">
+                            </div>
+                        </div>
+
+                        <div style="height: 10px;"></div>
+                        <div class="row">
+                            <div class="col-xs-8 col-xs-offset-2">
+                                <input id="buttonHelp" type="button"
+                                       class="form-control btn input-lg btn-link text-center"
+                                       value="Уже есть аккаунт? Войдите">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block other_content %}
+    <div class="row fill-space-bottom">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="height: 100px"></div>
+    </div>
 {% endblock %}
 
 
 {% block scripts_bottom %}
     <script type="text/javascript" src={% static "scripts/script_reg.js" %}></script>
-    <script type="text/javascript" src={% static "scripts/script_welcome_utils.js" %}></script>
-    <script type="text/javascript" src={% static "scripts/script_reg_info_check.js" %}></script>
+    {#    <script type="text/javascript" src={% static "scripts/script_welcome.js" %}></script>#}
 {% endblock %}
-
-
-
-
-
-
-
-
-{##}
-{#{% load staticfiles %}#}
-{#<html>#}
-{#<head>#}
-{#    <title>Three pachans Web Site</title>#}
-{#    <meta http-equiv="Content-type" content="text/html" charset="UTF-8">#}
-{#    <!--#}
-{#        <link rel="stylesheet" type="text/css" href="../static/css/fonts.css">#}
-{#        <link rel="stylesheet" type="text/css" href="../static/css/general_style.css">#}
-{#        <link rel="stylesheet" type="text/css" href="../static/css/welcome-auth-reg_style.css">#}
-{#        <script type="text/javascript" src="../test/library/jquery-3.1.1.js"></script>#}
-{#        <script type="text/javascript" src="../test/library/jquery.animate-colors.js"></script>#}
-{#    -->#}
-{#    <link rel="stylesheet" type="text/css" href={% static "css/fonts.css" %}>#}
-{#    <link rel="stylesheet" type="text/css" href={% static "css/general_style.css" %}>#}
-{#    <link rel="stylesheet" type="text/css" href={% static "css/welcome_auth_reg.css" %}>#}
-{#    <script type="text/javascript" src={% static "library/jquery-3.1.1.js" %}></script>#}
-{#    <script type="text/javascript" src={% static "library/jquery.animate-colors.js" %}></script>#}
-{##}
-{#</head>#}
-{#<body>#}
-{#<div class="top-block">#}
-{#    <div class="top">#}
-{#        <div class="logo"><a href="/">IntoDayer</a></div>#}
-{#        <div id="sing_up-top"><a href="/registration">Sign up</a></div>#}
-{#        <div id="login-top"><a href="/login">Log In</a></div>#}
-{#    </div>#}
-{#</div>#}
-{##}
-{#</body>#}
-{##}
-{#<div class="page">#}
-{#    <!--панель регистрации-->#}
-{#    <div class="reg">#}
-{#        <form action="" autocomplete="on" method="post">#}
-{#            <ul>#}
-{#                <div class="title-sign">Sing Up to Intodayer</div>#}
-{#                <li>#}
-{#                    <span class="form-text">Пожалуйте, заполните все обязательные поля *</span>#}
-{#                    {{ form.username }}#}
-{#                </li>#}
-{#                <li>#}
-{#                    <span class="form-text">Придумайте хороший пароль от 8 символов</span>#}
-{#                </li>#}
-{#                <li class="pswd1">#}
-{#                    <div class="kostil">#}
-{#                        {{ form.password1 }}#}
-{#                        <div id="circle_indicator1"></div>#}
-{#                    </div>#}
-{#                </li>#}
-{#                <li>#}
-{#                    <p id="pswdContent"></p>#}
-{#                    {{ form.password2 }}#}
-{#                </li>#}
-{##}
-{#                <li class="outline-checkbox">#}
-{#                    <div class="check-content">#}
-{#                        <input id="get-sms_checkbox" type="checkbox">#}
-{#                        <label for="get-sms_checkbox"></label>#}
-{#                        <label for="get-sms_checkbox"><span></span>Хочу получать смс рассылку об изменении в расписании</label>#}
-{##}
-{#                    </div>#}
-{#                    <div class="phone-content">#}
-{#                        {{ form.phone }}#}
-{#                    </div>#}
-{#                </li>#}
-{#                <li>#}
-{#                    <span class="form-text">Нажимая на кнопку "Регистрация" вы соглашаетесь с политикой<br>#}
-{#                            использования сервиса "Intodayer".</span>#}
-{#                    <ul class="buttons-panel">#}
-{#                        <button class="back" type="button"><a href="/">Назад</a></button>#}
-{#                        <input id="submit-reg" type="submit" value="Sign In">#}
-{#                    </ul>#}
-{#                </li>#}
-{#            </ul>#}
-{#        </form>#}
-{#    </div>#}
-{#    <h3>Стать участником Intodayer. Получай удобные уведомления. Будь в курсе событий.</h3>#}
-{#</div>#}
-{#<!--#}
-{#<script type="text/javascript" src="scripts/set-screen-size.js"></script>#}
-{#<script type="text/javascript" src="scripts/script_reg.js"></script>#}
-{#-->#}
-{#<script type="text/javascript" src={% static "scripts/set-screen-size.js" %}></script>#}
-{#<script type="text/javascript" src={% static "scripts/script_reg.js" %}></script>#}
-{#<script type="text/javascript" src={% static "scripts/script_reg_info_check.js" %}></script>#}
-{##}
-{#</html>#}

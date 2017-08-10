@@ -3,39 +3,6 @@ var imageData, timer, day, storageKey;
 
 $(document).ready(function () {
 
-    $('.share_button').each(function () {
-        $(this).click(function () {
-
-            var $textarea = $('.mailing').find('textarea');
-            day = $(this).parent().parent().parent().parent().parent().attr('day_num');
-            console.log(day);
-            storageKey = day + $('.title_content').attr('plan_id');
-
-            blurElement('.effect_blur', 4);
-            $('.cover_all').fadeIn(800);
-            $('.mailing_wrap').delay(300).fadeIn(500);
-            $('.mailing').slideToggle(800, 'easeInOutBack').css({'display': 'flex'});
-
-            if ('key' in localStorage) {
-                $textarea.val(localStorage[storageKey]);
-            }
-
-            $textarea.off();
-            $textarea.on('input', function () {
-                var thisTextArea = $(this);
-
-                localStorage.setItem(storageKey, thisTextArea.val());
-
-                var timerInputId = setInterval(function () {
-                    validateTextArea(thisTextArea);
-                }, 50);
-
-                setTimeout(function () {
-                    clearInterval(timerInputId);
-                }, 500);
-            });
-        });
-    });
 
     $('.mailing_close').click(function () {
         blurElement('.effect_blur', 0);

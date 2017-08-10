@@ -1,0 +1,215 @@
+
+//ширина контента страницы и хедера
+$max-width-page: 1200px
+
+// основные переменные для верхнего хедера
+$intodayer-color: #8b1deb
+$top-block-background: rgba(242, 242, 242, 1)
+$height-header: 40px
+
+// переменные для стилизации логотипа
+$logo-font-size: 24px
+$logo-width: 187px
+
+@import mixins
+
+ul
+  list-style: none
+  margin: 0 auto
+
+%a
+  text-decoration: none
+  transition: .2s linear
+a
+  @extend %a
+  &:active
+    @extend %a
+  &:link
+    @extend %a
+
+button
+  background: none
+  border: none
+  &:hover, &:focus
+    outline: none
+
+.top-block
+  border-bottom: 3px solid $intodayer-color
+  background: $top-block-background
+
+.top
+  max-width: $max-width-page
+  margin: auto
+  display: flex
+  flex-direction: row
+  justify-content: flex-start
+  padding: 0 10px 0 10px
+
+.top-menu
+  ul
+    display: flex
+    height: $height-header
+    li
+      @include set-flex(center)
+      height: auto
+      a
+        @include set-flex(center)
+        height: 100%
+        width: 100%
+        color: black
+        font-size: 0.85em
+        padding:
+          left: 20px
+          right: 20px
+        &:hover
+          background: white
+          color: dodgerblue
+          transition: 0.3s ease
+        &:active
+          background: rgba(242, 242, 242, 1)
+          transition: 0.3s ease
+
+.droplist
+  display: flex
+  justify-content: center
+  margin-left: auto
+  min-width: 120px
+  max-width: 150px
+  z-index: 100
+  background: rgba(240, 240, 240, 1)
+  position: relative
+  cursor: pointer
+  a
+    display: flex
+    cursor: pointer
+    padding: 0 15px 0 10px
+    @include user-select(none)
+
+.logo
+  display: flex
+  align-content: center
+  height: auto
+  width: $logo-width
+  font-size: $logo-font-size
+  a
+    @include set-flex(center)
+
+
+#profile_title
+  @include set-flex(center)
+  height: auto
+  a
+    @include set-flex(center)
+    height: auto
+    margin-top: 1px
+
+#user_ava_thumbnail_content
+  cursor: pointer
+  height: auto
+  @include set-flex(center)
+  padding: 0 10px 0 0
+
+#user_ava_thumbnail
+  width: 30px
+  height: 30px
+  @include border-radius(2px)
+  background: center no-repeat
+  background-size: cover
+  cursor: pointer
+
+#arrow_down_content
+  cursor: pointer
+  padding: 0 10px 0 5px
+  @include set-flex(center)
+
+#arrow_down
+  margin: 5px 0 0 0
+  border: 6px solid transparent
+    top: 7px solid rgba(150, 150, 150, 1)
+  cursor: pointer
+
+
+.droplist_click
+  position: absolute
+  margin-top: -10px
+  background: white
+  font-size: 0.9em
+  @include border-radius(4px)
+  border: 1px solid rgba(210, 210, 210, 1)
+  @include box-shadow(0px 2px 15px 0px rgba(0, 0, 0, 0.2))
+  cursor: pointer
+  @include user-select(none)
+  z-index: 1
+
+.droplist_click_container
+  display: inline
+  margin-top: 10px
+
+.droplist_click
+  position: relative
+  ul
+    li
+      cursor: pointer
+      width: 110px
+      line-height: 35px
+      overflow: hidden
+      border-bottom: 1px solid rgba(230, 230, 230, 1)
+      &:first-child
+        @include border-radius(4px 4px 0 0)
+      &:last-child
+        @include border-radius(0 0 4px 4px)
+      &:first-child, &:last-child
+        background: white
+        cursor: default
+        &:hover, &:active
+          background: white
+
+      &:first-child
+        height: 4px
+        border-bottom: none
+      &:last-child
+        height: 3px
+        border-bottom: none
+      &:nth-child(4)
+        border-bottom: none
+      &:hover
+        background: rgba(230, 230, 230, 1)
+      &:active
+        background: rgba(220, 220, 220, 1)
+      a
+        display: block
+        width: 100%
+        padding: 0 10px 0 10px
+        cursor: pointer
+
+%triangle_styles
+  display: inline-table
+  position: relative
+  width: 0
+  height: 0
+  border-left: 8px solid transparent
+  border-right: 8px solid transparent
+  z-index: 3
+
+.triangle
+  @extend %triangle_styles
+  bottom: 5px
+  right: -79px
+  border-bottom: 6px solid rgba(220, 220, 220, 1)
+
+.triangle_bottom
+  @extend %triangle_styles
+  bottom: 4px
+  right: -63px
+  border-bottom: 6px solid white
+
+@media (max-width: 768px)
+  .logo
+    width: auto
+    padding-right: 20px
+    font-size: $logo-font-size - 4
+    margin-top: 2px
+  .top-menu ul li a
+    font-size: 0.7em
+    padding-left: 8px
+    padding-right: 8px

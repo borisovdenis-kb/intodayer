@@ -1,9 +1,11 @@
-from intodayer_bot.utils import *
-from intodayer_bot.work_with_db import *
+# from intodayer_bot.utils import *
+from intodayer_bot.utils import set_user_state, is_logging, login
+# from intodayer_bot.work_with_db import *
 import telebot
-import intodayer_bot.config as config
+from intodayer2 import config
 import json
 
+from intodayer_bot.work_with_db import MySQLer
 
 bot = telebot.TeleBot(config.token)
 
@@ -18,8 +20,9 @@ def say_welcome(message):
     db = MySQLer(config.db_config_pymysql)
 
     username = message.chat.first_name
-    welcome_text = 'Здравствуйте, %s!\nIntoDayerBot чертовски рад Вас видеть :)' % username
-    login_text = 'Пожалуйста введите логин от своей учетной записи intodayer.'
+    welcome_text = 'Здравствуйте, %s!\nIntodayerBot чертовски рад Вас видеть :)' % username
+    login_text = 'Пожалуйста, введите через пробел логин и пароль от своей учетной записи Intodayer.\n' \
+                 'Пример: neo@matrix.com ma7tr7ix7#'
 
     bot.send_message(message.chat.id, welcome_text)
 
@@ -29,18 +32,25 @@ def say_welcome(message):
         bot.send_message(message.chat.id, login_text)
 
 
-@bot.message_handler(func=lambda message: is_logging(message.chat.id) == True)
+@bot.message_handler(func=lambda message: is_logging(message.chat.id) is True)
 def user_login(message):
     db = MySQLer(config.db_config_pymysql)
-    user_id = db.get_user_by_username(message.text)
+    error_message = "Попробуйте еще раз.\nПример: morpheus@zeon.com zeOn1999*"
+    success_message = "Поздравляем, все прошло успешно!"
 
-    if user_id:
-        db.set_chat_id(message.chat.id, user_id)
-        # выводим пользователя из режима log in
-        set_user_state(False)
-        bot.reply_to(message, "Поздравляем, все прошло успешно!")
-    else:
-        bot.reply_to(message, "Попробуйте еще раз")
+    try:
+        email, password = message.text.split()
+        user_id = login(email, password)
+
+        if user_id:
+            db.set_chat_id(message.chat.id, user_id)
+            # выводим пользователя из режима log in
+            set_user_state(message.chat.id, False)
+            bot.send_message(message.chat.id, success_message)
+        else:
+            bot.send_message(message.chat.id, error_message)
+    except ValueError:
+        bot.send_message(message.chat.id, error_message)
 
 
 def do_mailing(data):
@@ -51,37 +61,37 @@ def do_mailing(data):
     except TypeError:
         raise TypeError('Send JSON string')
 
-    message_text = ''
-    unknown = '- ? -' + '\n'
-
-    if data['plan_info']['title']:
-        message_text += 'Расписание: ' + data['plan_info']['title'] + '\n'
-    else:
-        message_text += 'Расписание: ' + unknown
-
-    if data['plan_info']['mem_count']:
-        message_text += 'Количество участников: ' + data['plan_info']['mem_count'] + '\n'
-    else:
-        message_text += 'Количество участников: ' + unknown
-
-    if data['sender_name']:
-        message_text += 'Староста: ' + data['sender_name'] + '\n'
-    else:
-        message_text += 'Староста: ' + unknown
-
-    if data['text']:
-        message_text += '\n' + '"' + data['text'] + '"' + '\n'
-    else:
-        message_text += '\n' + '[Пустое сообщение]' + '\n'
+    # message_text = ''
+    # unknown = '- ? -' + '\n'
+    #
+    # if data['plan_info']['title']:
+    #     message_text += 'Расписание: ' + data['plan_info']['title'] + '\n'
+    # else:
+    #     message_text += 'Расписание: ' + unknown
+    #
+    # if data['plan_info']['mem_count']:
+    #     message_text += 'Количество участников: ' + data['plan_info']['mem_count'] + '\n'
+    # else:
+    #     message_text += 'Количество участников: ' + unknown
+    #
+    # if data['sender_name']:
+    #     message_text += 'Староста: ' + data['sender_name'] + '\n'
+    # else:
+    #     message_text += 'Староста: ' + unknown
+    #
+    # if data['text']:
+    #     message_text += '\n' + '"' + data['text'] + '"' + '\n'
+    # else:
+    #     message_text += '\n' + '[Пустое сообщение]' + '\n'
 
     # делаем рассылку по списку контактов
-    if data['recipients_telegram']:
-        for recp in data['recipients_telegram']:
-            bot.send_message(recp['chat_id'], message_text)
+    text = data['message']['text']
 
-            if data['image']:
-                with open(data['image'], 'rb') as f:
-                    bot.send_photo(recp['chat_id'], f)
+    for recp in data['recipient_list']:
+        bot.send_message(recp['chat_id'], text)
+        if data['message']['image']:
+            with open(data['message']['image'], 'rb') as f:
+                bot.send_photo(recp['chat_id'], f)
 
 
 if __name__ == '__main__':

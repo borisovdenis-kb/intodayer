@@ -1,18 +1,58 @@
 import os
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from PIL import Image
-from datetime import *
-from django.utils import timezone
+from datetime import datetime
+from extra.validators import (
+    validate_yn_filed, validate_not_empty_filed, validate_day_of_week_field,
+    validate_role_field, validate_weeks_duration_field, validate_date_field,
+    validate_time_field, validate_email_field, validate_parity_field,
+    validate_telegram_chat_id_field, validate_phone_field
+)
 
 
-_MAX_SIZE = 300
+class ThereIsNoAction(Exception):
+    pass
 
 
-class DivToPng(models.Model):
+class ArgumentError(Exception):
+    error_message = 'called function missing 1 argument "%s"'
+
+
+class UnacceptableNewRoleValue(Exception):
+    error_message = 'argument new_role must be of: participant or admin, not elder'
+
+
+class InvalidActionValue(Exception):
+    error_message = 'argument "action" must be of:\n' \
+                    'edit_plan, leave_plan, delete_plan, invite_participants, ' \
+                    'delete_participant, delete_admin or set_role'
+
+
+class UpdateMixin:
     """
-        Таблица для хранения изображений
-        полученных при конвертации div блоков с расписанием
+        An mixin that allows you to add a method for any model. 
+        By inheritance.
+
+        class ModelName(models.Model, UpdateMixin):
+            ...
+        obj = ModelName.objects.get(...)
+        obj.update(**{field1: value1, ...})
+    """
+    def update(self, **kwargs):
+        if self._state.adding:
+            raise self.DoesNotExist
+
+        for field, value in kwargs.items():
+            setattr(self, field, value)
+
+        self.clean_fields()
+        self.save()
+
+
+class DivToPng(models.Model, UpdateMixin):
+    """
+        Table for storing images obtained by 
+        converting div blocks with a plan.
     """
     image = models.ImageField(upload_to='div_to_png/', blank=True, max_length=1000)
 
@@ -21,11 +61,12 @@ class DivToPng(models.Model):
         db_table = 'div_to_png'
 
 
-class DaysOfWeek(models.Model):
+class DaysOfWeek(models.Model, UpdateMixin):
     """
-        Таблица дней недели
+        Table that stores days of week
+        in Russian (Понедельник, ..., Воскресенье) and in English (Monday, ..., Sunday)
     """
-    name = models.CharField(max_length=50, blank=True, null=True)
+    name = models.CharField(max_length=50, blank=True, null=True, validators=[validate_day_of_week_field])
 
     class Meta:
         managed = True
@@ -35,12 +76,11 @@ class DaysOfWeek(models.Model):
         return self.name
 
 
-class Places(models.Model):
+class Places(models.Model, UpdateMixin):
     """
-        Таблица аудиторий
-        Фишка будет заключаться в том,
-        чтобы при вторичном создании/редактировании расписания
-        предлагать пользователю введенное до этого расположение аудитории.
+        Table that stores the audience.
+        It is necessary to output previously entered audiences 
+        when editing the plan.
     """
     name = models.CharField(max_length=100)
     plan = models.ForeignKey('PlanLists', models.DO_NOTHING, blank=True)
@@ -56,12 +96,11 @@ class Places(models.Model):
         )
 
 
-class Subjects(models.Model):
+class Subjects(models.Model, UpdateMixin):
     """
-        Таблица предметов
-        Фишка будет заключаться в том,
-        чтобы при вторичном создании/редактировании расписания
-        предлагать пользователю введенное до этого название предмета.
+        Table that stores subjects.
+        It is necessary to output previously entered subjects
+        when editing the plan.
     """
     name = models.CharField(max_length=100, blank=True, null=True)
     plan = models.ForeignKey('PlanLists', models.DO_NOTHING, blank=True)
@@ -74,12 +113,11 @@ class Subjects(models.Model):
         return self.name
 
 
-class Teachers(models.Model):
+class Teachers(models.Model, UpdateMixin):
     """
-        Таблица преподавателей
-        Фишка будет заключаться в том,
-        чтобы при вторичном создании/редактировании расписания
-        предлагать пользователю введенное до этого имя преподавателя.
+        Table that stores teachers.
+        It is necessary to output previously entered teachers
+        when editing the plan.
     """
     name_short = models.CharField(max_length=255, blank=True, null=True)
     name_full = models.CharField(max_length=255, blank=True, null=True)
@@ -93,14 +131,13 @@ class Teachers(models.Model):
         return self.name_short
 
 
-class Times(models.Model):
+class Times(models.Model, UpdateMixin):
     """
-        Таблице хранения времени
-        Фишка будет заключаться в том,
-        чтобы при вторичном создании/редактировании расписания
-        предлагать пользователю введенное до этого время.
+        Table that stores times.
+        It is necessary to output previously entered times
+        when editing the plan.
     """
-    hh24mm = models.TimeField()
+    hh24mm = models.TimeField(validators=[validate_time_field])
     plan = models.ForeignKey('PlanLists', models.DO_NOTHING, blank=True)
 
     class Meta:
@@ -115,16 +152,11 @@ class Times(models.Model):
         return str(self.hh24mm)
 
 
-class Invitations(models.Model):
+class Invitations(models.Model, UpdateMixin):
     """
-        Таблица приглашений
-        Эта таблица нужна, когда один пользователь захочет
-        расшарить свое расписание другому пользователю.
-        Пользователю, которому расшарили расписание,
-        будет приходить уведомление вида:
-        --- от какого Юзера пришло приглашение
-        --- ссылка на рассписание, которым с ним делятся
-        --- и комментарий
+        Table that stores invitations.
+        This table is needed when one user wants 
+        to share the created schedule with another user.
     """
     from_user = models.ForeignKey(
         'CustomUser',
@@ -140,7 +172,8 @@ class Invitations(models.Model):
     )
     comment = models.TextField(blank=True, null=True)
     plan = models.ForeignKey('PlanLists', models.DO_NOTHING)
-    confirmed_yn = models.CharField(max_length=1, blank=True, null=True)
+    confirmed_yn = models.CharField(max_length=1, blank=True, null=True, validators=[validate_yn_filed])
+    email = models.TextField(blank=False, validators=[validate_email_field])
 
     class Meta:
         managed = True
@@ -156,20 +189,19 @@ class Invitations(models.Model):
         )
 
 
-class PlanRows(models.Model):
+class PlanRows(models.Model, UpdateMixin):
     """
-        Таблица, в которой будет храниться основная информация
-        необходимая для рассписания
+        Table that stores the basic information for plan.
     """
-    parity = models.IntegerField(models.DO_NOTHING)
+    parity = models.IntegerField(models.DO_NOTHING, blank=True, null=True, validators=[validate_parity_field])
     day_of_week = models.ForeignKey(DaysOfWeek, models.DO_NOTHING)
     time = models.ForeignKey(Times, models.DO_NOTHING)
     subject = models.ForeignKey(Subjects, models.DO_NOTHING)
     teacher = models.ForeignKey(Teachers, models.DO_NOTHING)
     place = models.ForeignKey(Places, models.DO_NOTHING)
-    start_week = models.IntegerField()
-    end_week = models.IntegerField()
-    comment = models.CharField(max_length=256)
+    start_week = models.IntegerField(validators=[validate_weeks_duration_field])
+    end_week = models.IntegerField(validators=[validate_weeks_duration_field])
+    comment = models.CharField(max_length=256, blank=True)
     plan = models.ForeignKey('PlanLists', models.DO_NOTHING)
     # subgroup = models.IntegerField(models.DO_NOTHING)
 
@@ -183,18 +215,19 @@ class PlanRows(models.Model):
         )
 
 
-class PlanRowsTemporal(models.Model):
+class PlanRowsTemporal(models.Model, UpdateMixin):
     """
-        Таблица для временного изменения расписания
+        Do we need this table? 
+        It is absolutely not used at all.
     """
-    parity = models.BooleanField()
+    parity = models.BooleanField(validators=[validate_parity_field])
     day_of_week = models.ForeignKey(DaysOfWeek, models.DO_NOTHING)
     time = models.ForeignKey(Times, models.DO_NOTHING)
     subject = models.ForeignKey(Subjects, models.DO_NOTHING)
     teacher = models.ForeignKey(Teachers, models.DO_NOTHING)
     place = models.ForeignKey(Places, models.DO_NOTHING)
-    start_week = models.IntegerField()
-    end_week = models.IntegerField()
+    start_week = models.IntegerField(validators=[validate_weeks_duration_field])
+    end_week = models.IntegerField(validators=[validate_weeks_duration_field])
     comment = models.CharField(max_length=256)
     plan = models.ForeignKey('PlanLists', models.DO_NOTHING)
 
@@ -208,18 +241,25 @@ class PlanRowsTemporal(models.Model):
         )
 
 
-class UserPlans(models.Model):
+class UserPlans(models.Model, UpdateMixin):
     """
-        Таблица для связи многие-ко-многим
-        между юзерами и рассписаниями
+        Table that stores many2many relation of users and plans.
     """
     user = models.ForeignKey('CustomUser', models.DO_NOTHING)
     plan = models.ForeignKey('PlanLists', models.DO_NOTHING)
-    current_yn = models.CharField(max_length=1, blank=False)
+    current_yn = models.CharField(max_length=1, blank=False, validators=[validate_yn_filed])
+    role = models.CharField(max_length=12, blank=False, validators=[validate_role_field])
 
     class Meta:
         managed = True
         db_table = 'user_plans'
+
+    @staticmethod
+    def validate_role(role):
+        if role in ['participant', 'admin', 'elder']:
+            return role
+        else:
+            raise ValueError('role must be of: participant, admin or elder')
 
     def __str__(self):
         return '%s %s' % (
@@ -228,13 +268,13 @@ class UserPlans(models.Model):
         )
 
 
-class PlanLists(models.Model):
+class PlanLists(models.Model, UpdateMixin):
     """
-        Таблица с описанием рассписания
+        Table that stores plan's info.
     """
-    title = models.CharField(max_length=256)
+    title = models.CharField(max_length=256, blank=False, validators=[validate_not_empty_filed])
     description = models.TextField(max_length=1000)
-    start_date = models.DateTimeField()
+    start_date = models.DateTimeField(blank=True, validators=[validate_date_field])
     owner = models.ForeignKey('CustomUser', models.DO_NOTHING)
     avatar = models.ImageField(upload_to='plans_avatars/', blank=True, max_length=1000)
 
@@ -242,9 +282,14 @@ class PlanLists(models.Model):
         managed = True
         db_table = 'plan_lists'
 
-    def get_image_url(self):
+    def delete_with_message(self, message=None):
+        # mailing = IntodayerMailing(text=message)
+        # mailing.send_by_plan(plan_id=self.id)
+        self.delete()
+
+    def get_avatar_url(self):
         """
-            Returns the URL of the image assoc1iated with this Object.
+            Returns the URL of the image associated with this Object.
             If an image hasn't been uploaded yet, it returns a stock image
             :returns: str -- the image url
         """
@@ -257,7 +302,7 @@ class PlanLists(models.Model):
             return '/static/images/plan_avatar_default.png'
 
     def count_of_users(self):
-        n = UserPlans.objects.filter(user_id=self.id).count()
+        n = UserPlans.objects.filter(plan_id=self.id).count()
 
         if (n % 10) in [0, 5, 6, 7, 8, 9]:
             res = '%s участников' % n
@@ -276,23 +321,75 @@ class PlanLists(models.Model):
         )
 
 
-class CustomUser(AbstractUser):
+class UserMailingChannels(models.Model, UpdateMixin):
     """
-        Расширение стандартного юзера
-        Добавлено:
-        --- Номер телефона
-        --- Аватар
+        Table showing which channels the user wants to receive the mailing. 
+        It is understood that the user can use more than one channel.
+        If a new channel appears, then you need to add a new field <some_channel>_yn to the table.
     """
-    avatar = models.ImageField(upload_to='users_avatars/', blank=True, max_length=1000)
-    # телефон хранится в формате +7*********
-    phone = models.CharField(max_length=12, blank=True)
-    # id чата с ботом в телеграме
-    chat_id = models.CharField(max_length=15, blank=True)
+    user = models.ForeignKey('CustomUser', models.DO_NOTHING)
+    email_yn = models.CharField(max_length=1, blank=False, validators=[validate_yn_filed])
+    telegram_yn = models.CharField(max_length=1, blank=False, validators=[validate_yn_filed])
 
     class Meta:
         managed = True
 
-    def get_image_url(self):
+    @staticmethod
+    def get_telegram_recipients(plan_id):
+        """
+            The function for some plan returns list of users(chat_id) 
+            who have chosen mailing via telegram.
+            :param plan_id: id of plan
+            :return: list [{'chat_id': 423232334}, {'chat_id': 23283732}, ...]
+        """
+        user_ids = UserPlans.objects.filter(plan_id=plan_id).values('user_id')
+        user_ids = UserMailingChannels.objects.filter(telegram_yn='y', user_id__in=user_ids).values('user_id')
+        recipients_telegram = list(CustomUser.objects.filter(id__in=user_ids).values('chat_id'))
+
+        return recipients_telegram
+
+    @staticmethod
+    def get_email_recipients(plan_id):
+        """
+            The function for some plan returns list of users(email) 
+            who have chosen mailing via telegram.
+            :param plan_id: id of plan
+            :return: list [{'email': morpheus@zeon.com}, {'email':trinity@matrix.com}, ...]
+        """
+        user_ids = UserPlans.objects.filter(plan_id=plan_id).values('user_id')
+        user_ids = UserMailingChannels.objects.filter(email_yn='y', user_id__in=user_ids).values('user_id')
+        recipients_telegram = list(CustomUser.objects.filter(id__in=user_ids).values('email'))
+
+        return recipients_telegram
+
+    def __str__(self):
+        return '%s telegram(%s) email(%s)' % (
+            ' '.join(self.user.get_name().values()),
+            self.telegram_yn,
+            self.email_yn
+        )
+
+
+class CustomUser(AbstractUser, UpdateMixin):
+    """
+        Extension of standard user model.
+        Added:
+        --- phone number
+        --- avatar
+    """
+    first_name = models.CharField(max_length=30, blank=False, validators=[validate_not_empty_filed])
+    last_name = models.CharField(max_length=30, blank=False, validators=[validate_not_empty_filed])
+    email = models.EmailField(blank=False, validators=[validate_email_field])
+    avatar = models.ImageField(upload_to='users_avatars/', blank=True, max_length=1000)
+    # телефон хранится в формате +7*********
+    phone = models.CharField(max_length=12, blank=True, validators=[validate_phone_field])
+    # id чата с ботом в телеграме
+    chat_id = models.CharField(max_length=15, blank=True, validators=[validate_telegram_chat_id_field])
+
+    class Meta:
+        managed = True
+
+    def get_avatar_url(self):
         """
             Returns the URL of the image associated with this Object.
             If an image hasn't been uploaded yet or dose not exist on server
@@ -310,33 +407,25 @@ class CustomUser(AbstractUser):
 
     def get_name(self):
         """
-            Returns user's first name and last name if exist.
-            Else return username.
-            To construct name use ' '.join()
-            :return: str -- username (first_name + last_name or username)
+            Returns user's first name and last name.
+            :return: dict -- {'first_name': some_str, 'last_name': some_str}
         """
-        if self.first_name and self.last_name:
-            res = [self.first_name, self.last_name]
-            return res
-        else:
-            res = [self.username]
-            return res
+        return {'first_name': self.first_name, 'last_name': self.last_name}
 
-    def add_new_plan(self):
+    def add_new_plan(self, title='No name', description='No description'):
         """
-            Эта функцию нужна для того, чтобы добавить пользователю новое пустое
-            расписание.
-            :return: plan_list object
+            Function that needed to add new empty plan to user.
+            :return: PlanLists object
         """
         new_plan = PlanLists(
-            title='No name',
-            description='No description',
+            title=title,
+            description=description,
             start_date=datetime.now(),
-            owner_id=self.id
+            owner_id=self.id,
         )
         new_plan.save()
 
-        UserPlans(user_id=self.id, plan_id=new_plan.id).save()
+        UserPlans(user_id=self.id, plan_id=new_plan.id, role='elder').save()
         # устанавливаем это расписание текущим
         self.set_current_plan(new_plan.id)
 
@@ -344,8 +433,8 @@ class CustomUser(AbstractUser):
 
     def set_current_plan(self, plan_id):
         """
-            Функция для данного юзера усатанавливает текущее расписание,
-            при этом снимая метку current_yn у предыдущего текущего.
+            Function for this user sets the current plan, 
+            and remove the current_yn label from the previous one.
             :param plan_id: 
             :return: 
         """
@@ -358,6 +447,71 @@ class CustomUser(AbstractUser):
             else:
                 row.current_yn = 'n'
                 row.save()
+
+    def has_rights(self, action=None, **kwargs):
+        """
+            The function shows user has rights or not in this plan for some action.
+            :param action: <str>
+                available actions
+                (
+                    'edit_plan', 'leave_plan', 'delete_plan', 'invite_participants',
+                    'delete_participant', 'delete_admin', 'set_role'
+                )
+            :param kwargs:
+                all possible kwargs
+                * - necessary parameter
+                {
+                    plan_id: <int>, *
+                    participant_id: <int>,
+                    new_role: str [participant, admin, elder]
+                }
+            :return: True/False
+        """
+        if not action:
+            raise ArgumentError(ArgumentError.error_message % 'action')
+
+        user_role = UserPlans.objects.get(user_id=self.id, plan_id=kwargs['plan_id']).role
+
+        if action == 'edit_plan':
+            return True if user_role in ['admin', 'elder'] else False
+
+        elif action == 'leave_plan':
+            return True if user_role in ['admin', 'participant'] else False
+
+        elif action == 'delete_plan':
+            return True if user_role == 'elder' else False
+
+        elif action == 'invite_participants':
+            return True if user_role in ['admin', 'elder'] else False
+
+        elif action == 'set_role':
+
+            cur_part_role = UserPlans.objects.get(
+                user_id=kwargs['participant_id'],
+                plan_id=kwargs['plan_id']
+            ).role
+
+            if kwargs['new_role'] != 'elder':
+                if user_role in ['admin', 'elder'] and cur_part_role != 'elder':
+                    return True
+                else:
+                    return False
+            else:
+                raise UnacceptableNewRoleValue(UnacceptableNewRoleValue.error_message)
+
+        elif action in 'delete_participant':
+            participant_role = UserPlans.objects.get(
+                user_id=kwargs['participant_id'],
+                plan_id=kwargs['plan_id']
+            ).role
+
+            if user_role in ['admin', 'elder'] and participant_role != 'elder':
+                return True
+            else:
+                return False
+
+        else:
+            raise InvalidActionValue(InvalidActionValue.error_message)
 
     def __str__(self):
         return '%s %s %s' % (

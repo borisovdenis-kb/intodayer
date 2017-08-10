@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="512px" height="512px" viewBox="0 0 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 3.7.2 (28276) - http://www.bohemiancoding.com/sketch -->
+    <title>Profi_icons_72</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="Profi_icons_72" stroke="#4A4A4A" stroke-width="16">
+            <g id="Group" transform="translate(74.000000, 116.000000)">
+                <path d="M78.2059649,261.494927 L63.7829547,94.5868434 C63.7829547,52.5238622 97.8851267,18.4250787 139.946477,18.4250787 C182.010428,18.4250787 216.109999,52.5192625 216.109999,94.5868434 L216.360225,122.967101" id="Rectangle-31" transform="translate(140.071590, 139.960003) rotate(-45.000000) translate(-140.071590, -139.960003) "></path>
+                <path d="M161.243328,261.082828 L147.675245,94.4629608 C147.675245,52.3999796 181.777417,18.301196 223.838767,18.301196 C265.902719,18.301196 300.002289,52.3953798 300.002289,94.4629608 L299.874509,122.825221" id="Rectangle-31-Copy" transform="translate(223.838767, 139.692012) scale(-1, 1) rotate(-45.000000) translate(-223.838767, -139.692012) "></path>
+            </g>
+            <path d="M256,385 C256,385 267.000001,351 256,315 C245,279 223.990742,264 223.990742,264 L289.999997,264 C289.999996,264 288,245 278,224 C268,203 256,190 256,190" id="Path-786"></path>
+        </g>
+    </g>
+</svg>

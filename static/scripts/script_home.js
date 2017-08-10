@@ -2,10 +2,6 @@
  * Created by Alexey on 28.04.2017.
  */
 
-
-
-
-
 $(document).ready(function () {
     setStrColor();
 });

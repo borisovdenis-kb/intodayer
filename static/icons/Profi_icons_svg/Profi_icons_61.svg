@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="512px" height="512px" viewBox="0 0 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 3.7.2 (28276) - http://www.bohemiancoding.com/sketch -->
+    <title>Profi_icons_61</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="196" y="109" width="120" height="220" rx="100"></rect>
+        <mask id="mask-2" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="0" y="0" width="120" height="220" fill="white">
+            <use xlink:href="#path-1"></use>
+        </mask>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Profi_icons_61" stroke="#4A4A4A">
+            <use id="Rectangle-21" mask="url(#mask-2)" stroke-width="32" xlink:href="#path-1"></use>
+            <path d="M336.653137,272 C336.653137,316.643606 300.475664,352.834399 255.826568,352.834399 L255.826568,352.834399 C211.187287,352.834399 175,316.650072 175,272" id="Rectangle-21-Copy" stroke-width="16"></path>
+            <path d="M256,353 L256,394" id="Path-142" stroke-width="16"></path>
+            <path d="M191,393 L321,393" id="Path-143" stroke-width="16"></path>
+        </g>
+    </g>
+</svg>
