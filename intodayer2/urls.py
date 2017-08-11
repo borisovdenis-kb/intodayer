@@ -38,7 +38,6 @@ urlpatterns = [
     url(r'^about_service/$', views.about_service_view),
 
     # для ajax запросов
-    url(r'^get_avatar', views.get_avatar_ajax),
     url(r'^get_invitations', views.get_invitations_ajax),
     url(r'^home/switch_plan', views.switch_plan_home_ajax),
     url(r'^plan/edit_plan_row', views.edit_plan_row_ajax),
@@ -62,6 +61,7 @@ urlpatterns = [
     url(r'^plan/switch_plan', planApi.switch_plan_plan),
     url(r'^upload_plan_avatar', planApi.upload_plan_avatar),
     url(r'^plan/settings_plan', views.get_settings_plan_html),
+    url(r'^get_avatar', planApi.get_avatar),
 
     # API участников
     url(r'^change_role', participantsApi.set_role),

@@ -18,7 +18,7 @@ function avatarEditAccess(data) {
      *  data - словарь (возможные ключ: plan_id)
      */
     $.getJSON('/get_avatar', data, function (msg) {
-        $('.ava_content').css({'background-image': 'url(' + msg.url + ')'});
+        $('.ava_content').css({'background-image': 'url(' + msg.plan_avatar_url + ')'});
         if (msg.isOwner == true) {
             $('.ava_cover').css({'display': 'block'});
         } else {

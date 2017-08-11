@@ -249,12 +249,12 @@ function sendFile(form, address, plan_id, update_avatar) {
      */
     var allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
     var currentType = document.getElementById('id_image_file').files[0].type;
-    var maxFileSize = 2 * 1024 * 1024; // кол-во байт
+    var maxFileSizeByte = 2 * 1024 * 1024;
 
     // проверяем, что файл - изображение
     if (allowedTypes.indexOf(currentType) != -1) {
         // проверяем, что размер файла <= 2 Мб
-        if (getFileSize('#id_image_file') <= maxFileSize) {
+        if (getFileSize('#id_image_file') <= maxFileSizeByte) {
             var data = new FormData;
             var get_ava_data = {plan_id: $(update_avatar).find('p').text()};
 
@@ -267,9 +267,9 @@ function sendFile(form, address, plan_id, update_avatar) {
                 type: 'POST',
                 processData: false,
                 contentType: false,
-                success: function (msg) {
-                    $.getJSON('/get_avatar', get_ava_data, function (msg) {
-                        $(update_avatar).css({'background-image': 'url(' + msg.url + ')'})
+                success: function () {
+                    $.getJSON('/get_avatar', get_ava_data, function (data) {
+                        $(update_avatar).css({'background-image': 'url(' + data.plan_avatar_url + ')'})
                     });
                     $('.close').trigger('click');
                     $('#send_avatar_form')[0].reset();

@@ -17,11 +17,13 @@ function setListenersTitleBlock() {
 
 function removePlan() {
     var plan_id = +$('.title_content').attr('plan_id');
+    var data = {plan_id: plan_id};
 
     $.ajax({
         url: '/delete_plan',
+        contentType: "application/json",
         method: 'POST',
-        data: {plan_id: plan_id},
+        data: JSON.stringify(data),
         dataType: 'text',
         success: function () {
             location.href = "/plan";
@@ -121,10 +123,12 @@ function updateSettings() {
         $title_input.val("No name");
     }
 
-    var date_settings = {
-        'start_date': $('#start_date').val(),
+    var data = {
         'plan_id': plan_id,
-        'new_title': $title_input.val()
+        'plan_info': {
+            'start_date': $('#start_date').val().split('.').reverse().join('-'),
+            'title': $title_input.val()
+        }
     };
     // после выполнения ajax запроса, фиксирует, что они оба прошли успешно
     // и только тогда настройки закрываютс
@@ -133,8 +137,9 @@ function updateSettings() {
 
     $.ajax({
         url: '/update_plan_info',
+        contentType: "application/json",
         type: 'POST',
-        data: date_settings,
+        data: JSON.stringify(data),
         // TODO: подправить тут корректную обработку ошибок
         success: function () {
             d1.resolve();
