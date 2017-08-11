@@ -16,7 +16,8 @@ from django.shortcuts import render_to_response
 from django.http import JsonResponse, HttpResponse
 from intodayer2_app.models import (
     CustomUser, UserPlans, Times, Subjects, Teachers, Places, PlanLists,
-    PlanRows)
+    PlanRows
+)
 
 
 def create_plan(request):
@@ -104,7 +105,7 @@ def get_drop_list(request):
     """
     if request.user.is_authenticated():
         user = CustomUser.objects.get(username=request.user.username)
-        data = json.loads(request.body)
+        data = request.POST
         context = {'is_error': False}
 
         try:
@@ -161,22 +162,6 @@ def upload_plan_avatar(request):
         return HttpResponse(status=401)
 
 
-def mailing_test(request):
-    if request.user.is_authenticated():
-        user = CustomUser.objects.get(username=request.user.username)
-        data = json.loads(request.body)
-
-        try:
-            mailing = IntodayerMailing(text=data['text'], image=data['image'])
-            mailing.send_by_plan(plan_id=data['plan_id'])
-        except ValueError:
-            return HttpResponse(status=400)
-
-        return HttpResponse(status=200)
-    else:
-        return HttpResponse(status=403)
-
-
 def switch_plan_plan(request):
     """
         I don't sure that this is RESTfull endpoint...
@@ -204,3 +189,39 @@ def switch_plan_plan(request):
         return render_to_response('content_pages/right_content_plan_general.html', context)
     else:
         return HttpResponse(status=401)
+
+
+def get_avatar(request):
+    if request.user.is_authenticated():
+        user = CustomUser.objects.get(username=request.user.username)
+        data = request.GET
+        response = {}
+
+        if 'user_id' in data:
+            # если хотим получить аватарку пользователя
+            response['user_avatar_url'] = user.get_avatar_url()
+
+        if 'plan_id' in data:
+            # если хотим получить аватарку расписания
+            plan = PlanLists.objects.get(id=data['plan_id'])
+            response['plan_avatar_url'] = plan.get_avatar_url()
+
+        return JsonResponse(response)
+    else:
+        return HttpResponse(status=401)
+
+
+def mailing_test(request):
+    if request.user.is_authenticated():
+        user = CustomUser.objects.get(username=request.user.username)
+        data = json.loads(request.body)
+
+        try:
+            mailing = IntodayerMailing(text=data['text'], image=data['image'])
+            mailing.send_by_plan(plan_id=data['plan_id'])
+        except ValueError:
+            return HttpResponse(status=400)
+
+        return HttpResponse(status=200)
+    else:
+        return HttpResponse(status=403)

@@ -441,7 +441,7 @@ class CustomUser(AbstractUser, UpdateMixin):
         user_plans = UserPlans.objects.filter(user_id=self.id)
 
         for row in user_plans:
-            if row.plan_id == plan_id:
+            if row.plan_id == int(plan_id):
                 row.current_yn = 'y'
                 row.save()
             else:

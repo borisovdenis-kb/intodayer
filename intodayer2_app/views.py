@@ -345,36 +345,6 @@ def save_plan_avatar_ajax(request, plan_id):
         return HttpResponse(status=400)
 
 
-def get_avatar_ajax(request):
-    if request.is_ajax():
-        user = CustomUser.objects.get(username=request.user.username)
-
-        response = HttpResponse()
-        response['Content-Type'] = 'application/json'
-
-        try:
-            if request.GET['user_id']:
-                response.write(json.dumps({'url': user.get_avatar_url()}))
-                return response
-        except KeyError:
-            pass
-
-        try:
-            if request.GET['plan_id']:
-                # если хотим получить аватарку расписания
-                plan = PlanLists.objects.get(id=request.GET['plan_id'])
-
-                response.write(json.dumps({
-                    'url': plan.get_avatar_url(),
-                    'isOwner': True if plan.owner == user else False
-                }))
-                return response
-        except KeyError:
-            pass
-
-        return response
-
-
 ###################################################################################
 #                         ОБРАБОТКА ОБЫЧНЫХ ЗАПРОСОВ                              #
 ###################################################################################
