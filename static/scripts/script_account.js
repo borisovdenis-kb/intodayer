@@ -11,14 +11,16 @@ $(document).ready(function () {
         hideAllPlans();
         showSelectTypePlans($(this));
     });
+
     $('#cancel').unbind();
     $('#cancel').click(function () {
         setInputsFromDefault();
     });
-    $('.pr_pass_btn').unbind();
+    // $('.pr_pass_btn').unbind();
     $('.pr_pass_btn').click(function () {
-        showModal('old_pass');
+        showModal('oldPassword');
     });
+
     $('#save').unbind();
     $('#save').click(function () {
         beforeSendToServer();
@@ -26,44 +28,71 @@ $(document).ready(function () {
 });
 
 var inputValues = {
-    'login': "",
-    'username': "",
-    'email': "",
-    'send_telegram': "",
-    'send_email': "",
-    'pass': ""
+    'first_name': "",
+    'last_name': "",
+    'telegram_yn': "",
+    'email_yn': ""
 };
 
 function sendDataToServer(data) {
-    console.log("На сервер будет отправлено:");
-    for (var k in data) {
-        console.log(k + ": " + data[k]);
-    }
+    data = {
+        user: {
+            first_name: data.first_name,
+            last_name: data.last_name,
+            email: data.email
+        },
+        channels: {
+            telegram_yn: data.telegram_yn ? 'y' : 'n',
+            email_yn: data.email_yn ? 'y' : 'n'
+        }
+    };
+
+    $.ajax({
+        url: '/update_user_info',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(data),
+        success: function () {
+            console.log('User info updated')
+        }
+    })
 }
 
 function beforeSendToServer() {
+    var re = /^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/;
     var data = {
-        "login": $('#pr_login').val(),
-        "username": $('#pr_username').val(),
-        "email": $('#pr_email').val(),
-        "send_telegram": $('#pr_send_telegram').prop('checked'),
-        "send_email": $('#pr_send_email').prop('checked'),
-        "passStatus": false
+        telegram_yn: $('#pr_send_telegram').prop('checked'),
+        email_yn: $('#pr_send_email').prop('checked')
     };
-    if (old_pass != "") {
-        if (new_pass == re_new_pass) {
-            data.old_pass = old_pass;
-            data.new_pass = new_pass;
-            data.re_new_pass = re_new_pass;
-            data.passStatus = 'yes';
-        }
-        else {
-            data.passStatus = 'do not match';
-            alert("Ведённые пароли не совпадают");
-            setChangePassButtonDefault();
-            setDefaultPassValues();
-        }
+
+    if ($('#pr_email').val().search(re) != -1) {
+        data.email = $('#pr_email').val();
+    } else {
+        alert('Неправильный формат email')
+        return;
     }
+
+    if ($('#first_name').val() && $('#last_name').val()){
+        data.first_name = $('#first_name').val();
+        data.last_name = $('#last_name').val();
+    } else {
+        alert('Поля имя и фамиля не могут быть пустыми');
+        return;
+    }
+    // if (oldPassword != "") {
+    //     if (newPassword == comfiredPassword) {
+    //         data.oldPassword = oldPassword;
+    //         data.newPassword = newPassword;
+    //         data.comfiredPassword = comfiredPassword;
+    //         data.passStatus = 'yes';
+    //     }
+    //     else {
+    //         data.passStatus = 'do not match';
+    //         alert("Ведённые пароли не совпадают");
+    //         setChangePassButtonDefault();
+    //         setDefaultPassValues();
+    //     }
+    // }
 
     // если значения хотя бы одного поля отличаются (значит отправляем для обновления на севрер)
     for (var key in data) {
@@ -76,11 +105,11 @@ function beforeSendToServer() {
 }
 
 function saveInputs() {
-    inputValues.login = $('#pr_login').val();
-    inputValues.username = $('#pr_username').val();
+    inputValues.first_name = $('#first_name').val();
+    inputValues.last_name = $('#last_name').val();
     inputValues.email = $('#pr_email').val();
-    inputValues.send_telegram = $('#pr_send_telegram').prop('checked');
-    inputValues.send_email = $('#pr_send_email').prop('checked');
+    inputValues.telegram_yn = $('#pr_send_telegram').prop('checked');
+    inputValues.email_yn = $('#pr_send_email').prop('checked');
     inputValues.passStatus = false;
 }
 
@@ -88,15 +117,11 @@ function saveInputs() {
 var button_change_pass = $('.change_pass_btn').html();
 
 function setInputsFromDefault() {
-    $('#pr_login').val(inputValues.login);
-    $('#pr_username').val(inputValues.username);
+    $('#first_name').val(inputValues.first_name);
+    $('#last_name').val(inputValues.last_name);
     $('#pr_email').val(inputValues.email);
-    $('#pr_send_telegram').removeAttr('checked');
-    $('#pr_send_email').removeAttr('checked');
-    if (inputValues.send_telegram == 1)
-        $('#pr_send_telegram').prop('checked', true);
-    if (inputValues.send_email == 1)
-        $('#pr_send_email').prop('checked', true);
+    $('#pr_send_telegram').prop('checked', inputValues.telegram_yn);
+    $('#pr_send_email').prop('checked', inputValues.email_yn);
     setDefaultPassValues();
     setChangePassButtonDefault();
 }
@@ -104,7 +129,7 @@ function setInputsFromDefault() {
 function setChangePassButtonDefault() {
     $('.pr_pass_btn').replaceWith(button_change_pass);
     $('.pr_pass_btn').click(function () {
-        showModal('old_pass');
+        showModal('oldPassword');
     });
 }
 
@@ -122,7 +147,7 @@ function hideAllPlans() {
 }
 
 function showSelectTypePlans($this_elem) {
-    if ($this_elem.attr('id') == 'pr_all') {
+    if ($this_elem.attr('id') == 'all') {
         $('.pr_plans_content').show();
     }
     else {

@@ -8,16 +8,26 @@ $(document).ready(function () {
 
 var pause_time = 100;
 
-var old_pass = "";
-var new_pass = "";
-var re_new_pass = "";
-// чтобы при закрытии и последующем открытии о окна были исходные стили
+var oldPassword = "";
+var newPassword = "";
+var confirmedPassword = "";
+// чтобы при закрытии и последующем открытии у окна были исходные стили
 var modal_html = "";
+
+var passwordChangedSuccesfuly = {text: 'Пароль успешно изменен.', color: '#2BBBAD'};
+var notCorrectOldPassword = {text: 'Введенный пароль и Ваш текущий пароль не совпадают.', color: '#d9534f'};
+var newPasswordAndConfirmedNotEquel = {text: 'Пароли не совпадают.', color: '#d9534f'};
+var newPasswordDontPassValidation = {
+    text: 'Пароль должен быть не меньше 8 символов и содержать: заглавные буквы, строчные буквы и цифры.',
+    color: '#d9534f'
+};
+
+
 
 function showModal(m_type) {
     // var modal_window = modal_fade.find('.in_modal_body');var modal_fade = $(".in_modal_fade[modal_type='" + m_type + "']")
     // получаем модальное окно определённого типа
-    // при нажании на "изменить пароль" получаем окно типа old_pass
+    // при нажании на "изменить пароль" получаем окно типа oldPassword
     var modal_fade = $(".in_modal_fade");
     modal_fade.html(modal_html);
     var modal_window = $(".in_modal_body");
@@ -45,9 +55,9 @@ function showModal(m_type) {
         var $input_pass = $('.in_modal_body').find('#pass');
 
         // для 1 ого модального окна сохраняем старый пароль
-        if ($('.in_modal_fade').attr('modal_type') == 'old_pass') {
+        if ($('.in_modal_fade').attr('modal_type') == 'oldPassword') {
             $input_pass.change(function () {
-                old_pass = $(this).val();
+                oldPassword = $(this).val();
             });
         }
 
@@ -96,7 +106,7 @@ function hideModalFade(confirm_yes) {
     }).delay(400).queue(function () {
         $(this).hide();
         // параметры по умолчанию
-        $(".in_modal_fade").attr('modal_type', 'old_pass');
+        $(".in_modal_fade").attr('modal_type', 'oldPassword');
         $(this).dequeue();
     });
 }
@@ -106,16 +116,15 @@ function okayAction() {
     var pass_input = $('.in_modal_body').find('#pass');
     if (pass_input.val() != "") {
         if ($('.in_modal_fade').attr('modal_type') == 'confirm_pass') {
-            complete_submit_pass();
+            completeConfirmPass();
         }
-        else if ($('.in_modal_fade').attr('modal_type') == 'new_pass') {
-            complete_new_pass();
+        else if ($('.in_modal_fade').attr('modal_type') == 'newPassword') {
+            completeNewPass();
         }
-        else if ($('.in_modal_fade').attr('modal_type') == 'old_pass') {
-            complete_old_pass();
+        else if ($('.in_modal_fade').attr('modal_type') == 'oldPassword') {
+            completeOldPass();
         }
-    }
-    else {
+    } else {
         hideModalFade();
         hideModalWindow();
     }
@@ -124,62 +133,113 @@ function okayAction() {
 // Вид модального окна в 3 стадиях ввода пароля
 
 // после подтверждения старого пароля
-function complete_old_pass() {
-    hideModalWindow(1.5, 0.5);
-    $('.in_modal_fade').attr('modal_type', 'new_pass');
-    $('.in_modal_body').delay(200).queue(function () {
-        showModal();
-        var $okay_btn = $('.in_modal_body').find('#okay');
-        var $input_pass = $('.in_modal_body').find('#pass');
-        $('.in_modal_title').text("Creating new password");
-        $okay_btn.removeClass('btn-success');
-        $okay_btn.addClass('btn-primary');
-        $okay_btn.val("Next");
-        $input_pass.attr('placeholder', "Input new password");
+function completeOldPass() {
+    var data = JSON.stringify({old_password: oldPassword});
 
-        $input_pass.unbind();
-        $input_pass.change(function () {
-            new_pass = $(this).val();
-        });
+    console.log(data);
 
-        $(this).dequeue();
+    $.ajax({
+        url: '/check_old_password',
+        type: 'POST',
+        contentType: 'json',
+        data: data,
+        success: function () {
+            hideModalWindow(1.5, 0.5);
+            $('.in_modal_fade').attr('modal_type', 'newPassword');
+            $('.in_modal_body').delay(200).queue(function () {
+                showModal();
+                var $okay_btn = $('.in_modal_body').find('#okay');
+                var $input_pass = $('.in_modal_body').find('#pass');
+                $('.in_modal_title').text("Creating new password");
+                $okay_btn.removeClass('btn-success');
+                $okay_btn.addClass('btn-primary');
+                $okay_btn.val("Next");
+                $input_pass.attr('placeholder', "Input new password");
+
+                $input_pass.unbind();
+                $input_pass.change(function () {
+                    newPassword = $(this).val();
+                });
+
+                $(this).dequeue();
+            });
+        },
+        error: function () {
+            showFrameMessage(notCorrectOldPassword.text, notCorrectOldPassword.color)
+        }
     });
 }
 
 // после подтверждения нового пароля
-function complete_new_pass() {
-    hideModalWindow(1.5, 0.5);
-    $('.in_modal_fade').attr('modal_type', 'confirm_pass');
-    $('.in_modal_body').delay(200).queue(function () {
-        showModal();
-        var $input_pass = $('.in_modal_body').find('#pass');
-        $('.in_modal_body').find('#okay').css('background', 'black');
-        $('.in_modal_body').find('#okay').val("Okay");
-        $('.in_modal_title').text("Confirm new password");
-        $input_pass.attr('placeholder', "Repeat new password");
+function completeNewPass() {
+    var re = /(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/;
 
-        $input_pass.unbind();
-        $input_pass.change(function () {
-            re_new_pass = $(this).val();
+    if (newPassword.search(re) != -1){
+        hideModalWindow(1.5, 0.5);
+        $('.in_modal_fade').attr('modal_type', 'confirm_pass');
+        $('.in_modal_body').delay(200).queue(function () {
+            showModal();
+            var $input_pass = $('.in_modal_body').find('#pass');
+            $('.in_modal_body').find('#okay').css('background', 'black');
+            $('.in_modal_body').find('#okay').val('Change password');
+            $('.in_modal_title').text("Confirm new password");
+            $input_pass.attr('placeholder', "Repeat new password");
+
+            $input_pass.unbind();
+            $input_pass.change(function () {
+                confirmedPassword = $(this).val();
+            });
+
+            $(this).dequeue();
         });
-
-        $(this).dequeue();
-    });
+    } else {
+        showFrameMessage(newPasswordDontPassValidation.text, newPasswordDontPassValidation.color);
+    }
 }
 
 // после подтверждения повтора нового пароля
-function complete_submit_pass() {
-    // alert("Вы ввели: "  + old_pass + " " + new_pass + " " + re_new_pass);
-    $('.pr_pass_btn').text("Сохраните изменения");
-    $('.pr_pass_btn').unbind();
-    $('.pr_pass_btn').addClass('disabled');
-    $('.pr_pass_btn').addClass('btn-danger');
-    hideModalWindow();
-    hideModalFade(true);
+function completeConfirmPass() {
+    if (newPassword == confirmedPassword){
+        var data = JSON.stringify({new_password: newPassword});
+
+        $.ajax({
+            url: '/make_new_password',
+            type: 'POST',
+            contentType: 'json',
+            data: data,
+            success: function () {
+                showFrameMessage(passwordChangedSuccesfuly.color, passwordChangedSuccesfuly.color);
+                $('.pr_pass_btn').text(passwordChangedSuccesfuly.text);
+                $('.pr_pass_btn').unbind();
+                $('.pr_pass_btn').addClass('disabled');
+                $('.pr_pass_btn').addClass('btn-success');
+                hideModalWindow();
+                hideModalFade(true);
+
+                setTimeout(function () {
+                    location.href = '/login';
+                }, 1000);
+
+            },
+            error: function () {
+                showFrameMessage(notCorrectOldPassword.text, notCorrectOldPassword.color);
+            }
+        });
+    } else {
+        showFrameMessage(newPasswordAndConfirmedNotEquel.text, newPasswordAndConfirmedNotEquel.color)
+    }
 }
 
 function setDefaultPassValues() {
-    new_pass = "";
-    re_new_pass = "";
-    old_pass = "";
+    newPassword = "";
+    confirmedPassword = "";
+    oldPassword = "";
+}
+
+function showFrameMessage(message, color) {
+    /*
+     *  Выводит переданное сообещение (message) внизу формы.
+     */
+    $('.in_stage_content').animate({'padding-bottom': '10px', 'color': color}, 200);
+    $('.in_stage_content').text(message);
 }

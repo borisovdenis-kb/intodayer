@@ -113,12 +113,6 @@ def validate_telegram_chat_id_field(value):
     except ValueError:
         raise ValidationError('Chat_id field must be numeric not %s' % type(value))
 
-    # numeric_pattern = re.compile('^\d+$')
-    # match = numeric_pattern.match(value)
-    #
-    # if not match or match.end() - match.start() != len(value):
-    #     raise ValidationError('Chat_id field must be numeric')
-
 
 def validate_phone_field(value):
     """
@@ -132,7 +126,7 @@ def validate_password(value):
     """
         Not for model
         Password requirements: 
-            lower case, upper case, digit, special symbols, length >= 8
+            lower case, upper case, digit, length >= 8
     """
     password_pattern = re.compile('(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$')
     match = password_pattern.match(value)

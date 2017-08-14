@@ -7,6 +7,7 @@
 {% endblock %}
 
 {% block scripts_bottom %}
+    <script type="text/javascript" src={% static "library/jquery.maskedinput.min.js" %}></script>
     <script type="text/javascript" src={% static "scripts/script_account.js" %}></script>
     <script type="text/javascript" src={% static "scripts/components/script_intodayer_modal.js" %}></script>
 {% endblock %}
@@ -16,11 +17,12 @@
     <div class="pr_page">
         <div class="pr_top_content">
             <div class="pr_title_content">
-                <input class="col-lg-3 col-md-4 col-sm-5 col-xs-6" id="pr_login" type="text" value="Alexey">
-                <input class="col-lg-6 col-md-7 col-md-8 col-xs-9" id="pr_username" type="text" autocomplete="off"
-                       value="Алексей Кротков">
+                <input class="col-lg-6 col-md-7 col-md-8 col-xs-9"
+                       id="first_name" type="text" autocomplete="off" value={{ user.first_name }}>
+                <input class="col-lg-6 col-md-7 col-md-8 col-xs-9"
+                       id="last_name" type="text" autocomplete="off" value={{ user.last_name }}>
 
-                <span>Кол-во расписаний: 17</span>
+                <span>Кол-во расписаний: {{ user_plans|length }}</span>
             </div>
             <div class="pr_ava_content">
                 <div class="pr_ava_img"
@@ -36,7 +38,7 @@
                     <label for="pr_email">Почта</label><br>
 
                     <input class="form-control" id="pr_email" type="email" placeholder="Почтовый ящик"
-                           value="alexeykrotkov@yahoo.com">
+                           value={{ user.email }}>
                     <label class="comment">Для входа на сайт и рассылки</label>
                 </div>
 
@@ -46,13 +48,21 @@
                 <div class="pr_share_block  col-lg-3 col-lg-offset-1 col-md-offset-1  col-md-3 col-sm-4 col-xs-5">
                     <label>Мгновенная рассылка</label><br>
 
-                    <input id="pr_send_telegram" type="checkbox" checked="checked">
+                    <input id="pr_send_telegram" type="checkbox"
+                            {% if user_channels.telegram_yn == 'y' %}
+                                checked="checked"
+                            {% endif %}
+                    >
                     <label class="share"
                            for="pr_send_telegram">Telegram
 
                         Bot</label><br>
 
-                    <input id="pr_send_email" type="checkbox">
+                    <input id="pr_send_email" type="checkbox"
+                           {% if user_channels.email_yn == 'y' %}
+                                checked="checked"
+                           {% endif %}
+                    >
                     <label class="share" for="pr_send_email">
                         Почта
                         email</label>
@@ -86,90 +96,30 @@
                     <span>Мои расписания</span>
                     <ul>
                         <li>
-                            <button type="button" id="pr_all" class="btn btn-sm btn-default btn-danger ">Все</button>
+                            <button type="button" id="all" class="btn btn-sm btn-default btn-danger ">Все</button>
                         </li>
                         <li>
-                            <button type="button" id="pr_participant" class="btn btn-sm btn-default">Я участник</button>
+                            <button type="button" id="elder" class="btn btn-sm btn-default">Я староста</button>
                         </li>
                         <li>
-                            <button type="button" id="pr_elder" class="btn btn-sm btn-default">Я староста</button>
+                            <button type="button" id="admin" class="btn btn-sm btn-default">Я админ</button>
                         </li>
                         <li>
-                            <button type="button" id="pr_admin" class="btn btn-sm btn-default">Я админ</button>
-                        </li>
-                        <li>
-                            <button type="button" id="pr_invited" class="btn btn-sm btn-default">Я приглашён</button>
+                            <button type="button" id="participant" class="btn btn-sm btn-default">Я участник</button>
                         </li>
                     </ul>
                 </div>
 
                 <div class="pr_captain_plans ">
-                    <div class="pr_plans_content" plan_role="pr_elder">
-
-                        <div style="position: relative">
-                            <div class="pr_color_type color_elder"></div>
-                            <div class="pr_img_title">Расписание 0</div>
-                            <img src="{% static "DSC00598.psd_Comp_1111_00000.jpg" %}" alt="..."
-                                 class="img-rounded">
+                    {% for plan in user_plans %}
+                        <div class="pr_plans_content" plan_role={{ plan.role }}>
+                            <div style="position: relative">
+                                <div class="pr_color_type color_elder"></div>
+                                <div class="pr_img_title">{{ plan.plan.title }}</div>
+                                <img src={{ plan.plan.get_avatar_url }} alt="..." class="img-rounded">
+                            </div>
                         </div>
-                    </div>
-
-                    <div class="pr_plans_content" plan_role="pr_elder">
-                        <div style="position: relative">
-                            <div class="pr_img_title">Расписание 1</div>
-                            <div class="pr_color_type color_elder"></div>
-                            <img src="{% static "DSC00598.psd_Comp_1111_00000.jpg" %}" alt="..."
-                                 class="img-rounded">
-                        </div>
-                    </div>
-                    <div class="pr_plans_content" plan_role="pr_admin">
-                        <div style="position: relative">
-                            <div class="pr_img_title">Расписание 2</div>
-                            <div class="pr_color_type color_admin"></div>
-                            <img src="{% static "DSC00598.psd_Comp_1111_00000.jpg" %}" alt="..."
-                                 class="img-rounded">
-                        </div>
-                    </div>
-                    <div class="pr_plans_content" plan_role="pr_participant">
-                        <div style="position: relative">
-                            <div class="pr_img_title">Расписание 3</div>
-                            <div class="pr_color_type color_participant"></div>
-                            <img src="{% static "DSC00598.psd_Comp_1111_00000.jpg" %}" alt="..."
-                                 class="img-rounded">
-                        </div>
-                    </div>
-                    <div class="pr_plans_content" plan_role="pr_admin">
-                        <div style="position: relative">
-                            <div class="pr_img_title">Расписание 4</div>
-                            <div class="pr_color_type color_admin"></div>
-                            <img src="{% static "DSC00598.psd_Comp_1111_00000.jpg" %}" alt="..."
-                                 class="img-rounded">
-                        </div>
-                    </div>
-                    <div class="pr_plans_content" plan_role="pr_participant">
-                        <div style="position: relative">
-                            <div class="pr_img_title">Расписание 5</div>
-                            <div class="pr_color_type color_participant"></div>
-                            <img src="{% static "DSC00598.psd_Comp_1111_00000.jpg" %}" alt="..."
-                                 class="img-rounded">
-                        </div>
-                    </div>
-                    <div class="pr_plans_content" plan_role="pr_participant">
-                        <div style="position: relative">
-                            <div class="pr_img_title">Расписание 6</div>
-                            <div class="pr_color_type color_participant"></div>
-                            <img src="{% static "DSC00598.psd_Comp_1111_00000.jpg" %}" alt="..."
-                                 class="img-rounded">
-                        </div>
-                    </div>
-                    <div class="pr_plans_content" plan_role="pr_invited">
-                        <div style="position: relative">
-                            <div class="pr_img_title">Расписание 7</div>
-                            <div class="pr_color_type color_invited"></div>
-                            <img src="{% static "DSC00598.psd_Comp_1111_00000.jpg" %}" alt="..."
-                                 class="img-rounded">
-                        </div>
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>

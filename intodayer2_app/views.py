@@ -14,8 +14,8 @@ from extra.utils import (
 
 from intodayer2_app.models import (
     UserPlans, Invitations, PlanLists, PlanRows, DaysOfWeek,
-    CustomUser
-)
+    CustomUser,
+    UserMailingChannels)
 
 
 # TODO: Сделать в выводе расписания в /plan сортировку по времени, а не по неделям
@@ -673,10 +673,15 @@ def participant_page(request):
 
 
 def profile_page(request):
-    context = dict()
-    context.update(get_this_user(request))
-
     if request.user.is_authenticated():
+        user = CustomUser.objects.get(username=request.user.username)
+        user_plans = UserPlans.objects.select_related().filter(user_id=user.id)
+        user_channels = UserMailingChannels.objects.get(user_id=user.id)
+        context = dict()
+
+        context['user'] = user
+        context['user_plans'] = user_plans
+        context['user_channels'] = user_channels
         return render_to_response('account.html', context)
 
 

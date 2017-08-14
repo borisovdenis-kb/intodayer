@@ -9,7 +9,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "intodayer2.settings")
 django.setup()
 # ---------------------------------------------------------------
 from intodayer2_app.models import CustomUser, UserMailingChannels, UserPlans
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.contrib.auth.hashers import check_password, make_password
@@ -50,9 +50,9 @@ def check_old_password(request):
         data = json.loads(request.body)
 
         if check_password(data['old_password'], user.password):
-            return JsonResponse({'old_password_is_correct': True}, status=200)
+            return HttpResponse(status=200)
         else:
-            return JsonResponse({'old_password_is_correct': False}, status=200)
+            return HttpResponse(status=400)
     else:
         return HttpResponse(status=401)
 
