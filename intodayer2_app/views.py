@@ -1,21 +1,23 @@
 import json
-from django.contrib.auth.models import auth
-from django.core.exceptions import ObjectDoesNotExist
-from django.db.utils import IntegrityError
-from django.shortcuts import render_to_response
-from extra.stripes_api import Stripes
 from datetime import datetime
+from extra.stripes_api import Stripes
+from django.db.utils import IntegrityError
+from django.contrib.auth.models import auth
+from django.contrib.auth import get_user_model
+from django.shortcuts import render_to_response
+from django.contrib.auth.backends import ModelBackend
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest
 from intodayer2_app.forms import SetAvatarForm, CustomUserCreationForm
 
 from extra.utils import (
-    edit_plan_row, CloneError, UPDATE, CREATE, get_today_tomorrow_plans
+    edit_plan_row, get_today_tomorrow_plans, CloneError, UPDATE, CREATE
 )
 
 from intodayer2_app.models import (
     UserPlans, Invitations, PlanLists, PlanRows, DaysOfWeek,
-    CustomUser,
-    UserMailingChannels)
+    CustomUser, UserMailingChannels
+)
 
 
 # TODO: Сделать в выводе расписания в /plan сортировку по времени, а не по неделям
@@ -23,9 +25,17 @@ from intodayer2_app.models import (
 # TODO: Сделать аутентификацию по почте, а не по логину. Значит нужно сделать и подтверждение email
 
 
-###################################################################################
-#                          ОБРАБОТКА AJAX ЗАПРОСОВ                                #
-###################################################################################
+class EmailBackend(ModelBackend):
+    def authenticate(self, username=None, password=None, **kwargs):
+        try:
+            UserModel = get_user_model()
+            user = UserModel.objects.get(email=username)
+        except UserModel.DoesNotExist:
+            return None
+        else:
+            if getattr(user, 'is_active', False) and user.check_password(password):
+                return user
+        return None
 
 
 def switch_plan_only_set_ajax(request):
@@ -33,7 +43,7 @@ def switch_plan_only_set_ajax(request):
         Данная функция просто меняет current_plan в БД и возвращает success
     """
     if request.is_ajax:
-        user = CustomUser.objects.get(username=request.user.username)
+        user = CustomUser.objects.get(email=request.user.email)
 
         try:
             select_id = int(request.POST['select_id'])
@@ -68,7 +78,7 @@ def edit_plan_row_ajax(request):
     :return:
     """
     if request.is_ajax():
-        user = CustomUser.objects.get(username=request.user.username)
+        user = CustomUser.objects.get(email=request.user.email)
         # выбираем текущее расписание юзера
         plan_list = UserPlans.objects.select_related().get(user_id=user.id, current_yn='y')
         data = request.POST
@@ -122,7 +132,7 @@ def plan_delete_ajax(request):
     2. Ориентируется только по id и текущем выбранном расписании пользователя
     """
     if request.is_ajax():
-        user = CustomUser.objects.get(username=request.user.username)
+        user = CustomUser.objects.get(email=request.user.email)
         plan = UserPlans.objects.select_related().get(user_id=user.id, current_yn='y')
         data = request.POST
 
@@ -143,7 +153,7 @@ def left_content_load_ajax(request):
     """
     if request.is_ajax():
         if request.user.is_authenticated():
-            user = CustomUser.objects.get(username=request.user.username)
+            user = CustomUser.objects.get(email=request.user.email)
             all_plans = UserPlans.objects.select_related().filter(user_id=user.id)
             context = dict()
 
@@ -166,7 +176,7 @@ def switch_plan_home_ajax(request):
     if request.is_ajax():
         if request.user.is_authenticated():
             context = dict()
-            user = CustomUser.objects.get(username=request.user.username)
+            user = CustomUser.objects.get(email=request.user.email)
 
             try:
                 plan_id = int(request.POST['plan_id'])
@@ -195,7 +205,7 @@ def switch_plan_plan_ajax(request):
         :return: Отрендеренная html разметка расписания
     """
     if request.is_ajax:
-        user = CustomUser.objects.get(username=request.user.username)
+        user = CustomUser.objects.get(email=request.user.email)
         context = {}
 
         try:
@@ -220,7 +230,7 @@ def right_plan_content_only(request):
         Загружает правый контент (без учёта Title блока), только контент расписания
     """
     if request.is_ajax:
-        user = CustomUser.objects.get(username=request.user.username)
+        user = CustomUser.objects.get(email=request.user.email)
         context = dict()
 
         try:
@@ -248,7 +258,7 @@ def get_invitations_ajax(request):
         :return: html разметка с приглашениями
     """
     if request.is_ajax():
-        user = CustomUser.objects.get(username=request.user.username)
+        user = CustomUser.objects.get(email=request.user.email)
         invitations = Invitations.objects.select_related().filter()
         context = {
             'invitations': invitations,
@@ -268,7 +278,7 @@ def confirm_invitation_ajax(request):
         :return: ?
     """
     if request.is_ajax():
-        user = CustomUser.objects.get(username=request.user.username)
+        user = CustomUser.objects.get(email=request.user.email)
         inv = Invitations.objects.select_related().get(to_user=user.id, plan_id=request.GET['plan_id'])
 
         inv.confirmed_yn = 'y' if request.GET['decision'] == '1' else 'n'
@@ -324,7 +334,7 @@ def save_plan_avatar_ajax(request, plan_id):
     """
     if request.is_ajax():
         if request.user.is_authenticated():
-            user = CustomUser.objects.get(username=request.user.username)
+            user = CustomUser.objects.get(email=request.user.email)
 
             try:
                 # если user имеет права редактирования
@@ -357,7 +367,7 @@ def save_plan_avatar_ajax(request, plan_id):
 
 def statistics_view(request):
     if request.user.is_authenticated():
-        user = CustomUser.objects.get(username=request.user.username)
+        user = CustomUser.objects.get(email=request.user.email)
 
         all_plans = UserPlans.objects.select_related().filter(user_id=user.id)
         if all_plans.count() == 0:
@@ -408,10 +418,11 @@ def registration_view(request):
 
 def login_view(request):
     if request.method == 'POST':
-        username = request.POST['username']
+        email = request.POST['email']
         password = request.POST['password']
 
-        user = auth.authenticate(username=username, password=password)
+        user = auth.authenticate(username=email, password=password)
+        print(user)
 
         if user is not None:
             if user.is_active:
@@ -434,7 +445,7 @@ def get_all_plans(request):
     Возвращает контекст со списком всех расписаний
     """
     context = dict()
-    user = CustomUser.objects.get(username=request.user.username)
+    user = CustomUser.objects.get(email=request.user.email)
 
     all_plans = UserPlans.objects.select_related().filter(user_id=user.id)
     if all_plans.count() > 0:
@@ -451,7 +462,7 @@ def get_cur_plan(request, plan_id=None):
         или формирует страницу, если такой отсутствует
     """
     context = dict()
-    user = CustomUser.objects.get(username=request.user.username)
+    user = CustomUser.objects.get(email=request.user.email)
 
     # если расписание уже существует
     if not plan_id:
@@ -494,7 +505,7 @@ def get_this_user(request):
     """
         Возвращает контекст с текущим пользователем
     """
-    user = CustomUser.objects.get(username=request.user.username)
+    user = CustomUser.objects.get(email=request.user.email)
     context = dict()
     context['user'] = user
     return context
@@ -502,7 +513,7 @@ def get_this_user(request):
 
 def statistics_view(request):
     if request.user.is_authenticated():
-        user = CustomUser.objects.get(username=request.user.username)
+        user = CustomUser.objects.get(email=request.user.email)
 
         all_plans = UserPlans.objects.select_related().filter(user_id=user.id)
         if all_plans.count() == 0:
@@ -553,10 +564,10 @@ def registration_view(request):
 
 def login_view(request):
     if request.method == 'POST':
-        username = request.POST['username']
+        email = request.POST['email']
         password = request.POST['password']
 
-        user = auth.authenticate(username=username, password=password)
+        user = auth.authenticate(username=email, password=password)
 
         if user is not None:
             if user.is_active:
@@ -627,7 +638,7 @@ def plan_view(request):
 
 def about_service_view(request):
     if request.user.is_authenticated():
-        user = CustomUser.objects.get(username=request.user.username)
+        user = CustomUser.objects.get(email=request.user.email)
         context = {'user': user}
 
         print(context)
@@ -674,7 +685,7 @@ def participant_page(request):
 
 def profile_page(request):
     if request.user.is_authenticated():
-        user = CustomUser.objects.get(username=request.user.username)
+        user = CustomUser.objects.get(email=request.user.email)
         user_plans = UserPlans.objects.select_related().filter(user_id=user.id)
         user_channels = UserMailingChannels.objects.get(user_id=user.id)
         context = dict()

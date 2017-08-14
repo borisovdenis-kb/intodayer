@@ -27,7 +27,7 @@ def create_plan(request):
         --> For more detailed documentation see Postman.
     """
     if request.user.is_authenticated():
-        user = CustomUser.objects.get(username=request.user.username)
+        user = CustomUser.objects.get(email=request.user.email)
         new_plan = user.add_new_plan()
 
         return JsonResponse({'new_plan_id': new_plan.id}, status=200)
@@ -43,7 +43,7 @@ def delete_plan(request):
         --> For more detailed documentation see Postman.
     """
     if request.user.is_authenticated():
-        user = CustomUser.objects.get(username=request.user.username)
+        user = CustomUser.objects.get(email=request.user.email)
         data = json.loads(request.body)
 
         try:
@@ -74,7 +74,7 @@ def update_plan_info(request):
         --> For more detailed documentation see Postman.
     """
     if request.user.is_authenticated():
-        user = CustomUser.objects.get(username=request.user.username)
+        user = CustomUser.objects.get(email=request.user.email)
         data = json.loads(request.body)
 
         try:
@@ -104,7 +104,7 @@ def get_drop_list(request):
         --> For more detailed documentation see Postman.
     """
     if request.user.is_authenticated():
-        user = CustomUser.objects.get(username=request.user.username)
+        user = CustomUser.objects.get(email=request.user.email)
         data = request.POST
         context = {'is_error': False}
 
@@ -139,7 +139,7 @@ def upload_plan_avatar(request):
         --> For more detailed documentation see Postman.
     """
     if request.user.is_authenticated():
-        user = CustomUser.objects.get(username=request.user.username)
+        user = CustomUser.objects.get(email=request.user.email)
         data = request.POST
 
         try:
@@ -169,7 +169,7 @@ def switch_plan_plan(request):
         --> For more detailed documentation see Postman.
     """
     if request.user.is_authenticated():
-        user = CustomUser.objects.get(username=request.user.username)
+        user = CustomUser.objects.get(email=request.user.email)
         context = {}
 
         try:
@@ -193,7 +193,7 @@ def switch_plan_plan(request):
 
 def get_avatar(request):
     if request.user.is_authenticated():
-        user = CustomUser.objects.get(username=request.user.username)
+        user = CustomUser.objects.get(email=request.user.email)
         data = request.GET
         response = {}
 
@@ -213,7 +213,7 @@ def get_avatar(request):
 
 def mailing_test(request):
     if request.user.is_authenticated():
-        user = CustomUser.objects.get(username=request.user.username)
+        user = CustomUser.objects.get(email=request.user.email)
         data = json.loads(request.body)
 
         try:

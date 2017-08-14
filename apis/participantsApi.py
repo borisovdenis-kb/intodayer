@@ -24,7 +24,7 @@ def delete_participant(request):
         --> For more detailed documentation see Postman.
     """
     if request.user.is_authenticated():
-        user = CustomUser.objects.get(username=request.user.username)
+        user = CustomUser.objects.get(email=request.user.email)
         data = json.loads(request.body)
 
         try:
@@ -50,7 +50,7 @@ def set_role(request):
         --> For more detailed documentation see Postman.
     """
     if request.user.is_authenticated():
-        user = CustomUser.objects.get(username=request.user.username)
+        user = CustomUser.objects.get(email=request.user.email)
         data = json.loads(request.body)
 
         try:
@@ -78,7 +78,7 @@ def invite_participants(request):
         --> For more detailed documentation see Postman.
     """
     if request.user.is_authenticated():
-        user = CustomUser.objects.get(username=request.user.username)
+        user = CustomUser.objects.get(email=request.user.email)
         data = json.loads(request.body)
 
         try:
@@ -137,7 +137,7 @@ def get_expected_participants(request):
         --> For more detailed documentation see Postman.
     """
     if request.user.is_authenticated():
-        user = CustomUser.objects.get(username=request.user.username)
+        user = CustomUser.objects.get(email=request.user.email)
         data = request.GET
 
         try:
@@ -167,7 +167,7 @@ def switch_plan_participants(request):
         --> For more detailed documentation see Postman.
     """
     if request.user.is_authenticated():
-        user = CustomUser.objects.get(username=request.user.username)
+        user = CustomUser.objects.get(email=request.user.email)
         data = request.POST
         context = {}
 

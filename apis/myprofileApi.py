@@ -23,7 +23,7 @@ def update_user_info(request):
         --> For more detailed documentation see Postman.
     """
     if request.user.is_authenticated():
-        user = CustomUser.objects.get(username=request.user.username)
+        user = CustomUser.objects.get(email=request.user.email)
         data = json.loads(request.body)
 
         try:
@@ -46,7 +46,7 @@ def check_old_password(request):
         --> For more detailed documentation see Postman.
     """
     if request.user.is_authenticated():
-        user = CustomUser.objects.get(username=request.user.username)
+        user = CustomUser.objects.get(email=request.user.email)
         data = json.loads(request.body)
 
         if check_password(data['old_password'], user.password):
@@ -64,7 +64,7 @@ def make_new_password(request):
         --> For more detailed documentation see Postman.
     """
     if request.user.is_authenticated():
-        user = CustomUser.objects.get(username=request.user.username)
+        user = CustomUser.objects.get(email=request.user.email)
         data = json.loads(request.body)
 
         try:
@@ -85,7 +85,7 @@ def upload_user_avatar(request):
         --> For more detailed documentation see Postman.
     """
     if request.user.is_authenticated():
-        user = CustomUser.objects.get(username=request.user.username)
+        user = CustomUser.objects.get(email=request.user.email)
 
         try:
             # удаляем предыдущую аватарку
@@ -107,7 +107,7 @@ def get_user_plans(request):
         --> For more detailed documentation see Postman.
     """
     if request.user.is_authenticated():
-        user = CustomUser.objects.get(username=request.user.username)
+        user = CustomUser.objects.get(email=request.user.email)
         context = {}
 
         try:

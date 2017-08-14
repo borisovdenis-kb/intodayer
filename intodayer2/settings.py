@@ -115,6 +115,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL = 'intodayer2_app.CustomUser'
+
+AUTHENTICATION_BACKENDS = ['intodayer2_app.views.EmailBackend', ]
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
@@ -135,14 +138,20 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+
 MEDIA_URL = '/media/'
+
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-AUTH_USER_MODEL = 'intodayer2_app.CustomUser'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
 EMAIL_HOST = 'smtp.yandex.ru'
+
 EMAIL_PORT = 465
+
 EMAIL_USE_SSL = True
+
 EMAIL_HOST_USER = config('PROJECT_EMAIL')
+
 EMAIL_HOST_PASSWORD = config('PROJECT_EMAIL_PSWD')
