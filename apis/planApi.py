@@ -44,7 +44,7 @@ def delete_plan(request):
     """
     if request.user.is_authenticated():
         user = CustomUser.objects.get(email=request.user.email)
-        data = json.loads(request.body)
+        data = json.loads(request.body.decode('utf-8'))
 
         try:
             action_is_available = user.has_rights(action='delete_plan', **data)
@@ -75,7 +75,7 @@ def update_plan_info(request):
     """
     if request.user.is_authenticated():
         user = CustomUser.objects.get(email=request.user.email)
-        data = json.loads(request.body)
+        data = json.loads(request.body.decode('utf-8'))
 
         try:
             if user.has_rights(action='edit_plan', **data):
@@ -214,7 +214,7 @@ def get_avatar(request):
 def mailing_test(request):
     if request.user.is_authenticated():
         user = CustomUser.objects.get(email=request.user.email)
-        data = json.loads(request.body)
+        data = json.loads(request.body.decode('utf-8'))
 
         try:
             mailing = IntodayerMailing(text=data['text'], image=data['image'])

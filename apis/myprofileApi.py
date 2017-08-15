@@ -24,7 +24,7 @@ def update_user_info(request):
     """
     if request.user.is_authenticated():
         user = CustomUser.objects.get(email=request.user.email)
-        data = json.loads(request.body)
+        data = json.loads(request.body.decode('utf-8'))
 
         try:
             user_channels = UserMailingChannels.objects.get(user_id=user.id)
@@ -47,7 +47,7 @@ def check_old_password(request):
     """
     if request.user.is_authenticated():
         user = CustomUser.objects.get(email=request.user.email)
-        data = json.loads(request.body)
+        data = json.loads(request.body.decode('utf-8'))
 
         if check_password(data['old_password'], user.password):
             return HttpResponse(status=200)
@@ -65,7 +65,7 @@ def make_new_password(request):
     """
     if request.user.is_authenticated():
         user = CustomUser.objects.get(email=request.user.email)
-        data = json.loads(request.body)
+        data = json.loads(request.body.decode('utf-8'))
 
         try:
             validate_password(data['new_password'])

@@ -25,7 +25,7 @@ def delete_participant(request):
     """
     if request.user.is_authenticated():
         user = CustomUser.objects.get(email=request.user.email)
-        data = json.loads(request.body)
+        data = json.loads(request.body.decode('utf-8'))
 
         try:
             if user.has_rights(action='delete_participant', **data):
@@ -51,7 +51,7 @@ def set_role(request):
     """
     if request.user.is_authenticated():
         user = CustomUser.objects.get(email=request.user.email)
-        data = json.loads(request.body)
+        data = json.loads(request.body.decode('utf-8'))
 
         try:
             if user.has_rights(action='set_role', **data):
@@ -79,7 +79,7 @@ def invite_participants(request):
     """
     if request.user.is_authenticated():
         user = CustomUser.objects.get(email=request.user.email)
-        data = json.loads(request.body)
+        data = json.loads(request.body.decode('utf-8'))
 
         try:
             email_list = data['email_list']
