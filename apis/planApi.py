@@ -108,6 +108,7 @@ def get_drop_list(request):
         data = request.POST
         context = {'is_error': False}
 
+
         try:
             plan = UserPlans.objects.select_related().get(user_id=user.id, plan_id=data['plan_id'])
         except ValueError:
