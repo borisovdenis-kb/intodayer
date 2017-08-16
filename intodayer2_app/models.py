@@ -431,7 +431,6 @@ class CustomUser(AbstractUser, UpdateMixin):
 
         return new_plan
 
-
     def set_current_plan(self, plan_id):
         """
             Function for this user sets the current plan, 

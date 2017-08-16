@@ -652,7 +652,6 @@ def about_service_view(request):
         return render_to_response('about_service.html', context)
 
 
-
 def get_participants(plan):
     """
         Возвращает всех участников расписания
