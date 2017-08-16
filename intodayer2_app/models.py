@@ -1,7 +1,7 @@
 import os
 from django.db import models
-from django.contrib.auth.models import AbstractUser
 from datetime import datetime
+from django.contrib.auth.models import AbstractUser
 from extra.validators import (
     validate_yn_filed, validate_not_empty_filed, validate_day_of_week_field,
     validate_role_field, validate_weeks_duration_field, validate_date_field,

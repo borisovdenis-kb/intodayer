@@ -9,7 +9,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "intodayer2.settings")
 django.setup()
 # ---------------------------------------------------------------
 from intodayer2_app.models import CustomUser, UserMailingChannels, UserPlans
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.contrib.auth.hashers import check_password, make_password
@@ -23,8 +23,8 @@ def update_user_info(request):
         --> For more detailed documentation see Postman.
     """
     if request.user.is_authenticated():
-        user = CustomUser.objects.get(username=request.user.username)
-        data = json.loads(request.body)
+        user = CustomUser.objects.get(email=request.user.email)
+        data = json.loads(request.body.decode('utf-8'))
 
         try:
             user_channels = UserMailingChannels.objects.get(user_id=user.id)
@@ -46,13 +46,13 @@ def check_old_password(request):
         --> For more detailed documentation see Postman.
     """
     if request.user.is_authenticated():
-        user = CustomUser.objects.get(username=request.user.username)
-        data = json.loads(request.body)
+        user = CustomUser.objects.get(email=request.user.email)
+        data = json.loads(request.body.decode('utf-8'))
 
         if check_password(data['old_password'], user.password):
-            return JsonResponse({'old_password_is_correct': True}, status=200)
+            return HttpResponse(status=200)
         else:
-            return JsonResponse({'old_password_is_correct': False}, status=200)
+            return HttpResponse(status=400)
     else:
         return HttpResponse(status=401)
 
@@ -64,8 +64,8 @@ def make_new_password(request):
         --> For more detailed documentation see Postman.
     """
     if request.user.is_authenticated():
-        user = CustomUser.objects.get(username=request.user.username)
-        data = json.loads(request.body)
+        user = CustomUser.objects.get(email=request.user.email)
+        data = json.loads(request.body.decode('utf-8'))
 
         try:
             validate_password(data['new_password'])
@@ -85,7 +85,7 @@ def upload_user_avatar(request):
         --> For more detailed documentation see Postman.
     """
     if request.user.is_authenticated():
-        user = CustomUser.objects.get(username=request.user.username)
+        user = CustomUser.objects.get(email=request.user.email)
 
         try:
             # удаляем предыдущую аватарку
@@ -107,7 +107,7 @@ def get_user_plans(request):
         --> For more detailed documentation see Postman.
     """
     if request.user.is_authenticated():
-        user = CustomUser.objects.get(username=request.user.username)
+        user = CustomUser.objects.get(email=request.user.email)
         context = {}
 
         try:

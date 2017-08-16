@@ -27,7 +27,7 @@ def create_plan(request):
         --> For more detailed documentation see Postman.
     """
     if request.user.is_authenticated():
-        user = CustomUser.objects.get(username=request.user.username)
+        user = CustomUser.objects.get(email=request.user.email)
         new_plan = user.add_new_plan()
 
         return JsonResponse({'new_plan_id': new_plan.id}, status=200)
@@ -43,11 +43,11 @@ def delete_plan(request):
         --> For more detailed documentation see Postman.
     """
     if request.user.is_authenticated():
-        user = CustomUser.objects.get(username=request.user.username)
-        data = json.loads(request.body)
+        user = CustomUser.objects.get(email=request.user.email)
+        data = json.loads(request.body.decode('utf-8'))
 
         try:
-            action_is_available = user.has_rights(action='delete_plan', **data)
+            action_is_available = user.has_rights(action='delete_plan', **{'plan_id': data['plan_id']})
         except (ValueError, ValidationError):
             return HttpResponse(status=400)
         except ObjectDoesNotExist:
@@ -74,11 +74,11 @@ def update_plan_info(request):
         --> For more detailed documentation see Postman.
     """
     if request.user.is_authenticated():
-        user = CustomUser.objects.get(username=request.user.username)
-        data = json.loads(request.body)
+        user = CustomUser.objects.get(email=request.user.email)
+        data = json.loads(request.body.decode('utf-8'))
 
         try:
-            if user.has_rights(action='edit_plan', **data):
+            if user.has_rights(action='edit_plan', **{'plan_id': data['plan_id']}):
                 PlanLists.objects.get(id=data['plan_id']).update(**data['plan_info'])
             else:
                 return HttpResponse(status=403)
@@ -104,7 +104,7 @@ def get_drop_list(request):
         --> For more detailed documentation see Postman.
     """
     if request.user.is_authenticated():
-        user = CustomUser.objects.get(username=request.user.username)
+        user = CustomUser.objects.get(email=request.user.email)
         data = request.POST
         context = {'is_error': False}
 
@@ -139,12 +139,11 @@ def upload_plan_avatar(request):
         --> For more detailed documentation see Postman.
     """
     if request.user.is_authenticated():
-        user = CustomUser.objects.get(username=request.user.username)
+        user = CustomUser.objects.get(email=request.user.email)
         data = request.POST
 
         try:
-            params = {'plan_id': data['plan_id']}
-            if user.has_rights(action='edit_plan', **params):
+            if user.has_rights(action='edit_plan', **{'plan_id': data['plan_id']}):
                 plan = PlanLists.objects.get(id=data['plan_id'])
                 # удаляем предыдущую аватарку
                 plan.avatar.delete()
@@ -169,7 +168,7 @@ def switch_plan_plan(request):
         --> For more detailed documentation see Postman.
     """
     if request.user.is_authenticated():
-        user = CustomUser.objects.get(username=request.user.username)
+        user = CustomUser.objects.get(email=request.user.email)
         context = {}
 
         try:
@@ -193,7 +192,7 @@ def switch_plan_plan(request):
 
 def get_avatar(request):
     if request.user.is_authenticated():
-        user = CustomUser.objects.get(username=request.user.username)
+        user = CustomUser.objects.get(email=request.user.email)
         data = request.GET
         response = {}
 
@@ -213,8 +212,8 @@ def get_avatar(request):
 
 def mailing_test(request):
     if request.user.is_authenticated():
-        user = CustomUser.objects.get(username=request.user.username)
-        data = json.loads(request.body)
+        user = CustomUser.objects.get(email=request.user.email)
+        data = json.loads(request.body.decode('utf-8'))
 
         try:
             mailing = IntodayerMailing(text=data['text'], image=data['image'])

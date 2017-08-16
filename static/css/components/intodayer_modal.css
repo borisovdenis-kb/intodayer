@@ -40,6 +40,16 @@
   align-content: center;
   background: white; }
 
+.in_stage_content {
+  background-color: #ffffff;
+  text-align: center;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  -khtml-border-radius: 4px;
+  -ms-border-radius: 4px;
+  border-radius: 4px;
+}
+
 input[id=pass], input[id=okay].btn {
   height: 40px;
   border: none;

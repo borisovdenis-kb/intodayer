@@ -24,8 +24,8 @@ def delete_participant(request):
         --> For more detailed documentation see Postman.
     """
     if request.user.is_authenticated():
-        user = CustomUser.objects.get(username=request.user.username)
-        data = json.loads(request.body)
+        user = CustomUser.objects.get(email=request.user.email)
+        data = json.loads(request.body.decode('utf-8'))
 
         try:
             if user.has_rights(action='delete_participant', **data):
@@ -50,8 +50,8 @@ def set_role(request):
         --> For more detailed documentation see Postman.
     """
     if request.user.is_authenticated():
-        user = CustomUser.objects.get(username=request.user.username)
-        data = json.loads(request.body)
+        user = CustomUser.objects.get(email=request.user.email)
+        data = json.loads(request.body.decode('utf-8'))
 
         try:
             if user.has_rights(action='set_role', **data):
@@ -78,8 +78,8 @@ def invite_participants(request):
         --> For more detailed documentation see Postman.
     """
     if request.user.is_authenticated():
-        user = CustomUser.objects.get(username=request.user.username)
-        data = json.loads(request.body)
+        user = CustomUser.objects.get(email=request.user.email)
+        data = json.loads(request.body.decode('utf-8'))
 
         try:
             email_list = data['email_list']
@@ -137,7 +137,7 @@ def get_expected_participants(request):
         --> For more detailed documentation see Postman.
     """
     if request.user.is_authenticated():
-        user = CustomUser.objects.get(username=request.user.username)
+        user = CustomUser.objects.get(email=request.user.email)
         data = request.GET
 
         try:
@@ -167,7 +167,7 @@ def switch_plan_participants(request):
         --> For more detailed documentation see Postman.
     """
     if request.user.is_authenticated():
-        user = CustomUser.objects.get(username=request.user.username)
+        user = CustomUser.objects.get(email=request.user.email)
         data = request.POST
         context = {}
 

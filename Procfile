@@ -1,1 +1,0 @@
-web: gunicorn intodayer2.wsgi --log-file -
