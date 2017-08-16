@@ -61,6 +61,7 @@ urlpatterns = [
     url(r'^plan/switch_plan', planApi.switch_plan_plan),
     url(r'^upload_plan_avatar', planApi.upload_plan_avatar),
     url(r'^plan/settings_plan', views.get_settings_plan_html),
+    url(r'^plan/invite_setting_plan', views.get_invite_settings_html),
     url(r'^get_avatar', planApi.get_avatar),
 
     # API участников

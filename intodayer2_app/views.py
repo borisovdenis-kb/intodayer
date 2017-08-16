@@ -69,6 +69,13 @@ def get_settings_plan_html(request):
         return render_to_response('templates_for_ajax/settings_ajax.html', context)
 
 
+def get_invite_settings_html(request):
+    if request.is_ajax():
+        context = dict()
+        context.update(get_cur_plan(request))
+        return render_to_response('templates_for_ajax/invite_settings.html', context)
+
+
 def edit_plan_row_ajax(request):
     """
         1. Главная фукнция создания и обновления расписания
@@ -645,22 +652,17 @@ def about_service_view(request):
         return render_to_response('about_service.html', context)
 
 
-# ЛЕХ!!!!
-# Ты просто послушай.
-# функция get_participants возвращает всех участников расписания
-# такие как: ИМЕНА ДНЕЙ НЕДЕЛИ, ДАТА НАЧАЛА РАБОТЫ РАСПАСАНИЯ"
-# Это просто шок.
-# Бредовее комментария я еще не видел.
+
 def get_participants(plan):
     """
         Возвращает всех участников расписания
-        такие как: имена дней недели, дата начала работы расписания
     """
     context = dict()
     # TODO: exclude role = elder
     participant_list = UserPlans.objects.select_related().filter(plan_id=plan.plan.id)
 
     context['participants'] = participant_list
+
     return context
 
 
@@ -675,6 +677,7 @@ def participant_page(request):
             return render_to_response('plan_empty.html', context)
 
         context.update(get_participants(context['cur_plan']))
+        context['this_user'] = request.user
 
         print(context)
 
