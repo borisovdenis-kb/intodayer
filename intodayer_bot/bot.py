@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 # from intodayer_bot.utils import *
 # from intodayer_bot.work_with_db import *
 import telebot
