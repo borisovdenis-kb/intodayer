@@ -47,7 +47,7 @@ def delete_plan(request):
         data = json.loads(request.body.decode('utf-8'))
 
         try:
-            action_is_available = user.has_rights(action='delete_plan', **data)
+            action_is_available = user.has_rights(action='delete_plan', **{'plan_id': data['plan_id']})
         except (ValueError, ValidationError):
             return HttpResponse(status=400)
         except ObjectDoesNotExist:
@@ -78,7 +78,7 @@ def update_plan_info(request):
         data = json.loads(request.body.decode('utf-8'))
 
         try:
-            if user.has_rights(action='edit_plan', **data):
+            if user.has_rights(action='edit_plan', **{'plan_id': data['plan_id']}):
                 PlanLists.objects.get(id=data['plan_id']).update(**data['plan_info'])
             else:
                 return HttpResponse(status=403)
@@ -143,8 +143,7 @@ def upload_plan_avatar(request):
         data = request.POST
 
         try:
-            params = {'plan_id': data['plan_id']}
-            if user.has_rights(action='edit_plan', **params):
+            if user.has_rights(action='edit_plan', **{'plan_id': data['plan_id']}):
                 plan = PlanLists.objects.get(id=data['plan_id'])
                 # удаляем предыдущую аватарку
                 plan.avatar.delete()
