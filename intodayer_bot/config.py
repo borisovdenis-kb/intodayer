@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from decouple import config
 
 DB_PYMYSQL_PARAMS = {

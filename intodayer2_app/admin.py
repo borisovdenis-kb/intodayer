@@ -1,6 +1,11 @@
+# -*- coding: utf-8 -*-
+
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from intodayer2_app.models import *
+from intodayer2_app.models import (
+    CustomUser, Times, DaysOfWeek, Places, Subjects, Teachers,
+    UserPlans, PlanLists, PlanRows, PlanRowsTemporal
+)
 
 
 class CustomUserAdmin(BaseUserAdmin):

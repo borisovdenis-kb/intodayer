@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from intodayer2_app.models import CustomUser
