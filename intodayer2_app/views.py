@@ -8,16 +8,15 @@ from django.contrib.auth.models import auth
 from django.contrib.auth import get_user_model
 from django.shortcuts import render_to_response
 from django.contrib.auth.backends import ModelBackend
-from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest
-from intodayer2_app.forms import SetAvatarForm, CustomUserCreationForm
+from intodayer2_app.forms import CustomUserCreationForm
 
 from extra.utils import (
     edit_plan_row, get_today_tomorrow_plans, CloneError, UPDATE, CREATE
 )
 
 from intodayer2_app.models import (
-    UserPlans, Invitations, PlanLists, PlanRows, DaysOfWeek,
+    UserPlans, Invitations, PlanRows, DaysOfWeek,
     CustomUser, UserMailingChannels
 )
 
@@ -304,59 +303,6 @@ def confirm_invitation_ajax(request):
         return response
 
 
-def save_user_avatar_ajax(request):
-    """
-        Функция сохраняет загруженную пользователем аватарку
-        :param request:
-        :return:
-    """
-    if request.is_ajax():
-        form = SetAvatarForm(request.POST, request.FILES)
-        response = HttpResponse()
-        response['Content-Type'] = 'application/json'
-
-        if form.is_valid():
-            user = CustomUser(username=request.user.username)
-            user.avatar = request.FILES['image_file']
-            user.save()
-
-            response.write(json.dumps([{'success': 1}]))
-        else:
-            response.write(json.dumps([{'success': 0}]))
-
-        return response
-
-
-def save_plan_avatar_ajax(request, plan_id):
-    """
-        Функция сохраняет загруженную пользователем аватарку
-        :param plan_id:
-        :param request:
-        :return:
-    """
-    if request.is_ajax():
-        if request.user.is_authenticated():
-            user = CustomUser.objects.get(email=request.user.email)
-
-            try:
-                # если user имеет права редактирования
-                plan = PlanLists.objects.get(id=plan_id, owner=user.id)
-            except ObjectDoesNotExist:
-                return HttpResponse(status=403)
-
-            # удаляем предыдущую аватарку
-            plan.avatar.delete()
-            # сохраняем новую
-            plan.avatar = request.FILES['avatar']
-            plan.save()
-
-            return HttpResponse(status=200)
-        else:
-            return HttpResponse(status=401)
-    else:
-        return HttpResponse(status=400)
-
-
 ###################################################################################
 #                         ОБРАБОТКА ОБЫЧНЫХ ЗАПРОСОВ                              #
 ###################################################################################
@@ -365,81 +311,6 @@ def save_plan_avatar_ajax(request, plan_id):
 #     context = dict()
 #     context.update(get_all_plans(request))
 #     return render_to_response('plan_empty.html', context)
-
-
-def statistics_view(request):
-    if request.user.is_authenticated():
-        user = CustomUser.objects.get(email=request.user.email)
-
-        all_plans = UserPlans.objects.select_related().filter(user_id=user.id)
-        if all_plans.count() == 0:
-            return HttpResponseRedirect("/plan")
-
-        # выбираем текущее расписание юзера
-        try:
-            cur_plan = UserPlans.objects.select_related().filter(user_id=user.id, always_yn='y')[0]
-        except IndexError:
-            cur_plan = all_plans[0]
-
-        # plan_rows = PlanRows.objects.select_related().filter(plan_id=cur_plan.plan_id)
-
-        stripes_dict = Stripes(cur_plan.plan_id)
-        stripes_dict_json = stripes_dict.get_stripes_json()
-
-        print(stripes_dict_json)
-
-        return render_to_response('statistics.html', {'data': json.loads(stripes_dict_json)})
-
-    else:
-        return HttpResponseRedirect("/login")
-
-
-def welcome_view(request):
-    if request.user.is_authenticated():
-        return HttpResponseRedirect("/home")
-    else:
-        return render_to_response('welcome.html')
-
-
-def registration_view(request):
-    if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)
-        if form.is_valid():
-            # сохраняем usr_name и pswd в таблицу auth_user
-            new_user = form.save()
-            # добавляем пользователю дефолтное расписание
-            new_user.add_new_plan()
-
-            return HttpResponseRedirect('/login')
-    else:
-        form = CustomUserCreationForm()
-
-    context = {'form': form}
-    return render_to_response('reg.html', context)
-
-
-def login_view(request):
-    if request.method == 'POST':
-        email = request.POST['email']
-        password = request.POST['password']
-
-        user = auth.authenticate(username=email, password=password)
-        print(user)
-
-        if user is not None:
-            if user.is_active:
-                auth.login(request, user)
-                return HttpResponseRedirect("/home")
-            else:
-                return HttpResponse('User is not active')
-        else:
-            return HttpResponse('Invalid Login or Password')
-    else:
-        return render_to_response('login.html')
-
-
-def logout_view(request):
-    auth.logout(request)
 
 
 def get_all_plans(request):
@@ -457,7 +328,6 @@ def get_all_plans(request):
     return context
 
 
-# TODO: Какая-то стремная функция зачем она вообще нужна??
 def get_cur_plan(request, plan_id=None):
     """
         Возвращает контекст с текущим выбранным расписанием
@@ -513,57 +383,6 @@ def get_this_user(request):
     return context
 
 
-def statistics_view(request):
-    if request.user.is_authenticated():
-        user = CustomUser.objects.get(email=request.user.email)
-
-        all_plans = UserPlans.objects.select_related().filter(user_id=user.id)
-        if all_plans.count() == 0:
-            return HttpResponseRedirect("/plan")
-
-        # выбираем текущее расписание юзера
-        try:
-            cur_plan = UserPlans.objects.select_related().filter(user_id=user.id, always_yn='y')[0]
-        except IndexError:
-            cur_plan = all_plans[0]
-
-        # plan_rows = PlanRows.objects.select_related().filter(plan_id=cur_plan.plan_id)
-
-        stripes_dict = Stripes(cur_plan.plan_id)
-        stripes_dict_json = stripes_dict.get_stripes_json()
-
-        print(stripes_dict_json)
-
-        return render_to_response('statistics.html', {'data': json.loads(stripes_dict_json)})
-
-    else:
-        return HttpResponseRedirect("/login")
-
-
-def welcome_view(request):
-    if request.user.is_authenticated():
-        return HttpResponseRedirect("/home")
-    else:
-        return render_to_response('welcome.html')
-
-
-def registration_view(request):
-    if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)
-        if form.is_valid():
-            # сохраняем usr_name и pswd в таблицу auth_user
-            new_user = form.save()
-            # добавляем пользователю дефолтное расписание
-            new_user.add_new_plan()
-
-            return HttpResponseRedirect('/login')
-    else:
-        form = CustomUserCreationForm()
-
-    context = {'form': form}
-    return render_to_response('reg.html', context)
-
-
 def login_view(request):
     if request.method == 'POST':
         email = request.POST['email']
@@ -586,6 +405,13 @@ def login_view(request):
 def logout_view(request):
     auth.logout(request)
     return HttpResponseRedirect("/")
+
+
+def welcome_view(request):
+    if request.user.is_authenticated():
+        return HttpResponseRedirect("/home")
+    else:
+        return render_to_response('welcome.html')
 
 
 def home_view(request):
@@ -630,7 +456,6 @@ def plan_view(request):
         context['plan_rows'] = plan_rows
         # для появления кнопки добавления расписания
         context['is_plan_page'] = True
-        print(context['is_plan_page'])
 
         return render_to_response('plan.html', context)
 
@@ -638,21 +463,78 @@ def plan_view(request):
         return HttpResponseRedirect("/login", {})
 
 
+def statistics_view(request):
+    if request.user.is_authenticated():
+        user = CustomUser.objects.get(email=request.user.email)
+
+        all_plans = UserPlans.objects.select_related().filter(user_id=user.id)
+        if all_plans.count() == 0:
+            return HttpResponseRedirect("/plan")
+
+        # выбираем текущее расписание юзера
+        try:
+            cur_plan = UserPlans.objects.select_related().filter(user_id=user.id, always_yn='y')[0]
+        except IndexError:
+            cur_plan = all_plans[0]
+
+        # plan_rows = PlanRows.objects.select_related().filter(plan_id=cur_plan.plan_id)
+
+        stripes_dict = Stripes(cur_plan.plan_id)
+        stripes_dict_json = stripes_dict.get_stripes_json()
+
+        print(stripes_dict_json)
+
+        return render_to_response('statistics.html', {'data': json.loads(stripes_dict_json)})
+
+    else:
+        return HttpResponseRedirect("/login")
+
+
+def participant_view(request):
+    if request.user.is_authenticated():
+        context = dict()
+        context.update(get_this_user(request))
+        context.update(get_all_plans(request))
+        context.update(get_cur_plan(request))
+
+        if context['cur_plan'] == 0:
+            return render_to_response('plan_empty.html', context)
+
+        context.update(get_participants(context['cur_plan']))
+
+        return render_to_response('participants.html', context)
+    else:
+        return HttpResponseRedirect("/")
+
+
 def about_service_view(request):
     if request.user.is_authenticated():
         user = CustomUser.objects.get(email=request.user.email)
         context = {'user': user}
 
-        print(context)
         return render_to_response('about_service.html', context)
 
 
-# ЛЕХ!!!!
-# Ты просто послушай.
-# функция get_participants возвращает всех участников расписания
-# такие как: ИМЕНА ДНЕЙ НЕДЕЛИ, ДАТА НАЧАЛА РАБОТЫ РАСПАСАНИЯ"
-# Это просто шок.
-# Бредовее комментария я еще не видел.
+def registration_view(request):
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            try:
+                new_user = form.save()
+            except AttributeError:
+                pass
+
+            new_user.update(**{'username': new_user.email})
+            new_user.add_new_plan()
+            UserMailingChannels.objects.create(user_id=new_user.id, telegram_yn='n', email_yn='n')
+            return HttpResponseRedirect('/login')
+    else:
+        form = CustomUserCreationForm()
+
+    context = {'form': form}
+    return render_to_response('reg.html', context)
+
+
 def get_participants(plan):
     """
         Возвращает всех участников расписания
@@ -666,26 +548,7 @@ def get_participants(plan):
     return context
 
 
-def participant_page(request):
-    if request.user.is_authenticated():
-        context = dict()
-        context.update(get_this_user(request))
-        context.update(get_all_plans(request))
-        context.update(get_cur_plan(request))
-
-        if context['cur_plan'] == 0:
-            return render_to_response('plan_empty.html', context)
-
-        context.update(get_participants(context['cur_plan']))
-
-        print(context)
-
-        return render_to_response('participants.html', context)
-    else:
-        return HttpResponseRedirect("/")
-
-
-def profile_page(request):
+def profile_view(request):
     if request.user.is_authenticated():
         user = CustomUser.objects.get(email=request.user.email)
         user_plans = UserPlans.objects.select_related().filter(user_id=user.id)

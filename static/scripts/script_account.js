@@ -39,7 +39,7 @@ function sendDataToServer(data) {
         user: {
             first_name: data.first_name,
             last_name: data.last_name,
-            email: data.email
+            email: data.email,
         },
         channels: {
             telegram_yn: data.telegram_yn ? 'y' : 'n',

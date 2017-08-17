@@ -378,15 +378,19 @@ class CustomUser(AbstractUser, UpdateMixin):
         Added:
         --- phone number
         --- avatar
+        --- chat_id
     """
     first_name = models.CharField(max_length=30, blank=False, validators=[validate_not_empty_filed])
     last_name = models.CharField(max_length=30, blank=False, validators=[validate_not_empty_filed])
-    email = models.EmailField(blank=False, validators=[validate_email_field])
+    email = models.EmailField(blank=False, unique=True, validators=[validate_email_field])
     avatar = models.ImageField(upload_to='users_avatars/', blank=True, max_length=1000)
     # телефон хранится в формате +7*********
     phone = models.CharField(max_length=12, blank=True, validators=[validate_phone_field])
     # id чата с ботом в телеграме
     chat_id = models.CharField(max_length=15, blank=True, validators=[validate_telegram_chat_id_field])
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['first_name', 'last_name']
 
     class Meta:
         managed = True

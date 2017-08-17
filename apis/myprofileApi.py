@@ -30,7 +30,6 @@ def update_user_info(request):
 
         try:
             user_channels = UserMailingChannels.objects.get(user_id=user.id)
-
             user.update(**data['user'])
             user_channels.update(**data['channels'])
         except ValidationError:

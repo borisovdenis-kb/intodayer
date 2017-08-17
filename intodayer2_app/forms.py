@@ -18,20 +18,16 @@ class CustomUserCreationForm(UserCreationForm):
                                                                   'required': 'required',
                                                                   'placeholder': 'Confirm password'}))
     email = forms.CharField(max_length=100,
-                            widget=forms.PasswordInput(attrs={'id': 'inputEmail',
-                                                                    'name': 'email',
-                                                                    'class': 'form-control input-lg',
-                                                                    'required': 'required',
-                                                                    'placeholder': 'Enter email'}))
+                            widget=forms.TextInput(attrs={'id': 'inputEmail',
+                                                          'name': 'email',
+                                                          'class': 'form-control input-lg',
+                                                          'required': 'required',
+                                                          'placeholder': 'Enter email'}))
 
     class Meta:
         model = CustomUser
         fields = ('first_name', 'last_name', 'password1', 'password2', 'email')
         widgets = {
-            'username': forms.TextInput(attrs={'id': 'inputUsername',
-                                               'class': 'form-control input-lg',
-                                               'required': 'required',
-                                               'placeholder': 'Enter username'}),
             'first_name': forms.TextInput(attrs={'id': 'inputFirstName',
                                                  'class': 'form-control input-lg',
                                                  'required': 'required',
@@ -40,6 +36,10 @@ class CustomUserCreationForm(UserCreationForm):
                                                 'class': 'form-control input-lg',
                                                 'required': 'required',
                                                 'placeholder': 'Enter last name'}),
+            'email': forms.TextInput(attrs={'id': 'inputEmail',
+                                                  'class': 'form-control input-lg',
+                                                  'required': 'required',
+                                                  'placeholder': 'Enter email'})
         }
 
 
