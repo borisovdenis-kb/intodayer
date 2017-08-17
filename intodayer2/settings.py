@@ -30,6 +30,7 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = True
 
 ALLOWED_HOSTS = [
+    "193.124.117.138",
     "192.168.0.49",
     "192.168.0.8",
     "127.0.0.1",
