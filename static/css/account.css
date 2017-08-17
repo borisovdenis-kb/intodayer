@@ -42,14 +42,14 @@
 
 input#first_name, input#last_name {
   border: 2px solid #d9d9e3;
-  font-size: 1.5em;
   text-align: center;
   font-family: "PT Sans" !important;
+  font-size: 22px;
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
   -khtml-border-radius: 4px;
-  -ms-border-radius: 4px;
   border-radius: 4px;
+  -ms-border-radius: 4px;
   transition: 0.4s border ease; }
   input#first_name:focus, input#last_name:focus {
     border: 2px solid rgba(139, 29, 235, 0.4);
@@ -57,10 +57,22 @@ input#first_name, input#last_name {
 
 input#first_name {
   margin-top: 4px;
-  margin-bottom: 8px; }
+  margin-bottom: 4px; }
 input#last_name {
   margin-top: 4px;
-  margin-bottom: 0px;}
+  margin-bottom: 0px; }
+
+input::-webkit-input-placeholder {
+  color: #d2d2d2; }
+
+input:-moz-placeholder {
+  color: #d2d2d2; }
+
+input::-moz-placeholder {
+  color: #d2d2d2; }
+
+input:-ms-input-placeholder {
+  color: #d2d2d2; }
 
 .pr_title_content {
   width: 100%;
@@ -71,6 +83,7 @@ input#last_name {
   align-content: center;
   flex-direction: column; }
   .pr_title_content span {
+    margin-top: 4px;
     font-size: 1em; }
 
 .pr_ava_content {

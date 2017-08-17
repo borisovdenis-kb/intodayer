@@ -1,0 +1,51 @@
+@import "mixins"
+@import "global_vars"
+
+.invite_by_mail, .invite_by_link
+  background: white
+  padding: $gl_block_padding
+    top: 15px
+    bottom: 15px
+  border: $gl_block_border
+  @include border-radius($gl_border_radius)
+  margin-top: 5px
+
+
+.invite_by_mail, .invite_by_link
+  span
+    text-align: left
+    font-size: 1.5em
+    font-weight: bold
+  input
+    @extend %input_styles
+    width: 100%
+    margin:
+      top: 2px
+      bottom: 2px
+  //input[type=button]
+  //  @extend %input_styles_simple
+  //  border: none
+  //  width: 100px 
+
+.invite_by_link
+  margin:
+    bottom: 100px
+
+#invite_link
+  margin-bottom: 5px
+
+
+.invite_link_btns
+  display: flex
+  button
+    width: 25%
+    @include border-radius(0px)
+    &:nth-child(1)
+      @include border-radius(4px 0 0 4px)
+    &:nth-child(4)
+      @include border-radius(0 4px 4px 0)
+
+
+@include placeholder()
+  color: $gl_placeholder_color
+

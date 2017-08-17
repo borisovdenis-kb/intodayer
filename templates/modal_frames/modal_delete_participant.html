@@ -1,0 +1,19 @@
+{% extends "modal_frames/intodayer_modal_base.html" %}
+{% load staticfiles %}
+
+{% block modal_type %}
+    modal_type="delete_participants"
+{% endblock %}
+
+{% block modal_title %}
+    <div class="in_modal_title">Delete participant</div>
+{% endblock %}
+
+{% block modal_content %}
+    <p>Вы действительно хотите исключить данного пользователя из расписания?</p>
+{% endblock %}
+
+{% block modal_bottom %}
+    <div id=btn_ok class="btn btn-danger btn-sm">Да</div>
+    <div id=btn_no class="btn btn-primary btn-sm">Нет</div>
+{% endblock %}

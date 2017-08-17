@@ -9,7 +9,7 @@
 {% block scripts_bottom %}
     <script type="text/javascript" src={% static "library/jquery.maskedinput.min.js" %}></script>
     <script type="text/javascript" src={% static "scripts/script_account.js" %}></script>
-    <script type="text/javascript" src={% static "scripts/components/script_intodayer_modal.js" %}></script>
+    <script type="text/javascript" src={% static "scripts/components/script_modal_change_pass.js" %}></script>
 {% endblock %}
 
 
@@ -17,9 +17,9 @@
     <div class="pr_page">
         <div class="pr_top_content">
             <div class="pr_title_content">
-                <input class="col-lg-6 col-md-7 col-md-8 col-xs-9"
+                <input class="col-lg-6 col-md-7 col-md-8 col-xs-9" placeholder="Ваше имя"
                        id="first_name" type="text" autocomplete="off" value={{ user.first_name }}>
-                <input class="col-lg-6 col-md-7 col-md-8 col-xs-9"
+                <input class="col-lg-6 col-md-7 col-md-8 col-xs-9" placeholder="Ваша фамилия"
                        id="last_name" type="text" autocomplete="off" value={{ user.last_name }}>
 
                 <span>Кол-во расписаний: {{ user_plans|length }}</span>
@@ -127,5 +127,5 @@
 {% endblock %}
 
 {% block others %}
-    {% include "modal_frames/intodayer_modal.html" %}
+    {% include "modal_frames/modal_profile_pass.html" %}
 {% endblock %}

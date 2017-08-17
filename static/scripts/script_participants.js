@@ -3,6 +3,10 @@
  */
 
 $(document).ready(function () {
+    setBindsParticipants();
+});
+
+function setBindsParticipants() {
     $('.part_settings').unbind();
     $('.part_settings').click(function () {
         if ($('.setting_msg').length > 0) {
@@ -13,16 +17,18 @@ $(document).ready(function () {
         }
     });
 
-
+    $('.part_admin').unbind();
     $('.part_admin').click(function () {
-        var $part_rights = $(this).parents('.part_rights');
+        let $part_rights = $(this).parents('.part_rights');
         if ($part_rights.attr('role') === 'elder' || $part_rights.attr('role') === 'admin') {
             return false;
         }
-        let click_elem = $(this);
-        setRoleServer(click_elem, 'admin');
+        let $click_elem = $(this);
+        showModal('modal_set_admin', $click_elem);
+
 
     });
+    $('.part_participant').unbind();
     $('.part_participant').click(function () {
         let $part_rights = $(this).parents('.part_rights');
         if ($part_rights.attr('role') === 'participant') {
@@ -30,20 +36,25 @@ $(document).ready(function () {
         }
         setRoleServer($(this), 'participant');
     });
+    $('.part_remove').unbind();
     $('.part_remove').click(function () {
-        $('#modal_ok_cancel').modal();
-        $('.modal_ok').click(function () {
-            removePlan();
-        });
-        removeRoleServer($(this));
-    })
-});
+        let $click_elem = $(this);
+        let $part_rights = $click_elem.parents('.part_rights');
+        if ($part_rights.attr('role') === 'elder') {
+            showModal('modal_elder_leave', $click_elem);
+        }
+        else {
+            showModal('modal_delete_part', $click_elem);
+        }
+    });
+}
+
 
 function setRoleServer($click_elem, role_str) {
-    var data = {
+    let data = {
         new_role: role_str,
         plan_id: $('.title_content').attr('plan_id'),
-        participant_id: $('.part_block').attr('part_id')
+        participant_id: $click_elem.parents('.part_block').attr('part_id')
     };
 
     $.ajax({
@@ -54,16 +65,23 @@ function setRoleServer($click_elem, role_str) {
         success: function () {
             $click_elem.parents('.part_rights').attr('role', role_str);
             changeRoleAnimate($click_elem);
+            hideModalFade();
+            hideModalWindow();
+        },
+        error: function () {
+            alert("Ошибка. Не удалось выполнить операцию. Обновите страницу");
+            hideModalFade();
+            hideModalWindow();
         }
     });
 }
 
-function removeRoleServer($click_elem) {
-    var $part_block = $click_elem.parents('.part_block');
+function removeParticipantServer($click_elem) {
+    let $part_block = $click_elem.parents('.part_block');
     if ($part_block.attr('part_id') && $('.title_content').attr('plan_id')) {
-        var data = {
+        let data = {
             plan_id: $('.title_content').attr('plan_id'),
-            participant_id: $('.part_block').attr('part_id')
+            participant_id: $click_elem.parents('.part_block').attr('part_id')
         };
         $.ajax({
             url: '/delete_participant',
@@ -72,6 +90,13 @@ function removeRoleServer($click_elem) {
             data: JSON.stringify(data),
             success: function () {
                 deleteUserAnimate($part_block);
+                hideModalWindow();
+                hideModalFade();
+            },
+            error: function () {
+                alert("Ошибка. Не удалось выполнить операцию. Обновите страницу");
+                hideModalFade();
+                hideModalWindow();
             }
         });
     }
@@ -95,6 +120,10 @@ function activeInvite() {
     // Данная функция активирует все стили и обработчки событий и также подгружает правый контент настроек plan
 
     // Вставка верхнего информативного табло
+    $('.part_settings').text("К участникам");
+    // $('.part_settings').removeClass('btn-success');
+    // $('.part_settings').activeClass('btn-primary');
+
     $('.setting_info_block').append($('<div class="setting_msg alert-success" style="display: none">Invite new people in your plan</div>'));
     $('.setting_msg').delay(200).slideDown(250);
 
@@ -109,7 +138,7 @@ function activeInvite() {
 
 
 function deactivateInvite() {
-
+    $('.part_settings').text("Пригласить");
     // удаление контента настроек
     $('.setting_msg').remove();
     $('.setting_invite').empty();

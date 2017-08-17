@@ -42,6 +42,7 @@
   border: 2px solid rgba(217, 217, 227, 1)
   text-align: center
   font-family: "PT Sans" !important
+  font-size: 22px
   @include border-radius(4px)
   transition: 0.4s border ease
   &:focus
@@ -49,18 +50,20 @@
     outline: none
 
 input
-  &#pr_username
+  &#first_name
     @extend %top_input_style
-    font-size: 2em
     margin:
       top: 4px
-      bottom: 8px
-  &#pr_login
+      bottom: 4px
+  &#last_name
     @extend %top_input_style
     margin:
       top: 4px
       bottom: 0px
-    font-size: 1em
+
+@include placeholder()
+  color: rgba(210,210,210,1)
+
 
 
 .pr_title_content
@@ -72,6 +75,7 @@ input
   @include set-flex(center)
   flex-direction: column
   span
+    margin-top: 4px
     font-size: 1em
 
 .pr_ava_content

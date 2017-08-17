@@ -20,7 +20,8 @@
         </div>
         <div class="setting_right">
             <div class="icon_setting_content">
-                <span class="part_settings glyphicon glyphicon-plus"></span>
+                <span class="part_settings" >Пригласить</span>
+                {#                <span class="part_settings glyphicon glyphicon-plus"></span>#}
             </div>
         </div>
     </div>
@@ -44,26 +45,45 @@
                                     {% if participant.role == 'participant' %}
                                 style="opacity: 1"
                                     {% endif %}>
-                                <img src={% static "icons/rights_icons/admin-96.png" %}>
+                                <div class="part_ava_right_content">
+                                    <img src={% static "icons/rights_icons/admin-96.png" %}>
+                                    <p>People</p>
+                                </div>
                             </li>
+
                         {% endif %}
                         {% if this_user.id != participant.user.id %}
                             <li class="part_role part_admin"
                                     {% if participant.role == 'elder' or participant.role == 'admin' %}
                                 style="opacity: 1"
                                     {% endif %}>
-                                <img src={% static "icons/rights_icons/user-96.png" %}>
+                                <div class="part_ava_right_content">
+                                    <img src={% static "icons/rights_icons/user-96.png" %}>
+                                    <p>Admin</p>
+                                </div>
                             </li>
+
                         {% endif %}
                         {% if this_user.id == participant.user.id %}
                             <li class="part_role part_elder">
-                                <img src={% static "icons/rights_icons/elder-96.png" %}>
+                                <div class="part_ava_right_content">
+                                    <img src={% static "icons/rights_icons/elder-96.png" %}>
+                                    <p>Elder</p>
+                                </div>
                             </li>
                         {% endif %}
 
+
                         <li class="part_remove">
-                            <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>
+                            {% if this_user.id == participant.user.id %}
+                                <span>Покинуть</span>
+                            {% endif %}
+                            {% if this_user.id != participant.user.id %}
+                                <span>Удалить</span>
+                            {% endif %}
+                            {#                            <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>#}
                         </li>
+
 
                     </ul>
 

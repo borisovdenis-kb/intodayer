@@ -148,6 +148,10 @@ function switchPlan($this_plan) {
             setListenersRightContent();
         }
 
+        if (address == 'participants'){
+            setBindsParticipants();
+        }
+
         // смена аватарки при изменении расписания
         avatarEditAccess(data);
 

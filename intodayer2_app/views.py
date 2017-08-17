@@ -635,7 +635,7 @@ def plan_view(request):
         context['plan_rows'] = plan_rows
         # для появления кнопки добавления расписания
         context['is_plan_page'] = True
-        print(context['is_plan_page'])
+        # print(context['is_plan_page'])
 
         return render_to_response('plan.html', context)
 

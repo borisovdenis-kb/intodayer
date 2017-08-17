@@ -1,0 +1,19 @@
+{% extends "modal_frames/intodayer_modal_base.html" %}
+{% load staticfiles %}
+
+{% block modal_type %}
+    modal_type="confirm_role"
+{% endblock %}
+
+{% block modal_title %}
+    <div class="in_modal_title">Change role of user</div>
+{% endblock %}
+
+{% block modal_content %}
+    <p>Вы действительно хотите сделать данного пользователя администратором расписания?</p>
+{% endblock %}
+
+{% block modal_bottom %}
+    <div id=btn_ok class="btn btn-success btn-sm">Да</div>
+    <div id=btn_no class="btn btn-primary btn-sm">Нет</div>
+{% endblock %}

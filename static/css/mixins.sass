@@ -78,6 +78,16 @@
   height: calc(100% - #{$val}) /* cross-browser */
 
 
+@mixin placeholder()
+  input::-webkit-input-placeholder
+    @content
+  input:-moz-placeholder
+    @content
+  input::-moz-placeholder
+    @content
+  input:-ms-input-placeholder
+    @content
+
 /// Mixin printing a linear-gradient
 /// as well as a plain color fallback
 /// and the `-webkit-` prefixed declaration

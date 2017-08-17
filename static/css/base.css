@@ -97,6 +97,12 @@ body {
   margin-top: 5px;
   overflow: hidden; }
   .plan_selector ul li a {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
     display: block;
     padding: 10px 0 10px 10px;
     line-height: 20px;
