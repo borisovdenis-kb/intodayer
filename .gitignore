@@ -2,8 +2,7 @@
 /.idea/
 /media/
 /intodayer2_app/migrations/
-/staticfiles/
-/intodayer2/settings.py
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -109,3 +108,5 @@ ENV/
 /intodayer_bot/shelve.db.bak
 /intodayer_bot/shelve.db.dat
 /intodayer_bot/shelve.db.dir
+static/avatars/
+staticfiles/

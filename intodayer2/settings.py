@@ -14,6 +14,7 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 
 import os
 from decouple import config
+# from intodayer2.log import LOGGING
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -28,6 +29,8 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 # TODO: Поменять на False
 DEBUG = True
+
+# LOGGING = LOGGING
 
 ALLOWED_HOSTS = [
     "193.124.117.138",
