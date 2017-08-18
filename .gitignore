@@ -2,6 +2,8 @@
 /.idea/
 /media/
 /intodayer2_app/migrations/
+/staticfiles/
+/intodayer2/settings.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
