@@ -1,8 +1,8 @@
 .part_block {
   border: 1px solid #e6e6e6;
   padding: 10px;
-  padding-top: 6px;
-  padding-bottom: 4px;
+  padding-top: 4px;
+  padding-bottom: 1px;
   background: white;
   margin-top: 5px;
   -moz-border-radius: 4px;
@@ -18,8 +18,8 @@
   float: left;
   margin-left: 5px; }
   .part_ava img {
-    width: 60px;
     height: 60px;
+    width: auto;
     -moz-border-radius: 4px;
     -webkit-border-radius: 4px;
     -khtml-border-radius: 4px;
@@ -43,7 +43,7 @@
 .part_rights {
   margin-left: auto; }
   .part_rights img {
-    height: 70px; }
+    height: 60px; }
   .part_rights span {
     margin-right: 10px;
     font-size: 1.2em;
@@ -61,7 +61,7 @@
         -ms-user-select: none;
         user-select: none;
         cursor: default;
-        margin-top: -5px;
+        margin-top: -4px;
         height: 10px;
         font-size: 0.8em;
         font-weight: bold;
@@ -71,7 +71,7 @@
   display: flex;
   flex-direction: column; }
 
-.part_admin, .part_participant, part_elder {
+.part_admin, .part_participant, .part_elder {
   cursor: pointer;
   width: auto;
   overflow: hidden;

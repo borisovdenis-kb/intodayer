@@ -2,9 +2,12 @@
  * Created by Alexey on 16.08.2017.
  */
 
+var invite_input_block;
+
 $(document).ready(function () {
     setBindsParticipants();
 });
+
 
 function setBindsParticipants() {
     $('.part_settings').unbind();
@@ -130,10 +133,52 @@ function activeInvite() {
     $('.part_content').hide();
 
     // Вставка всей панели настроек
+
     $('.setting_invite').load('/plan/invite_setting_plan', {}, function () {
+        if (!invite_input_block) {
+            invite_input_block = $('.invite_input_block').html();
+        }
+
         $('.btn-back ').unbind();
         $('.btn-back ').click(deactivateInvite);
+
+        newInputInviteBinds($('.invite_input'));
+
     });
+}
+
+function newInputInviteBinds($input_field) {
+    $input_field.unbind();
+    $input_field.on('input', function () {
+        inputInviteActions($(this).val());
+        toggleInviteButtonWorking();
+    });
+    $input_field.on('change', function () {
+        hideInviteInput($(this));
+
+    });
+}
+
+
+function hideInviteInput($input_field) {
+    // let input_outer_block = $(this).parents('.input_outer');
+    let empty_input = false;
+    $('.invite_input').each(function () {
+            // проверяем, что если останется 2 пустых поля, то удаляем одно
+            if (!$(this).val() && !empty_input) {
+                empty_input = true;
+                return true;
+            }
+            if (!$(this).val() && empty_input) {
+                let $this_input_block = $input_field.parents('.input_outer');
+                $this_input_block.fadeTo(200, 1, function () {
+                    $this_input_block.slideUp(200, function () {
+                        $this_input_block.remove();
+                    });
+                });
+            }
+        }
+    )
 }
 
 
@@ -147,3 +192,94 @@ function deactivateInvite() {
     // var data = {plan_id: plan_id};
 }
 
+
+function inputInviteActions(email) {
+    if (validateEmail(email)) {
+        showNewInputInvite();
+    }
+}
+
+function showNewInputInvite() {
+    let empty_input = false;
+    // проверяем, что нет пустых полей input
+    if ($('.invite_input').length >= 8) {
+        return false;
+    }
+    $('.invite_input').each(function () {
+        if (!$(this).val()) {
+            empty_input = true;
+            return true;
+        }
+    });
+    if (!empty_input) {
+        let $invite_input_block = $('.invite_input_block');
+        $invite_input_block.append(invite_input_block);
+
+        let $last_input = $invite_input_block.find('.invite_input').last();
+        $last_input.hide();
+        $last_input.css('opacity', 0);
+        $last_input.slideDown(200);
+        $last_input.fadeTo(200, 1);
+        newInputInviteBinds($last_input);
+    }
+
+}
+
+function validateEmail(email) {
+    var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+    return regex.test(email);
+}
+
+// отключает кнопку submit , если нечего отправлять
+function toggleInviteButtonWorking() {
+    var $btn_invite = $('#invite_btn');
+    var validate_fields = false;
+
+    $('.invite_input').each(function () {
+        if (validateEmail($(this).val())) {
+            if ($btn_invite.hasClass('disabled')) {
+                $btn_invite.removeClass('disabled');
+                $('#invite_btn').click(sendEmailsToServer);
+            }
+            validate_fields = true;
+            return true;
+        }
+    });
+
+    if (!$btn_invite.hasClass('disabled')) {
+        if (!validate_fields) {
+            $('#invite_btn').unbind();
+            $btn_invite.addClass('disabled');
+        }
+    }
+
+}
+
+function sendEmailsToServer() {
+    let email_list = [];
+    $('.invite_input').each(function () {
+        if (validateEmail($(this).val())) {
+            email_list.push($(this).val());
+        }
+    });
+    let data = {
+        plan_id: $('.title_content').attr('plan_id'),
+        email_list: email_list
+    };
+    // alert(data.email_list);
+    $.ajax({
+        url: '/invite_participants',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(data),
+        success: function () {
+            success_frame_animate();
+            $('.part_settings').trigger('click');
+        },
+        error: function () {
+            alert("Ошибка. Не удалось выполнить операцию.");
+        }
+    });
+
+
+}

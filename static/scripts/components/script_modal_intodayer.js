@@ -8,7 +8,7 @@
 
     // При добавлении новых модальных окон нужно сделать следующее
     // 0. Создать сам html шаблон модального окна (поместить его изначально на старницу)
-    // 1. Добавить новую глобальную переменную, которая будет хранить html код
+    // 1. Добавить новую глобальную переменную, которая будет хранить html код модального окна (который перый раз загружается вместе со страницей)
     // 2. Добавить соответствующий код в функции loadSpecialModalType и setModalProperties
 
 
@@ -121,7 +121,6 @@ function setModalProperties(m_type, $click_elem) {
             hideModalFade();
         });
     }
-
 }
 
 function hideModalWindow(scale_size, opacity_size) {
@@ -137,8 +136,6 @@ function hideModalWindow(scale_size, opacity_size) {
         });
         $(this).dequeue();
     });
-
-
 }
 
 function hideModalFade() {

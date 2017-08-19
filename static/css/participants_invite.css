@@ -35,12 +35,6 @@
   margin-top: 2px;
   margin-bottom: 2px; }
 
-.invite_by_link {
-  margin-bottom: 100px; }
-
-#invite_link {
-  margin-bottom: 5px; }
-
 .invite_link_btns {
   display: flex; }
   .invite_link_btns button {
@@ -62,6 +56,12 @@
       -khtml-border-radius: 0 4px 4px 0;
       border-radius: 0 4px 4px 0;
       -ms-border-radius: 0 4px 4px 0; }
+
+.settings_btns_content {
+  padding-top: 15px; }
+
+p.invite_info {
+  padding-bottom: 5px; }
 
 input::-webkit-input-placeholder {
   color: gainsboro; }

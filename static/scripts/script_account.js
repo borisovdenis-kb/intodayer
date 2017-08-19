@@ -11,19 +11,17 @@ $(document).ready(function () {
         hideAllPlans();
         showSelectTypePlans($(this));
     });
-
-    $('#cancel').unbind();
-    $('#cancel').click(function () {
-        setInputsFromDefault();
+    $('input').unbind();
+    $('input').bind('input change', function () {
+        isNewValuesDifferents();
     });
-    // $('.pr_pass_btn').unbind();
+    // $('input:radio').change(function () {
+    //    alert("DSfa");
+    // });
+
+    $('.pr_pass_btn').unbind();
     $('.pr_pass_btn').click(function () {
         showModal('oldPassword');
-    });
-
-    $('#save').unbind();
-    $('#save').click(function () {
-        beforeSendToServer();
     });
 });
 
@@ -31,8 +29,22 @@ var inputValues = {
     'first_name': "",
     'last_name': "",
     'telegram_yn': "",
-    'email_yn': ""
+    'email_yn': "",
+    'email': ""
 };
+
+function setOkCancelBinds() {
+    $('#cancel').unbind();
+    $('#cancel').click(function () {
+        setInputsFromDefault();
+        disableOkCancel();
+    });
+    $('#save').unbind();
+    $('#save').click(function () {
+        beforeSendToServer();
+    });
+
+}
 
 function sendDataToServer(data) {
     data = {
@@ -53,9 +65,64 @@ function sendDataToServer(data) {
         contentType: 'application/json',
         data: JSON.stringify(data),
         success: function () {
+            success_frame_animate();
+            saveInputs();
+            disableOkCancel();
             console.log('User info updated')
+        },
+        error: function () {
+            alert("Ошибка. Поля не были обновлены! Перезагрузите страницу. (")
         }
     })
+}
+
+// проверяет, что введённые значения в любое поле отличаются от старых
+function isNewValuesDifferents() {
+    let data_fields = getAllData();
+    let flag_diff = false;
+    for (let key in data_fields) {
+        if (data_fields[key] !== inputValues[key]) {
+            flag_diff = true;
+            break;
+        }
+    }
+
+    if ($('#save').hasClass('disabled') && flag_diff) {
+        enableOkCancel();
+    }
+    else if (!$('#save').hasClass('disabled') && !flag_diff) {
+        disableOkCancel();
+    }
+}
+
+function enableOkCancel() {
+    let $save_btn = $('#save');
+    let $cancel_btn = $('#cancel');
+    setOkCancelBinds();
+    $save_btn.removeClass('disabled');
+    $cancel_btn.removeClass('disabled');
+
+}
+
+function disableOkCancel() {
+    let $save_btn = $('#save');
+    let $cancel_btn = $('#cancel');
+    $save_btn.unbind();
+    $cancel_btn.unbind();
+    $save_btn.addClass('disabled');
+    $cancel_btn.addClass('disabled');
+
+}
+
+function getAllData() {
+    let data_fields = {
+        telegram_yn: $('#pr_send_telegram').prop('checked'),
+        email_yn: $('#pr_send_email').prop('checked'),
+        email: $('#pr_email').val(),
+        first_name: $('#first_name').val(),
+        last_name: $('#last_name').val(),
+    };
+    return data_fields;
 }
 
 function beforeSendToServer() {
@@ -72,27 +139,14 @@ function beforeSendToServer() {
         return;
     }
 
-    if ($('#first_name').val() && $('#last_name').val()){
+    if ($('#first_name').val() && $('#last_name').val()) {
         data.first_name = $('#first_name').val();
         data.last_name = $('#last_name').val();
     } else {
         alert('Поля имя и фамиля не могут быть пустыми');
         return;
     }
-    // if (oldPassword != "") {
-    //     if (newPassword == comfiredPassword) {
-    //         data.oldPassword = oldPassword;
-    //         data.newPassword = newPassword;
-    //         data.comfiredPassword = comfiredPassword;
-    //         data.passStatus = 'yes';
-    //     }
-    //     else {
-    //         data.passStatus = 'do not match';
-    //         alert("Ведённые пароли не совпадают");
-    //         setChangePassButtonDefault();
-    //         setDefaultPassValues();
-    //     }
-    // }
+
 
     // если значения хотя бы одного поля отличаются (значит отправляем для обновления на севрер)
     for (var key in data) {
