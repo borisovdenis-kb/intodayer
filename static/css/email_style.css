@@ -1,0 +1,28 @@
+.mail-container {
+  padding: 10px;
+    padding-left: 15px;
+  width: 500px;
+  height: 150px;
+  margin: 0 auto;
+  background-color: #ffffff;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  -khtml-border-radius: 4px;
+  border-radius: 4px;
+  -ms-border-radius: 4px; }
+
+.mail-header {
+  padding: 5px;
+    padding-left: 10px;
+  background-color: #8b1deb;
+  color: white;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  -khtml-border-radius: 4px;
+  border-radius: 4px;
+  -ms-border-radius: 4px; }
+
+h2 {
+  margin: 0; }
+
+/*# sourceMappingURL=email_style.css.map */
