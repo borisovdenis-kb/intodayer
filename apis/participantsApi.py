@@ -10,6 +10,7 @@ import django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "intodayer2.settings")
 django.setup()
 # ---------------------------------------------------------------
+from extra.mailing import IntodayerMailing
 from intodayer2_app.views import get_participants
 from django.shortcuts import render_to_response
 from django.http import HttpResponse, JsonResponse
@@ -85,48 +86,45 @@ def invite_participants(request):
 
         try:
             email_list = data['email_list']
-            action_is_available = user.has_rights(action='invite_participants', **data)
+            params = {'plan_id': data['plan_id']}
+            action_is_available = user.has_rights(action='invite_participants', **params)
         except ValueError:
             return HttpResponse(status=400)
         except ObjectDoesNotExist:
             return HttpResponse(status=403)
 
         if action_is_available:
-            invitations_states = []
-            for_mailing = []
-
-            for email in email_list:
-                try:
-                    _user = CustomUser.objects.get(email=email)
-                except ObjectDoesNotExist:
-                    # пользователя не существует
-                    if not Invitations.objects.filter(plan_id=data['plan_id'], email=email):
-                        # пользователь не приглашен
-                        Invitations.objects.create(from_user=user, plan_id=data['plan_id'], email=email)
-                        invitations_states.append({'email': email, 'state': 'invitation_sent'})
-                        for_mailing.append(email)
-                    else:
-                        invitations_states.append({'email': email, 'state': 'already_invited'})
-
-                    continue
-
-                if not UserPlans.objects.filter(plan_id=data['plan_id'], user_id=_user.id):
-                    # если пользователь не присоединился
-                    if not Invitations.objects.filter(plan_id=data['plan_id'], email=email):
-                        # если пользователь не приглашен
-                        Invitations.objects.create(from_user=user, plan_id=data['plan_id'], to_user=_user, email=email)
-                        invitations_states.append({'email': email, 'state': 'invitation_sent'})
-                        for_mailing.append(email)
-                    else:
-                        invitations_states.append({'email': email, 'state': 'already_invited'})
-                else:
-                    invitations_states.append({'email': email, 'state': 'already_joined'})
-
-            # TODO: тут должна быть рассылка общего вида
-
-            return JsonResponse({'invitation_states': invitations_states})
+            mailing = IntodayerMailing()
+            invitation_states = mailing.send_invitations_via_email(email_list, user, data['plan_id'])
+            return JsonResponse({'invitation_states': invitation_states})
         else:
             return HttpResponse(status=403)
+    else:
+        return HttpResponse(status=401)
+
+
+def check_email(request):
+    """
+        This endpoint to check email that user trying to invite.
+
+        --> For more detailed documentation see Postman.
+    """
+    if request.user.is_authenticated():
+        user = CustomUser.objects.get(email=request.user.email)
+        data = json.loads(request.body.decode('utf-8'))
+
+        if Invitations.objects.filter(email=data['email']):
+            return JsonResponse({'state': 'already_invited'})
+
+        try:
+            checked_user = CustomUser.objects.get(email=data['email'])
+
+            if UserPlans.objects.filter(user_id=checked_user.id, plan_id=data['plan_id']):
+                return JsonResponse({'state': 'already_joined'})
+        except ObjectDoesNotExist:
+            return JsonResponse({'state': 'ok'})
+
+        return JsonResponse({'state': 'ok'})
     else:
         return HttpResponse(status=401)
 

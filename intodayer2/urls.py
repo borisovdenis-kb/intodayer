@@ -67,6 +67,7 @@ urlpatterns = [
 
     # API участников
     url(r'^change_role', participantsApi.set_role),
+    url(r'^check_email', participantsApi.check_email),
     url(r'^delete_participant', participantsApi.delete_participant),
     url(r'^invite_participants', participantsApi.invite_participants),
     url(r'^participants/switch_plan', participantsApi.switch_plan_participants),

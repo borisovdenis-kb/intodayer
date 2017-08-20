@@ -6,16 +6,20 @@ import json
 # Вставлять обязательно перед импортом моделей!!!
 import os
 import django
+from django.template.loader import get_template
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "intodayer2.settings")
 django.setup()
 # ---------------------------------------------------------------
-from intodayer_bot import bot
-from django.core.mail import send_mail
-from base64 import b64decode
-from django.core.files.base import ContentFile
 from decouple import config
-from intodayer2_app.models import UserMailingChannels, DivToPng
+from base64 import b64decode
+from intodayer_bot import bot
+from smtplib import SMTPException
+from django.core.mail import send_mail
+from django.core.files.base import ContentFile
+from extra.validators import validate_email_field
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
+from intodayer2_app.models import UserMailingChannels, DivToPng, CustomUser, Invitations
 
 
 class IntodayerMailing:
@@ -42,7 +46,7 @@ class IntodayerMailing:
         """
             Sends the message that was set when the instance was created 
             via telegram to all chat_id in recipient_list.
-            :param recipient_list: [{chat_id: sum_number}, ...]
+            :param recipient_list: [828399002, ...]
         """
         mailing_attrs = {
             'message': {'text': self.text, 'image': self.image},
@@ -57,17 +61,48 @@ class IntodayerMailing:
         """
             Sends the message that was set when the instance was created 
             via email to all email in recipient_list.
-            :param recipient_list: [{email: some@email.com}, ...]
+            :param recipient_list: [some@email.com, ...]
         """
-        recipient_list = [recp['email'] for recp in recipient_list]
-
         send_mail(
-            self.subject,
-            self.text,
-            config('PROJECT_EMAIL'),
-            recipient_list,
-            fail_silently=False
+            self.subject, self.text, config('PROJECT_EMAIL'), recipient_list, fail_silently=False
         )
+
+    def send_invitations_via_email(self, recipient_list, from_user, plan_id):
+        mailing_states = {}
+        context = {
+            'from_user': from_user,
+        }
+
+        # email validation
+        for email in recipient_list:
+            try:
+                validate_email_field(email)
+            except ValidationError:
+                recipient_list.remove(email)
+                mailing_states[email] = 'validation error'
+
+        for email in recipient_list:
+            try:
+                send_mail(
+                    self.subject,
+                    self.text,
+                    config('PROJECT_EMAIL'),
+                    recipient_list,
+                    fail_silently=False,
+                    html_message=get_template('emails/confirmation.html').render(context)
+                )
+            except SMTPException:
+                mailing_states[email] = 'sending error'
+            else:
+                mailing_states[email] = 'ok'
+                try:
+                    to_user = CustomUser.objects.get(email=email)
+                except ObjectDoesNotExist:
+                    Invitations.objects.create(from_user=from_user, email=email, plan_id=plan_id)
+                else:
+                    Invitations.objects.create(from_user=from_user, to_user=to_user, email=email, plan_id=plan_id)
+
+        return mailing_states
 
     def send_by_plan(self, plan_id):
         """
@@ -101,10 +136,10 @@ class IntodayerMailing:
 
 
 if __name__ == '__main__':
-    recipient_telegram = [{'chat_id': '322530729'}]
-    recipient_email = [{'email': 'borisovdenis-kb@yandex.ru'}]
+    recipient_email = ['borisovdenis-kb@yandex.ru']
+    user = CustomUser.objects.get(id=4)
 
-    image = r'C:\Users\Denis\Desktop\perelman.jpg'
+    Z = IntodayerMailing()
+    res = Z.send_invitations_via_email(recipient_email, user, 300)
 
-    Z = IntodayerMailing(text='popa', image=image)
-    Z.send_by_plan(248)
+    print(res)

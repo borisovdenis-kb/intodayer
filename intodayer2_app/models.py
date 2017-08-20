@@ -348,7 +348,7 @@ class UserMailingChannels(models.Model, UpdateMixin):
         user_ids = UserMailingChannels.objects.filter(telegram_yn='y', user_id__in=user_ids).values('user_id')
         recipients_telegram = list(CustomUser.objects.filter(id__in=user_ids).values('chat_id'))
 
-        return recipients_telegram
+        return [recp['chat_id'] for recp in recipients_telegram]
 
     @staticmethod
     def get_email_recipients(plan_id):
@@ -362,7 +362,7 @@ class UserMailingChannels(models.Model, UpdateMixin):
         user_ids = UserMailingChannels.objects.filter(email_yn='y', user_id__in=user_ids).values('user_id')
         recipients_telegram = list(CustomUser.objects.filter(id__in=user_ids).values('email'))
 
-        return recipients_telegram
+        return [recp['email'] for recp in recipients_telegram]
 
     def __str__(self):
         return '%s telegram(%s) email(%s)' % (
