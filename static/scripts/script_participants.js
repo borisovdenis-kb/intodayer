@@ -165,7 +165,7 @@ function hideInviteInput($input_field) {
     let empty_input = false;
     $('.invite_input').each(function () {
             // проверяем, что если останется 2 пустых поля, то удаляем одно
-            if (!$(this).val() && !empty_input) {
+            if ((!$(this).val() || $(this).val().length === 0) && !empty_input) {
                 empty_input = true;
                 return true;
             }

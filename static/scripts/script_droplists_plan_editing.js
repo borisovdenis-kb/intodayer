@@ -95,7 +95,7 @@ function setStyleDropList($thisField, $droplist) {
 $(window).on('resize scroll', function () {
     var $active_elem = $(document.activeElement);
     var $this_field = $(document.activeElement);
-    console.log($active_elem.get(0).tagName);
+    // console.log($active_elem.get(0).tagName);
     if ($active_elem.get(0).tagName == "BODY") {
         $this_field = ($('.selected_field'));
         if ($this_field.length != 1) {

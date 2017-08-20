@@ -54,13 +54,10 @@
     {% include "content_pages/left_content.html" %}
 {% endblock %}
 
-{% block mailing %}
+
+{% block modal_frames %}
+    {% include "modal_frames/modal_choose_ava.html" %}
     {% include "modal_frames/mailing_frame.html" %}
-{% endblock %}
-
-
-{% block choose_avatar %}
-    {% include "modal_frames/choose_avatar.html" %}
 {% endblock %}
 
 

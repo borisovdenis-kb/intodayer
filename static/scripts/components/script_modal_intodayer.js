@@ -28,6 +28,11 @@ $(document).ready(function () {
 
 var pause_time = 100;
 
+
+function test() {
+    this.a = 100;
+}
+
 function showModal(m_type, $click_elem) {
     // var modal_window = modal_fade.find('.in_modal_body');var modal_fade = $(".in_modal_fade[modal_type='" + m_type + "']")
     // получаем модальное окно определённого типа
