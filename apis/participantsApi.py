@@ -103,6 +103,37 @@ def invite_participants(request):
         return HttpResponse(status=401)
 
 
+def cancel_invitation(request):
+    """
+        This endpoint to cancel invitation, that was sent to incorrect email or 
+        to user that inviter don't want to invite.
+
+        --> For more detailed documentation see Postman.
+    """
+    if request.user.is_authenticated():
+        user = CustomUser.objects.get(email=request.user.email)
+        data = json.loads(request.body.decode('utf-8'))
+
+        try:
+            action_is_available = user.has_rights(action='edit_plan', **{'plan_id': data['plan_id']})
+        except ValueError:
+            return HttpResponse(status=400)
+        except ObjectDoesNotExist:
+            return HttpResponse(status=403)
+
+        if action_is_available:
+            try:
+                Invitations.objects.get(plan_id=data['plan_id'], email=data['email']).delete()
+            except ObjectDoesNotExist:
+                return HttpResponse(status=400)
+        else:
+            return HttpResponse(status=403)
+
+        return HttpResponse(status=200)
+    else:
+        return HttpResponse(status=401)
+
+
 def check_email(request):
     """
         This endpoint to check email that user trying to invite.
