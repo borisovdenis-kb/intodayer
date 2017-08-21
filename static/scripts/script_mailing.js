@@ -4,14 +4,6 @@ var imageData, timer, day, storageKey;
 $(document).ready(function () {
 
 
-    $('.mailing_close').click(function () {
-        blurElement('.effect_blur', 0);
-        $('.mailing').slideToggle(800, 'easeInOutBack');
-        $('.mailing_wrap').delay(400).fadeOut(500);
-        $('.cover_all').delay(400).fadeOut(800);
-        $('.maiiling_footer').text('Изображение можно загузить в формате jpg, png или gif.');
-    });
-
     $('.do_mailing_button').click(function() {
 
         var $elem, $clone;

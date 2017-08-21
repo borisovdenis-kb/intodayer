@@ -221,10 +221,10 @@ function preventDefault(e) {
 }
 
 function preventDefaultForScrollKeys(e) {
-    if (keys[e.keyCode]) {
-        preventDefault(e);
-        return false;
-    }
+    // if (keys[e.keyCode]) {
+    //     preventDefault(e);
+    //     return false;
+    // }
 }
 
 function disableScroll() {

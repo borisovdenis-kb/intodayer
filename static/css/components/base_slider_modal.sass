@@ -1,6 +1,6 @@
 @import "../mixins"
 
-$background_modal_slider_footer: rgba(255,255,255,0.8)
+$background_modal_slider_footer: rgba(255, 255, 255, 0.8)
 $background_modal_slider_body: rgba(244, 243, 248, 0.85)
 $background_modal_slider_header: rgba(139, 29, 235, 0.90)
 
@@ -30,18 +30,20 @@ $background_modal_slider_header: rgba(139, 29, 235, 0.90)
   color: white
   display: flex
   height: 30px
-  //font-weight: bold
-  //background:$background_modal_slider_footer
   background: $background_modal_slider_header
   font-family: "Cyntho Pro" !important
 
 .modal_slider_footer
+  display: inline-block
+
   width: 100%
-  height: 40px
+  height: auto
   color: black
   background: white
   font-family: "Cyntho Pro" !important
   p
+    padding:
+      top: 5px
     display: flex
     align-content: center
     align-items: center
@@ -60,16 +62,14 @@ $background_modal_slider_header: rgba(139, 29, 235, 0.90)
   opacity: 0
   transition: 0.5s opacity, filter ease
 
-
-.close
-  @include set-flex(center)
-  //height: 100%
-  margin-left: auto
-  margin-right: 5px
-  width: 30px
-  height: 30px
-  cursor: pointer
-  background: url('../../images/reject.png') no-repeat right
-  @include background-size(contain)
+//.close
+  //@include set-flex(center)
+  //margin-left: auto
+  //margin-right: 5px
+  //width: 30px
+  //height: 30px
+  //cursor: pointer
+  //background: url('../../images/reject.png') no-repeat right
+  //@include background-size(contain)
 
 

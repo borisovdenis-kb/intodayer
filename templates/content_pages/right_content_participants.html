@@ -20,7 +20,7 @@
         </div>
         <div class="setting_right">
             <div class="icon_setting_content">
-                <span class="part_settings" >Пригласить</span>
+                <button class="part_settings" >Пригласить</button>
                 {#                <span class="part_settings glyphicon glyphicon-plus"></span>#}
             </div>
         </div>
@@ -31,7 +31,8 @@
         {% for participant in participants %}
             <div class="part_block" part_id='{{ participant.user.id }}'>
                 <div class="part_ava">
-                    <img src={{ participant.user.get_avatar_url }} class="img-rounded"/>
+                    <div class="img_ava" style="background-image: url({{ participant.user.get_avatar_url }})"></div>
+{#                    <img src={{ participant.user.get_avatar_url }} class="img-rounded"/>#}
                 </div>
                 <div class="part_username">
                     <span>

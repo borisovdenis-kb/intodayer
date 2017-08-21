@@ -2,14 +2,14 @@
 @import "mixins"
 
 $width_right_ava: 70px
-$height_ava_user: 60px
+$height_ava_user: 65px
 
 .part_block
   border: $gl_block_border
   padding: $gl_block_padding
   padding:
     top: 4px
-    bottom: 1px
+    bottom: 4px
   background: white
   margin-top: 5px
   @include border-radius(4px)
@@ -22,10 +22,13 @@ $height_ava_user: 60px
 .part_ava
   float: left
   margin-left: 5px
-  img
+  .img_ava
     height: $height_ava_user
-    width: auto
+    width: $height_ava_user
     @include border-radius(4px)
+    background: no-repeat center
+      size: cover
+
 
 .part_username
   float: left
@@ -50,6 +53,7 @@ $height_ava_user: 60px
   img
     height: 60px
   span
+    margin-top: 2px
     margin-right: 10px
     font-size: 1.2em
     margin-left: 20px
@@ -58,13 +62,14 @@ $height_ava_user: 60px
 
   ul
     display: flex
+    //margin-top: 3px
     li
       background: white
       p
         @include user-select(none)
         cursor: default
-        margin-top: -4px
-        height: 10px
+        margin-top: -3px
+        height: 5px
         font-size: 0.8em
         font-weight: bold
         //background: red
@@ -104,17 +109,17 @@ $height_ava_user: 60px
 
 
 .setting_right
-  span
+  button
     cursor: pointer
     //color: greenyellow
-    font-size: 1.2em
+    font-size: 1em
     //border: 2px sol
-    width: 130px
+    width: 110px
     padding:
       top: 8px
       bottom: 8px
-      left: 10px
-      right: 10px
+      left: 5px
+      right: 5px
     font-weight: 800
     color: white
     background: green

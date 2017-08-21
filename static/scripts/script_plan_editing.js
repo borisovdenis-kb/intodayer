@@ -89,7 +89,7 @@ function setListenersRightContent() {
 
     $('.share_button').each(function () {
         $(this).click(function () {
-            shareButtonAction($(this));
+            modal_share.showModal();
         });
     });
 }

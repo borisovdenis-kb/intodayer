@@ -1,7 +1,3 @@
-$(document).ready(function () {
-    setAvaModalListeners();
-});
-
 class SliderModal {
     constructor(modalId) {
         this.modalIdAccess = ".modal_slider_outer" + modalId;
@@ -10,6 +6,7 @@ class SliderModal {
         // html модального окна (нужно, чтобы сбрасывать всю DOM информацию о модальном окне
         this.modal_html = this.$modal_outer_body.html();
         this.$modal_outer_body.empty();
+        this.flag_open = false;
     }
 
     modalInit() {
@@ -17,12 +14,16 @@ class SliderModal {
         this.$modal_outer_body.append($(this.modal_html));
         this.$close_btn = this.$modal_outer_body.find('.close');
         this.$modal_body = this.$modal_outer_body.find('.modal_slider_body');
+        // отвечает за задний фон
+        this.$modal_blur = undefined;
+        this.setInitListeners();
     }
 
     showModal() {
-        if (this.$modal_outer_body.find('.modal_slider_body').length > 0) {
+        if (this.flag_open) {
             return false;
         }
+        this.flag_open = true;
         this.modalInit();
         disableScroll();
         this.$modal_outer_body.delay(300).fadeIn(500);
@@ -32,47 +33,51 @@ class SliderModal {
             $(this).css('opacity', 0.7);
             $(this).dequeue();
         });
+
+    }
+
+    setInitListeners() {
+        let self = this;
+        this.$close_btn.click(function () {
+            // при нажатии на закрытие удаляем все обработчики повторного закрытия
+            $('.modal_blur').off();
+            $(this).off();
+            self.hideModal();
+
+        });
     }
 
     setModalListeners() {
         let self = this;
-        $('.modal_blur').delay(1000).queue(function () {
-            $(this).click(function () {
-                $(this).unbind();
+        setTimeout(function () {
+            $('.modal_blur').unbind();
+            $('.modal_blur').click(function () {
+                // при нажатии на закрытие удаляем все обработчики повторного закрытия
+                $(this).off();
+                self.$close_btn.off();
                 self.hideModal();
             });
-            $(this).dequeue();
-        });
-        this.$close_btn.click(function () {
-            $(this).unbind();
-            self.hideModal();
-        });
+        }, 1000);
     }
 
     hideModal() {
+        let self = this;
         enableScroll();
+        this.$modal_body.slideToggle(800, 'easeInOutBack');
+        this.$modal_outer_body.delay(400).fadeOut(500, function () {
+            self.$modal_outer_body.empty();
+            self.flag_open = false;
+        });
         $('.modal_blur').queue(function () {
             $(this).css({
                 'opacity': 0
             });
             $(this).dequeue();
         }).delay(500).queue(function () {
-            $(this).hide();
             $(this).remove();
             $(this).dequeue();
         });
-
-        let self = this;
-        this.$modal_body.slideToggle(800, 'easeInOutBack');
-        this.$modal_outer_body.delay(400).fadeOut(500, function () {
-            self.$modal_outer_body.empty();
-        });
     }
-}
-
-
-class SliderModalShare extends SliderModal {
-
 }
 
 class SliderModalAva
@@ -179,6 +184,27 @@ class SliderModalAva
     }
 }
 
+
+class SliderModalShare extends SliderModal {
+    modalInit(){
+        super.modalInit();
+        this.text_share = this.$modal_body.find('.text_share');
+
+    }
+    showModal() {
+        super.showModal();
+        super.setModalListeners();
+    }
+    setModalListeners(){
+        super.setModalListeners();
+
+    }
+    hideModal(){
+        super.hideModal();
+        this.text_share.fadeTo(300,0);
+    }
+
+}
 
 function getFileSize(inputFileId) {
     /*

@@ -17,7 +17,7 @@ function setListenersLeftContent() {
 }
 
 function setAvaModalListeners() {
-    $('.ava_cover_text p').click(function () {
+    $('#upload_ava').click(function () {
         modal_ava.showModal();
     })
 }

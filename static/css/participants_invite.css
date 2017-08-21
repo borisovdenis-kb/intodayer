@@ -36,29 +36,36 @@
   margin-bottom: 2px; }
 
 .invite_link_btns {
-  display: flex; }
-  .invite_link_btns button {
+  width: 100%;
+  margin-left: 1px; }
+  .invite_link_btns button.btn {
     width: 25%;
     -moz-border-radius: 0px;
     -webkit-border-radius: 0px;
     -khtml-border-radius: 0px;
     border-radius: 0px;
     -ms-border-radius: 0px; }
-    .invite_link_btns button:nth-child(1) {
+    .invite_link_btns button.btn:nth-child(1) {
       -moz-border-radius: 4px 0 0 4px;
       -webkit-border-radius: 4px 0 0 4px;
       -khtml-border-radius: 4px 0 0 4px;
       border-radius: 4px 0 0 4px;
       -ms-border-radius: 4px 0 0 4px; }
-    .invite_link_btns button:nth-child(4) {
+    .invite_link_btns button.btn:nth-child(4) {
       -moz-border-radius: 0 4px 4px 0;
       -webkit-border-radius: 0 4px 4px 0;
       -khtml-border-radius: 0 4px 4px 0;
       border-radius: 0 4px 4px 0;
       -ms-border-radius: 0 4px 4px 0; }
+    .invite_link_btns button.btn:focus, .invite_link_btns button.btn:link, .invite_link_btns button.btn:active {
+      outline: none; }
 
 .settings_btns_content {
   padding-top: 15px; }
+
+.invite_link_btns {
+  padding-top: 10px;
+  padding-bottom: 5px; }
 
 p.invite_info {
   padding-bottom: 5px; }

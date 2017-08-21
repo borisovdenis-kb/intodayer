@@ -21,18 +21,6 @@
                 </div>
             </div>
 
-            {#                <div class="row text-center">#}
-            {#                    <div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-1  col-lg-8 col-md-8 col-sm-10 col-xs-12">#}
-            {#                        <input type="email" class="btn-lg" placeholder="Почта для приглашения">#}
-            {#                    </div>#}
-            {#                    <input class="btn-lg btn-success" type="button" value="invite">#}
-            {#                </div>#}
-            {#                <div class="row text-center">#}
-            {#                    <div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-1 col-lg-8 col-md-8 col-sm-10 col-xs-12">#}
-            {#                        <input type="email" class="btn-lg" placeholder="Почта для приглашения">#}
-            {#                    </div>#}
-            {#                    <input class="btn-lg btn-success" type="button" value="invite">#}
-            {#                </div>#}
         </div>
         <div class="row settings_btns_content text-center">
             <div class="form-group">
@@ -42,32 +30,29 @@
         </div>
 
     </div>
-    {#    <div class="invite_by_link">#}
-    {#        <form>#}
-    {#            <div class="form-group">#}
-    {#                <span>Пригласить по ссылке</span>#}
-    {#                <div class="split-line"></div>#}
-    {#                <div class="row text-center">#}
-    {#                    <div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-1 col-lg-8 col-md-8 col-sm-10 col-xs-12">#}
-    {#                        <input id="invite_link" type="url" class="btn-lg" placeholder="Ссылка на приглашение" value="http://">#}
-    {#                    </div>#}
-    {#                </div>#}
-    {#            </div>#}
-    {##}
-    {#            <div class="form-group">#}
-    {#                <div class="row text-center">#}
-    {#                    <div class="invite_link_btns col-lg-offset-2 col-md-offset-2 col-sm-offset-1 col-lg-8 col-md-8 col-sm-10 col-xs-12">#}
-    {#                        <button class="btn btn-lg btn-default">Create</button>#}
-    {#                        <button class="btn btn-lg btn-default">Copy</button>#}
-    {#                        <button class="btn btn-lg btn-default">Share</button>#}
-    {#                        <button class="btn btn-lg btn-default">Close</button>#}
-    {#                    </div>#}
-    {#                    <input class="btn-lg btn-success" type="button" value="invite">#}
-    {#                </div>#}
-    {##}
-    {#            </div>#}
-    {#        </form>#}
-    {#    </div>#}
+    <div class="invite_by_link">
+
+        <div class="form-group">
+            <span>Пригласить по ссылке</span>
+            <div class="split-line"></div>
+            <p class="invite_info">Чтобы пригласить новых участников в расписание отправьте активную ссылку. По данной
+                активной ссылке любой человек сможет стать участником данного расписания. Действите ссылки можно прекратить в любой момент.</p>
+            <div class="row text-center">
+                <div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-1 col-lg-8 col-md-8 col-sm-10 col-xs-12">
+                    <input id="invite_link" type="url" class="btn-lg" autocomplete="off" placeholder="http://">
+                    <div class="invite_link_btns btn-group">
+                        <button class="btn btn-lg btn-default">Create</button>
+                        <button class="btn btn-lg btn-default">Copy</button>
+                        <button class="btn btn-lg btn-default">Share</button>
+                        <button class="btn btn-lg btn-default">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
 
 </div>
 
