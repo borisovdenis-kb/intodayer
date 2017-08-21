@@ -19,10 +19,10 @@ class CustomUserCreationForm(UserCreationForm):
                                                                   'placeholder': 'Confirm password'}))
     email = forms.CharField(max_length=100,
                             widget=forms.EmailInput(attrs={'id': 'inputEmail',
-                                                                    'name': 'email',
-                                                                    'class': 'form-control input-lg',
-                                                                    'required': 'required',
-                                                                    'placeholder': 'Enter email'}))
+                                                                 'name': 'email',
+                                                                 'class': 'form-control input-lg',
+                                                                 'required': 'required',
+                                                                 'placeholder': 'Enter email'}))
 
     class Meta:
         model = CustomUser

@@ -515,7 +515,6 @@ def get_participants(plan):
     return context
 
 
-
 def participant_view(request):
     if request.user.is_authenticated():
         context = dict()
