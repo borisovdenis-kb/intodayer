@@ -213,6 +213,8 @@ def switch_plan_participants(request):
 
         # устанавливаем current_yn
         user.set_current_plan(data['plan_id'])
+        # текущий пользователь
+        context['this_user'] = request.user
 
         return render_to_response('content_pages/right_content_participants.html', context, status=200)
     else:

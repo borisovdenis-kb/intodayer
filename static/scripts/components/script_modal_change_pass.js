@@ -28,34 +28,35 @@ function showModal(m_type) {
     // var modal_window = modal_fade.find('.in_modal_body');var modal_fade = $(".in_modal_fade[modal_type='" + m_type + "']")
     // получаем модальное окно определённого типа
     // при нажании на "изменить пароль" получаем окно типа oldPassword
-    var modal_fade = $(".in_modal_fade");
-    modal_fade.html(modal_html);
-    var modal_window = $(".in_modal_body");
+    var $modal_fade = $(".in_modal_fade");
+    $modal_fade.html(modal_html);
+    var $modal_window = $(".in_modal_body");
     $(".in_modal_body").clearQueue();
     $(".in_modal_fade").clearQueue();
-    modal_window.delay(pause_time).queue(function () {
+    $modal_window.delay(pause_time).queue(function () {
         $(this).css({
             'transform': 'scale(1.4, 1.4)',
             'opacity': 1
         });
-        modal_window.find('input[id=pass]').focus();
-        modal_window.find('input[id=pass]').val("");
-        modal_window.dequeue();
+        $modal_window.find('input[id=pass]').focus();
+        $modal_window.find('input[id=pass]').val("");
+        $modal_window.dequeue();
     });
-    modal_fade.show().delay(pause_time).queue(function () {
+    $modal_fade.show().delay(pause_time).queue(function () {
         $(this).css({
             'opacity': 1
         });
 
         $('#okay').unbind();
         $('#okay').click(function () {
+            // alert("DSfsadf");
             okayAction();
         });
 
         var $input_pass = $('.in_modal_body').find('#pass');
 
         // для 1 ого модального окна сохраняем старый пароль
-        if ($('.in_modal_fade').attr('modal_type') == 'oldPassword') {
+        if ($('.in_modal_fade').attr('modal_type') === 'oldPassword') {
             $input_pass.change(function () {
                 oldPassword = $(this).val();
             });
@@ -114,14 +115,15 @@ function hideModalFade(confirm_yes) {
 // Поведение модального окна в 3 стадиях ввода пароля
 function okayAction() {
     var pass_input = $('.in_modal_body').find('#pass');
-    if (pass_input.val() != "") {
-        if ($('.in_modal_fade').attr('modal_type') == 'confirm_pass') {
+    if (pass_input.val()) {
+        // alert($('.in_modal_fade').attr('modal_type'));
+        if ($('.in_modal_fade').attr('modal_type') === 'confirm_pass') {
             completeConfirmPass();
         }
-        else if ($('.in_modal_fade').attr('modal_type') == 'newPassword') {
+        else if ($('.in_modal_fade').attr('modal_type') === 'newPassword') {
             completeNewPass();
         }
-        else if ($('.in_modal_fade').attr('modal_type') == 'oldPassword') {
+        else if ($('.in_modal_fade').attr('modal_type') === 'oldPassword') {
             completeOldPass();
         }
     } else {

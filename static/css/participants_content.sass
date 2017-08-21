@@ -1,28 +1,133 @@
-
 @import "global_vars"
 @import "mixins"
+
+$width_right_ava: 70px
+$height_ava_user: 65px
 
 .part_block
   border: $gl_block_border
   padding: $gl_block_padding
+  padding:
+    top: 4px
+    bottom: 4px
   background: white
   margin-top: 5px
   @include border-radius(4px)
   display: flex
   align-content: center
   align-items: center
+//justify-content: space-between
 
 
 .part_ava
-  img
-    width: 60px
-    height: 60px
+  float: left
+  margin-left: 5px
+  .img_ava
+    height: $height_ava_user
+    width: $height_ava_user
     @include border-radius(4px)
+    background: no-repeat center
+      size: cover
+
 
 .part_username
+  float: left
   span
     font-family: "Fira Sans"
     font-size: 1.4em
     margin:
       left: 20px
       right: 10px
+
+
+%glyphicon_effects
+  opacity: 0.8
+  transition: 0.3s opacity, color ease
+  &:hover
+    opacity: 1
+
+
+.part_rights
+  margin-left: auto
+
+  img
+    height: 60px
+  span
+    margin-top: 2px
+    margin-right: 10px
+    font-size: 1.2em
+    margin-left: 20px
+    @extend %glyphicon_effects
+    cursor: pointer
+
+  ul
+    display: flex
+    //margin-top: 3px
+    li
+      background: white
+      p
+        @include user-select(none)
+        cursor: default
+        margin-top: -3px
+        height: 5px
+        font-size: 0.8em
+        font-weight: bold
+        //background: red
+        text-align: center
+
+.part_ava_right_content
+  display: flex
+  flex-direction: column
+
+.part_admin, .part_participant, .part_elder
+  cursor: pointer
+  width: auto
+  overflow: hidden
+  opacity: 0.3
+  transition: 0.2s opacity ease
+  margin:
+    left: -5px
+    right: -5px
+
+.part_elder.part_role
+  opacity: 1
+
+.part_remove
+  text-align: center
+  display: flex
+  align-content: center
+  align-items: center
+
+
+  span
+    width: 70px
+    padding-bottom: 5px
+    @extend %glyphicon_effects
+    &:hover
+      color: red
+      //opacity: 0.8
+
+
+.setting_right
+  button
+    cursor: pointer
+    //color: greenyellow
+    font-size: 1em
+    //border: 2px sol
+    width: 110px
+    padding:
+      top: 8px
+      bottom: 8px
+      left: 5px
+      right: 5px
+    font-weight: 800
+    color: white
+    background: green
+    @include border-radius(8px)
+    @extend %glyphicon_effects
+    opacity: 0.8
+
+
+.in_modal_content
+  flex-direction: column
+  //color: #00C851

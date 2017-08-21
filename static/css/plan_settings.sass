@@ -21,12 +21,15 @@ $button-return-padding: 15px
   display: flex
   flex-direction: row
 
-.setting_msg
+%setting_msg
   display: none
   font-size: 1em
   padding: 10px
   @include border-radius(4px)
   margin-bottom: 4px
+
+.setting_msg
+  @extend %setting_msg
 
 $margin-panel: 3px
 

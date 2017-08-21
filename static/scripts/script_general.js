@@ -1,36 +1,8 @@
 $(document).ready(function () {
     setInvitationsListeners();
-    setAvatarFrameListeners();
-
 });
 
-function setAvatarFrameListeners() {
-    $('.ava_cover_text p').click(function () {
-        blurElement('.effect_blur', 4);
-        $('.cover_all').fadeIn(800);
-        $('.choose_avatar_wrap').delay(300).fadeIn(500);
-        $('.choose_avatar').slideToggle(800, 'easeInOutBack').css({'display': 'flex'});
-    });
 
-    $('.close').click(function () {
-        blurElement('.effect_blur', 0);
-        $('.choose_avatar').slideToggle(800, 'easeInOutBack');
-        $('.choose_avatar_wrap').delay(400).fadeOut(500);
-        $('.cover_all').delay(400).fadeOut(800);
-        $('.file_upload').css({'display': 'block'});
-        $('.send_button').css({'display': 'none'});
-        $('.choose_avatar_footer p').text('Изображение можно загузить в формате jpg, png или gif.');
-    });
-
-    $('.send_button').click(function () {
-        sendFile(
-            '#id_image_file',
-            '/upload_plan_avatar',
-            $('.ava_content p').text(),
-            '.ava_content'
-        );
-    });
-}
 
 function setInvitationsListeners() {
     if (location.href.indexOf('invitation') < 0) {
@@ -106,11 +78,6 @@ function setInputCursorToEnd($this_input) {
 }
 
 
-function setScrollTop() {
-    $('html, body').animate({scrollTop: 0}, 400); //1100 - скорость
-}
-
-
 function switchPlan($this_plan) {
     /*
      * Это функция общая для всего приложения.
@@ -148,8 +115,13 @@ function switchPlan($this_plan) {
             setListenersRightContent();
         }
 
+        if (address == 'participants'){
+            setBindsParticipants();
+        }
+
         // смена аватарки при изменении расписания
         avatarEditAccess(data);
+
 
         // установка цвета левой панели
         jQuery.each($('.plan_list li a'), function () {
@@ -210,86 +182,6 @@ function createPlan($plus_button) {
     });
 }
 
-function getFileName() {
-    /*
-     *  Функция выводит имя выбранного файла
-     *  Причем обрезая до 20 последних символов.
-     */
-    var fileName = document.getElementById('id_image_file').files[0].name;
-    var dots = '';
-
-    if (fileName.length > 30) {
-        dots = '...';
-    }
-
-    $('.choose_avatar_footer p').text('Выбранный файл: ' + dots + fileName.slice(-30));
-    $('.choose_avatar_footer p').css({'color': '#000000'});
-    $('.file_upload').css({'display': 'none'});
-    $('.send_button').css({'display': 'block'});
-}
-
-
-function getFileSize(inputFileId) {
-    /*
-     *  Функция возвращает размер файла в байтах
-     *  inputFile: id элемента input
-     */
-    var fileInput = $(inputFileId)[0];
-
-    return fileInput.files[0].size;
-}
-
-function sendFile(form, address, plan_id, update_avatar) {
-    /*
-     *  Функция посылает на сервер выбранную пользователем аватарку.
-     *  Перед отправкой приозводит валидацию на тип и размер файла.
-     *  form: id формы, с коротой приосходит отправка
-     *  address: /upload_user_avatar или /upload_plan_avatar
-     *  update_avatar: элемент, в котором нужно обновить background-image
-     */
-    var allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-    var currentType = document.getElementById('id_image_file').files[0].type;
-    var maxFileSizeByte = 2 * 1024 * 1024;
-
-    // проверяем, что файл - изображение
-    if (allowedTypes.indexOf(currentType) != -1) {
-        // проверяем, что размер файла <= 2 Мб
-        if (getFileSize('#id_image_file') <= maxFileSizeByte) {
-            var data = new FormData;
-            var get_ava_data = {plan_id: $(update_avatar).find('p').text()};
-
-            data.append('avatar', $(form).prop('files')[0]);
-            data.append('plan_id', plan_id);
-
-            $.ajax({
-                url: address,
-                data: data,
-                type: 'POST',
-                processData: false,
-                contentType: false,
-                success: function () {
-                    $.getJSON('/get_avatar', get_ava_data, function (data) {
-                        $(update_avatar).css({'background-image': 'url(' + data.plan_avatar_url + ')'})
-                    });
-                    $('.close').trigger('click');
-                    $('#send_avatar_form')[0].reset();
-                }
-            });
-        } else {
-            $('.file_upload').css({'display': 'block'});
-            $('.send_button').css({'display': 'none'});
-            $('.choose_avatar_footer p').css({'color': '#FF6068'});
-            $('.choose_avatar_footer p').text('Разрешено загружать файлы размером не больше 2 Мб!');
-            $('#send_avatar_form')[0].reset();
-        }
-    } else {
-        $('.file_upload').css({'display': 'block'});
-        $('.send_button').css({'display': 'none'});
-        $('.choose_avatar_footer p').css({'color': '#FF6068'});
-        $('.choose_avatar_footer p').text('Изображение можно загрузить в формате jpg, png или gif.');
-        $('#send_avatar_form')[0].reset();
-    }
-}
 
 function blurElement(element, size) {
     var filterVal = 'blur(' + size + 'px)';
@@ -318,4 +210,37 @@ function showFlexCenter($elem) {
 
 function show_invitations() {
     $('.for_invitations').load('/get_invitations');
+}
+
+
+function preventDefault(e) {
+  e = e || window.event;
+  if (e.preventDefault)
+      e.preventDefault();
+  e.returnValue = false;
+}
+
+function preventDefaultForScrollKeys(e) {
+    // if (keys[e.keyCode]) {
+    //     preventDefault(e);
+    //     return false;
+    // }
+}
+
+function disableScroll() {
+  if (window.addEventListener) // older FF
+      window.addEventListener('DOMMouseScroll', preventDefault, false);
+  window.onwheel = preventDefault; // modern standard
+  window.onmousewheel = document.onmousewheel = preventDefault; // older browsers, IE
+  window.ontouchmove  = preventDefault; // mobile
+  document.onkeydown  = preventDefaultForScrollKeys;
+}
+
+function enableScroll() {
+    if (window.removeEventListener)
+        window.removeEventListener('DOMMouseScroll', preventDefault, false);
+    window.onmousewheel = document.onmousewheel = null;
+    window.onwheel = null;
+    window.ontouchmove = null;
+    document.onkeydown = null;
 }

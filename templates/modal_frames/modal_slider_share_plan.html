@@ -1,0 +1,22 @@
+{% extends "modal_frames/base_slide_modal.html" %}
+{% load staticfiles %}
+
+{% block modal_slider_header %}
+     <p class="choose_avatar_text">
+        Отправить расписание
+    </p>
+{% endblock %}
+
+{% block modal_slider_id %}
+    id="modal_share"
+{% endblock %}
+
+{% block modal_slider_footer %}
+    <div class="split-line"></div>
+        <button id="btn_send_share" class="btn btn-lg btn-default">Send</button>
+{% endblock %}
+
+{% block modal_slider_body %}
+    <textarea class="text_share" placeholder="Напишите новость, которую увидят все участники расписания!"></textarea>
+
+{% endblock %}

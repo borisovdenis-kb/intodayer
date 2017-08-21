@@ -8,11 +8,14 @@
 {% block styles %}
     <link rel="stylesheet" type="text/css" href={% static "css/plan_content.css" %}>
     <link rel="stylesheet" type="text/css" href={% static "css/participants_content.css" %}>
+    <link rel="stylesheet" type="text/css" href={% static "css/participants_invite.css" %}>
+    <link rel="stylesheet" type="text/css" href={% static "css/plan_settings.css" %}>
 {% endblock %}
 
 
 {% block scripts_bottom %}
     <script type="text/javascript" src={% static "scripts/script_participants.js" %}></script>
+    <script type="text/javascript" src={% static "scripts/components/script_modal_intodayer.js" %}></script>
 {% endblock %}
 
 {% block invitation %}
@@ -41,6 +44,11 @@
 {% endblock %}
 
 {% block choose_avatar %}
-    {% include "modal_frames/choose_avatar.html" %}
+    {% include "modal_frames/modal_slider_choose_ava.html" %}
 {% endblock %}
 
+{% block others %}
+    {% include "modal_frames/modal_confirm_role.html" %}
+    {% include "modal_frames/modal_delete_participant.html" %}
+    {% include "modal_frames/modal_elder_leave.html" %}
+{% endblock %}

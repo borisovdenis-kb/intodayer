@@ -16,3 +16,30 @@ $gl_border_radius: 4px
 
 $gl_intodayer_purple: #8b1deb
 
+$gl_placeholder_color: rgba(220,220,220,1)
+
+%input_styles
+  border: 2px solid rgba(217, 217, 227, 1)
+  text-align: center
+  font-family: "PT Sans" !important
+  font-size: 22px
+  @include border-radius(4px)
+  transition: 0.4s border ease
+  &:focus
+    border: 2px solid rgba(139, 29, 235, 0.4)
+    outline: none
+
+%input_styles_simple
+  border: 2px solid rgba(217, 217, 227, 1)
+  text-align: center
+  font-family: "PT Sans" !important
+  font-size: 22px
+  @include border-radius(4px)
+  &:focus
+    //border: 2px solid rgba(139, 29, 235, 0.4)
+    outline: none
+  //transition: 0.4s border ease
+  //&:focus
+  //  border: 2px solid rgba(139, 29, 235, 0.4)
+  //  outline: none
+>>>>>>> participats-page

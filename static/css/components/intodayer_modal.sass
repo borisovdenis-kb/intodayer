@@ -4,7 +4,7 @@
   position: fixed
   width: 100%
   height: 100%
-  background: rgba(0,0,0,0.4)
+  background: rgba(0, 0, 0, 0.4)
   z-index: 100
   top: 0
   opacity: 0
@@ -16,10 +16,10 @@ $modal-height: 120px
 .in_modal_body
   position: fixed
   width: $modal-width
-  height: $modal-height
+  min-height: $modal-height
   background: white
-  top: calc(50% - #{$modal-height}/2 - 10%)
-  left: calc(50% - #{$modal-width}/2)
+  top: calc(50% - #{$modal-height} / 2 - 10%)
+  left: calc(50% - #{$modal-width} / 2)
   transform: scale(0.9, 0.9)
   opacity: 0
   transition: 0.4s transform ease, 0.1s opacity ease
@@ -30,7 +30,7 @@ $modal-height: 120px
 @media (max-height: 400px)
   .in_modal_body
     transition: 0.3s top ease
-    top: calc(50% - #{$modal-height}/2)
+    top: calc(50% - #{$modal-height} / 2)
 
 .in_modal_title
   text-align: center
@@ -40,17 +40,36 @@ $modal-height: 120px
 
   @include set-flex(center)
   background: white
-  //height: 100%
+
+  p
+    font-size: 0.8em
+    width: calc(#{$modal-width} - 40px)
+    text-align: left
 
 input
-  &[id=old_pass], &[id=okay].btn
+  &[id=pass], &[id=okay].btn
     height: 40px
     border: none
     text-align: center
     &:active, &:focus
       outline: none
 
-  &[id=old_pass]
+  &[id=pass]
     margin-right: 10px
   &[id=okay]
     width: 70px
+
+.in_stage_content
+  background-color: #ffffff
+  text-align: center
+  @include border-radius(4px)
+
+.in_modal_bottom
+  background-color: #ffffff
+  text-align: center
+  padding:
+    bottom: 10px
+  @include border-radius(4px)
+
+#btn_ok.btn, #btn_no.btn
+  width: 50px

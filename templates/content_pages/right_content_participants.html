@@ -1,10 +1,11 @@
-
-
+{% load staticfiles %}
 
 {% block right_content %}
     <div class="plan_load_progres">
         <div class="plan_load_progres_indicator"></div>
     </div>
+
+    <div class="setting_info_block"></div>
 
     <div class="title_content" plan_id="{{ cur_plan.plan.id }}">
         <div class="setting_left">
@@ -18,24 +19,75 @@
             <div id="count_title">{{ cur_plan.plan.count_of_users }}</div>
         </div>
         <div class="setting_right">
-            {#            <div class="icon_setting_content">#}
-            {#                <span class="plan_settings glyphicon glyphicon-pencil"></span>#}
-            {#            </div>#}
+            <div class="icon_setting_content">
+                <button class="part_settings" >Пригласить</button>
+                {#                <span class="part_settings glyphicon glyphicon-plus"></span>#}
+            </div>
         </div>
     </div>
-
+    <div class="setting_invite">
+    </div>
     <div class="part_content">
         {% for participant in participants %}
-            <div class="part_block">
+            <div class="part_block" part_id='{{ participant.user.id }}'>
                 <div class="part_ava">
-                    <img src={{ participant.user.get_avatar_url }} class="img-rounded">
+                    <div class="img_ava" style="background-image: url({{ participant.user.get_avatar_url }})"></div>
+{#                    <img src={{ participant.user.get_avatar_url }} class="img-rounded"/>#}
                 </div>
                 <div class="part_username">
                     <span>
                         {{ participant.user.get_name.first_name }} {{ participant.user.get_name.last_name }}
                     </span>
                 </div>
-                <div class="rights">
+                <div class="part_rights" role='{{ participant.role }}'>
+                    <ul>
+                        {% if this_user.id != participant.user.id %}
+                            <li class="part_role part_participant"
+                                    {% if participant.role == 'participant' %}
+                                style="opacity: 1"
+                                    {% endif %}>
+                                <div class="part_ava_right_content">
+                                    <img src={% static "icons/rights_icons/admin-96.png" %}>
+                                    <p>People</p>
+                                </div>
+                            </li>
+
+                        {% endif %}
+                        {% if this_user.id != participant.user.id %}
+                            <li class="part_role part_admin"
+                                    {% if participant.role == 'elder' or participant.role == 'admin' %}
+                                style="opacity: 1"
+                                    {% endif %}>
+                                <div class="part_ava_right_content">
+                                    <img src={% static "icons/rights_icons/user-96.png" %}>
+                                    <p>Admin</p>
+                                </div>
+                            </li>
+
+                        {% endif %}
+                        {% if this_user.id == participant.user.id %}
+                            <li class="part_role part_elder">
+                                <div class="part_ava_right_content">
+                                    <img src={% static "icons/rights_icons/elder-96.png" %}>
+                                    <p>Elder</p>
+                                </div>
+                            </li>
+                        {% endif %}
+
+
+                        <li class="part_remove">
+                            {% if this_user.id == participant.user.id %}
+                                <span>Покинуть</span>
+                            {% endif %}
+                            {% if this_user.id != participant.user.id %}
+                                <span>Удалить</span>
+                            {% endif %}
+                            {#                            <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>#}
+                        </li>
+
+
+                    </ul>
+
 
                 </div>
             </div>
@@ -44,3 +96,4 @@
 
 
 {% endblock %}
+

@@ -1,0 +1,28 @@
+.mailing_footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-content: center; }
+
+.choose_avatar_text, .mailing_text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  height: 100%;
+  margin-left: 10px; }
+
+.send_button {
+  display: none;
+  width: 150px; }
+
+.file_upload {
+  width: 100px; }
+
+[hidden] {
+  display: none !important; }
+
+.file_info {
+  background: #eb6b66; }
+
+/*# sourceMappingURL=slider_modal_ava.css.map */

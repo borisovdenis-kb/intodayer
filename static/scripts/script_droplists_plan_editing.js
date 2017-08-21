@@ -35,6 +35,7 @@ function loadData($thisField) {
 
     } else if ($thisField.hasClass('parity')) {
         // Здесь без ajax запроса. Т.к. четность у нас статичная
+
         $('.drop_list').append(
             '<ul>' +
             '<li><a>Все</a></li>' +
@@ -42,6 +43,7 @@ function loadData($thisField) {
             '<li><a>Нечет</a></li>' +
             '</ul>'
         );
+        setStyleDropList($thisField, $('.drop_list').first());
     }
 
     if (!$thisField.hasClass('parity')) {
@@ -56,6 +58,7 @@ function loadData($thisField) {
             setStyleDropList($thisField, $('.drop_list').first());
         });
     }
+
 
 }
 
@@ -92,7 +95,7 @@ function setStyleDropList($thisField, $droplist) {
 $(window).on('resize scroll', function () {
     var $active_elem = $(document.activeElement);
     var $this_field = $(document.activeElement);
-    console.log($active_elem.get(0).tagName);
+    // console.log($active_elem.get(0).tagName);
     if ($active_elem.get(0).tagName == "BODY") {
         $this_field = ($('.selected_field'));
         if ($this_field.length != 1) {

@@ -1,0 +1,27 @@
+@import "../mixins"
+
+
+
+
+.mailing_footer
+  @include set-flex(center)
+
+.choose_avatar_text, .mailing_text
+  @include set-flex(center)
+  height: 100%
+  margin-left: 10px
+
+.send_button
+  display: none
+  width: 150px
+
+.file_upload
+  width: 100px
+
+//для правильного отображения кнопки закрыть
+[hidden]
+  display: none !important
+
+.file_info
+  background: #eb6b66
+

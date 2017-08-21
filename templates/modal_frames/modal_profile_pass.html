@@ -1,0 +1,14 @@
+{% extends "modal_frames/base_intodayer_modal.html" %}
+{% load staticfiles %}
+
+
+{% block modal_type %}modal_type='confirm_pass'{% endblock %}
+{% block modal_title %}
+    <div class="in_modal_title">Change your password</div>
+{% endblock %}
+
+{% block modal_content %}
+    <input id="pass" type="password" placeholder="Input your old password">
+    <input id="okay" class="btn btn-lg btn-success" type="button" value="OK">
+{% endblock %}
+

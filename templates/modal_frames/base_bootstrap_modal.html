@@ -3,16 +3,19 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Remove plan</h4>
+                {% block modal_title %}
+                {% endblock %}
             </div>
             <div class="modal-body">
-                <p>Do you want really remove plan "{{ cur_plan.plan.title }}"?</p>
-                <p>You can't undo this action&hellip;</p>
+                {% block modal_body %}
+                {% endblock %}
             </div>
             <div class="modal-footer">
                 <div class="buttons_modal text-center">
-                    <button type="button" class="modal_cancel btn btn-default" data-dismiss="modal">Cancel</button>
-                    <button type="button" class="modal_ok btn btn-danger">Remove</button>
+                    <div class="modal-buttons">
+                        {% block modal_buttons %}
+                        {% endblock %}
+                    </div>
                 </div>
             </div>
         </div><!-- /.modal-content -->

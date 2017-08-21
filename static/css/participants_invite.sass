@@ -1,0 +1,84 @@
+@import "mixins"
+@import "global_vars"
+
+$margin-panel: 3px
+
+//.invite_settings_layouts
+//  display: flex
+//  flex-direction: row
+
+//.invite_by_mail
+//  margin-right: $margin-panel
+//  width: calc(50% - #{$margin-panel})
+//
+//.invite_by_link
+//  width: calc(50% - #{$margin-panel})
+//  margin-left: $margin-panel
+
+//.plan_settings_content
+//@media (max-width: 970px)
+//  .invite_settings_layouts
+//    flex-direction: column
+//
+//  .invite_by_mail, .invite_by_link
+//    width: 100%
+//
+//  .invite_by_mail
+//    margin-right: 0
+//
+//  .invite_by_link
+//    margin:
+//      left: 0
+//      top: 5px
+
+.invite_by_mail, .invite_by_link
+  background: white
+  padding: $gl_block_padding
+    top: 15px
+    bottom: 15px
+  border: $gl_block_border
+  @include border-radius($gl_border_radius)
+  margin-top: 5px
+
+.invite_by_mail, .invite_by_link
+  span
+    text-align: left
+    font-size: 1.5em
+    font-weight: bold
+  input
+    @extend %input_styles
+    width: 100%
+    margin:
+      top: 2px
+      bottom: 2px
+
+
+.invite_link_btns
+  width: 100%
+  margin-left: 1px
+  button.btn
+    width: 25%
+    @include border-radius(0px)
+    &:nth-child(1)
+      @include border-radius(4px 0 0 4px)
+    &:nth-child(4)
+      @include border-radius(0 4px 4px 0)
+    &:focus, &:link, &:active
+      outline: none
+
+.settings_btns_content
+  padding:
+    top: 15px
+
+.invite_link_btns
+  padding:
+    top: 10px
+    bottom: 5px
+
+
+p.invite_info
+  padding-bottom: 5px
+
+@include placeholder()
+  color: $gl_placeholder_color
+

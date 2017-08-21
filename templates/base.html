@@ -35,9 +35,10 @@
     <link rel="stylesheet" type="text/css" href={% static "css/font_optimizate_new.css" %}>
 
     {#    Импорт стилей для компонентов#}
+    <link rel="stylesheet" type="text/css" href={% static "css/components/intodayer_modal.css" %}>
     <link rel="stylesheet" type="text/css" href={% static "css/components/elements.css" %}>
     <link rel="stylesheet" type="text/css" href={% static "css/components/success_frame.css" %}>
-    <link rel="stylesheet" type="text/css" href={% static "css/components/ok_cancel_buttons.css" %}>
+    <link rel="stylesheet" type="text/css" href={% static "css/components/bootstrap_modal.css" %}>
 
 
     <!--Добавление в наследующие шаблоны новых стилей-->
@@ -84,26 +85,16 @@
 <div class="effect_blur">
 </div>
 
-{% block choose_avatar %}
+{% block modal_frames %}
 {% endblock %}
 
 {% block  mailing %}
 {% endblock %}
 
-
-
-
-
-
 {% block footer %}
-    {#    <div class="footer">#}
-    {#        <p class="text-center">Denis Borisov & Alexey Krotkov © 2017</p>#}
-    {#    </div>#}
 {% endblock %}
 
-
 {% include 'modal_frames/success_frame.html' %}
-
 
 {% block others %}
 {% endblock %}
@@ -114,12 +105,12 @@
 <script type="text/javascript" src={% static "scripts/script_left_content.js" %}></script>
 <script type="text/javascript" src={% static "scripts/script_general.js" %}></script>
 <script type="text/javascript" src={% static "scripts/script_header.js" %}></script>
+<script type="text/javascript" src={% static "scripts/components/script_modals_slider.js" %}></script>
 
 {#    Импорт скриптов для компонентов#}
 <script type="text/javascript" src={% static "scripts/components/script_success_frame.js" %}></script>
 
 {% block scripts_bottom %}
 {% endblock %}
-
 
 </html>
