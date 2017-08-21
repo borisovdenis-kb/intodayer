@@ -93,6 +93,7 @@ def leave_plan(request):
     else:
         return HttpResponse(status=401)
 
+
 def update_plan_info(request):
     """
         This endpoint to update plan information.
