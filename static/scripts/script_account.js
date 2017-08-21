@@ -205,8 +205,16 @@ function showSelectTypePlans($this_elem) {
         $('.pr_plans_content').show();
     }
     else {
-        $(".pr_plans_content[plan_role='" + $this_elem.attr('id') + "']").each(function () {
-            $(this).show();
-        });
+        if ($(".pr_plans_content[plan_role='" + $this_elem.attr('id') + "']").length == 0) {
+            $("h5").remove();
+            $(".pr_captain_plans").append(
+                '<h5 class="text-center alert-warning btn-lg">Нет расписаний</h5>'
+            )
+        } else {
+            $("h5").remove();
+            $(".pr_plans_content[plan_role='" + $this_elem.attr('id') + "']").each(function () {
+                $(this).show();
+            });
+        }
     }
 }

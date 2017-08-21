@@ -49,7 +49,7 @@
                     <div class="form-group">
                         <div class="row">
                             <div class="col-xs-12 col-lg-10  col-md-9">
-                                <label for="inputPassword">Придумайте хороший пароль</label>
+                                <label for="inputPassword">Придумайте надежный пароль</label>
                                 {{ form.password1 }}
                             </div>
                         </div>
@@ -66,7 +66,7 @@
                         <div class="row">
                             <div class="col-xs-12 col-lg-10 col-md-9">
 
-                                <label for="inputEmail">Введите свою почту для рассылки</label>
+                                <label for="inputEmail">Введите свою почту</label>
                                 {{ form.email }}
 
                             </div>
@@ -75,12 +75,12 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Нажимая на кнопку "Регистрация" вы соглашаетесь с политикой использования сервиса
-                            "Intodayer".</label>
+{#                        <label>Нажимая на кнопку "Регистрация" вы соглашаетесь с политикой использования сервиса#}
+{#                            "Intodayer".</label>#}
                     </div>
 
                     <div class="form-group">
-                        <div class="row">
+                        <div class="row reg_btn_content">
                             <div class="col-xs-6" style="padding-right:3px">
                                 <input type="button"
                                        id="buttonBack"
@@ -96,11 +96,9 @@
                         </div>
 
                         <div style="height: 10px;"></div>
-                        <div class="row">
+                        <div class="row reg_bottom_content">
                             <div class="col-xs-8 col-xs-offset-2">
-                                <input id="buttonHelp" type="button"
-                                       class="form-control btn input-lg btn-link text-center"
-                                       value="Уже есть аккаунт? Войдите">
+                                <a class="btn-link" href="/login">Уже есть аккаунт? Войдите</a>
                             </div>
                         </div>
                     </div>

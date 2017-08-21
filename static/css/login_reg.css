@@ -6,6 +6,7 @@ html, body {
   display: block;
   background: rgba(255, 255, 255, 0.8);
   border: 1px solid #e6e6e6;
+  padding-bottom: 20px;
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
   -khtml-border-radius: 4px;
@@ -36,11 +37,18 @@ h2 {
 
 .panel_reg {
   max-width: 800px;
-  text-align: left; }
+  text-align: left;
+  padding-bottom: 20px; }
+  .panel_reg .reg_bottom_content {
+    margin-top: 10px; }
+  .panel_reg .reg_btn_content {
+    margin-top: 10px; }
 
 .panel_auth {
   max-width: 600px;
   text-align: center; }
+  .panel_auth .login_bottom_content {
+    margin-top: 15px; }
 
 .panel_reg label, .panel_auth label {
   margin-top: 15px; }
