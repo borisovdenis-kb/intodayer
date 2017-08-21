@@ -38,6 +38,7 @@ urlpatterns = [
     url(r'^registration/$', views.registration_view),
     url(r'^participants/$', views.participant_view),
     url(r'^about_service/$', views.about_service_view),
+    url(r'check_email_unique', views.check_email_unique),
 
     # для ajax запросов
     url(r'^get_invitations', views.get_invitations_ajax),
@@ -54,6 +55,8 @@ urlpatterns = [
     # url(r'^favicon\.ico$', favicon_view),
 
     # API расписания
+    url(r'^get_avatar', planApi.get_avatar),
+    url(r'^leave_plan', planApi.delete_plan),
     url(r'^delete_plan', planApi.delete_plan),
     url(r'^create_plan', planApi.create_plan),
     url(r'^test_mailing', planApi.mailing_test),
@@ -63,7 +66,6 @@ urlpatterns = [
     url(r'^upload_plan_avatar', planApi.upload_plan_avatar),
     url(r'^plan/settings_plan', views.get_settings_plan_html),
     url(r'^plan/invite_setting_plan', views.get_invite_settings_html),
-    url(r'^get_avatar', planApi.get_avatar),
 
     # API участников
     url(r'^change_role', participantsApi.set_role),

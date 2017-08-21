@@ -8,7 +8,7 @@ from django.contrib.auth.models import auth
 from django.contrib.auth import get_user_model
 from django.shortcuts import render_to_response
 from django.contrib.auth.backends import ModelBackend
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, JsonResponse
 from intodayer2_app.forms import CustomUserCreationForm
 
 from extra.utils import (
@@ -37,6 +37,18 @@ class EmailBackend(ModelBackend):
             if getattr(user, 'is_active', False) and user.check_password(password):
                 return user
         return None
+
+
+def check_email_unique(request):
+    if request.is_ajax():
+        data = json.loads(request.body.decode('utf-8'))
+
+        if CustomUser.objects.filter(email=data['email']).count() == 0:
+            return JsonResponse({'is_exist': False}, status=200)
+        else:
+            return JsonResponse({'is_exist': True}, status=200)
+    else:
+        return HttpResponse(status=400)
 
 
 def switch_plan_only_set_ajax(request):

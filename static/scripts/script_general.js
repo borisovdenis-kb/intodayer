@@ -244,3 +244,15 @@ function enableScroll() {
     window.ontouchmove = null;
     document.onkeydown = null;
 }
+
+
+function validatePassword(email) {
+    var regex = /(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/;
+    return regex.test(email);
+}
+
+function validateEmail(email) {
+    var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+    return regex.test(email);
+}
+

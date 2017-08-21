@@ -66,6 +66,33 @@ def delete_plan(request):
         return HttpResponse(status=401)
 
 
+def leave_plan(request):
+    """
+        This endpoint to leave plan. Available for participants and admins.
+
+        --> For more detailed documentation see Postman.
+    """
+    if request.user.is_authenticated():
+        user = CustomUser.objects.get(email=request.user.email)
+        data = json.loads(request.body.decode('utf-8'))
+
+        try:
+            action_is_available = user.has_rights(action='leave_plan', **{'plan_id': data['plan_id']})
+        except (ValueError, ValidationError):
+            return HttpResponse(status=400)
+        except ObjectDoesNotExist:
+            return HttpResponse(status=403)
+
+        if action_is_available:
+            UserPlans.objects.get(plan_id=data['plan_id'], user_id=user.id).delete()
+            # plan.delete_with_message(message='Some message')
+        else:
+            return HttpResponse(status=403)
+
+        return HttpResponse(status=200)
+    else:
+        return HttpResponse(status=401)
+
 def update_plan_info(request):
     """
         This endpoint to update plan information.

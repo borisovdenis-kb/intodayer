@@ -19,10 +19,14 @@ class CustomUserCreationForm(UserCreationForm):
                                                                   'placeholder': 'Confirm password'}))
     email = forms.CharField(max_length=100,
                             widget=forms.EmailInput(attrs={'id': 'inputEmail',
-                                                                 'name': 'email',
-                                                                 'class': 'form-control input-lg',
-                                                                 'required': 'required',
-                                                                 'placeholder': 'Enter email'}))
+                                                           'data-container': 'body',
+
+                                                           'data-placement': 'right',
+                                                           'title': 'Tooltip on right',
+                                                           'name': 'email',
+                                                           'class': 'form-control input-lg',
+                                                           'required': 'required',
+                                                           'placeholder': 'Enter email'}))
 
     class Meta:
         model = CustomUser
@@ -37,9 +41,9 @@ class CustomUserCreationForm(UserCreationForm):
                                                 'required': 'required',
                                                 'placeholder': 'Enter last name'}),
             'email': forms.TextInput(attrs={'id': 'inputEmail',
-                                                  'class': 'form-control input-lg',
-                                                  'required': 'required',
-                                                  'placeholder': 'Enter email'})
+                                            'class': 'form-control input-lg',
+                                            'required': 'required',
+                                            'placeholder': 'Enter email'})
         }
 
 
