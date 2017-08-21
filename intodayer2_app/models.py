@@ -176,6 +176,7 @@ class Invitations(models.Model, UpdateMixin):
     plan = models.ForeignKey('PlanLists', models.DO_NOTHING)
     confirmed_yn = models.CharField(max_length=1, blank=True, null=True, validators=[validate_yn_filed])
     email = models.TextField(blank=False, validators=[validate_email_field])
+    uuid = models.TextField(max_length=36, blank=False)
 
     class Meta:
         managed = True
@@ -184,10 +185,8 @@ class Invitations(models.Model, UpdateMixin):
         unique_together = ('from_user', 'to_user')
 
     def __str__(self):
-        return '%s %s %s' % (
-            self.from_user,
-            self.to_user,
-            self.plan.title,
+        return '%s' % (
+            self.uuid,
         )
 
 

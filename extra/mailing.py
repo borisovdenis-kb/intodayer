@@ -11,10 +11,10 @@ from django.template.loader import get_template
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "intodayer2.settings")
 django.setup()
 # ---------------------------------------------------------------
+from uuid import uuid4
 from decouple import config
 from base64 import b64decode
 from intodayer_bot import bot
-from smtplib import SMTPException
 from django.core.mail import send_mail
 from django.core.files.base import ContentFile
 from extra.validators import validate_email_field
@@ -82,25 +82,32 @@ class IntodayerMailing:
                 mailing_states[email] = 'validation error'
 
         for email in recipient_list:
+            uuid = str(uuid4())
+
             try:
-                send_mail(
-                    self.subject,
-                    self.text,
-                    config('PROJECT_EMAIL'),
-                    recipient_list,
-                    fail_silently=False,
-                    html_message=get_template('emails/confirmation.html').render(context)
+                to_user = CustomUser.objects.get(email=email)
+            except ObjectDoesNotExist:
+                Invitations.objects.create(
+                    from_user=from_user, email=email, plan_id=plan_id, uuid=uuid
                 )
-            except SMTPException:
-                mailing_states[email] = 'sending error'
             else:
-                mailing_states[email] = 'ok'
-                try:
-                    to_user = CustomUser.objects.get(email=email)
-                except ObjectDoesNotExist:
-                    Invitations.objects.create(from_user=from_user, email=email, plan_id=plan_id)
-                else:
-                    Invitations.objects.create(from_user=from_user, to_user=to_user, email=email, plan_id=plan_id)
+                Invitations.objects.create(
+                    from_user=from_user, to_user=to_user, email=email, plan_id=plan_id, uuid=uuid
+                )
+
+            # TODO: Изменить на боевом серерве
+            context['url'] = "http://127.0.0.1:8000/invitation/{}".format(uuid)
+
+            send_mail(
+                self.subject,
+                self.text,
+                config('PROJECT_EMAIL'),
+                [email],
+                fail_silently=False,
+                html_message=get_template('emails/invitation.html').render(context)
+            )
+
+            mailing_states[email] = 'ok'
 
         return mailing_states
 

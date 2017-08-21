@@ -393,7 +393,12 @@ def login_view(request):
         if user is not None:
             if user.is_active:
                 auth.login(request, user)
-                return HttpResponseRedirect("/home")
+                if 'state' in request.session:
+                    if request.session['state']['operation'] == 'confirm_invitation':
+                        url = "/invitation/{}".format(request.session['state']['uuid'])
+                        return HttpResponseRedirect(url)
+                else:
+                    return HttpResponseRedirect("/home")
             else:
                 return HttpResponse('User is not active')
         else:

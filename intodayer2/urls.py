@@ -19,7 +19,7 @@ from django.contrib import admin
 from intodayer2_app import views
 from django.conf import settings
 from django.conf.urls.static import static
-from apis import planApi, participantsApi, myprofileApi
+from apis import planApi, participantsApi, myprofileApi, invitationsApi
 
 # favicon_view = RedirectView.as_view(url='favicon.ico', permanent=True)
 
@@ -44,7 +44,6 @@ urlpatterns = [
     url(r'^home/switch_plan', views.switch_plan_home_ajax),
     url(r'^plan/edit_plan_row', views.edit_plan_row_ajax),
     url(r'^plan/update_delete', views.plan_delete_ajax),
-    url(r'^confirm_invitation', views.confirm_invitation_ajax),
     url(r'^switch_plan_only_set', views.switch_plan_only_set_ajax),
     url(r'^plan/invitation/(\d+)$', views.plan_view),
 
@@ -79,6 +78,10 @@ urlpatterns = [
     url(r'^make_new_password', myprofileApi.make_new_password),
     url(r'^upload_user_avatar', myprofileApi.upload_user_avatar),
     url(r'^check_old_password', myprofileApi.check_old_password),
+
+    # API приглашений
+    url(r'^invitation/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})', invitationsApi.verify_invitation),
+    url(r'^confirm_invitation/(\d+)/(\d+)/(\d+)', invitationsApi.confirm_invitation_view),
 ]
 
 
