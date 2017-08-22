@@ -246,9 +246,9 @@ function enableScroll() {
 }
 
 
-function validatePassword(email) {
+function validatePassword(pass) {
     var regex = /(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/;
-    return regex.test(email);
+    return regex.test(pass);
 }
 
 function validateEmail(email) {

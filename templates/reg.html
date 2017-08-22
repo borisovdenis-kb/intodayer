@@ -6,13 +6,8 @@
 
     <link rel="stylesheet" type="text/css" href={% static "css/header.css" %}>
     <link rel="stylesheet" type="text/css" href={% static "css/welcome_base.css" %}>
-    <link rel="stylesheet" type="text/css" href={% static "css/login_reg.css" %}>
+     <link rel="stylesheet" type="text/css" href={% static "css/login_reg.css" %}>
 {% endblock %}
-
-{% block header %}
-    {% include 'templates_for_ajax/header_welcome.html' %}
-{% endblock %}
-
 
 
 {% block content_page %}
@@ -20,7 +15,7 @@
         <div class="welcome_background_fade">
         </div>
     </div>
-    <div class="reg_page container-fluid text-center">
+    <div class="reg_page container text-center">
 
         <div class="panel_reg col-xs-11 col-lg-7 col-md-8 col-sm-8 center-block" style="opacity: 0;">
             <div class="row">
@@ -32,7 +27,7 @@
                 <form action="" method="post">
                     <div class="form-group">
                         <div class="row">
-                            <div class="col-xs-12 col-lg-10 col-md-9">
+                            <div class="col-xs-10 col-lg-10 col-md-9 ">
                                 <label for="inputFirstName">Введите ваше Имя</label>
                                 {{ form.first_name }}
                             </div>
@@ -40,7 +35,7 @@
                     </div>
                     <div class="form-group">
                         <div class="row">
-                            <div class="col-xs-12 col-lg-10 col-md-9">
+                            <div class="col-xs-10 col-lg-10 col-md-9">
                                 <label for="inputLastName">Введите вашу Фамилию</label>
                                 {{ form.last_name }}
                             </div>
@@ -48,7 +43,7 @@
                     </div>
                     <div class="form-group">
                         <div class="row">
-                            <div class="col-xs-12 col-lg-10  col-md-9">
+                            <div class="col-xs-10 col-lg-10  col-md-9">
                                 <label for="inputPassword">Придумайте хороший пароль</label>
                                 {{ form.password1 }}
                             </div>
@@ -56,7 +51,7 @@
                     </div>
                     <div class="form-group">
                         <div class="row">
-                            <div class="col-xs-12 col-lg-10 col-md-9">
+                            <div class="col-xs-10 col-lg-10 col-md-9">
                                 {{ form.password2 }}
                             </div>
                         </div>
@@ -64,7 +59,7 @@
 
                     <div class="form-group">
                         <div class="row">
-                            <div class="col-xs-12 col-lg-10 col-md-9">
+                            <div class="col-xs-10 col-lg-10 col-md-9">
 
                                 <label for="inputEmail">Введите свою почту для рассылки</label>
                                 {{ form.email }}
@@ -90,7 +85,7 @@
                             <div class="col-xs-6" style="padding-left:3px">
                                 <input type="submit"
                                        id="buttonEnter"
-                                       class="disabled form-control btn input-lg  btn-success"
+                                       class="form-control btn input-lg  btn-success"
                                        value="Регистрация">
                             </div>
                         </div>
@@ -109,10 +104,7 @@
         </div>
 
     </div>
-
-
 {% endblock %}
-
 
 {% block other_content %}
     <div class="row fill-space-bottom">

@@ -12,6 +12,7 @@ html, body {
   border-radius: 4px;
   -ms-border-radius: 4px; }
   .panel_reg input, .panel_auth input {
+    transition: 0.3s background ease;
     -moz-border-radius: 4px;
     -webkit-border-radius: 4px;
     -khtml-border-radius: 4px;
@@ -45,7 +46,8 @@ h2 {
 .panel_reg label, .panel_auth label {
   margin-top: 15px; }
 .panel_reg input, .panel_auth input {
-  margin-top: 5px; }
+  margin-top: 5px;
+  margin-bottom: 5px; }
 
 #buttonEnter {
   background: #5cb85c;
@@ -87,13 +89,19 @@ h2 {
 #sign_in:hover {
   border-color: #323232; }
 
-.pswd_equal_pswd_confirm {
-  background-color: #fff5a1; }
+.success_input_validate {
+  background-color: #faffbd; }
+
+.error_input_validate {
+  background-color: #f2dede; }
 
 .auth_page, .reg_page {
   display: flex;
   align-items: center;
   justify-content: center;
   align-content: center; }
+
+.popover {
+  width: 300px; }
 
 /*# sourceMappingURL=login_reg.css.map */
