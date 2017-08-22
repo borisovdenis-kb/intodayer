@@ -6,7 +6,11 @@
 
     <link rel="stylesheet" type="text/css" href={% static "css/header.css" %}>
     <link rel="stylesheet" type="text/css" href={% static "css/welcome_base.css" %}>
-     <link rel="stylesheet" type="text/css" href={% static "css/login_reg.css" %}>
+    <link rel="stylesheet" type="text/css" href={% static "css/login_reg.css" %}>
+{% endblock %}
+
+{% block header %}
+    {% include 'templates_for_ajax/header_welcome.html' %}
 {% endblock %}
 
 
@@ -15,93 +19,83 @@
         <div class="welcome_background_fade">
         </div>
     </div>
-    <div class="reg_page container text-center">
+    <div class="reg_page text-center">
+        <form action="" method="post">
+            <div class="panel_reg" style="opacity: 0;">
 
-        <div class="panel_reg col-xs-11 col-lg-7 col-md-8 col-sm-8 center-block" style="opacity: 0;">
-            <div class="row">
-                <h2 class="col-xs-12 hidden-xs text-center">Sign Up to Intodayer Now!</h2>
-                <h3 class="col-xs-12 visible-xs text-center">Sign Up to Intodayer Now!</h3>
+                <div class="row">
+                    <div class="col-xs-8 col-lg-7 ">
+                        <h3 for="inputFirstName">Регистрация</h3>
+                    </div>
+                </div>
+
+                <div class="split-line"></div>
+
+
+                <div class="row">
+                    <div class="reg_input_content first col-xs-8 col-lg-7 ">
+                        <label for="inputFirstName">Введите ваше Имя</label>
+                        {{ form.first_name }}
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="reg_input_content col-xs-8 col-lg-7 ">
+                        <label for="inputLastName">Введите вашу Фамилию</label>
+                        {{ form.last_name }}
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="reg_input_content col-xs-8 col-lg-7 ">
+                        <label for="inputPassword">Придумайте хороший пароль</label>
+                        {{ form.password1 }}
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="reg_input_content col-xs-8 col-lg-7">
+                        {{ form.password2 }}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="reg_input_content col-xs-8 col-lg-7">
+                        <label for="inputEmail">Введите свою почту для рассылки</label>
+                        {{ form.email }}
+                    </div>
+                </div>
+
+                <div class="split-line"></div>
+
+
+                <div class="row text-center reg_btn_content">
+
+                    <input type="button"
+                           id="buttonBack"
+                           class="btn input-lg btn-default"
+                           value="Назад">
+
+
+                    <input type="submit"
+                           id="buttonEnter"
+                           class="btn input-lg  btn-success"
+                           value="Регистрация">
+
+                </div>
+
+
+                <div class="reg_footer row text-center">
+                    <a href="/login" id="buttonHelp" type="button"
+                       class="btn btn-sm btn-lg btn-link text-center">
+                        Уже есть аккаунт? Войдите
+                    </a>
+                </div>
             </div>
-
-            <div class="col-xs-12 col-xs-offset-0 col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2 form-content">
-                <form action="" method="post">
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-xs-10 col-lg-10 col-md-9 ">
-                                <label for="inputFirstName">Введите ваше Имя</label>
-                                {{ form.first_name }}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-xs-10 col-lg-10 col-md-9">
-                                <label for="inputLastName">Введите вашу Фамилию</label>
-                                {{ form.last_name }}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-xs-10 col-lg-10  col-md-9">
-                                <label for="inputPassword">Придумайте хороший пароль</label>
-                                {{ form.password1 }}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-xs-10 col-lg-10 col-md-9">
-                                {{ form.password2 }}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-xs-10 col-lg-10 col-md-9">
-
-                                <label for="inputEmail">Введите свою почту для рассылки</label>
-                                {{ form.email }}
-
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Нажимая на кнопку "Регистрация" вы соглашаетесь с политикой использования сервиса
-                            "Intodayer".</label>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-xs-6" style="padding-right:3px">
-                                <input type="button"
-                                       id="buttonBack"
-                                       class="form-control btn input-lg btn-default"
-                                       value="Назад">
-                            </div>
-                            <div class="col-xs-6" style="padding-left:3px">
-                                <input type="submit"
-                                       id="buttonEnter"
-                                       class="form-control btn input-lg  btn-success"
-                                       value="Регистрация">
-                            </div>
-                        </div>
-
-                        <div style="height: 10px;"></div>
-                        <div class="row">
-                            <div class="col-xs-8 col-xs-offset-2">
-                                <input id="buttonHelp" type="button"
-                                       class="form-control btn input-lg btn-link text-center"
-                                       value="Уже есть аккаунт? Войдите">
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
+        </form>
 
     </div>
 {% endblock %}

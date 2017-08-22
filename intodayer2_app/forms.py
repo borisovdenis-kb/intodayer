@@ -22,11 +22,10 @@ class CustomUserCreationForm(UserCreationForm):
                                                                   'placeholder': 'Confirm password'}))
     email = forms.CharField(max_length=100,
                             widget=forms.EmailInput(attrs={'id': 'inputEmail',
-                                                           'data-container': 'body',
                                                            'data-toggle': 'popover',
                                                            'data-placement': 'right',
+
                                                            'autocomplete': 'off',
-                                                           'name': 'email',
                                                            'class': 'form-control input-lg reg_field',
                                                            'required': 'required',
                                                            'placeholder': 'Enter email'}))

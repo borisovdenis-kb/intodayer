@@ -1,7 +1,7 @@
 @charset "UTF-8";
 body {
   overflow-y: scroll;
-  min-width: 600px; }
+  min-width: 300px; }
 
 .page {
   clear: both; }

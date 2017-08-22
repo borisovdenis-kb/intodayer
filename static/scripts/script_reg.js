@@ -17,6 +17,10 @@ var $btn_back;
 
 $(document).ready(function () {
     $reg_first_name = $('#inputFirstName');
+    setTimeout(function () {
+        $reg_first_name.focus();
+    }, 50);
+
     $reg_last_name = $('#inputLastName');
     $reg_pass = $('#inputPassword');
     $reg_pass_re = $('#inputPassword_re');
@@ -24,30 +28,51 @@ $(document).ready(function () {
     $btn_submit = $('#buttonEnter');
     $btn_back = $('#buttonBack');
 
-    $reg_first_name.popover({
-        placement: 'right',
+
+    var options = {
+        placement: function (context, source) {
+            var position = $(source).position();
+            if (position.left > 515) {
+                return "left";
+            }
+            if (position.left < 515) {
+                return "right";
+            }
+
+            if (position.top < 110) {
+                return "bottom";
+            }
+            return "top";
+        }
+        ,
         html: true,
         trigger: 'manual',
-        // container: 'input'
+        viewport: 'body'
+
+    };
+
+    $reg_first_name.popover({
+        options
     });
     $reg_last_name.popover({
-        placement: 'right',
-        html: true,
-        trigger: 'manual',
+        options
     });
     $reg_pass.popover({
-        placement: 'right',
-        html: true,
-        trigger: 'manual',
+        options
     });
     $reg_email.popover({
-        placement: 'right',
-        html: true,
-        trigger: 'manual',
+        options
     });
 
     setSubmitDisable();
     setRegistrationsListeners();
+
+    $(window).resize(function () {
+        $reg_first_name.popover('destroy');
+        $reg_last_name.popover('destroy');
+        $reg_pass.popover('destroy');
+        $reg_email.popover('destroy');
+    });
 
 });
 function setRegistrationsListeners() {
@@ -61,7 +86,7 @@ function setRegistrationsListeners() {
     });
 
 
-    $('input.reg_field').on('input blur', function () {
+    $('input.reg_field').on('input focusout', function () {
         setTimeout(function () {
             totalValidation();
         }, 50);
@@ -70,7 +95,7 @@ function setRegistrationsListeners() {
 
 
     // Поля имени и фамилиии
-    $reg_first_name.on('change blur', function () {
+    $reg_first_name.on('focusout', function () {
         setValidateTextField($(this));
     });
     $reg_first_name.on('input', function () {
@@ -79,15 +104,15 @@ function setRegistrationsListeners() {
     $reg_last_name.on('input', function () {
         setValidateEmptyInput($(this));
     });
-    $reg_last_name.on('change blur', function () {
+    $reg_last_name.on('change focusout', function () {
         setValidateTextField($(this));
     });
     // Поля ввода пароля
 
-    $reg_pass.on('blur', function () {
+    $reg_pass.on('focusout', function () {
         setValidateCorrectPass($reg_pass, $reg_pass_re);
     });
-    $reg_pass_re.on('blur', function () {
+    $reg_pass_re.on('focusout', function () {
         setValidateCorrectPass($reg_pass, $reg_pass_re);
     });
     $reg_pass.on('input', function () {
@@ -132,7 +157,7 @@ function totalValidation() {
 
 function setValidateEmptyInput($input_field) {
     if (!inputNotEmpty($input_field.val())) {
-        $input_field.popover('hide');
+        $input_field.popover('destroy');
         setInputDefault($input_field);
     }
 }
@@ -165,13 +190,14 @@ function setValidateEmail($email_input) {
 
 function setValidateCorrectPassDefault($pass_input1, $pass_input2) {
     if (!inputNotEmpty($pass_input1.val()) && !validatePassword($pass_input1.val())) {
-        $pass_input1.popover('hide');
+        $pass_input1.popover('destroy');
         setInputDefault($pass_input1);
         setInputDefault($pass_input2);
 
     }
 }
 
+// в этой функции много ifoв потому что она работает с совпадение 2 полей
 function setValidateCorrectPass($pass_input1, $pass_input2) {
     let pass1 = $pass_input1.val();
     let pass2 = $pass_input2.val();
@@ -180,7 +206,6 @@ function setValidateCorrectPass($pass_input1, $pass_input2) {
         if (!validatePassword(pass1)) {
             setInputError($pass_input1);
             setInputError($pass_input2);
-
             $pass_input1.attr('data-content', 'Пароль должен состоять не менее, чем из 8 латинских символов, букв разного регистра и цифр.');
             $pass_input1.attr('data-original-title', 'Слабый пароль');
             $pass_input1.popover('show');
@@ -206,14 +231,9 @@ function setValidateCorrectPass($pass_input1, $pass_input2) {
         }
     }
     else {
-        // if ($pass_input1.next().hasClass('popover')) {
-        //     $pass_input1.popover('hide');
-        // }
         setInputDefault($pass_input1);
         setInputDefault($pass_input2);
     }
-
-
 }
 
 
@@ -230,7 +250,7 @@ function setValidateTextField($text_input) {
 // устанавливают стили INPUT валидации
 function setInputSuccess($input) {
     if ($input.next().hasClass('popover')) {
-        $input.popover('hide');
+        $input.popover('destroy');
     }
 
     setInputDefault($input);
@@ -248,7 +268,7 @@ function setInputDefault($input) {
 
 
 function inputNotEmpty(input_val) {
-    if (input_val) {
+    if (input_val || input_val !== "") {
         return true;
     } else {
         return false;
@@ -286,29 +306,27 @@ function emailNotExistValidation(email_str) {
 function setSubmitDisable() {
     $btn_submit.addClass('disabled');
     $btn_submit.unbind();
-    // $btn_submit.click(function () {
-    //
-    // });
-    // return false;
     $btn_submit.click(function () {
-        $('input.reg_field').each(() => {
-
-                $(this).popover('hide');
-
-            }
-        );
-        $('input.reg_field').each(function () {
-            if (!inputNotEmpty($(this).val())) {
-
-                // $(this).parent().addClass('popover_style');
-                $(this).attr('data-content', 'Заполните данное поле');
-                $(this).attr('data-original-title', '');
-                $(this).popover('show');
-                return false;
-            }
-        });
+        checkAllValidateStyle();
         return false;
     });
+}
+
+function setValidateEmptyInputs($inputs_set) {
+    $inputs_set.each(function () {
+        if (!inputNotEmpty($(this).val())) {
+            $(this).attr('data-content', 'Заполните данное поле');
+            $(this).attr('data-original-title', '');
+            $(this).popover('show');
+            return false;
+        }
+    });
+}
+
+function checkAllValidateStyle() {
+    setValidateEmptyInputs($('input.reg_field'));
+    setValidateCorrectPass($reg_pass, $reg_pass_re);
+    setValidateEmail($reg_email);
 }
 
 function setSubmitEnable() {

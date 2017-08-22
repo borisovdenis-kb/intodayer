@@ -308,6 +308,12 @@ html, body {
   margin-bottom: 20px; }
 
 .welcome_info_content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  flex-direction: column;
+  padding: 20px;
   height: 100px;
   background: #2fb370;
   color: white; }
@@ -334,8 +340,29 @@ html, body {
   border-radius: 0px 0px 0px 0px;
   -ms-border-radius: 0px 0px 0px 0px; }
 
-@media (max-height: 900px) {
+@media (max-width: 768px) {
+  .welcome_info_content {
+    height: 80px; }
+    .welcome_info_content img {
+      height: 40px; }
+
+  .welcome_main {
+    padding: 5px; }
+
+  .welcome_main_border p {
+    font-size: 1.2em; }
+  .welcome_main_border h1 {
+    font-size: 2em; }
+
+  .welcome_info_content p {
+    font-size: 0.8em; }
+
   .fill-space-bottom {
     display: none; } }
+@media only screen and (max-width: 768px) and (orientation: landscape) {
+  .welcome_info_content {
+    height: 70px; }
+    .welcome_info_content img {
+      height: 40px; } }
 
 /*# sourceMappingURL=welcome_base.css.map */
