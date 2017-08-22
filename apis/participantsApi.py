@@ -125,7 +125,7 @@ def cancel_invitation(request):
         return HttpResponse(status=401)
 
 
-def check_email(request):
+def check_email_not_invited(request):
     """
         This endpoint to check email that user trying to invite.
 
@@ -135,14 +135,16 @@ def check_email(request):
         user = CustomUser.objects.get(email=request.user.email)
         data = json.loads(request.body.decode('utf-8'))
 
-        if Invitations.objects.filter(email=data['email']):
-            return JsonResponse({'state': 'already_invited'})
-
         try:
-            checked_user = CustomUser.objects.get(email=data['email'])
+            if Invitations.objects.filter(email=data['email'], plan_id=data['plan_id']):
+                return JsonResponse({'state': 'already_invited'})
 
+            checked_user = CustomUser.objects.get(email=data['email'])
             if UserPlans.objects.filter(user_id=checked_user.id, plan_id=data['plan_id']):
                 return JsonResponse({'state': 'already_joined'})
+
+        except ValueError:
+            return HttpResponse(status=400)
         except ObjectDoesNotExist:
             return JsonResponse({'state': 'ok'})
 
@@ -202,10 +204,8 @@ def switch_plan_participants(request):
         except ObjectDoesNotExist:
             return render_to_response('templates_for_ajax/content_errors.html', status=403)
 
-        # устанавливаем current_yn
         user.set_current_plan(data['plan_id'])
-        # текущий пользователь
-        context['this_user'] = request.user
+        context['this_user'] = user
 
         return render_to_response('content_pages/right_content_participants.html', context, status=200)
     else:

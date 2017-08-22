@@ -42,10 +42,13 @@ def check_email_unique(request):
     if request.is_ajax():
         data = json.loads(request.body.decode('utf-8'))
 
-        if CustomUser.objects.filter(email=data['email']).count() == 0:
-            return JsonResponse({'is_exist': False}, status=200)
-        else:
-            return JsonResponse({'is_exist': True}, status=200)
+        try:
+            if CustomUser.objects.filter(email=data['email']).count() == 0:
+                return JsonResponse({'is_exist': False}, status=200)
+            else:
+                return JsonResponse({'is_exist': True}, status=200)
+        except ValueError:
+            return HttpResponse(status=400)
     else:
         return HttpResponse(status=400)
 
