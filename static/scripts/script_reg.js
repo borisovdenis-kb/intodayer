@@ -131,7 +131,6 @@ function emailNotExistValidation(email_str) {
         data: JSON.stringify(data),
         dataType: "json",
         success: function (response) {
-            alert(response['is_exist']);
             if (response['is_exist']) {
                 setSubmitDisable();
             }
