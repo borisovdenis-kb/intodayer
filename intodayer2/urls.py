@@ -84,8 +84,7 @@ urlpatterns = [
     url(r'^check_old_password', myprofileApi.check_old_password),
 
     # API приглашений
-    url(r'^invitation/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})', invitationsApi.verify_invitation),
-    url(r'^confirm_invitation/(\d+)/(\d+)/(\d+)', invitationsApi.confirm_invitation_view),
+    url(r'^invitation/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})', invitationsApi.confirm_invitation),
 ]
 
 
