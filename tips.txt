@@ -1,0 +1,14 @@
+������ python manage.py sqlall
+-
+python manage.py sqlmigrate myapp 0001_initial
+
+# ---------------------------------------------------------------
+# Для того, что бы тестировать django файлы
+# Вставлять обязательно перед импортом моделей!!!
+# import os
+# import django
+
+#
+# os.environ.setdefault("DJANGO_SETTINGS_MODULE", "intodayer2.settings")
+# django.setup()
+# ---------------------------------------------------------------

@@ -1,16 +1,9 @@
-# ---------------------------------------------------------------
-# Для того, что бы тестировать django файлы
-# Вставлять обязательно перед импортом моделей!!!
-import os
-import django
-from django.shortcuts import render_to_response
+# -*- coding: utf-8 -*-
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "intodayer2.settings")
-django.setup()
-# ---------------------------------------------------------------
-from intodayer2_app.models import Invitations, CustomUser
-from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseRedirect
+from django.shortcuts import render_to_response
+from django.core.exceptions import ObjectDoesNotExist
+from intodayer2_app.models import Invitations, CustomUser
 
 
 def confirm_invitation(request, uuid):

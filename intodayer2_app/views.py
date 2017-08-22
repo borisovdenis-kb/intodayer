@@ -8,22 +8,21 @@ from django.contrib.auth.models import auth
 from django.contrib.auth import get_user_model
 from django.shortcuts import render_to_response
 from django.contrib.auth.backends import ModelBackend
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, JsonResponse
 from intodayer2_app.forms import CustomUserCreationForm
 
 from extra.utils import (
     edit_plan_row, get_today_tomorrow_plans, CloneError, UPDATE, CREATE
 )
+from django.http import (
+    HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, JsonResponse
+)
 
 from intodayer2_app.models import (
-    UserPlans, Invitations, PlanRows, DaysOfWeek,
-    CustomUser, UserMailingChannels
+    UserPlans, Invitations, PlanRows, DaysOfWeek, CustomUser, UserMailingChannels
 )
 
 
 # TODO: Сделать в выводе расписания в /plan сортировку по времени, а не по неделям
-
-# TODO: Сделать аутентификацию по почте, а не по логину. Значит нужно сделать и подтверждение email
 
 
 class EmailBackend(ModelBackend):
@@ -49,29 +48,6 @@ def check_email_unique(request):
             return JsonResponse({'is_exist': True}, status=200)
     else:
         return HttpResponse(status=400)
-
-
-def switch_plan_only_set_ajax(request):
-    """" 
-        Данная функция просто меняет current_plan в БД и возвращает success
-    """
-    if request.is_ajax:
-        user = CustomUser.objects.get(email=request.user.email)
-
-        try:
-            select_id = int(request.POST['select_id'])
-        except ValueError:
-            return render_to_response('templates_for_ajax/content_errors.html')
-        except IndexError:
-            return render_to_response('templates_for_ajax/content_errors.html')
-
-        user.set_current_plan(select_id)
-
-        response = HttpResponse()
-        response['Content-Type'] = 'application/json'
-        response.write(json.dumps({}))
-
-        return response
 
 
 # Почему-то не получается перенести эту функцию в planSettingsApi
@@ -218,33 +194,6 @@ def switch_plan_home_ajax(request):
         return HttpResponse(status=400)
 
 
-def switch_plan_plan_ajax(request):
-    """
-        Функция для переключения между расписаниями со страницы /plan
-        :param request:
-        :return: Отрендеренная html разметка расписания
-    """
-    if request.is_ajax:
-        user = CustomUser.objects.get(email=request.user.email)
-        context = {}
-
-        try:
-            plan_id = int(request.POST['plan_id'])
-            context.update(get_cur_plan(request, plan_id))
-        except ValueError:
-            return render_to_response('templates_for_ajax/content_errors.html')
-        except IndexError:
-            return render_to_response('templates_for_ajax/content_errors.html')
-
-        context.update(get_dates_info(context['cur_plan']))
-        # устанавливаем current_yn
-        user.set_current_plan(plan_id)
-        plan_rows = PlanRows.objects.select_related().filter(plan_id=plan_id).order_by('start_week')
-        context['plan_rows'] = plan_rows
-
-        return render_to_response('content_pages/right_content_plan_general.html', context)
-
-
 def right_plan_content_only(request):
     """
         Загружает правый контент (без учёта Title блока), только контент расписания
@@ -286,50 +235,6 @@ def get_invitations_ajax(request):
         }
 
         return render_to_response('templates_for_ajax/invitations.html', context)
-
-
-def confirm_invitation_ajax(request):
-    """
-        Функция реагирует на выбор пользовтеля:
-            принял приглашение - confirmed_yn = y
-            отклонить приглашение - confirmed_yn = n
-        Далее в БД должен сработать соотв. триггер.
-        :param request:
-        :return: ?
-    """
-    if request.is_ajax():
-        user = CustomUser.objects.get(email=request.user.email)
-        inv = Invitations.objects.select_related().get(to_user=user.id, plan_id=request.GET['plan_id'])
-
-        inv.confirmed_yn = 'y' if request.GET['decision'] == '1' else 'n'
-        inv.save()
-
-        if inv.confirmed_yn == 'y':
-            # добавляем расписание и удаляем приглашение
-            new = UserPlans(
-                user_id=user.id,
-                plan_id=request.GET['plan_id'],
-                current_yn='n'
-            )
-            new.save()
-
-        inv.delete()
-
-        response = HttpResponse()
-        response['Content-Type'] = 'application/json'
-        response.write(json.dumps([{'success': 1}]))
-
-        return response
-
-
-###################################################################################
-#                         ОБРАБОТКА ОБЫЧНЫХ ЗАПРОСОВ                              #
-###################################################################################
-
-# def plan_empty(request):
-#     context = dict()
-#     context.update(get_all_plans(request))
-#     return render_to_response('plan_empty.html', context)
 
 
 def get_all_plans(request):
@@ -458,7 +363,7 @@ def home_view(request):
         return render_to_response('home.html', context)
 
     else:
-        return HttpResponseRedirect("/login", {})
+        return HttpResponseRedirect("/login")
 
 
 def plan_view(request):
@@ -484,7 +389,7 @@ def plan_view(request):
         return render_to_response('plan.html', context)
 
     else:
-        return HttpResponseRedirect("/login", {})
+        return HttpResponseRedirect("/login")
 
 
 def statistics_view(request):
@@ -542,7 +447,7 @@ def participant_view(request):
 
         return render_to_response('participants.html', context)
     else:
-        return HttpResponseRedirect("/")
+        return HttpResponseRedirect("/login")
 
 
 def about_service_view(request):
@@ -551,6 +456,8 @@ def about_service_view(request):
         context = {'user': user}
 
         return render_to_response('about_service.html', context)
+    else:
+        return HttpResponseRedirect("/login")
 
 
 def registration_view(request):
@@ -573,19 +480,6 @@ def registration_view(request):
     return render_to_response('reg.html', context)
 
 
-def get_participants(plan):
-    """
-        Возвращает всех участников расписания
-        такие как: имена дней недели, дата начала работы расписания
-    """
-    context = dict()
-    # TODO: exclude role = elder
-    participant_list = UserPlans.objects.select_related().filter(plan_id=plan.plan.id)
-
-    context['participants'] = participant_list
-    return context
-
-
 def profile_view(request):
     if request.user.is_authenticated():
         user = CustomUser.objects.get(email=request.user.email)
@@ -597,8 +491,5 @@ def profile_view(request):
         context['user_plans'] = user_plans
         context['user_channels'] = user_channels
         return render_to_response('account.html', context)
-
-
-# TODO: Вообще нигде не используется
-def sort_by_start_date(row):
-    return row.start_week
+    else:
+        return HttpResponseRedirect("/login")

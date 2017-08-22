@@ -1,21 +1,12 @@
 # -*- coding: utf-8 -*-
 
 import json
-# ---------------------------------------------------------------
-# Для того, что бы тестировать django файлы
-# Вставлять обязательно перед импортом моделей!!!
-import os
-import django
-
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "intodayer2.settings")
-django.setup()
-# ---------------------------------------------------------------
-from intodayer2_app.models import CustomUser, UserMailingChannels, UserPlans
 from django.http import HttpResponse
-from django.shortcuts import render_to_response
-from django.core.exceptions import ValidationError, ObjectDoesNotExist
-from django.contrib.auth.hashers import check_password, make_password
 from extra.validators import validate_password
+from django.shortcuts import render_to_response
+from django.contrib.auth.hashers import check_password, make_password
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
+from intodayer2_app.models import CustomUser, UserMailingChannels, UserPlans
 
 
 def update_user_info(request):

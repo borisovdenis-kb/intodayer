@@ -1,18 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import json
-# ---------------------------------------------------------------
-# Для того, что бы тестировать django файлы
-# Вставлять обязательно перед импортом моделей!!!
-import os
-import django
-
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "intodayer2.settings")
-django.setup()
-# ---------------------------------------------------------------
 from extra.mailing import IntodayerMailing
-from intodayer2_app.views import get_participants
 from django.shortcuts import render_to_response
+from intodayer2_app.views import get_participants
 from django.http import HttpResponse, JsonResponse
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from intodayer2_app.models import CustomUser, UserPlans, Invitations, UnacceptableNewRoleValue

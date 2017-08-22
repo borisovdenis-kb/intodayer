@@ -1,21 +1,11 @@
 # -*- coding: utf-8 -*-
 
-# ---------------------------------------------------------------
-# Для того, что бы тестировать django файлы
-# Вставлять обязательно перед импортом моделей!!!
-import os
-import django
-
-from intodayer2_app.views import get_cur_plan, get_dates_info
-
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "intodayer2.settings")
-django.setup()
-# ---------------------------------------------------------------
 import json
-from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from extra.mailing import IntodayerMailing
 from django.shortcuts import render_to_response
 from django.http import JsonResponse, HttpResponse
+from intodayer2_app.views import get_cur_plan, get_dates_info
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from intodayer2_app.models import (
     CustomUser, UserPlans, Times, Subjects, Teachers, Places, PlanLists,
     PlanRows
@@ -218,6 +208,24 @@ def switch_plan_plan(request):
         return render_to_response('content_pages/right_content_plan_general.html', context)
     else:
         return HttpResponse(status=401)
+
+
+def change_current_plan(request):
+    """
+        This endpoint just to change user's current plan.
+
+        --> For more detailed documentation see Postman.
+    """
+    if request.is_ajax:
+        user = CustomUser.objects.get(email=request.user.email)
+        data = request.POST
+
+        try:
+            user.set_current_plan(data['plan_id'])
+        except (ValueError, IndexError):
+            return render_to_response('templates_for_ajax/content_errors.html', status=400)
+
+        return HttpResponse(status=200)
 
 
 def get_avatar(request):

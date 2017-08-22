@@ -45,7 +45,6 @@ urlpatterns = [
     url(r'^home/switch_plan', views.switch_plan_home_ajax),
     url(r'^plan/edit_plan_row', views.edit_plan_row_ajax),
     url(r'^plan/update_delete', views.plan_delete_ajax),
-    url(r'^switch_plan_only_set', views.switch_plan_only_set_ajax),
     url(r'^plan/invitation/(\d+)$', views.plan_view),
 
     # подгрузка контентов
@@ -65,6 +64,7 @@ urlpatterns = [
     url(r'^plan/switch_plan', planApi.switch_plan_plan),
     url(r'^upload_plan_avatar', planApi.upload_plan_avatar),
     url(r'^plan/settings_plan', views.get_settings_plan_html),
+    url(r'^change_current_plan', planApi.change_current_plan),
     url(r'^plan/invite_setting_plan', views.get_invite_settings_html),
 
     # API участников
