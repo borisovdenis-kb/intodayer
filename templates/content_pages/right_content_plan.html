@@ -52,7 +52,7 @@
                             </div>
                             <ul>
                                 <li><textarea class="weeks"
-                                              num="1">{{ row.start_week }}-{{ row.end_week }}</textarea></li>
+                                              num="1">{% if row.start_week < 9 %}0{% endif %}{{ row.start_week }}-{{ row.end_week }}</textarea></li>
                                 <li><textarea class="time" num="2">{{ row.time.get_format_time }}</textarea>
                                 </li>
                                 <li><textarea class="subject" num="3">{{ row.subject.name }}</textarea></li>
