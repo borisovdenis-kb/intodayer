@@ -10,12 +10,12 @@ django.setup()
 # ---------------------------------------------------------------
 from intodayer2_app.models import Invitations, CustomUser
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 
 
-def verify_invitation(request, uuid):
+def confirm_invitation(request, uuid):
     """
-        This endpoint to check existence of invitation.
+        This endpoint to confirm invitation.
 
         --> For more detailed documentation see Postman.
     """
@@ -28,23 +28,7 @@ def verify_invitation(request, uuid):
         except ObjectDoesNotExist:
             return render_to_response("errors/invitation_is_not_valid.html")
         else:
-            url = "/confirm_invitation/{}/{}/{}/".format(
-                invitation.from_user.id, invitation.to_user.id, invitation.plan_id
-            )
-            return HttpResponseRedirect(url)
+            return render_to_response("confirm_invitation.html")
     else:
         request.session['state'] = {'operation': 'confirm_invitation', 'uuid': uuid}
         return HttpResponseRedirect("/")
-
-
-def confirm_invitation_view(request, from_user_id, to_user_id, plan_id):
-    if request.user.is_authenticated():
-        try:
-            invitation = Invitations.objects.get(from_user=from_user_id, to_user=to_user_id, plan_id=plan_id)
-        except ObjectDoesNotExist:
-            return render_to_response("errors/invitation_is_not_valid.html")
-        else:
-            # TODO: Нужно выдать страничку с подтверждением или отклонение расписания.
-            return render_to_response("confirm_invitation.html")
-    else:
-        return HttpResponse(status=401)
