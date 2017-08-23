@@ -2,11 +2,12 @@
 {% load staticfiles %}
 
 
-{% block scripts_top %}
+{% block styles %}
 
     <link rel="stylesheet" type="text/css" href={% static "css/header.css" %}>
     <link rel="stylesheet" type="text/css" href={% static "css/welcome_base.css" %}>
     <link rel="stylesheet" type="text/css" href={% static "css/login_reg.css" %}>
+    <link rel="stylesheet" type="text/css" href={% static "css/components/loading_circle.css" %}>
 {% endblock %}
 
 {% block header %}
@@ -24,7 +25,7 @@
             <div class="panel_reg" style="opacity: 0;">
 
                 <div class="row">
-                    <div class="col-xs-8 col-lg-7 ">
+                    <div class="">
                         <h3 for="inputFirstName">Регистрация</h3>
                     </div>
                 </div>
@@ -33,7 +34,7 @@
 
 
                 <div class="row">
-                    <div class="reg_input_content first col-xs-8 col-lg-7 ">
+                    <div class="reg_input_content first">
                         <label for="inputFirstName">Введите ваше Имя</label>
                         {{ form.first_name }}
                     </div>
@@ -41,7 +42,7 @@
 
 
                 <div class="row">
-                    <div class="reg_input_content col-xs-8 col-lg-7 ">
+                    <div class="reg_input_content">
                         <label for="inputLastName">Введите вашу Фамилию</label>
                         {{ form.last_name }}
                     </div>
@@ -49,7 +50,7 @@
 
 
                 <div class="row">
-                    <div class="reg_input_content col-xs-8 col-lg-7 ">
+                    <div class="reg_input_content">
                         <label for="inputPassword">Придумайте хороший пароль</label>
                         {{ form.password1 }}
                     </div>
@@ -57,15 +58,15 @@
 
 
                 <div class="row">
-                    <div class="reg_input_content col-xs-8 col-lg-7">
+                    <div class="reg_input_content">
                         {{ form.password2 }}
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="reg_input_content col-xs-8 col-lg-7">
+                <div class="row email_content">
+                    <div class="reg_input_content">
                         <label for="inputEmail">Введите свою почту для рассылки</label>
-                        {{ form.email }}
+                        {{ form.email }}{% include 'components/loading_circle.html' %}
                     </div>
                 </div>
 
@@ -102,7 +103,7 @@
 
 {% block other_content %}
     <div class="row fill-space-bottom">
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="height: 100px"></div>
+        <div class="" style="height: 100px"></div>
     </div>
 {% endblock %}
 

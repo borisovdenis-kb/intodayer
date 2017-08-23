@@ -342,11 +342,11 @@ function setNewListenersNewStr($new_div) {
     $new_div.find('textarea.time').each(function () {
         $(this).mask("23:59", {placeholder: "__:__", autoclear: false});
     });
-    $new_div.find('textarea.weeks').each(function () {
-        $.mask.definitions['z'] = '[1-9]';
-        $(this).mask("5z-5z", {placeholder: "__-__"});
-
-    });
+    // $new_div.find('textarea.weeks').each(function () {
+    //     $.mask.definitions['z'] = '[1-9]';
+    //     $(this).mask("5z-5z", {placeholder: "__-__"});
+    //
+    // });
 }
 
 

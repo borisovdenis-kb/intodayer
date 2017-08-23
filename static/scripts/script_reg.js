@@ -1,18 +1,18 @@
-var width_size, raise, is_correct, old_content;
-var input_width = $('.reg input').outerWidth();
+let width_size, raise, is_correct, old_content;
+
 raise = 0;
 width_size = 0;
 is_correct = 0;
 old_content = $('#password1').val();
 
 
-var $reg_first_name;
-var $reg_last_name;
-var $reg_pass;
-var $reg_pass_re;
-var $reg_email;
-var $btn_submit;
-var $btn_back;
+let $reg_first_name;
+let $reg_last_name;
+let $reg_pass;
+let $reg_pass_re;
+let $reg_email;
+let $btn_submit;
+let $btn_back;
 
 
 $(document).ready(function () {
@@ -28,50 +28,39 @@ $(document).ready(function () {
     $btn_submit = $('#buttonEnter');
     $btn_back = $('#buttonBack');
 
-
-    var options = {
-        placement: function (context, source) {
-            var position = $(source).position();
-            if (position.left > 515) {
-                return "left";
-            }
-            if (position.left < 515) {
-                return "right";
-            }
-
-            if (position.top < 110) {
-                return "bottom";
-            }
-            return "top";
-        }
-        ,
+    $reg_first_name.popover({
+        placement: 'right',
         html: true,
         trigger: 'manual',
         viewport: 'body'
-
-    };
-
-    $reg_first_name.popover({
-        options
     });
     $reg_last_name.popover({
-        options
+        placement: 'right',
+        html: true,
+        trigger: 'manual',
+        viewport: 'body'
     });
     $reg_pass.popover({
-        options
+        placement: 'right',
+        html: true,
+        trigger: 'manual',
+        viewport: 'body'
     });
     $reg_email.popover({
-        options
+        placement: 'right',
+        html: true,
+        trigger: 'manual',
+        viewport: 'body'
     });
 
     setSubmitDisable();
     setRegistrationsListeners();
 
     $(window).resize(function () {
-        $reg_first_name.popover('destroy');
-        $reg_last_name.popover('destroy');
-        $reg_pass.popover('destroy');
-        $reg_email.popover('destroy');
+        $reg_first_name.popover('hide');
+        $reg_last_name.popover('hide');
+        $reg_pass.popover('hide');
+        $reg_email.popover('hide');
     });
 
 });
@@ -87,39 +76,110 @@ function setRegistrationsListeners() {
 
 
     $('input.reg_field').on('input focusout', function () {
-        setTimeout(function () {
-            totalValidation();
-        }, 50);
-
+        totalValidation();
     });
 
 
     // Поля имени и фамилиии
-    $reg_first_name.on('focusout', function () {
+    $reg_first_name.on('change', function () {
         setValidateTextField($(this));
     });
+    $reg_last_name.on('change', function () {
+        setValidateTextField($(this));
+    });
+
     $reg_first_name.on('input', function () {
-        setValidateEmptyInput($(this));
+        if (inputNotEmpty($(this).val())) {
+            $(this).prop('validate', true);
+        }
+        else {
+            setInputDefault($(this));
+            $(this).prop('validate', false);
+        }
     });
     $reg_last_name.on('input', function () {
-        setValidateEmptyInput($(this));
+        if (inputNotEmpty($(this).val())) {
+            $(this).prop('validate', true);
+        }
+        else {
+            setInputDefault($(this));
+            $(this).prop('validate', false);
+        }
     });
-    $reg_last_name.on('change focusout', function () {
-        setValidateTextField($(this));
-    });
-    // Поля ввода пароля
 
-    $reg_pass.on('focusout', function () {
-        setValidateCorrectPass($reg_pass, $reg_pass_re);
-    });
-    $reg_pass_re.on('focusout', function () {
-        setValidateCorrectPass($reg_pass, $reg_pass_re);
-    });
+
+    // Поля ввода пароля
     $reg_pass.on('input', function () {
-        setValidateCorrectPassDefault($reg_pass, $reg_pass_re);
+        if (!inputNotEmpty($(this).val())) {
+            $(this).popover('hide');
+            setInputDefault($(this));
+        }
     });
     $reg_pass_re.on('input', function () {
-        setValidateCorrectPassDefault($reg_pass, $reg_pass_re);
+        if (!inputNotEmpty($(this).val())) {
+
+            setInputDefault($(this));
+        }
+    });
+    $reg_pass.on('input', function () {
+        if (validatePassword($(this).val())) {
+            $(this).prop('validate', true);
+        }
+        else {
+            $(this).prop('validate', false);
+        }
+    });
+    $reg_pass_re.on('input', function () {
+        if (validatePassword($(this).val()) && $(this).val() === $reg_pass.val()) {
+            $(this).prop('validate', true);
+        }
+        else {
+            $(this).prop('validate', false);
+        }
+    });
+
+    $reg_pass.on('change', function () {
+        if (!inputNotEmpty($reg_pass.val())) {
+            return false;
+        }
+        if (!validatePassword($reg_pass.val())) {
+            $reg_pass.attr('data-content', 'Пароль должен состоять не менее, чем из 8 латинских символов, букв разного регистра и цифр.');
+            $reg_pass.attr('data-original-title', 'Слабый пароль');
+
+            $reg_pass.popover('show');
+
+            setInputError($reg_pass);
+            setInputDefault($reg_pass_re);
+        }
+        else {
+            if (!inputNotEmpty($reg_pass_re.val())) {
+                setInputSuccess($reg_pass);
+            }
+            else {
+                if ($reg_pass.val() !== $reg_pass_re.val()) {
+
+                    $reg_pass.attr('data-content', 'Проверьте клавишу CapsLock и язык ввода.');
+                    $reg_pass.attr('data-original-title', 'Пароли не совпадают');
+
+
+                    $reg_pass.popover('show');
+
+                    setInputError($reg_pass);
+                    setInputError($reg_pass_re);
+                }
+                else {
+                    setInputSuccess($reg_pass);
+                    setInputSuccess($reg_pass_re);
+                }
+            }
+        }
+    });
+
+    $reg_pass_re.on('change', function () {
+        if (inputNotEmpty($(this).val())) {
+            $(this).popover('hide');
+        }
+        $reg_pass.trigger('change');
     });
 
     // Поле ввода email
@@ -129,113 +189,77 @@ function setRegistrationsListeners() {
 
     $reg_email.on('input', function () {
         if (!validateEmail($(this).val())) {
+            $(this).prop('validate', false);
+
+        }
+    });
+    $reg_email.on('input', function () {
+        if (!inputNotEmpty($(this).val())) {
+            $(this).popover('hide');
             setInputDefault($(this));
         }
     });
-}
-
-function totalValidation() {
-    let count_input = $('input.reg_field').length;
-
-    let validate_count = 0;
-    $('input.reg_field').each(function (i) {
-
-        if ($(this).hasClass('success_input_validate')) {
-            validate_count += 1;
-        }
-        if (i + 1 === count_input) {
-            if (count_input === validate_count) {
-                console.log(validate_count);
-                setSubmitEnable();
-            }
-            else {
-                setSubmitDisable();
-            }
+    $reg_email.on('change', function () {
+        if (inputNotEmpty($(this).val()) && !validateEmail($(this).val())) {
+            $reg_email.attr('data-content', 'Такой почты не существует');
+            $reg_email.attr('data-original-title', 'Неверный email');
+            $reg_email.prop('validate', false);
+            $reg_email.popover('show');
+            setInputError($(this));
         }
     });
 }
 
-function setValidateEmptyInput($input_field) {
-    if (!inputNotEmpty($input_field.val())) {
-        $input_field.popover('destroy');
-        setInputDefault($input_field);
-    }
+// общая валидация проверяет во всех ли полях введена правильная информация
+// а точнее, проверяет наличие атрибута 'validate' == true
+function totalValidation() {
+    setTimeout(() => {
+        let count_input = $('input.reg_field').length;
+
+        let validate_count = 0;
+        $('input.reg_field').each(function (i) {
+
+            if ($(this).prop('validate')) {
+                validate_count += 1;
+            }
+            // console.log(count_input + " " + validate_count);
+            if (i + 1 === count_input) {
+                if (count_input === validate_count) {
+                    setSubmitEnable();
+                }
+                else {
+                    setSubmitDisable();
+                }
+            }
+        });
+    }, 100);
 }
 
 var timer_check_email;
+var $inline_circle_loader_email = $('.email_content').find('.inline_circle_loader');
 function setValidateEmail($email_input) {
     if (validateEmail($email_input.val())) {
-
         clearTimeout(timer_check_email);
+        $inline_circle_loader_email.show();
         timer_check_email = setTimeout(() => {
-            setTimeout(() => {
-                totalValidation();
-            }, 50);
-
 
             emailNotExistValidation($email_input.val()).then(function () {
+                $email_input.prop('validate', true);
+                totalValidation();
                 setInputSuccess($email_input);
+                $inline_circle_loader_email.hide();
             }, function () {
-                $email_input.popover('show');
+                $inline_circle_loader_email.hide();
                 $email_input.attr('data-content', 'Такой email уже зарегестрирован другим пользователем');
                 $email_input.attr('data-original-title', 'Адрес занят');
+                $email_input.prop('validate', false);
                 $email_input.popover('show');
+                totalValidation();
                 setInputError($email_input);
             });
         }, 500);
-
-
     }
 }
-
-function setValidateCorrectPassDefault($pass_input1, $pass_input2) {
-    if (!inputNotEmpty($pass_input1.val()) && !validatePassword($pass_input1.val())) {
-        $pass_input1.popover('destroy');
-        setInputDefault($pass_input1);
-        setInputDefault($pass_input2);
-
-    }
-}
-
-// в этой функции много ifoв потому что она работает с совпадение 2 полей
-function setValidateCorrectPass($pass_input1, $pass_input2) {
-    let pass1 = $pass_input1.val();
-    let pass2 = $pass_input2.val();
-
-    if (inputNotEmpty(pass1)) {
-        if (!validatePassword(pass1)) {
-            setInputError($pass_input1);
-            setInputError($pass_input2);
-            $pass_input1.attr('data-content', 'Пароль должен состоять не менее, чем из 8 латинских символов, букв разного регистра и цифр.');
-            $pass_input1.attr('data-original-title', 'Слабый пароль');
-            $pass_input1.popover('show');
-            return;
-        }
-        else {
-            setInputDefault($pass_input1);
-            setInputDefault($pass_input2);
-            if (inputNotEmpty(pass2)) {
-                if (pass1 !== pass2) {
-                    setInputError($pass_input1);
-                    setInputError($pass_input2);
-                    $pass_input1.attr('data-content', 'Проверьте клавишу CapsLock и язык ввода.');
-                    $pass_input1.attr('data-original-title', 'Пароли не совпадают');
-                    $pass_input1.popover('show');
-                    return;
-                }
-                else {
-                    setInputSuccess($pass_input1);
-                    setInputSuccess($pass_input2);
-                }
-            }
-        }
-    }
-    else {
-        setInputDefault($pass_input1);
-        setInputDefault($pass_input2);
-    }
-}
-
 
 function setValidateTextField($text_input) {
     if (inputNotEmpty($text_input.val())) {
@@ -250,7 +274,7 @@ function setValidateTextField($text_input) {
 // устанавливают стили INPUT валидации
 function setInputSuccess($input) {
     if ($input.next().hasClass('popover')) {
-        $input.popover('destroy');
+        $input.popover('hide');
     }
 
     setInputDefault($input);
@@ -312,6 +336,12 @@ function setSubmitDisable() {
     });
 }
 
+function setSubmitEnable() {
+    $btn_submit.removeClass('disabled');
+    $btn_submit.unbind();
+}
+
+
 function setValidateEmptyInputs($inputs_set) {
     $inputs_set.each(function () {
         if (!inputNotEmpty($(this).val())) {
@@ -325,12 +355,8 @@ function setValidateEmptyInputs($inputs_set) {
 
 function checkAllValidateStyle() {
     setValidateEmptyInputs($('input.reg_field'));
-    setValidateCorrectPass($reg_pass, $reg_pass_re);
+    // setValidateCorrectPass($reg_pass, $reg_pass_re);
     setValidateEmail($reg_email);
 }
 
-function setSubmitEnable() {
-    $btn_submit.removeClass('disabled');
-    $btn_submit.unbind();
-}
 

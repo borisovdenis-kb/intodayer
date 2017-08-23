@@ -1,9 +1,21 @@
 @import mixins
 @import global_vars
 
+$login_max_width: 500px
+$login_mix_width: 500px
+
+$login_width_mobile: 300px
+$login_width_mobile_landscape: 400px
+
+$reg_min_width: 400px
+$reg_max_width: 500px
+$reg_min_width_mobile: 300px
+
+
 html, body
   height: 100%
   margin: 0 auto
+
 
 %panels_styles
   margin: auto
@@ -28,25 +40,36 @@ html, body
   margin-bottom: 0
 
 .panel_reg
+  #inputEmail.form-control
+    display: inline-block
+
+  input
+    max-width: 55%
   .reg_input_content.first
     margin-top: 5px
   .reg_footer
     margin-top: 20px
   @extend %panels_styles
-  min-width: 400px
-  max-width: 600px
+  min-width: $reg_min_width
+  max-width: $reg_max_width
   text-align: left
 
   .reg_btn_content
     input
-      width: 200px
+      width: 150px
+    margin:
+      top: 15px
 
 .panel_auth
   .row
     margin: 0
     padding: 0
-  width: 600px
+  max-width: $login_max_width
+  min-width: 300px
   @extend %panels_styles
+  input
+    margin: auto
+    width: 300px
   .auth_btn_content
     margin:
       top: 15px
@@ -72,20 +95,22 @@ html, body
   width: 300px
 
 .row
-  margin-left: 10px
+  margin-left: 20px
 
 @media (max-width: 768px)
   .row
     margin: 0
     padding: 0
   .panel_reg
-    min-width: 300px
-    width: auto
+    //min-width: $reg_min_width_mobile
+    min-width: $reg_min_width_mobile
+    //max-width: $reg_max
+    input
+      max-width: 60%
     .reg_btn_content
       input
-        width: 150px
+        width: 120px
   .panel_auth
-    width: auto
     .auth_btn_content
       input
         width: 120px
@@ -103,5 +128,5 @@ html, body
 
 @media (max-width: 768px) and (orientation: landscape)
   .panel_auth
-    width: 400px
+    width: $login_width_mobile_landscape
 

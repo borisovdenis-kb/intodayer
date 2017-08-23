@@ -37,20 +37,30 @@ html, body {
 
 .panel_reg {
   min-width: 400px;
-  max-width: 600px;
+  max-width: 500px;
   text-align: left; }
+  .panel_reg #inputEmail.form-control {
+    display: inline-block; }
+  .panel_reg input {
+    max-width: 55%; }
   .panel_reg .reg_input_content.first {
     margin-top: 5px; }
   .panel_reg .reg_footer {
     margin-top: 20px; }
-  .panel_reg .reg_btn_content input {
-    width: 200px; }
+  .panel_reg .reg_btn_content {
+    margin-top: 15px; }
+    .panel_reg .reg_btn_content input {
+      width: 150px; }
 
 .panel_auth {
-  width: 600px; }
+  max-width: 500px;
+  min-width: 300px; }
   .panel_auth .row {
     margin: 0;
     padding: 0; }
+  .panel_auth input {
+    margin: auto;
+    width: 300px; }
   .panel_auth .auth_btn_content {
     margin-top: 15px; }
     .panel_auth .auth_btn_content input {
@@ -73,7 +83,7 @@ html, body {
   width: 300px; }
 
 .row {
-  margin-left: 10px; }
+  margin-left: 20px; }
 
 @media (max-width: 768px) {
   .row {
@@ -81,15 +91,14 @@ html, body {
     padding: 0; }
 
   .panel_reg {
-    min-width: 300px;
-    width: auto; }
+    min-width: 300px; }
+    .panel_reg input {
+      max-width: 60%; }
     .panel_reg .reg_btn_content input {
-      width: 150px; }
-
-  .panel_auth {
-    width: auto; }
-    .panel_auth .auth_btn_content input {
       width: 120px; }
+
+  .panel_auth .auth_btn_content input {
+    width: 120px; }
 
   .popover {
     width: 120px;
