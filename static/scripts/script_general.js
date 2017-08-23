@@ -32,14 +32,14 @@ function setInvitationsListeners() {
         var confposLeft = $('.confirmation').offset().left;
     }
 
-    $(window).on('scroll', function () {
-        if ($(window).scrollTop() > confposTop + 10) {
-            $('.confirmation').css({'position': 'fixed', 'top': '10px', 'left': confposLeft});
-            // $('.confirmation').css({'position': 'fixed', 'top': '0px'});
-        } else {
-            $('.confirmation').css({'position': 'relative', 'top': '0', 'left': '0'});
-        }
-    });
+    // $(window).on('scroll', function () {
+    //     if ($(window).scrollTop() > confposTop + 10) {
+    //         $('.confirmation').css({'position': 'fixed', 'top': '10px', 'left': confposLeft});
+    //         // $('.confirmation').css({'position': 'fixed', 'top': '0px'});
+    //     } else {
+    //         $('.confirmation').css({'position': 'relative', 'top': '0', 'left': '0'});
+    //     }
+    // });
 
     var curtxt_accept = $('.accept').text();
     var curtxt_reject = $('.reject').text();

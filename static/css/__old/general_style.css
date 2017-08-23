@@ -146,13 +146,14 @@ button:focus {
 }
 
 .confirmation {
-    /*display: flex;*/
-    /*flex-direction: column;*/
-    /*justify-content: flex-start;*/
-    top: 0px;
-    margin: 0px 0px 0px 0px;
-    width: 170px;
+    display: flex;
+    position: fixed;
+    flex-direction: row;
+    justify-content: center;
+    height: 50px;
+    width: 100%;
     border-radius: 4px;
+    background-color: #f2f2f2;
 }
 
 .conf_fixed {
@@ -169,9 +170,10 @@ button:focus {
 }
 
 .accept, .reject {
-    margin-bottom: 7px;
-    /*padding: 8px;*/
+    display: flex;
+    margin-left: 10px;
     height: 40px;
+    width: 150px;
     border-radius: 4px;
     text-align: center;
     font-family: "Cyntho Pro" !important;
