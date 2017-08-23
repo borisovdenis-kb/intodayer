@@ -1,1 +1,14 @@
-<h1>Confirm invitation page</h1>
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block styles %}
+    <link rel="stylesheet" type="text/css" href={% static "css/plan_content.css" %}>
+{% endblock %}
+
+{% block header %}
+    {% include 'templates_for_ajax/header_welcome.html' %}
+{% endblock %}
+
+{% block right_content %}
+    {% include "content_pages/right_content_plan_general.html" %}
+{% endblock %}

@@ -15,6 +15,7 @@ from uuid import uuid4
 from decouple import config
 from base64 import b64decode
 from intodayer_bot import bot
+from intodayer2 import settings
 from django.core.mail import send_mail
 from django.core.files.base import ContentFile
 from extra.validators import validate_email_field
@@ -95,8 +96,10 @@ class IntodayerMailing:
                     from_user=from_user, to_user=to_user, email=email, plan_id=plan_id, uuid=uuid
                 )
 
-            # TODO: Изменить на боевом серерве
-            context['url'] = "http://intodayer.ru/invitation/{}".format(uuid)
+            if settings.DEBUG:
+                context['url'] = "http://127.0.0.1/invitation/{}".format(uuid)
+            else:
+                context['url'] = "http://intodayer.ru/invitation/{}".format(uuid)
 
             send_mail(
                 self.subject,
