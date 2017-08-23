@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-
+import json
 from datetime import datetime
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render_to_response
 from django.core.exceptions import ObjectDoesNotExist
-from intodayer2_app.models import Invitations, CustomUser, PlanLists, PlanRows, DaysOfWeek
+from intodayer2_app.models import Invitations, CustomUser, PlanLists, PlanRows, DaysOfWeek, UserPlans
 
 
 def get_plan(plan_id):
@@ -27,7 +27,7 @@ def get_dates_info(cur_plan):
     return context
 
 
-def confirm_invitation(request, uuid):
+def show_invitation(request, uuid):
     """
         This endpoint to confirm invitation.
 
@@ -48,3 +48,32 @@ def confirm_invitation(request, uuid):
     else:
         request.session['state'] = {'operation': 'confirm_invitation', 'uuid': uuid}
         return HttpResponseRedirect("/")
+
+
+def confirm_invitation(request, uuid):
+    """
+        This endpoint to confirm invitation.
+
+        --> For more detailed documentation see Postman.
+    """
+    if request.user.is_authenticated():
+        user = CustomUser.objects.get(email=request.user.email)
+        data = json.loads(request.body.decode('utf-8'))
+
+        try:
+            invitation = Invitations.objects.get(uuid=uuid, email=user.email)
+        except ObjectDoesNotExist:
+            return render_to_response("errors/invitation_is_not_valid.html")
+        else:
+            print(data['is_accept'])
+            if data['is_accept']:
+                UserPlans.objects.create(
+                    plan_id=invitation.plan_id, user_id=user.id, role='participant', current_yn='n'
+                )
+
+            invitation.delete()
+
+            return HttpResponse(status=200)
+
+    else:
+        return HttpResponse(status=401)

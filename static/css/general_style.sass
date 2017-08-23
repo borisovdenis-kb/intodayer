@@ -119,7 +119,8 @@ button
   display: flex
   flex-direction: column
   height: 100px
-  width: 170px
+  width: 100%
+  left: 0px
   margin: 15px 0 0 15px
   @include border-radius(4px)
 
@@ -131,12 +132,13 @@ button
   margin:
     top: 5px
   padding: 8px
-  height: 20px
-  @include border-radius(4px)
+  height: 40px
   text-align: center
   font-family: "Cyntho Pro" !important
   background-position: center
+  background-repeat: no-repeat
   @include background-size(contain)
+  @include border-radius(4px)
   overflow: hidden
   transition: 0.2s
   cursor: pointer

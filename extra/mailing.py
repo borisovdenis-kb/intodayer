@@ -97,7 +97,7 @@ class IntodayerMailing:
                 )
 
             if settings.DEBUG:
-                context['url'] = "http://127.0.0.1/invitation/{}".format(uuid)
+                context['url'] = "http://127.0.0.1:8000/invitation/{}".format(uuid)
             else:
                 context['url'] = "http://intodayer.ru/invitation/{}".format(uuid)
 

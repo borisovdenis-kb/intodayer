@@ -1,21 +1,43 @@
 $(document).ready(function () {
-    // setInvitationsListeners();
+    setInvitationsListeners();
 });
 
 
+function confirmInvitation(is_accept) {
+    /*
+     *  is_accept: true/false
+     */
+    var uuid, data;
+
+    uuid = location.href.split('/');
+    uuid = uuid[uuid.length - 1];
+    data = JSON.stringify({is_accept: is_accept});
+
+    $.ajax({
+        url: '/invitation/confirm/' + uuid,
+        type: "POST",
+        contentType: "application/json",
+        data: data,
+        success: function () {
+            window.location.href = "/";
+        }
+    });
+}
 
 function setInvitationsListeners() {
     if (location.href.indexOf('invitation') < 0) {
         show_invitations();
     } else {
-        var confpos = $('.confirmation').offset().top;
+        var confposTop = $('.confirmation').offset().top;
+        var confposLeft = $('.confirmation').offset().left;
     }
 
     $(window).on('scroll', function () {
-        if ($(window).scrollTop() > confpos) {
-            $('.confirmation').css({'position': 'fixed', 'top': '0px'});
+        if ($(window).scrollTop() > confposTop + 10) {
+            $('.confirmation').css({'position': 'fixed', 'top': '10px', 'left': confposLeft});
+            // $('.confirmation').css({'position': 'fixed', 'top': '0px'});
         } else {
-            $('.confirmation').css({'position': 'relative'});
+            $('.confirmation').css({'position': 'relative', 'top': '0', 'left': '0'});
         }
     });
 
@@ -39,38 +61,13 @@ function setInvitationsListeners() {
     });
 
     $('.accept').click(function () {
-        var array = location.href.split('/');
-
-        $.ajax({
-            url: '/confirm_invitation',
-            data: {'decision': 1, 'plan_id': array[array.length - 1]},
-            success: function (msg) {
-                blurElement('.effect_blur', 4);
-                $('.cover_all p').text('Расписание добавлено');
-                $('.cover_all').fadeIn(800);
-                $('.cover_all a').delay(1100).fadeIn(0);
-                // $('.perform_confirmation').animate({display: 'block'}, 300, 'easeInOutExpo');
-            }
-        });
+        confirmInvitation(true);
     });
 
     $('.reject').click(function () {
-        var array = location.href.split('/');
-
-        $.ajax({
-            url: '/confirm_invitation',
-            data: {'decision': 0, 'plan_id': array[array.length - 1]},
-            success: function (msg) {
-                blurElement('.effect_blur', 4);
-                $('.cover_all p').text('Приглашение отклонено');
-                $('.cover_all').fadeIn(800);
-                $('.cover_all a').delay(1100).fadeIn(0);
-                // $('.perform_confirmation').animate({display: 'block'}, 300, 'easeInOutExpo');
-            }
-        });
+        confirmInvitation(false);
     });
 }
-
 
 
 function setInputCursorToEnd($this_input) {
