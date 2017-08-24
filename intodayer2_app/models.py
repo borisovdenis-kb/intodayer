@@ -489,6 +489,10 @@ class CustomUser(AbstractUser, UpdateMixin):
         elif action == 'invite_participants':
             return True if user_role in ['admin', 'elder'] else False
 
+        # для фронтэнда
+        elif action == 'edit_role':
+            return True if user_role in ['admin', 'elder'] else False
+
         elif action == 'set_role':
 
             cur_part_role = UserPlans.objects.get(

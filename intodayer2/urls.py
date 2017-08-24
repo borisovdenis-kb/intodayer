@@ -50,9 +50,6 @@ urlpatterns = [
 
     # подгрузка контентов
     url(r'^left_content', views.left_content_load_ajax),
-    url(r'^plan/plan_content_only', views.right_plan_content_only),
-    # url(r'^empty_plans', views.plan_empty),
-    # url(r'^favicon\.ico$', favicon_view),
 
     # API расписания
     url(r'^get_avatar', planApi.get_avatar),

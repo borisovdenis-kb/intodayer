@@ -1,7 +1,22 @@
 @charset "UTF-8";
+input#title_edit_input {
+  border: 2px solid #d9d9e3;
+  text-align: center;
+  font-family: "PT Sans" !important;
+  font-size: 22px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  -khtml-border-radius: 4px;
+  border-radius: 4px;
+  -ms-border-radius: 4px;
+  transition: 0.4s border ease; }
+  input#title_edit_input:focus {
+    border: 2px solid rgba(139, 29, 235, 0.4);
+    outline: none; }
+
 body {
   overflow-y: scroll;
-  min-width: 300px; }
+  min-width: 600px; }
 
 .page {
   clear: both; }
@@ -183,23 +198,21 @@ body {
   width: 100%;
   cursor: default; }
 
-#title_edit_input {
+input#title_edit_input {
   width: 100%;
-  font-size: 2em;
-  border: 1px solid white;
   text-align: center;
-  transition: 0.3s;
   text-overflow: ellipsis; }
-  #title_edit_input:focus {
-    outline: none;
-    cursor: auto;
-    border: 1px solid #d9d9e3; }
-  #title_edit_input:hover {
+  input#title_edit_input:hover {
     outline: none;
     cursor: pointer; }
-  #title_edit_input:disabled {
+  input#title_edit_input:disabled {
     background: rgba(255, 255, 255, 0);
     cursor: default; }
+
+#title_edit_input[disabled='disabled'] {
+  opacity: 1;
+  color: black;
+  border: 2px solid rgba(255, 255, 255, 0); }
 
 #count_title {
   margin-top: 5px;

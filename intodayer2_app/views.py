@@ -11,6 +11,8 @@ from django.contrib.auth.backends import ModelBackend
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, JsonResponse
 from intodayer2_app.forms import CustomUserCreationForm
 
+# from apis.planApi import get_user_plan_rights
+
 from extra.utils import (
     edit_plan_row, get_today_tomorrow_plans, CloneError, UPDATE, CREATE
 )
@@ -79,6 +81,8 @@ def get_settings_plan_html(request):
     if request.is_ajax():
         context = dict()
         context.update(get_cur_plan(request))
+        context.update(get_user_plan_rights(request.user, context['cur_plan'].plan.id))
+        print(context)
         return render_to_response('templates_for_ajax/settings_ajax.html', context)
 
 
@@ -216,58 +220,6 @@ def switch_plan_home_ajax(request):
             return HttpResponse(status=401)
     else:
         return HttpResponse(status=400)
-
-
-def switch_plan_plan_ajax(request):
-    """
-        Функция для переключения между расписаниями со страницы /plan
-        :param request:
-        :return: Отрендеренная html разметка расписания
-    """
-    if request.is_ajax:
-        user = CustomUser.objects.get(email=request.user.email)
-        context = {}
-
-        try:
-            plan_id = int(request.POST['plan_id'])
-            context.update(get_cur_plan(request, plan_id))
-        except ValueError:
-            return render_to_response('templates_for_ajax/content_errors.html')
-        except IndexError:
-            return render_to_response('templates_for_ajax/content_errors.html')
-
-        context.update(get_dates_info(context['cur_plan']))
-        # устанавливаем current_yn
-        user.set_current_plan(plan_id)
-        plan_rows = PlanRows.objects.select_related().filter(plan_id=plan_id).order_by('start_week')
-        context['plan_rows'] = plan_rows
-
-        return render_to_response('content_pages/right_content_plan_general.html', context)
-
-
-def right_plan_content_only(request):
-    """
-        Загружает правый контент (без учёта Title блока), только контент расписания
-    """
-    if request.is_ajax:
-        user = CustomUser.objects.get(email=request.user.email)
-        context = dict()
-
-        try:
-            plan_id = int(request.POST['plan_id'])
-            context.update(get_cur_plan(request, plan_id))
-        except ValueError:
-            return render_to_response('templates_for_ajax/content_errors.html')
-        except IndexError:
-            return render_to_response('templates_for_ajax/content_errors.html')
-
-        context.update(get_dates_info(context['cur_plan']))
-        # устанавливаем current_yn
-        user.set_current_plan(plan_id)
-        plan_rows = PlanRows.objects.select_related().filter(plan_id=plan_id).order_by('start_week')
-        context['plan_rows'] = plan_rows
-
-        return render_to_response('content_pages/right_content_plan.html', context)
 
 
 def get_invitations_ajax(request):
@@ -461,6 +413,14 @@ def home_view(request):
         return HttpResponseRedirect("/login", {})
 
 
+def get_user_plan_rights(user, plan_id):
+    context = {}
+    if user.has_rights(action='edit_plan', **{'plan_id': plan_id}):
+        context['user_has_edit_plan'] = True
+        context['user_role'] = UserPlans.objects.get(user_id=user.id, plan_id=plan_id).role
+    return context
+
+
 def plan_view(request):
     """
        Функция, которая выводит таблицу редактирования текущего (выбранного) расписания.
@@ -480,6 +440,8 @@ def plan_view(request):
         context['plan_rows'] = plan_rows
         # для появления кнопки добавления расписания
         context['is_plan_page'] = True
+        # получить права пользователя на редактирование расписания
+        context.update(get_user_plan_rights(context['user'], context['cur_plan'].plan.id))
 
         return render_to_response('plan.html', context)
 
@@ -527,6 +489,19 @@ def get_participants(plan):
     return context
 
 
+def get_user_participant_rights(user, plan_id):
+    context = {}
+    if user.has_rights(action='leave_plan', **{'plan_id': plan_id}):
+        context['user_has_leave_plan'] = True
+    if user.has_rights(action='invite_participants', **{'plan_id': plan_id}):
+        context['user_has_invite_participants'] = True
+    if user.has_rights(action='edit_role', **{'plan_id': plan_id}):
+        context['user_has_edit_role'] = True
+    user_role = UserPlans.objects.get(user_id=user.id, plan_id=plan_id).role
+    context['user_role'] = user_role
+    return context
+
+
 def participant_view(request):
     if request.user.is_authenticated():
         context = dict()
@@ -539,6 +514,7 @@ def participant_view(request):
 
         context.update(get_participants(context['cur_plan']))
         context['this_user'] = request.user
+        context.update(get_user_participant_rights(request.user, context['cur_plan'].plan.id))
 
         return render_to_response('participants.html', context)
     else:

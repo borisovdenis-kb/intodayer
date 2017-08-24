@@ -5,8 +5,11 @@
     {% block title %}
         <title>Intodayer</title>
     {% endblock %}
+    {% block meta_html %}
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% endblock %}
     <meta http-equiv="Content-type" content="text/html" charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+{#    <meta name="viewport" content="width=device-width, initial-scale=1">#}
     {#    картинка сайта#}
     <link href="{% static "images/favicon.ico" %}" rel="shortcut icon" type="image/x-icon"/>
 
@@ -31,7 +34,7 @@
     {#    Импорт стилей контента#}
     <link rel="stylesheet" type="text/css" href={% static "css/general_style.css" %}>
     <link rel="stylesheet" type="text/css" href={% static "css/base.css" %}>
-    <link rel="stylesheet" type="text/css" href={% static "css/header.css" %}>
+    <link rel="stylesheet" type="text/css" href={% static "css/header-top.css" %}>
     <link rel="stylesheet" type="text/css" href={% static "css/font_optimizate_new.css" %}>
 
     {#    Импорт стилей для компонентов#}
@@ -111,6 +114,9 @@
 <script type="text/javascript" src={% static "scripts/components/script_success_frame.js" %}></script>
 
 {% block scripts_bottom %}
+{% endblock %}
+
+{% block script_user_rights %}
 {% endblock %}
 
 </html>

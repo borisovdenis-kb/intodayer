@@ -1,6 +1,5 @@
 body {
-  overflow-y: scroll;
-  min-width: 600px; }
+  overflow-y: scroll; }
 
 .plan_window, .plan_window:first-child {
   margin-top: 5px; }
@@ -355,5 +354,7 @@ h4 {
 
   .plan_settings_content-4 {
     width: 100%; } }
+.in_modal_content {
+  flex-direction: column; }
 
 /*# sourceMappingURL=plan_settings.css.map */

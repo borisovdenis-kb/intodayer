@@ -40,8 +40,8 @@ function activeSettings() {
     $('.setting_msg').delay(200).slideDown(250);
 
     // Вставка всей панели настроек
-    $('.right_content_only').load('/plan/settings_plan', {}, function () {
-
+    $('.right_content_settings').load('/plan/settings_plan', {}, function () {
+        $('.right_content_only').hide();
         var start_date = $('#start_date').val().split(' ');
         $('#datetimepicker').datetimepicker({
             format: 'DD.MM.YYYY',
@@ -49,40 +49,55 @@ function activeSettings() {
             defaultDate: new Date(day = start_date[0], month = start_date[1], year = start_date[2])
         });
 
-
-        // Установка title стилей и обработчиков событий
+        // если у пользователя есть права
         var $title_input = $('#title_edit_input');
-
         $title_input.attr('old_value', $title_input.val());
-        $title_input.prop('disabled', false);
-        $title_input.focus();
+        $('#remove_plan').unbind();
+        if ($('.plan_settings_layouts').attr('user_has_edit_plan') === 'yes') {
+            // Установка title стилей и обработчиков событий
 
-        $title_input.css({
-            "border": "1px solid rgba(217, 217, 227, 1)"
-        });
+            $title_input.prop('disabled', false);
+            $title_input.focus();
 
-        setInputCursorToEnd($title_input);
+            $title_input.css({
+                "border": "2px solid rgba(139, 29, 235, 0.4)"
+            });
 
-        $('.return_button').unbind();
-        $('.return_button').click(function () {
-            deactivateSettings();
-        });
+            setInputCursorToEnd($title_input);
+            $('.btn-okay').unbind();
+            $('.btn-okay').click(function () {
+                updateSettings();
+            });
+        }
+        else {
+            $('#datetimepicker input').attr('disabled', "");
+            $('#datetimepicker input').next().css('cursor', 'not-allowed');
+
+        }
+        // для старосты выводится отдельное модальное окно
+        if ($('.plan_title').attr('user_role') === 'elder') {
+            $('#remove_plan').click(function () {
+                showModal('modal_elder_leave');
+                $('#btn_ok').unbind();
+                $('#btn_ok').click(function () {
+                    removePlan();
+                });
+            });
+        }
+        else {
+            $('#remove_plan').click(function () {
+                $('#modal_ok_cancel').modal();
+                $('.modal_ok').click(function () {
+                    removePlan();
+                });
+            });
+        }
+
+
         $('.btn-back').unbind();
         $('.btn-back').click(function () {
             deactivateSettings();
         });
-        $('.btn-okay').unbind();
-        $('.btn-okay').click(function () {
-            updateSettings();
-        });
-        $('#remove_plan').unbind();
-        $('#remove_plan').click(function () {
-            $('#modal_ok_cancel').modal();
-            $('.modal_ok').click(function () {
-                removePlan();
-            });
-        });
-
 
     });
 }
@@ -105,10 +120,8 @@ function deactivateSettings(flag_update) {
     // удаление контента настроек
     $('.setting_msg').remove();
     var plan_id = $('.title_content').attr('plan_id');
-    var data = {plan_id: plan_id};
-    $('.right_content_only').load('/plan/plan_content_only', data, function () {
-        setListenersRightContent();
-    });
+    $('.right_content_settings').empty();
+    $('.right_content_only').show();
 }
 
 

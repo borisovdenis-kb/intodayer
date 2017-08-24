@@ -54,16 +54,39 @@ var places = ["510x", '110м', "Л-11", "Л-10", '511м', "112ф", "Кафедр
 var parity_PlaceHolder = 'Все';
 
 $(document).ready(function () {
-    setListenersRightContent();
+    rightContentActionsAllUsers();
+
+    if ($('.plan_title').attr('user_has_edit_plan') === 'yes') {
+        userHasRightsEditinig();
+    }
+    else {
+        userHasNotRightsEdidting();
+    }
+
+});
+
+function rightContentActionsAllUsers() {
+    $('.day_plan_content').each(function () {
+        setColorStr($(this));
+    });
+    setListenersTitleBlock();
+}
+
+
+function userHasRightsEditinig() {
+    setListenersAdminRightContent();
     setTimeout(() => {
         showTopCheckboxInNotEmptyDays();
     }, 500);
+}
+function userHasNotRightsEdidting() {
+    $('textarea').attr('disabled', "");
+    $('textarea').css('cursor', 'default');
+}
 
-    setColorStr($('.day_plan_content'));
-});
 
 // Запуск всего скрипта, навешивание всех обработчиков
-function setListenersRightContent() {
+function setListenersAdminRightContent() {
 
     $('.str_plan.change').each(function () {
         setNewListenersNewStr($(this));
@@ -340,7 +363,7 @@ function setNewListenersNewStr($new_div) {
     $.mask.definitions['3'] = '[0-3]';
     $.mask.definitions['4'] = '[0-4]';
     $new_div.find('textarea.time').each(function () {
-        $(this).mask("23:59", {placeholder: "__:__", autoclear: false});
+        $(this).mask("29:59", {placeholder: "__:__", autoclear: false});
     });
     // $new_div.find('textarea.weeks').each(function () {
     //     $.mask.definitions['z'] = '[1-9]';
@@ -412,7 +435,7 @@ function focusFieldWithKeys($this_field, $this_str, e) {
     }
 }
 
-// asdf
+
 function openTextareaDropList($this_field) {
     if ($this_field.hasClass('drop_is')) {
         $('.drop_list').remove();
@@ -902,13 +925,14 @@ var FLAG_DELETE = false;
 function delete_str(checkboxes, i, n) {
     if (!i) {
         FLAG_DELETE = true;
-        let i = 0;
-        let n = checkboxes.length;
+        var i = 0;
+        var n = checkboxes.length;
     }
     let $this_checkbox = $(checkboxes[i]);
     let $this_str = $this_checkbox.parents('.str_plan');
     let $this_day_block = $this_str.parents('.day_plan_content');
     // дублируем каждую следующую запись, только если успешно продублирована предыдущая
+    // alert($this_checkbox + " " + i + " " + n);
     if (i != undefined && n != undefined && i < n) {
 
         // получаем данные всех полей из текущей строки
@@ -918,6 +942,7 @@ function delete_str(checkboxes, i, n) {
             $.ajax({
                 url: '/plan/update_delete',
                 success: function (response) {
+
                     callback_delete($this_str);
                     delete_str(checkboxes, i + 1, n);
                 },
@@ -1065,6 +1090,7 @@ function getAjaxActions($pressed_button, i) {
         clone_str($checkboxes);
     }
     if ($pressed_button.hasClass('delete_row')) {
+
         delete_str($checkboxes);
     }
 
@@ -1073,11 +1099,11 @@ function getAjaxActions($pressed_button, i) {
 // дублируем строку
 // работает с AJAX
 function clone_str(checkboxes) {
-    let n = checkboxes.length;
-    let $this_str = $(this).parents('.str_plan');
-    let $this_day_block = $this_str.parents('.day_plan_content');
+    var n = checkboxes.length;
+    $(this).css('background', 'black');
+    var $this_day_block = $(checkboxes[0]).parents('.day_plan_content');
     checkboxes.each(function (i) {
-
+        let $this_str = $(this).parents('.str_plan');
         // если строка не пустая, то отмечаем синим, так как она уже существует в базе
         if (!strIsEmpty($this_str)) {
             var data = getFieldsInformation($this_str);
@@ -1085,6 +1111,7 @@ function clone_str(checkboxes) {
         }
         // если строка полностью пустая (не сохранена в базе)
         else {
+
             callback_clone({}, $this_str, 'new_str');
         }
         // по окончанию клонирования
@@ -1106,12 +1133,16 @@ function callback_clone(data, $this_str, mode) {
 
     appendNewStrAnimation($new_div, $this_str);
     $new_div.find('.weeks').val(data['weeks']);
-    $new_div.find('.parity').val(data['parity']);
     $new_div.find('.time').val(data['time']);
     $new_div.find('.subject').val(data['subject']);
     $new_div.find('.teacher').val(data['teacher']);
     $new_div.find('.place').val(data['place']);
+    if (!data['parity']) {
+        data['parity'] = "Все";
+    }
+    $new_div.find('.parity').val(data['parity']);
     $new_div.attr('id', 0);
+
 
     // преобразовываем поля input в a для всех новых полей
     // и устанавливаем плэйсхолдеры, которые были на строке дублирования
@@ -1177,11 +1208,6 @@ function mainValidationStr($this_str) {
         if (place == "") {
             errors['place'] = 'empty_value';
         }
-
-        // if (parity == "") {
-        //     alert(0 == "");
-        //     errors['parity'] = 'empty_value';
-        // }
 
         // Проверка корректности ввода дня недели
         if (!errors['weeks']) {
@@ -1425,6 +1451,7 @@ function appendNewStrAnimation($new_div, $insert_after_this) {
     $new_div.insertAfter($insert_after_this);
     $new_div.slideToggle(200);
     $new_div.fadeTo(200, 1);
+    console.log($new_div);
 }
 
 // добавление новой строки с расписанием
