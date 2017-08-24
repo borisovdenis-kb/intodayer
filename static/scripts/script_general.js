@@ -147,7 +147,8 @@ function switchPlan($this_plan, flag_open_editing) {
         if (flag_open_editing){
             $('.plan_settings').trigger('click');
         }
-        localStorage['new_plan_editing'] = true;
+        // для того, чтобы если мы только создали расписание, то в настройках кнопка Сохранить сразу активна
+        localStorage.setItem('new_plan_editing', 'true');
     });
 }
 

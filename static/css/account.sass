@@ -112,7 +112,12 @@ $ava-size: 120px
   transition: 0.2s opacity ease
   overflow: hidden
 
-  img
+  .pr_img_plan
+    background:
+      size: cover
+      position: center
+      repeat: no-repeat
+    @include border-radius(4px)
     @include user-select(none)
     cursor: pointer
     width: $ava-size

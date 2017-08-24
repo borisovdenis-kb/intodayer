@@ -130,7 +130,15 @@ input:-ms-input-placeholder {
   -khtml-opacity: 0.8;
   /* Good browsers */
   opacity: 0.8; }
-  .pr_plans_content img {
+  .pr_plans_content .pr_img_plan {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -khtml-border-radius: 4px;
+    border-radius: 4px;
+    -ms-border-radius: 4px;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;

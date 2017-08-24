@@ -13,7 +13,7 @@
                 <label>Date of start plan</label>
 
                 <div class='input-group date' id='datetimepicker'>
-                    <input id="start_date" type='text' class="form-control"
+                    <input id="start_date" type='text' class="settings_input form-control"
                            value="{{ cur_plan.plan.start_date | date:"j m Y " }}"/>
                     <span class="input-group-addon">
                         <span class="glyphicon glyphicon-calendar"></span>
@@ -59,7 +59,7 @@
 <div class="row settings_btns_content text-center">
     {% if user_has_edit_plan %}
         <button class="btn-back btn btn-lg btn-primary">Назад</button>
-        <button class="btn-okay btn btn-lg btn-success">Сохранить</button>
+        <button class="btn-okay btn btn-lg btn-success disabled">Сохранить</button>
     {% endif %}
     {% if not user_has_edit_plan %}
         <button class="btn-back btn btn-lg btn-primary">К расписанию</button>
@@ -67,4 +67,4 @@
 </div>
 
 
-{% include "modal_frames/modal_plan_remove.html" %}
+{% include "modal_frames/modal_plan_leave.html" %}
