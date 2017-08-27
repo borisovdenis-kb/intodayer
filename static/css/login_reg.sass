@@ -11,6 +11,8 @@ html, body
   display: block
   background: rgba(255,255,255,0.8)
   border: $gl_block_border
+  padding:
+    bottom: 20px
   @include border-radius(4px)
   input
     transition: 0.3s background ease
@@ -32,12 +34,23 @@ h2
   @extend %panels_styles
   max-width: 800px
   text-align: left
+  padding:
+    bottom: 20px
+  .reg_bottom_content
+    margin:
+      top: 10px
+  .reg_btn_content
+    margin:
+      top: 10px
 
 
 .panel_auth
   @extend %panels_styles
   max-width: 600px
   text-align: center
+  .login_bottom_content
+    margin:
+      top: 15px
 
 .panel_reg, .panel_auth
   label

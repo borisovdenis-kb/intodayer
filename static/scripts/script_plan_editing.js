@@ -760,26 +760,31 @@ function setBlurCheckbox($this_str, mode) {
 // устанавливает правильный placeholder
 function setTrueRandomPlaceholder($this_field) {
     if ($this_field.hasClass('weeks')) {
-        var week_start, week_end;
-        week_start = getRandomInt(1, 10);
-        week_end = getRandomInt(week_start + 1, 18);
-        return week_start + '-' + week_end;
+        // var week_start, week_end;
+        // week_start = getRandomInt(1, 10);
+        // week_end = getRandomInt(week_start + 1, 18);
+        // return week_start + '-' + week_end;
+        return "1-16";
     }
     if ($this_field.hasClass('time')) {
-        var time_hours, time_minutes_dec;
-        time_hours = getRandomInt(8, 15);
-        if (time_hours < 10) {
-            time_hours = '0' + time_hours;
-        }
-        time_minutes_dec = getRandomInt(0, 5);
-        return time_hours + ":" + time_minutes_dec + "0";
+        // var time_hours, time_minutes_dec;
+        // time_hours = getRandomInt(8, 15);
+        // if (time_hours < 10) {
+        //     time_hours = '0' + time_hours;
+        // }
+        // time_minutes_dec = getRandomInt(0, 5);
+        // return time_hours + ":" + time_minutes_dec + "0";
+        return "hh:mm";
     }
     if ($this_field.hasClass('subject'))
-        return subjects[getRandomInt(0, subjects.length)];
+        // return subjects[getRandomInt(0, subjects.length)];
+        return "Тервер";
     if ($this_field.hasClass('teacher'))
-        return teachers[getRandomInt(0, teachers.length)];
+        // return teachers[getRandomInt(0, teachers.length)];
+        return "Колмогоров А. Н.";
     if ($this_field.hasClass('place'))
-        return places[getRandomInt(0, places.length)];
+        // return places[getRandomInt(0, places.length)];
+        return "Л-1";
     if ($this_field.hasClass('parity'))
         return parity_PlaceHolder;
     return "Пусто";

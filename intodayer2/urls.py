@@ -45,7 +45,6 @@ urlpatterns = [
     url(r'^home/switch_plan', views.switch_plan_home_ajax),
     url(r'^plan/edit_plan_row', views.edit_plan_row_ajax),
     url(r'^plan/update_delete', views.plan_delete_ajax),
-    url(r'^switch_plan_only_set', views.switch_plan_only_set_ajax),
     url(r'^plan/invitation/(\d+)$', views.plan_view),
 
     # подгрузка контентов
@@ -65,14 +64,15 @@ urlpatterns = [
     url(r'^plan/switch_plan', planApi.switch_plan_plan),
     url(r'^upload_plan_avatar', planApi.upload_plan_avatar),
     url(r'^plan/settings_plan', views.get_settings_plan_html),
+    url(r'^change_current_plan', planApi.change_current_plan),
     url(r'^plan/invite_setting_plan', views.get_invite_settings_html),
 
     # API участников
     url(r'^change_role', participantsApi.set_role),
-    url(r'^check_email', participantsApi.check_email),
     url(r'^cancel_invitation', participantsApi.cancel_invitation),
     url(r'^delete_participant', participantsApi.delete_participant),
     url(r'^invite_participants', participantsApi.invite_participants),
+    url(r'^check_email_not_invited', participantsApi.check_email_not_invited),
     url(r'^participants/switch_plan', participantsApi.switch_plan_participants),
     url(r'^get_expected_participants', participantsApi.get_expected_participants),
 
@@ -84,8 +84,8 @@ urlpatterns = [
     url(r'^check_old_password', myprofileApi.check_old_password),
 
     # API приглашений
-    url(r'^invitation/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})', invitationsApi.verify_invitation),
-    url(r'^confirm_invitation/(\d+)/(\d+)/(\d+)', invitationsApi.confirm_invitation_view),
+    url(r'^invitation/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})', invitationsApi.show_invitation),
+    url(r'^invitation/confirm/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})', invitationsApi.confirm_invitation),
 ]
 
 

@@ -59,7 +59,7 @@
                                 <li><textarea class="teacher" num="4">{{ row.teacher.name_short }}</textarea>
                                 </li>
                                 <li><textarea class="place" num="5">{{ row.place.name }}</textarea></li>
-                                {% if row.parity == None %}
+                                {% if row.parity == 2 %}
                                     <li class="last"><input class="parity drop_button" type="button" value="Все"
                                                             num="6"></li>
                                 {% endif %}

@@ -108,14 +108,14 @@ def get_today_tomorrow_plans(plan):
         day_of_week=td_weekday + 1,
         start_week__lte=cur_week1,
         end_week__gte=cur_week1,
-        parity=td_parity
+        parity__in=[td_parity, 2]
     )
     tomorrow_plan = PlanRows.objects.select_related().filter(
         plan_id=plan.plan.id,
         day_of_week=tm_weekday + 1,
         start_week__lte=cur_week2,
         end_week__gte=cur_week2,
-        parity=tm_parity
+        parity__in=[tm_parity, 2]
     )
 
     context['today_plan'] = {
@@ -196,7 +196,7 @@ def edit_plan_row(data, this_plan, this_id, mode):
     if 'parity' in data:
 
         if data['parity'] == 'Все':
-            parity = None
+            parity = 2
         elif data['parity'] == 'Чет':
             parity = 0
         elif data['parity'] == 'Нечет':

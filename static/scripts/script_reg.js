@@ -276,6 +276,7 @@ function emailNotExistValidation(email_str) {
             error: function () {
                 reject();
                 alert('Ошибка проверки почты');
+
             }
         });
     });

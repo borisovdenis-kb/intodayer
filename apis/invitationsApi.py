@@ -1,21 +1,35 @@
-# ---------------------------------------------------------------
-# Для того, что бы тестировать django файлы
-# Вставлять обязательно перед импортом моделей!!!
-import os
-import django
+# -*- coding: utf-8 -*-
+import json
+from datetime import datetime
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render_to_response
-
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "intodayer2.settings")
-django.setup()
-# ---------------------------------------------------------------
-from intodayer2_app.models import Invitations, CustomUser
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponse, HttpResponseRedirect
+from intodayer2_app.models import Invitations, CustomUser, PlanLists, PlanRows, DaysOfWeek, UserPlans
 
 
-def verify_invitation(request, uuid):
+def get_plan(plan_id):
+    context = dict()
+    context['cur_plan'] = PlanLists.objects.get(id=plan_id)
+    plan_rows = PlanRows.objects.select_related().filter(plan_id=plan_id).order_by('time')
+    context['plan_rows'] = plan_rows
+
+    return context
+
+
+def get_dates_info(cur_plan):
+    context = dict()
+    day_of_weeks = DaysOfWeek.objects.all()
+    this_start_date = cur_plan.start_date
+    this_start_date = datetime.strftime(this_start_date, "%d.%m.%Y")
+    context['day_of_weeks'] = day_of_weeks
+    context['start_date'] = this_start_date
+
+    return context
+
+
+def show_invitation(request, uuid):
     """
-        This endpoint to check existence of invitation.
+        This endpoint to confirm invitation.
 
         --> For more detailed documentation see Postman.
     """
@@ -28,23 +42,38 @@ def verify_invitation(request, uuid):
         except ObjectDoesNotExist:
             return render_to_response("errors/invitation_is_not_valid.html")
         else:
-            url = "/confirm_invitation/{}/{}/{}/".format(
-                invitation.from_user.id, invitation.to_user.id, invitation.plan_id
-            )
-            return HttpResponseRedirect(url)
+            context = get_plan(invitation.plan_id)
+            context.update(get_dates_info(context['cur_plan']))
+            return render_to_response("confirm_invitation.html", context)
     else:
         request.session['state'] = {'operation': 'confirm_invitation', 'uuid': uuid}
         return HttpResponseRedirect("/")
 
 
-def confirm_invitation_view(request, from_user_id, to_user_id, plan_id):
+def confirm_invitation(request, uuid):
+    """
+        This endpoint to confirm invitation.
+
+        --> For more detailed documentation see Postman.
+    """
     if request.user.is_authenticated():
+        user = CustomUser.objects.get(email=request.user.email)
+        data = json.loads(request.body.decode('utf-8'))
+
         try:
-            invitation = Invitations.objects.get(from_user=from_user_id, to_user=to_user_id, plan_id=plan_id)
+            invitation = Invitations.objects.get(uuid=uuid, email=user.email)
         except ObjectDoesNotExist:
             return render_to_response("errors/invitation_is_not_valid.html")
         else:
-            # TODO: Нужно выдать страничку с подтверждением или отклонение расписания.
-            return render_to_response("confirm_invitation.html")
+            print(data['is_accept'])
+            if data['is_accept']:
+                UserPlans.objects.create(
+                    plan_id=invitation.plan_id, user_id=user.id, role='participant', current_yn='n'
+                )
+
+            invitation.delete()
+
+            return HttpResponse(status=200)
+
     else:
         return HttpResponse(status=401)

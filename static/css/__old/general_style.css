@@ -147,14 +147,12 @@ button:focus {
 
 .confirmation {
     display: flex;
-    flex-direction: column;
-    /*justify-content: center;*/
-    height: 100px;
-    width: 170px;
-    margin: 15px 0px 0px 15px;
-    /*background-color: #ff60e6;*/
-    /*border: 1px solid rgba(230, 230, 230, 1);*/
+    flex-direction: row;
+    justify-content: center;
+    height: 50px;
     border-radius: 4px;
+    background-color: #8b1deb;
+    z-index: 5;
 }
 
 .conf_fixed {
@@ -171,13 +169,13 @@ button:focus {
 }
 
 .accept, .reject {
-    /*width: 80%;*/
-    margin-top: 5px;
-    /*margin-left: 10px;*/
-    padding: 8px;
-    height: 20px;
+    display: flex;
+    margin-left: 10px;
+    height: 40px;
+    width: 150px;
     border-radius: 4px;
     text-align: center;
+    background-color: white;
     font-family: "Cyntho Pro" !important;
     -webkit-background-size: cover;
     -moz-background-size: cover;
@@ -194,17 +192,11 @@ button:focus {
 }
 
 .accept_img {
-    /*text-indent: 100%;*/
-    /*white-space: nowrap;*/
-    /*overflow: hidden;*/
     background-color: rgba(103, 198, 97, 0.9);
     background-image: url('../../images/accept.png');
 }
 
 .reject_img {
-    /*text-indent: 100%;*/
-    /*white-space: nowrap;*/
-    /*overflow: hidden;*/
     background-color: #eb6b66;
     background-image: url('../../images/reject.png');
 }
