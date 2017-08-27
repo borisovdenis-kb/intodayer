@@ -11,15 +11,18 @@ from django.template.loader import get_template
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "intodayer2.settings")
 django.setup()
 # ---------------------------------------------------------------
+import sendgrid
 from uuid import uuid4
 from decouple import config
 from base64 import b64decode
 from intodayer_bot import bot
 from intodayer2 import settings
 from django.core.mail import send_mail
+from django.db.utils import IntegrityError
 from django.core.files.base import ContentFile
 from extra.validators import validate_email_field
-from django.core.exceptions import ValidationError, ObjectDoesNotExist
+from django.core.exceptions import ValidationError
+from sendgrid.helpers.mail import Email, Mail, Content
 from intodayer2_app.models import UserMailingChannels, DivToPng, CustomUser, Invitations
 
 
@@ -32,6 +35,7 @@ class IntodayerMailing:
         """
         self.text = text
         self.subject = subject
+        self.sg = sendgrid.SendGridAPIClient(apikey=config('SENDGRID_API_KEY'))
 
         if image:
             if os.path.exists(image):
@@ -85,30 +89,32 @@ class IntodayerMailing:
         for email in recipient_list:
             uuid = str(uuid4())
 
+            to_user = CustomUser.objects.filter(email=email)
+            to_user = to_user[0] if to_user else None
             try:
-                to_user = CustomUser.objects.get(email=email)
-            except ObjectDoesNotExist:
-                Invitations.objects.create(
-                    from_user=from_user, email=email, plan_id=plan_id, uuid=uuid
-                )
-            else:
-                Invitations.objects.create(
-                    from_user=from_user, to_user=to_user, email=email, plan_id=plan_id, uuid=uuid
-                )
+                if to_user != from_user:
+                    Invitations.objects.create(
+                        from_user=from_user, to_user=to_user, email=email, plan_id=plan_id, uuid=uuid
+                    )
+                else:
+                    mailing_states[email] = 'can not invite yourself'
+                    continue
+            except IntegrityError:
+                mailing_states[email] = 'already_invited'
+                continue
 
             if settings.DEBUG:
                 context['url'] = "http://127.0.0.1:8000/invitation/{}".format(uuid)
             else:
                 context['url'] = "http://intodayer.ru/invitation/{}".format(uuid)
 
-            send_mail(
-                self.subject,
-                self.text,
-                config('PROJECT_EMAIL'),
-                [email],
-                fail_silently=False,
-                html_message=get_template('emails/invitation.html').render(context)
+            mail = Mail(
+                from_email=Email(config('PROJECT_EMAIL')),
+                subject="Invitation",
+                to_email=Email(email),
+                content=Content("text/html", get_template('emails/invitation.html').render(context))
             )
+            response = self.sg.client.mail.send.post(request_body=mail.get())
 
             mailing_states[email] = 'ok'
 
@@ -147,9 +153,9 @@ class IntodayerMailing:
 
 if __name__ == '__main__':
     recipient_email = ['borisovdenis-kb@yandex.ru']
-    user = CustomUser.objects.get(id=4)
+    user = CustomUser.objects.get(id=22)
 
     Z = IntodayerMailing()
-    res = Z.send_invitations_via_email(recipient_email, user, 300)
+    res = Z.send_invitations_via_email(recipient_email, user, 322)
 
     print(res)
