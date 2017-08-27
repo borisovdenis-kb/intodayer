@@ -8,6 +8,8 @@ from django.http import HttpResponse, JsonResponse
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from intodayer2_app.models import CustomUser, UserPlans, Invitations, UnacceptableNewRoleValue
 
+from intodayer2_app.views import get_user_participant_rights
+
 # TODO: Заняться оптимизацией запросов!!!
 
 
@@ -205,7 +207,9 @@ def switch_plan_participants(request):
             return render_to_response('templates_for_ajax/content_errors.html', status=403)
 
         user.set_current_plan(data['plan_id'])
-        context['this_user'] = user
+
+        context['this_user'] = request.user
+        context.update(get_user_participant_rights(request.user, context['cur_plan'].plan.id))
 
         return render_to_response('content_pages/right_content_participants.html', context, status=200)
     else:

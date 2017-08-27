@@ -116,10 +116,6 @@ function setModalProperties(m_type, $click_elem) {
     }
 
     if (m_type == 'modal_elder_leave') {
-        $('#btn_ok').unbind();
-        $('#btn_ok').click(function () {
-            removeParticipantServer($click_elem);
-        });
         $('#btn_no').unbind();
         $('#btn_no').click(function () {
             hideModalWindow();

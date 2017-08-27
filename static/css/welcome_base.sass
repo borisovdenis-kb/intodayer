@@ -1,6 +1,6 @@
 @import "mixins"
 @import "global_vars"
-@import "header"
+@import "header-top"
 
 html, body
   height: 100%
@@ -10,13 +10,6 @@ html, body
   background: none
   @include box-shadow(none)
   border: none
-//z-index: 10
-//padding: 0
-//@include border-radius(4px)
-//background-color: rgba(255,255,255,0.6)
-//overflow: hidden
-//@include box-shadow(  0px 0px 10px 0px rgba(128,128,128,0.5))
-
 
 .welcome_top_content
   @include border-radius(4px 4px 0 0)
@@ -26,12 +19,7 @@ html, body
   padding-top: 20px
   background-color: rgba(255, 255, 255, 0.6)
 
-
   @include border-radius(0 0 4px 4px)
-
-
-
-
 
 .welcome_background
   position: fixed
@@ -77,17 +65,19 @@ html, body
       bottom: 20px
 
 .welcome_info_content
-
-  //width: 33%
+  @include set-flex(center)
+  flex-direction: column
+  padding: 20px
   height: 100px
-
   background: rgb(47, 179, 112)
   color: white
-  //@include border-radius(4px 4px 0px 0px )
+
   p
     font-family: "Fira Sans"
     text-align: center
     font-size: 0.9em
+  //h1
+  //  font-size: 0.8em
 
   img
     filter: brightness(0) invert(1)
@@ -102,10 +92,30 @@ html, body
 .welcome_main.jumbotron
   background: white
   margin-bottom: 0px
-  //@include border-radius(0 0 4px 4px)
 
   @include border-radius(0px 0px 0px 0px)
 
-@media (max-height: 900px)
+@media (max-width: 768px)
+  .welcome_info_content
+    height: 80px
+    img
+      height: 40px
+  .welcome_main
+    padding: 5px
+
+  .welcome_main_border
+    p
+      font-size: 1.2em
+    h1
+      font-size: 2em
+  .welcome_info_content
+    p
+      font-size: 0.8em
   .fill-space-bottom
     display: none
+
+@media only screen and (max-width: 768px) and (orientation: landscape)
+  .welcome_info_content
+    height: 70px
+    img
+      height: 40px

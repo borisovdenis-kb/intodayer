@@ -5,11 +5,56 @@
 var invite_input_block;
 
 $(document).ready(function () {
-    setBindsParticipants();
+    setAdminParticipantsActions();
 });
 
+function setAdminParticipantsActions() {
+    setBindsParticipant();
+}
 
-function setBindsParticipants() {
+
+function setBindsParticipant() {
+    $('.part_rights').each(function () {
+        if ($(this).find('.part_role').length === 2) {
+            $(this).find('.part_role').css('cursor', 'pointer');
+
+            let $admin_icon = $(this).find('.part_admin');
+            $admin_icon.unbind();
+            $admin_icon.click(function () {
+                let $part_rights = $(this).parents('.part_rights');
+                if ($part_rights.attr('role') === 'elder' || $part_rights.attr('role') === 'admin') {
+                    return false;
+                }
+                let $click_elem = $(this);
+                showModal('modal_set_admin', $click_elem);
+            });
+
+            let $participant_icon = $(this).find('.part_participant');
+            $participant_icon.unbind();
+            $participant_icon.click(function () {
+                let $part_rights = $(this).parents('.part_rights');
+                if ($part_rights.attr('role') === 'participant') {
+                    return false;
+                }
+                setRoleServer($(this), 'participant');
+            });
+        }
+
+        let $part_remove = $(this).find('.part_remove');
+        if ($part_remove.length === 1) {
+            $part_remove.unbind();
+            $part_remove.click(function () {
+                let $click_elem = $(this);
+                let $part_rights = $click_elem.parents('.part_rights');
+                if ($part_rights.attr('role') === 'elder') {
+                    showModal('modal_elder_leave', $click_elem);
+                }
+                else {
+                    showModal('modal_delete_part', $click_elem);
+                }
+            });
+        }
+    });
     $('.part_settings').unbind();
     $('.part_settings').click(function () {
         if ($('.setting_msg').length > 0) {
@@ -19,39 +64,7 @@ function setBindsParticipants() {
             activeInvite();
         }
     });
-
-    $('.part_admin').unbind();
-    $('.part_admin').click(function () {
-        let $part_rights = $(this).parents('.part_rights');
-        if ($part_rights.attr('role') === 'elder' || $part_rights.attr('role') === 'admin') {
-            return false;
-        }
-        let $click_elem = $(this);
-        showModal('modal_set_admin', $click_elem);
-
-
-    });
-    $('.part_participant').unbind();
-    $('.part_participant').click(function () {
-        let $part_rights = $(this).parents('.part_rights');
-        if ($part_rights.attr('role') === 'participant') {
-            return false;
-        }
-        setRoleServer($(this), 'participant');
-    });
-    $('.part_remove').unbind();
-    $('.part_remove').click(function () {
-        let $click_elem = $(this);
-        let $part_rights = $click_elem.parents('.part_rights');
-        if ($part_rights.attr('role') === 'elder') {
-            showModal('modal_elder_leave', $click_elem);
-        }
-        else {
-            showModal('modal_delete_part', $click_elem);
-        }
-    });
 }
-
 
 function setRoleServer($click_elem, role_str) {
     let data = {

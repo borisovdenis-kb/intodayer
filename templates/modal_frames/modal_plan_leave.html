@@ -3,11 +3,11 @@
 
 
 {% block modal_title %}
-    <h4 class="modal-title">Remove plan</h4>
+    <h4 class="modal-title">Leave plan</h4>
 {% endblock %}
 
 {% block modal_body %}
-    <p>Do you want really remove plan "{{ cur_plan.plan.title }}"?</p>
+    <p>Do you want really leave plan "{{ cur_plan.plan.title }}"?</p>
     <p>You can't undo this action&hellip;</p>
 {% endblock %}
 
@@ -15,5 +15,5 @@
 {% block modal_buttons %}
     <button type="button" class="modal_cancel btn btn-default" data-dismiss="modal">Cancel
     </button>
-    <button type="button" class="modal_ok btn btn-danger">Remove</button>
+    <button type="button" class="modal_ok btn btn-danger">Leave</button>
 {% endblock %}

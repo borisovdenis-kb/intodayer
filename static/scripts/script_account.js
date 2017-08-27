@@ -5,7 +5,7 @@ $(document).ready(function () {
     saveInputs();
 
     $('.pr_content_title button').unbind();
-    $('.pr_content_title button').focus(function () {
+    $('.pr_content_title button').on('focus click', function () {
         deleteDefaultClass();
         $(this).addClass('btn-danger');
         hideAllPlans();

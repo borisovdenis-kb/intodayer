@@ -10,6 +10,7 @@ from intodayer2_app.models import (
     CustomUser, UserPlans, Times, Subjects, Teachers, Places, PlanLists,
     PlanRows
 )
+from intodayer2_app.views import get_user_plan_rights
 
 
 def create_plan(request):
@@ -181,29 +182,37 @@ def upload_plan_avatar(request):
         return HttpResponse(status=401)
 
 
+def get_plan_context(request):
+    user = CustomUser.objects.get(email=request.user.email)
+    context = {}
+
+    try:
+        plan_id = int(request.POST['plan_id'])
+        context.update(get_cur_plan(request, plan_id))
+    except ValueError:
+        return render_to_response('templates_for_ajax/content_errors.html')
+    except IndexError:
+        return render_to_response('templates_for_ajax/content_errors.html')
+
+    context.update(get_dates_info(context['cur_plan']))
+    # устанавливаем current_yn
+    user.set_current_plan(plan_id)
+    plan_rows = PlanRows.objects.select_related().filter(plan_id=plan_id).order_by('start_week')
+    context['plan_rows'] = plan_rows
+
+    context.update(get_user_plan_rights(user, context['cur_plan'].plan.id))
+    return context
+
+
 def switch_plan_plan(request):
     """
         I don't sure that this is RESTfull endpoint...
 
         --> For more detailed documentation see Postman.
     """
+    context = {}
     if request.user.is_authenticated():
-        user = CustomUser.objects.get(email=request.user.email)
-        context = {}
-
-        try:
-            plan_id = int(request.POST['plan_id'])
-            context.update(get_cur_plan(request, plan_id))
-        except ValueError:
-            return render_to_response('templates_for_ajax/content_errors.html')
-        except IndexError:
-            return render_to_response('templates_for_ajax/content_errors.html')
-
-        context.update(get_dates_info(context['cur_plan']))
-        # устанавливаем current_yn
-        user.set_current_plan(plan_id)
-        plan_rows = PlanRows.objects.select_related().filter(plan_id=plan_id).order_by('start_week')
-        context['plan_rows'] = plan_rows
+        context.update(get_plan_context(request))
 
         return render_to_response('content_pages/right_content_plan_general.html', context)
     else:

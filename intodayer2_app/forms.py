@@ -14,19 +14,20 @@ class CustomUserCreationForm(UserCreationForm):
                                                                   'name': 'password',
                                                                   'class': 'form-control input-lg reg_field',
                                                                   'required': 'required',
+                                                                  'validation': 'false',
                                                                   'placeholder': 'Password'}))
     password2 = forms.CharField(max_length=100,
                                 widget=forms.PasswordInput(attrs={'id': 'inputPassword_re',
-                                                                  'class': 'form-control input-lg',
+                                                                  'class': 'form-control input-lg reg_field',
                                                                   'required': 'required',
+                                                                  'validation': 'false',
                                                                   'placeholder': 'Confirm password'}))
     email = forms.CharField(max_length=100,
                             widget=forms.EmailInput(attrs={'id': 'inputEmail',
-                                                           'data-container': 'body',
                                                            'data-toggle': 'popover',
                                                            'data-placement': 'right',
+                                                           'validation': 'false',
                                                            'autocomplete': 'off',
-                                                           'name': 'email',
                                                            'class': 'form-control input-lg reg_field',
                                                            'required': 'required',
                                                            'placeholder': 'Enter email'}))
@@ -39,15 +40,18 @@ class CustomUserCreationForm(UserCreationForm):
                                                  'class': 'form-control input-lg reg_field',
                                                  'required': 'required',
                                                  'autocomplete': 'off',
+                                                 'validation': 'false',
                                                  'placeholder': 'Enter first name'}),
             'last_name': forms.TextInput(attrs={'id': 'inputLastName',
                                                 'class': 'form-control input-lg reg_field',
                                                 'required': 'required',
                                                 'autocomplete': 'off',
+                                                'validation': 'false',
                                                 'placeholder': 'Enter last name'}),
             'email': forms.TextInput(attrs={'id': 'inputEmail',
                                             'class': 'form-control input-lg reg_field',
                                             'required': 'required',
+                                            'validation': 'false',
                                             'placeholder': 'Enter email'})
         }
 

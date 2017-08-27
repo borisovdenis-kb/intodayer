@@ -1,6 +1,16 @@
-
 @import mixins
 @import global_vars
+
+$login_max_width: 500px
+$login_mix_width: 500px
+
+$login_width_mobile: 300px
+$login_width_mobile_landscape: 400px
+
+$reg_min_width: 400px
+$reg_max_width: 500px
+$reg_min_width_mobile: 300px
+
 
 html, body
   height: 100%
@@ -8,31 +18,40 @@ html, body
 
 
 %panels_styles
+  margin: auto
   display: block
-  background: rgba(255,255,255,0.8)
+  background: rgba(255, 255, 255, 0.8)
   border: $gl_block_border
-  padding:
-    bottom: 20px
+  padding: $gl_block_padding
+  margin:
+    bottom: 50px
   @include border-radius(4px)
-  input
+  input.reg_field, #inputPassword_re
     transition: 0.3s background ease
     @include border-radius(4px)
-    //margin: 0
+    margin:
+      top: 5px
+      bottom: 20px
     &[type='button'], &[type='submit'], &[type='button']:active, &[type='submit']:active
       outline: none
       @include box-shadow(none)
 
-h2
-  margin-top: 30px
-
-.content
-  background: none
-  box-shadow: none
-  border: none
+#inputPassword
+  margin-bottom: 0
 
 .panel_reg
+  #inputEmail.form-control
+    display: inline-block
+
+  input
+    max-width: 55%
+  .reg_input_content.first
+    margin-top: 5px
+  .reg_footer
+    margin-top: 20px
   @extend %panels_styles
-  max-width: 800px
+  min-width: $reg_min_width
+  max-width: $reg_max_width
   text-align: left
   padding:
     bottom: 20px
@@ -43,75 +62,79 @@ h2
     margin:
       top: 10px
 
-
-.panel_auth
-  @extend %panels_styles
-  max-width: 600px
-  text-align: center
-  .login_bottom_content
+  .reg_btn_content
+    input
+      width: 150px
     margin:
       top: 15px
 
-.panel_reg, .panel_auth
-  label
-    margin-top: 15px
+.panel_auth
+  .row
+    margin: 0
+    padding: 0
+  max-width: $login_max_width
+  min-width: 300px
+  @extend %panels_styles
   input
-    margin-top: 5px
-    margin-bottom: 5px
-
-#buttonEnter
-  background: #5cb85c
-  transition: 0.1s all ease
-  margin-left: 2px
-  &:hover
-    background: #56aa56
-  &:active
-    background: #4e9b4e
-
-#buttonBack
-  background: rgba(255, 255, 255, 1)
-  border: 1px solid rgba(200,200,200,1)
-  transition: 0.1s all ease
-  margin-right: 2px
-  &:hover
-    background: rgba(245, 245, 245, 1)
-  &:active
-    transition: none
-    background: rgba(235, 235, 235, 1)
-
-.btn_auth_content
-  //background: green
-  margin-top: 5px
-  width: 100%
-  @include set-flex(center)
-
-#buttonBack, #buttonEnter
-  width:  100%
-
-.buttonHelp
-  text-decoration: none
-  color: cornflowerblue
-  &:active
-    color: #6375cd
-
-#sign_in
-  &:hover
-    border-color: rgba(50, 50, 50, 1)
+    margin: auto
+    width: 300px
+  .auth_btn_content
+    margin:
+      top: 15px
+    input
+      width: 150px
+  .auth_footer
+    margin-top: 10px
+  .auth_input_content
+    &.first
+      margin:
+        top: 10px
+        bottom: 10px
+    &.second
+      margin-bottom: 10px
 
 .success_input_validate
   background-color: rgb(250, 255, 189)
-  //background-color: rgba(139, 29, 235, 0.21)
-  //background-color: ##dff0d8
 
 .error_input_validate
   background-color: #f2dede
 
-.auth_page, .reg_page
-  //background: green
-  @include set-flex(center)
-
 .popover
   width: 300px
-//
-//.popover_
-//    width: 200px
+
+.row
+  margin-left: 20px
+
+@media (max-width: 768px)
+  .row
+    margin: 0
+    padding: 0
+  .panel_reg
+    //min-width: $reg_min_width_mobile
+    min-width: $reg_min_width_mobile
+    //max-width: $reg_max
+    input
+      max-width: 60%
+    .reg_btn_content
+      input
+        width: 120px
+  .panel_auth
+    .auth_btn_content
+      input
+        width: 120px
+
+  .popover
+    width: 120px
+    font-size: 0.7em
+    .popover-content
+      @include word-break-full()
+      padding: 5px
+    .popover-title
+      padding: 5px
+        bottom: 0
+
+
+@media (max-width: 768px) and (orientation: landscape)
+  .panel_auth
+    width: $login_width_mobile_landscape
+

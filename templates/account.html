@@ -116,7 +116,7 @@
                             <div style="position: relative">
                                 <div class="pr_color_type color_elder"></div>
                                 <div class="pr_img_title">{{ plan.plan.title }}</div>
-                                <img src={{ plan.plan.get_avatar_url }} alt="..." class="img-rounded">
+                                <div class="pr_img_plan" style="background-image: url({{ plan.plan.get_avatar_url }})"></div>
                             </div>
                         </div>
                     {% endfor %}

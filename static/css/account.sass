@@ -38,25 +38,16 @@
   width: 100%
 
 
-%top_input_style
-  border: 2px solid rgba(217, 217, 227, 1)
-  text-align: center
-  font-family: "PT Sans" !important
-  font-size: 22px
-  @include border-radius(4px)
-  transition: 0.4s border ease
-  &:focus
-    border: 2px solid rgba(139, 29, 235, 0.4)
-    outline: none
+
 
 input
   &#first_name
-    @extend %top_input_style
+    @extend %input_styles
     margin:
       top: 4px
       bottom: 4px
   &#last_name
-    @extend %top_input_style
+    @extend %input_styles
     margin:
       top: 4px
       bottom: 0px
@@ -69,7 +60,7 @@ input
 .pr_title_content
   //width: calc(#{$profile-left-content} + 50px)
   width: 100%
-  //height: 130px
+  height: 140px
   text-align: center
   @extend %block_style
   @include set-flex(center)
@@ -85,10 +76,12 @@ input
 
 
 .pr_ava_img
-  width: 130px
-  height: 130px
+  //max-width: 140px
+  //max-height: 140px
+  height: 140px
+  width: 140px
   @include border-radius(4px)
-  background-size: contain
+  background-size: cover
   background-repeat: no-repeat
   background-position: center
   overflow: hidden
@@ -119,7 +112,12 @@ $ava-size: 120px
   transition: 0.2s opacity ease
   overflow: hidden
 
-  img
+  .pr_img_plan
+    background:
+      size: cover
+      position: center
+      repeat: no-repeat
+    @include border-radius(4px)
     @include user-select(none)
     cursor: pointer
     width: $ava-size

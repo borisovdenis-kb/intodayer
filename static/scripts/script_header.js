@@ -1,42 +1,48 @@
 $(document).ready(function () {
     setCurrentMenu();
+    setListenersHeader();
 });
 
 var $droplist = $('.droplist');
 var FLAG_DROPLIST = false;
 
-$droplist.unbind();
-$droplist.clearQueue();
+
+function setListenersHeader() {
+    $droplist.unbind();
+    $droplist.clearQueue();
 // $droplist.remove();
-$droplist.on('click', function (e) {
-    click_on_droplist($(this), e);
-});
+    $droplist.on('click', function (e) {
+        click_on_droplist($(this), e);
+    });
 
-$droplist.mouseover(function () {
-    if (FLAG_DROPLIST == false) {
-        $(this).stop(true, true);
-        $(this).animate({'background-color': 'rgba(210,210,210, 1)'}, 200);
-    }
-});
-$droplist.mouseleave(function () {
-    if (FLAG_DROPLIST == false) {
-        $(this).stop(true, true);
-        $(this).animate({'background-color': 'rgba(240,240,240,1)'}, 200);
-    }
-});
+    $droplist.mouseover(function () {
+        if (FLAG_DROPLIST == false) {
+            $(this).stop(true, true);
+            $(this).animate({'background-color': 'rgba(210,210,210, 1)'}, 200);
+        }
+    });
+    $droplist.mouseleave(function () {
+        if (FLAG_DROPLIST == false) {
+            $(this).stop(true, true);
+            $(this).animate({'background-color': 'rgba(240,240,240,1)'}, 200);
+        }
+    });
 
-$(window).on('click', function (event) {
-    if ($('.droplist_click_container').length != 0) {
-        hide_droplist(event);
-    }
-});
+    $(window).on('click', function (event) {
+        if ($('.droplist_click_container').length != 0) {
+            hide_droplist(event);
+        }
+    });
 
 // для мобильных устройств
-$(document).on("touchstart",function(){
-  if ($('.droplist_click_container').length != 0) {
-        hide_droplist(event);
-    }
-});
+    $(document).on("touchstart", function () {
+        if ($('.droplist_click_container').length != 0) {
+            hide_droplist(event);
+        }
+    });
+
+}
+
 
 // появление выпадающего списка
 function click_on_droplist(this_elem, event) {
@@ -67,7 +73,7 @@ function click_on_droplist(this_elem, event) {
 
     var $droplist_click = $('.droplist_click_container');
     $droplist_click.css({
-        'position': 'absolute', 'top': 10, 'left': 10
+        'position': 'absolute', 'top': 10, 'right': -10
     });
 
     //делаем анимацию на разные объекты, чтобы псевдо-стрелка корректо появлялась
@@ -78,10 +84,10 @@ function click_on_droplist(this_elem, event) {
 
 
     // var offset_out = this_elem.offset().left + this_elem.outerWidth();
-     $('.droplist_click_container').clearQueue();
+    $('.droplist_click_container').clearQueue();
     $('.droplist_click_container').animate({
         top: 30,
-        left: -30,
+        right: 10,
         opacity: 1
     }, 300);
 }
@@ -91,18 +97,18 @@ function hide_droplist(event, hide) {
     var $this_elem = $(event.target);
     if (($this_elem.parents('.droplist_click_container').length == 0 && $this_elem.parents('.droplist').length == 0) || hide == true) {
         var $this_droplist_click = $('.droplist_click_container');
-        $this_droplist_click.stop(true,true);
+        $this_droplist_click.stop(true, true);
         $this_droplist_click.fadeOut(200);
         $this_droplist_click.animate({
             top: 50,
-            left: -40
+            right: 0
         }, 200, function () {
             $this_droplist_click.remove();
         });
         $this_droplist_click.dequeue();
-        $('.droplist').stop(true,true);
+        $('.droplist').stop(true, true);
         $('.droplist').animate({'background-color': 'rgba(240,240,240,1)'}, 100);
-        $('#arrow_down').stop(true,true);
+        $('#arrow_down').stop(true, true);
         $('#arrow_down').animate({'border-top-color': 'rgba(150, 150, 150, 1)'}, 100);
         FLAG_DROPLIST = false;
     }

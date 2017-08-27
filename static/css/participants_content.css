@@ -43,15 +43,15 @@
     opacity: 1; }
 
 .part_rights {
-  margin-left: auto; }
+  margin-left: auto;
+  cursor: default; }
   .part_rights img {
     height: 60px; }
   .part_rights span {
     margin-top: 2px;
     margin-right: 10px;
     font-size: 1.2em;
-    margin-left: 20px;
-    cursor: pointer; }
+    margin-left: 20px; }
   .part_rights ul {
     display: flex; }
     .part_rights ul li {
@@ -63,7 +63,7 @@
         -moz-user-select: none;
         -ms-user-select: none;
         user-select: none;
-        cursor: default;
+        cursor: inherit;
         margin-top: -3px;
         height: 5px;
         font-size: 0.8em;
@@ -75,13 +75,14 @@
   flex-direction: column; }
 
 .part_admin, .part_participant, .part_elder {
-  cursor: pointer;
   width: auto;
   overflow: hidden;
   opacity: 0.3;
   transition: 0.2s opacity ease;
   margin-left: -5px;
   margin-right: -5px; }
+  .part_admin p, .part_participant p, .part_elder p {
+    cursor: inherit; }
 
 .part_elder.part_role {
   opacity: 1; }
@@ -92,7 +93,7 @@
   align-content: center;
   align-items: center; }
   .part_remove span {
-    width: 70px;
+    width: 60px;
     padding-bottom: 5px; }
     .part_remove span:hover {
       color: red; }
@@ -115,7 +116,7 @@
   -ms-border-radius: 8px;
   opacity: 0.8; }
 
-.in_modal_content {
-  flex-direction: column; }
+.margin-block {
+  padding-left: 15px; }
 
 /*# sourceMappingURL=participants_content.css.map */

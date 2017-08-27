@@ -3,6 +3,7 @@ $(document).ready(function () {
 });
 
 
+
 function confirmInvitation(is_accept) {
     /*
      *  is_accept: true/false
@@ -23,6 +24,7 @@ function confirmInvitation(is_accept) {
         }
     });
 }
+
 
 function setInvitationsListeners() {
     if (location.href.indexOf('invitation') < 0) {
@@ -70,11 +72,13 @@ function setInvitationsListeners() {
 
 
 function setInputCursorToEnd($this_input) {
-    $this_input.val($this_input.val());
+    let val = $this_input.val();
+    $this_input.val("");
+    $this_input.val(val);
 }
 
-
-function switchPlan($this_plan) {
+// если передан флаг, значит при вызове функции сразу откроются настройки расписания (нужно для create нового расписания)
+function switchPlan($this_plan, flag_open_editing) {
     /*
      * Это функция общая для всего приложения.
      * Отвечает за подгрузку и замену данных в right_content при переключении расписания.
@@ -103,16 +107,27 @@ function switchPlan($this_plan) {
 
     $('.plan_load_progres_indicator').css('display', 'flex');
     // alert('/' + address + '/switch_plan');
-    $('.right_content').load('/' + address + '/switch_plan', data, function () {
+    $('.right_content').load('/' + address + '/switch_plan', data, function (responseText) {
         $('.plan_load_progres_indicator').css('display', 'none');
-        // навешиваем обработчики
-        if (address == 'plan') {
-            setListenersTitleBlock();
-            setListenersRightContent();
-        }
 
-        if (address == 'participants'){
-            setBindsParticipants();
+        // навешиваем обработчики, учитывая права редактирования пользователей
+        if (address === 'plan') {
+            rightContentActionsAllUsers();
+
+            if ($('.plan_title').attr('user_has_edit_plan') === 'yes') {
+                pushAvaModalClickBlock();
+                setAvaModalListeners();
+                setListenersAdminRightContent();
+            }
+            else {
+                deleteAvaModalClickBlock();
+                userHasNotRightsEdidting();
+            }
+        }
+        if (address === 'participants') {
+            if ($('.plan_title').attr('user_has_edit_role') === 'yes') {
+                setAdminParticipantsActions();
+            }
         }
 
         // смена аватарки при изменении расписания
@@ -127,6 +142,13 @@ function switchPlan($this_plan) {
         // установить выбранный цвет
         var plan_menu = $('.plan_selector').find('[plan_id=' + data.plan_id + ']');
         plan_menu.css({'background': 'black', 'color': 'white'});
+
+        // когда создаём новое расписание открываются настройки
+        if (flag_open_editing){
+            $('.plan_settings').trigger('click');
+        }
+        // для того, чтобы если мы только создали расписание, то в настройках кнопка Сохранить сразу активна
+        localStorage.setItem('new_plan_editing', 'true');
     });
 }
 
@@ -169,7 +191,7 @@ function createPlan($plus_button) {
             setTimeout(function () {
                 // навешиваем возможность переключения
                 $new_plan_li_a.click(function () {
-                    switchPlan($(this));
+                    switchPlan($(this), true);
                 });
                 // переключаемся на него, иммитируя клик
                 $new_plan_li_a.trigger('click');
@@ -210,10 +232,10 @@ function show_invitations() {
 
 
 function preventDefault(e) {
-  e = e || window.event;
-  if (e.preventDefault)
-      e.preventDefault();
-  e.returnValue = false;
+    e = e || window.event;
+    if (e.preventDefault)
+        e.preventDefault();
+    e.returnValue = false;
 }
 
 function preventDefaultForScrollKeys(e) {
@@ -224,12 +246,12 @@ function preventDefaultForScrollKeys(e) {
 }
 
 function disableScroll() {
-  if (window.addEventListener) // older FF
-      window.addEventListener('DOMMouseScroll', preventDefault, false);
-  window.onwheel = preventDefault; // modern standard
-  window.onmousewheel = document.onmousewheel = preventDefault; // older browsers, IE
-  window.ontouchmove  = preventDefault; // mobile
-  document.onkeydown  = preventDefaultForScrollKeys;
+    if (window.addEventListener) // older FF
+        window.addEventListener('DOMMouseScroll', preventDefault, false);
+    window.onwheel = preventDefault; // modern standard
+    window.onmousewheel = document.onmousewheel = preventDefault; // older browsers, IE
+    window.ontouchmove = preventDefault; // mobile
+    document.onkeydown = preventDefaultForScrollKeys;
 }
 
 function enableScroll() {
