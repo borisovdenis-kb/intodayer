@@ -55,7 +55,7 @@ urlpatterns = [
 
     # API расписания
     url(r'^get_avatar', planApi.get_avatar),
-    url(r'^leave_plan', planApi.delete_plan),
+    url(r'^leave_plan', planApi.leave_plan),
     url(r'^delete_plan', planApi.delete_plan),
     url(r'^create_plan', planApi.create_plan),
     url(r'^test_mailing', planApi.mailing_test),
