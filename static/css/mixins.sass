@@ -98,3 +98,9 @@
   background: nth(nth($color-stops, 1), 1)
   background: -webkit-linear-gradient(legacy-direction($direction), $color-stops)
   background: linear-gradient($direction, $color-stops)
+
+@mixin background-size($size)
+  -webkit-background-size: $size
+  -moz-background-size: $size
+  -o-background-size: $size
+  background-size: $size
