@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 import json
 from datetime import datetime
-from django.http import HttpResponseRedirect, HttpResponse
+from django.db.utils import IntegrityError
 from django.shortcuts import render_to_response
 from django.core.exceptions import ObjectDoesNotExist
+from django.http import HttpResponseRedirect, HttpResponse
 from intodayer2_app.models import Invitations, CustomUser, PlanLists, PlanRows, DaysOfWeek, UserPlans
 
 
@@ -67,9 +68,12 @@ def confirm_invitation(request, uuid):
         else:
             print(data['is_accept'])
             if data['is_accept']:
-                UserPlans.objects.create(
-                    plan_id=invitation.plan_id, user_id=user.id, role='participant', current_yn='n'
-                )
+                try:
+                    UserPlans.objects.create(
+                        plan_id=invitation.plan_id, user_id=user.id, role='participant', current_yn='n'
+                    )
+                except IntegrityError:
+                    return HttpResponse(status=400)
 
             invitation.delete()
 
