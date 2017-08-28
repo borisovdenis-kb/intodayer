@@ -3,7 +3,7 @@
 
 {% block styles %}
     <link rel="stylesheet" type="text/css" href={% static "css/plan_content.css" %}>
-    <link rel="stylesheet" type="text/css" href={% static "css/__old/general_style.css" %}>
+    <link rel="stylesheet" type="text/css" href={% static "css/general_style.css" %}>
 {% endblock %}
 
 {% block scripts_top %}
@@ -14,7 +14,14 @@
 {% endblock %}
 
 {% block header %}
-    {% include 'templates_for_ajax/header_welcome.html' %}
+    <div class="top-block">
+        <div class="top" style="height: 38px">
+            <div class="logo"><a href="/">Intodayer</a></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block center_content_wide %}
     <div class="confirmation">
         <div class="accept">
             Принять
@@ -25,8 +32,8 @@
     </div>
 {% endblock %}
 
+{% block content_page %}
 
-{% block right_content %}
     <div class="plan_load_progres">
         <div class="plan_load_progres_indicator"></div>
     </div>
@@ -55,36 +62,15 @@
         {% for day in day_of_weeks %}
             <div class="plan_window" day_num="{{ day }}">
                 <div class="content_day_title">
-                    <div class="tools_panel left">
-{#                        <ul>#}
-{#                            <li>#}
-{#                                <button class="delete_row">Del</button>#}
-{#                            </li>#}
-{#                            <li>#}
-{#                                <button class="clone_row">Clone</button>#}
-{#                            </li>#}
-{#                        </ul>#}
-                    </div>
+
                     <div class="day_title_container">
                         <div class="day_title">{{ day.name }}</div>
                     </div>
-                    <div class="tools_panel right">
-{#                        <ul>#}
-{#                            <li>#}
-{#                                <div class=share_button>#}
-{#                                    <div class="second_layer"></div>#}
-{#                                    <div class="first_layer">Share</div>#}
-{#                                </div>#}
-{#                            </li>#}
-{#                        </ul>#}
-                    </div>
+
 
                 </div>
                 <div class="day_plan_content">
                     <div class="str_plan str_title">
-                        <div class="checkbox_wrap general_checkbox" flag_active="false">
-                            <div class="checkbox_container" style="opacity: 0"></div>
-                        </div>
                         <ul>
                             <li><a>Недели</a></li>
                             <li><a>Время</a></li>
@@ -100,9 +86,7 @@
                         {% if row.day_of_week.id == day.id %}
 
                             <div class="str_plan change" id="{{ row.id }}">
-                                <div class="checkbox_wrap">
-{#                                    <div class="checkbox_container row"></div>#}
-                                </div>
+
                                 <ul>
                                     <li><textarea class="weeks"
                                                   num="1">{{ row.start_week }}-{{ row.end_week }}</textarea></li>
@@ -143,3 +127,4 @@
         {% endfor %}
     </div>
 {% endblock %}
+

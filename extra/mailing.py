@@ -92,13 +92,16 @@ class IntodayerMailing:
             to_user = CustomUser.objects.filter(email=email)
             to_user = to_user[0] if to_user else None
             try:
-                if to_user != from_user:
-                    Invitations.objects.create(
-                        from_user=from_user, to_user=to_user, email=email, plan_id=plan_id, uuid=uuid
-                    )
-                else:
-                    mailing_states[email] = 'can not invite yourself'
-                    continue
+                # if to_user != from_user:
+                #     Invitations.objects.create(
+                #         from_user=from_user, to_user=to_user, email=email, plan_id=plan_id, uuid=uuid
+                #     )
+                # else:
+                #     mailing_states[email] = 'can not invite yourself'
+                #     continue
+                Invitations.objects.create(
+                    from_user=from_user, to_user=to_user, email=email, plan_id=plan_id, uuid=uuid
+                )
             except IntegrityError:
                 mailing_states[email] = 'already_invited'
                 continue

@@ -115,14 +115,14 @@ button
 .inv_description
   width: 170px
 
-.confirmation
-  display: flex
-  flex-direction: column
-  height: 100px
-  width: 100%
-  left: 0px
-  margin: 15px 0 0 15px
-  @include border-radius(4px)
+//.confirmation
+//  display: flex
+//  flex-direction: column
+//  height: 100px
+//  width: 100%
+//  left: 0px
+//  margin: 15px 0 0 15px
+//  @include border-radius(4px)
 
 .conf_fixed
   top: 0
@@ -276,3 +276,61 @@ button
 //  background: #3c177d
 
 /*# sourceMappingURL=welcome_base_new.css.map */
+
+.confirmation
+  display: flex
+  justify-content: center
+  flex-direction: row
+  align-content: center
+  align-items: center
+  height: 52px
+  width: 100%
+  margin:
+    bottom: 15px
+  background: #8b1deb
+  z-index: 5
+  padding:
+    bottom: 2px
+  //  bottom: 10px
+
+.accept
+  margin:
+    right: 5px
+.reject
+  margin:
+    left: 5px
+
+.accept, .reject
+  //width: 250px
+  width: 100%
+  max-width: 250px
+  min-width: 100px
+  margin:
+    top: 0
+    bottom: 0
+  border-radius: 4px
+  //height: calc(100% - 4px)
+  text-align: center
+  font-family: "Cyntho Pro" !important
+  @include set-flex(center)
+  @include background-size(contain)
+  background:
+    color: white
+    position: center
+    repeat: no-repeat
+  overflow: hidden
+  transition: 0.2s
+
+  &:hover
+    cursor: pointer
+
+
+.accept_img
+  background:
+    color: rgba(103, 198, 97, 0.9)
+    image:  url('../images/accept.png')
+
+.reject_img
+  background:
+    color: #eb6b66
+    image: url('../images/reject.png')
