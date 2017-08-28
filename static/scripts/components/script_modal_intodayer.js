@@ -11,33 +11,10 @@
     // 1. Добавить новую глобальную переменную, которая будет хранить html код модального окна (который перый раз загружается вместе со страницей)
     // 2. Добавить соответствующий код в функции loadSpecialModalType и setModalProperties
 
-
-var modal_confirm_role;
-var modal_delete_participant;
-var modal_elder_leave;
-
-
-
-
-$(document).ready(function () {
-
-    modal_confirm_role = $(".in_modal_fade[modal_type=confirm_role]").html();
-    modal_delete_participant = $(".in_modal_fade[modal_type=delete_participants]").html();
-    modal_elder_leave = $(".in_modal_fade[modal_type=elder_leave]").html();
-    // alert(modal_elder_leave);
-    $(".in_modal_fade").remove();
-
-});
-
 var pause_time = 100;
 
-
-function test() {
-    this.a = 100;
-}
-
-
-class simpleModal {
+// Базовые стили для модального окна в стиле Intodayer (простое белое модальное окно на потухающем фоне)
+class SimpleIntodayerModal {
     constructor(modalId) {
         this.modalIdAccess = ".in_modal_fade" + modalId;
         this.$modal_fade = $(this.modalIdAccess);
@@ -52,20 +29,30 @@ class simpleModal {
         // запоминаем компоненты модального окна
         this.$modal_fade.append($(this.modal_html));
         this.$modal_body = this.$modal_fade.find('.in_modal_body');
-        // отвечает за задний фон
-        this.setInitListeners();
+    }
+
+    __setBaseListeners() {
+        let self = this;
+        $('#btn_no').click(function () {
+            self.hideModal();
+        });
+        $('.close').click(function () {
+           self.hideModal();
+        });
+        $(document).unbind('click');
+
+        $(document).click(function (event) {
+            if ($(event.target).children(self.$modal_body).length === 1) {
+                self.hideModal();
+            }
+        });
     }
 
     setInitListeners() {
     }
 
-    showModal($click_elem) {
-        // var modal_window = modal_fade.find('.in_modal_body');var modal_fade = $(".in_modal_fade[modal_type='" + m_type + "']")
-        // получаем модальное окно определённого типа
-        // при нажании на "изменить пароль" получаем окно типа oldPassword
-        // $('body').append("<div class='in_modal_fade'></div>");
-        //загрузка html кода модального окна на страницу
-        // loadSpecialModalType(m_type);
+    showModal() {
+        let self = this;
         this.modalInit();
 
         this.$modal_fade.clearQueue();
@@ -77,9 +64,6 @@ class simpleModal {
                 'opacity': 1
             });
 
-            // навешивает обработчики событий на конкретный тип модального окна
-            // setModalProperties(m_type, $click_elem);
-
             $(this).dequeue();
         });
         this.$modal_fade.show().delay(pause_time).queue(function () {
@@ -88,17 +72,16 @@ class simpleModal {
             });
             $(this).dequeue();
         });
-        $(document).unbind('click');
-        $(document).click(function (event) {
-            let self = this;
-            if ($(event.target).children(this.$modal_body).length === 1) {
-                self.hideModalWindow();
-                self.hideModalFade();
-            }
-        });
+
+        this.__setBaseListeners();
     }
 
-    hideModalWindow(scale_size, opacity_size) {
+    hideModal(scale_size, opacity_size) {
+        this.__hideModalWindow(scale_size, opacity_size);
+        this.__hideModalFade();
+    }
+
+    __hideModalWindow(scale_size, opacity_size) {
         if (!scale_size) {
             scale_size = 0.5;
             opacity_size = 0;
@@ -113,7 +96,8 @@ class simpleModal {
         });
     }
 
-    hideModalFade() {
+    __hideModalFade() {
+        let self = this;
         this.$modal_fade.clearQueue();
 
         this.$modal_fade.queue(function () {
@@ -123,130 +107,89 @@ class simpleModal {
             $(this).dequeue();
         }).delay(400).queue(function () {
             $(this).hide();
-            this.$modal_fade.empty();
+            self.$modal_fade.empty();
             $(this).dequeue();
         });
     }
 }
 
-
-function showModal(m_type, $click_elem) {
-    // var modal_window = modal_fade.find('.in_modal_body');var modal_fade = $(".in_modal_fade[modal_type='" + m_type + "']")
-    // получаем модальное окно определённого типа
-    // при нажании на "изменить пароль" получаем окно типа oldPassword
-    $('body').append("<div class='in_modal_fade'></div>");
-    //загрузка html кода модального окна на страницу
-    loadSpecialModalType(m_type);
-
-    let $modal_fade = $(".in_modal_fade");
-    let $modal_window = $(".in_modal_body");
-
-    $modal_window.clearQueue();
-    $modal_fade.clearQueue();
-
-    $modal_window.delay(pause_time).queue(function () {
-        $(this).css({
-            'transform': 'scale(1.4, 1.4)',
-            'opacity': 1
-        });
-
-        // навешивает обработчики событий на конкретный тип модального окна
-        setModalProperties(m_type, $click_elem);
-
-        $modal_window.dequeue();
-    });
-    $modal_fade.show().delay(pause_time).queue(function () {
-        $(this).css({
-            'opacity': 1
-        });
-        $(this).dequeue();
-    });
-    $(document).unbind('click');
-    $(document).click(function (event) {
-        if ($(event.target).children(".in_modal_body").length == 1) {
-            hideModalWindow();
-            hideModalFade();
-        }
-    });
-}
-
-function loadSpecialModalType(m_type) {
-    let $modal_fade = $(".in_modal_fade");
-
-    if (m_type == 'modal_set_admin') {
-        $modal_fade.html(modal_confirm_role);
-    }
-    if (m_type == 'modal_delete_part') {
-        $modal_fade.html(modal_delete_participant);
-    }
-    if (m_type == 'modal_elder_leave') {
-        $modal_fade.html(modal_elder_leave);
-    }
-
-}
-
-function setModalProperties(m_type, $click_elem) {
-    // если вызвано модальное окно назанчения прав
-    if (m_type == 'modal_set_admin') {
+// Модальное окно, когда староста или админ хотят изменить роль участника (на админа или участника)
+class ModalConfirmRole extends SimpleIntodayerModal {
+    setInitListeners($click_elem, role_str) {
+        let self = this;
         $('#btn_ok').unbind();
         $('#btn_ok').click(function () {
-            setRoleServer($click_elem, 'admin');
-        });
-        $('#btn_no').unbind();
-        $('#btn_no').click(function () {
-            hideModalWindow();
-            hideModalFade();
+            setRoleServer($click_elem, role_str).then(function () {
+                self.hideModal();
+            }, function () {
+                self.hideModal();
+            });
         });
     }
 
-    // если вызвано модальное окно удаления участника
-    if (m_type == 'modal_delete_part') {
+    showModal($click_elem, role_str) {
+        super.showModal();
+        this.setInitListeners($click_elem, role_str);
+    }
+}
+
+// Модальное окно, когда админ или староста хотят удалить участники (или админа) из расписания
+class ModalDeleteParticipant extends SimpleIntodayerModal {
+    setInitListeners($click_elem) {
+        let self = this;
         $('#btn_ok').unbind();
         $('#btn_ok').click(function () {
-            removeParticipantServer($click_elem);
-        });
-        $('#btn_no').unbind();
-        $('#btn_no').click(function () {
-            hideModalWindow();
-            hideModalFade();
+            removeParticipantServer($click_elem).then(function () {
+                self.hideModal();
+            }, function () {
+                self.hideModal();
+            });
         });
     }
 
-    if (m_type == 'modal_elder_leave') {
-        $('#btn_no').unbind();
-        $('#btn_no').click(function () {
-            hideModalWindow();
-            hideModalFade();
-        });
+    showModal($click_elem, role_str) {
+        super.showModal();
+        this.setInitListeners($click_elem);
     }
 }
 
-function hideModalWindow(scale_size, opacity_size) {
-    if (!scale_size) {
-        scale_size = 0.5;
-        opacity_size = 0;
-    }
-    $(".in_modal_body").clearQueue();
-    $(".in_modal_body").queue(function () {
-        $(this).css({
-            'transform': 'scale(' + scale_size + ', ' + scale_size + ')',
-            'opacity': opacity_size
+// Модальное окно, когда староста хочет покинуть (удалить) расписание
+class ModalElderRemovePlan extends SimpleIntodayerModal {
+    setInitListeners($click_elem) {
+        let self = this;
+        $('#btn_ok').unbind();
+        $('#btn_ok').click(function () {
+            removePlan().then(function () {
+                self.hideModal();
+            }, function () {
+                self.hideModal();
+            });
         });
-        $(this).dequeue();
-    });
+    }
+
+    showModal($click_elem, role_str) {
+        super.showModal();
+        this.setInitListeners($click_elem);
+    }
+
 }
 
-function hideModalFade() {
-    $(".in_modal_fade").clearQueue();
-
-    $(".in_modal_fade").queue(function () {
-        $(this).css({
-            'opacity': 0
+// Модальное окно, когда участник или админ хочет покинуть расписание
+class ModalParticipantLeavePlan extends SimpleIntodayerModal {
+    setInitListeners($click_elem) {
+        let self = this;
+        $('#btn_ok').unbind();
+        $('#btn_ok').click(function () {
+            removePlan().then(function () {
+                self.hideModal();
+            }, function () {
+                self.hideModal();
+            });
         });
-        $(this).dequeue();
-    }).delay(400).queue(function () {
-        $(this).hide();
-        $(".in_modal_fade").remove();
-        $(this).dequeue();
-    });
+    }
+
+    showModal($click_elem, role_str) {
+        super.showModal();
+        this.setInitListeners($click_elem);
+    }
 }

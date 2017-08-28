@@ -4,12 +4,19 @@
 
 var invite_input_block;
 
+var modal_confirm_admin;
+var modal_delete_participant;
+
+
 $(document).ready(function () {
     setAdminParticipantsActions();
 });
 
+
 function setAdminParticipantsActions() {
     setBindsParticipant();
+    modal_confirm_admin = new ModalConfirmRole('#confirm_admin');
+    modal_delete_participant = new ModalDeleteParticipant('#delete_participant');
 }
 
 
@@ -26,7 +33,7 @@ function setBindsParticipant() {
                     return false;
                 }
                 let $click_elem = $(this);
-                showModal('modal_set_admin', $click_elem);
+                modal_confirm_admin.showModal($click_elem, 'admin');
             });
 
             let $participant_icon = $(this).find('.part_participant');
@@ -36,7 +43,9 @@ function setBindsParticipant() {
                 if ($part_rights.attr('role') === 'participant') {
                     return false;
                 }
-                setRoleServer($(this), 'participant');
+                let $click_elem = $(this);
+                setRoleServer($click_elem, 'participant').then(function () {
+                });
             });
         }
 
@@ -46,11 +55,8 @@ function setBindsParticipant() {
             $part_remove.click(function () {
                 let $click_elem = $(this);
                 let $part_rights = $click_elem.parents('.part_rights');
-                if ($part_rights.attr('role') === 'elder') {
-                    showModal('modal_elder_leave', $click_elem);
-                }
-                else {
-                    showModal('modal_delete_part', $click_elem);
+                if ($part_rights.attr('role') === 'participant' || $part_rights.attr('role') === 'admin') {
+                    modal_delete_participant.showModal($click_elem);
                 }
             });
         }
@@ -64,71 +70,6 @@ function setBindsParticipant() {
             activeInvite();
         }
     });
-}
-
-function setRoleServer($click_elem, role_str) {
-    let data = {
-        new_role: role_str,
-        plan_id: $('.title_content').attr('plan_id'),
-        participant_id: $click_elem.parents('.part_block').attr('part_id')
-    };
-
-    $.ajax({
-        url: '/change_role',
-        method: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(data),
-        success: function () {
-            $click_elem.parents('.part_rights').attr('role', role_str);
-            changeRoleAnimate($click_elem);
-            hideModalFade();
-            hideModalWindow();
-        },
-        error: function () {
-            alert("Ошибка. Не удалось выполнить операцию. Обновите страницу");
-            hideModalFade();
-            hideModalWindow();
-        }
-    });
-}
-
-function removeParticipantServer($click_elem) {
-    let $part_block = $click_elem.parents('.part_block');
-    if ($part_block.attr('part_id') && $('.title_content').attr('plan_id')) {
-        let data = {
-            plan_id: $('.title_content').attr('plan_id'),
-            participant_id: $click_elem.parents('.part_block').attr('part_id')
-        };
-        $.ajax({
-            url: '/delete_participant',
-            method: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(data),
-            success: function () {
-                deleteUserAnimate($part_block);
-                hideModalWindow();
-                hideModalFade();
-            },
-            error: function () {
-                alert("Ошибка. Не удалось выполнить операцию. Обновите страницу");
-                hideModalFade();
-                hideModalWindow();
-            }
-        });
-    }
-}
-
-function deleteUserAnimate($part_block) {
-    $part_block.fadeTo(100, 0, function () {
-        $(this).slideUp(200);
-    });
-}
-
-function changeRoleAnimate($this_elem) {
-    $this_elem.parents('ul').find('.part_admin').css('opacity', 0.3);
-    $this_elem.parents('ul').find('.part_participant').css('opacity', 0.3);
-
-    $this_elem.css('opacity', 1);
 }
 
 
@@ -289,6 +230,81 @@ function sendEmailsToServer() {
             alert("Ошибка. Не удалось выполнить операцию.");
         }
     });
-
-
 }
+
+
+
+
+function removeParticipantServer($click_elem) {
+    return new Promise(function (resolve, reject) {
+        let $part_block = $click_elem.parents('.part_block');
+        if ($part_block.attr('part_id') && $('.title_content').attr('plan_id')) {
+            let data = {
+                plan_id: $('.title_content').attr('plan_id'),
+                participant_id: $click_elem.parents('.part_block').attr('part_id')
+            };
+            $.ajax({
+                url: '/delete_participant',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: function () {
+                    deleteUserAnimate($part_block);
+                    return resolve();
+                },
+                error: function () {
+                    alert("Ошибка. Не удалось выполнить операцию. Обновите страницу");
+                    return reject();
+                }
+            });
+        }
+        else {
+            return reject();
+        }
+    });
+}
+
+// устанавливает role_str на выбранном пользователе $click_elem
+function setRoleServer($click_elem, role_str) {
+    return new Promise(function (resolve, reject) {
+
+        let self = this;
+
+        let data = {
+            new_role: role_str,
+            plan_id: $('.title_content').attr('plan_id'),
+            participant_id: $click_elem.parents('.part_block').attr('part_id')
+        };
+
+        $.ajax({
+            url: '/change_role',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function () {
+                $click_elem.parents('.part_rights').attr('role', role_str);
+                changeRoleAnimate($click_elem);
+                return resolve();
+            },
+            error: function () {
+                alert("Ошибка. Не удалось выполнить операцию. Обновите страницу");
+                return reject();
+            }
+        });
+    });
+}
+
+function deleteUserAnimate($part_block) {
+    $part_block.fadeTo(100, 0, function () {
+        $(this).slideUp(200);
+    });
+}
+
+function changeRoleAnimate($this_elem) {
+    $this_elem.parents('ul').find('.part_admin').css('opacity', 0.3);
+    $this_elem.parents('ul').find('.part_participant').css('opacity', 0.3);
+    $this_elem.css('opacity', 1);
+}
+
+
+

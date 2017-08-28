@@ -12,6 +12,11 @@
   top: 0;
   opacity: 0;
   transition: 0.3s opacity ease; }
+  .in_modal_fade .close {
+    position: absolute;
+    right: 0;
+    height: 25px;
+    width: 25px; }
 
 .in_modal_body {
   position: relative;
@@ -27,6 +32,11 @@
   -khtml-border-radius: 4px;
   border-radius: 4px;
   -ms-border-radius: 4px; }
+
+.in_modal_header {
+  position: relative;
+  display: flex;
+  justify-content: center; }
 
 .in_modal_title {
   text-align: center;

@@ -1,5 +1,10 @@
+var modal_elder_remove_plan;
+var modal_participant_leave_plan;
+
 $(document).ready(function () {
     setListenersTitleBlock();
+    modal_elder_remove_plan = new ModalElderRemovePlan('#elder_leave');
+    modal_participant_leave_plan = new ModalParticipantLeavePlan('#part_leave_plan');
 });
 
 function setListenersTitleBlock() {
@@ -16,19 +21,26 @@ function setListenersTitleBlock() {
 }
 
 function removePlan() {
-    var plan_id = +$('.title_content').attr('plan_id');
-    var data = {plan_id: plan_id};
+    return new Promise(function (resolve, reject) {
 
-    $.ajax({
-        url: '/delete_plan',
-        contentType: "application/json",
-        method: 'POST',
-        data: JSON.stringify(data),
-        dataType: 'text',
-        success: function () {
-            $('#modal_ok_cancel').hide();
-            location.href = "/plan";
-        }
+        var plan_id = +$('.title_content').attr('plan_id');
+        var data = {plan_id: plan_id};
+
+        $.ajax({
+            url: '/delete_plan',
+            contentType: "application/json",
+            method: 'POST',
+            data: JSON.stringify(data),
+            dataType: 'text',
+            success: function () {
+                location.href = "/plan";
+                return resolve();
+            },
+            error: function () {
+                alert("Не удалось выполнить операцию. Обновите страницу.");
+                return reject();
+            }
+        });
     });
 }
 
@@ -90,19 +102,13 @@ function activeSettings() {
         // для старосты выводится отдельное модальное окно
         if ($('.plan_title').attr('user_role') === 'elder') {
             $('#remove_plan').click(function () {
-                showModal('modal_elder_leave');
-                $('#btn_ok').unbind();
-                $('#btn_ok').click(function () {
-                    removePlan();
-                });
+                modal_elder_remove_plan.showModal();
             });
         }
         else {
             $('#remove_plan').click(function () {
-
-                $('#modal_ok_cancel').modal();
-                $('.modal_ok').click(function () {
-                    removePlan();
+                $('#remove_plan').click(function () {
+                    modal_elder_remove_plan.showModal();
                 });
 
             });

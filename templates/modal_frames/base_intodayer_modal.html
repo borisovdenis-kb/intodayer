@@ -1,7 +1,10 @@
-<div class="in_modal_fade" style="display: none" {% block modal_type %}{% endblock %}>
+<div class="in_modal_fade" style="display: none" {% block modal_id %}{% endblock %}>
     <div class="in_modal_body">
-        {% block modal_title %}
-        {% endblock %}
+        <div class="in_modal_header">
+            {% block modal_title %}
+            {% endblock %}
+            <div class="close"></div>
+        </div>
         <div class="split-line"></div>
         <div class="in_modal_content">
             {% block modal_content %}
