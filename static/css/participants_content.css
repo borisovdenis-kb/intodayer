@@ -88,6 +88,7 @@
   opacity: 1; }
 
 .part_remove {
+  cursor: pointer;
   text-align: center;
   display: flex;
   align-content: center;

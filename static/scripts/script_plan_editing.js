@@ -292,12 +292,13 @@ function setNewListenersNewStr($new_div) {
     // Работа валидации при вводе
     $new_textarea.on('input', function () {
         thisInput = $(this);
-        timerInputId = setInterval(function () {
-            validateField(thisInput);
-        }, 50);
-        setTimeout(function () {
-            clearInterval(timerInputId);
-        }, 100);
+        validateField(thisInput);
+        // timerInputId = setInterval(function () {
+        //
+        // }, 50);
+        // setTimeout(function () {
+        //     clearInterval(timerInputId);
+        // }, 100);
     });
 
 
@@ -1537,14 +1538,14 @@ function validateField(field) {
     // var timePatt3 = /^(([0,1][0-9])|(2[0-3])):$/;
     // var timePatt4 = /^(([0,1][0-9])|(2[0-3])):[0-5]$/;
     // var timePatt5 = /^(([0,1][0-9])|(2[0-3])):[0-5][0-9]$/;
-    // var weekPatt1 = /^([1-9])$/;
-    // var weekPatt2 = /^([1-9]-)|([1-4][0-9])|([5][0-2])$/;
-    // var weekPatt3 = /^([1-9]-[1-9])|([1-4][0-9]-)|([5][0-2]-)$/;
-    // var weekPatt4 = /^([1-9]-[1-4][0-9])|([1-4][0-9]-[1-9])|([5][0-2]-[1-9])|([1-9]-[5][0-2])$/;
-    // var weekPatt5 = /^([1-4][0-9]-[1-4][0-9])|([5][0-2]-[1-4][0-9])|([1-4][0-9]-[5][0-2])|([5][0-2]-[5][0-2])$/;
+    var weekPatt1 = /^([1-9])$/;
+    var weekPatt2 = /^([1-9]-)|([1-4][0-9])|([5][0-2])$/;
+    var weekPatt3 = /^([1-9]-[1-9])|([1-4][0-9]-)|([5][0-2]-)$/;
+    var weekPatt4 = /^([1-9]-[1-4][0-9])|([1-4][0-9]-[1-9])|([5][0-2]-[1-9])|([1-9]-[5][0-2])$/;
+    var weekPatt5 = /^([1-4][0-9]-[1-4][0-9])|([5][0-2]-[1-4][0-9])|([1-4][0-9]-[5][0-2])|([5][0-2]-[5][0-2])$/;
     var subjectPatt = /^[a-zA-Zа-яА-Я0-9 -]*$/;
     var content = field.val();
-    // var length = content.length;
+    var length = content.length;
 
     // if (field.hasClass('time')) {
     //     if (length == 1) {
@@ -1571,31 +1572,31 @@ function validateField(field) {
     //         delExtraSymbols(field, 5);
     //     }
     // }
-    // if (field.hasClass('weeks')) {
-    //     if (length == 1) {
-    //         if (content.search(weekPatt1) == -1) {
-    //             delExtraSymbols(field, 0);
-    //         }
-    //     } else if (length == 2) {
-    //         if (content.search(weekPatt2) == -1) {
-    //             delExtraSymbols(field, 1);
-    //         }
-    //     } else if (length == 3) {
-    //         if (content.search(weekPatt3) == -1) {
-    //             delExtraSymbols(field, 2);
-    //         }
-    //     } else if (length == 4) {
-    //         if (content.search(weekPatt4) == -1) {
-    //             delExtraSymbols(field, 3);
-    //         }
-    //     } else if (length == 5) {
-    //         if (content.search(weekPatt5) == -1) {
-    //             delExtraSymbols(field, 4);
-    //         }
-    //     } else if (length > 5) {
-    //         delExtraSymbols(field, 5);
-    //     }
-    // }
+    if (field.hasClass('weeks')) {
+        if (length == 1) {
+            if (content.search(weekPatt1) == -1) {
+                delExtraSymbols(field, 0);
+            }
+        } else if (length == 2) {
+            if (content.search(weekPatt2) == -1) {
+                delExtraSymbols(field, 1);
+            }
+        } else if (length == 3) {
+            if (content.search(weekPatt3) == -1) {
+                delExtraSymbols(field, 2);
+            }
+        } else if (length == 4) {
+            if (content.search(weekPatt4) == -1) {
+                delExtraSymbols(field, 3);
+            }
+        } else if (length == 5) {
+            if (content.search(weekPatt5) == -1) {
+                delExtraSymbols(field, 4);
+            }
+        } else if (length > 5) {
+            delExtraSymbols(field, 5);
+        }
+    }
     if (field.hasClass('subject')) {
         if (content.search(subjectPatt) == -1) {
             delExtraSymbols(field, 100);

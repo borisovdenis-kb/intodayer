@@ -16,6 +16,9 @@ var modal_confirm_role;
 var modal_delete_participant;
 var modal_elder_leave;
 
+
+
+
 $(document).ready(function () {
 
     modal_confirm_role = $(".in_modal_fade[modal_type=confirm_role]").html();
@@ -32,6 +35,100 @@ var pause_time = 100;
 function test() {
     this.a = 100;
 }
+
+
+class simpleModal {
+    constructor(modalId) {
+        this.modalIdAccess = ".in_modal_fade" + modalId;
+        this.$modal_fade = $(this.modalIdAccess);
+        //создаём модальное окно заново в DOM
+        // html модального окна (нужно, чтобы сбрасывать всю DOM информацию о модальном окне
+        this.modal_html = this.$modal_fade.html();
+        this.$modal_fade.empty();
+        this.flag_open = false;
+    }
+
+    modalInit() {
+        // запоминаем компоненты модального окна
+        this.$modal_fade.append($(this.modal_html));
+        this.$modal_body = this.$modal_fade.find('.in_modal_body');
+        // отвечает за задний фон
+        this.setInitListeners();
+    }
+
+    setInitListeners() {
+    }
+
+    showModal($click_elem) {
+        // var modal_window = modal_fade.find('.in_modal_body');var modal_fade = $(".in_modal_fade[modal_type='" + m_type + "']")
+        // получаем модальное окно определённого типа
+        // при нажании на "изменить пароль" получаем окно типа oldPassword
+        // $('body').append("<div class='in_modal_fade'></div>");
+        //загрузка html кода модального окна на страницу
+        // loadSpecialModalType(m_type);
+        this.modalInit();
+
+        this.$modal_fade.clearQueue();
+        this.$modal_body.clearQueue();
+
+        this.$modal_body.delay(pause_time).queue(function () {
+            $(this).css({
+                'transform': 'scale(1.4, 1.4)',
+                'opacity': 1
+            });
+
+            // навешивает обработчики событий на конкретный тип модального окна
+            // setModalProperties(m_type, $click_elem);
+
+            $(this).dequeue();
+        });
+        this.$modal_fade.show().delay(pause_time).queue(function () {
+            $(this).css({
+                'opacity': 1
+            });
+            $(this).dequeue();
+        });
+        $(document).unbind('click');
+        $(document).click(function (event) {
+            let self = this;
+            if ($(event.target).children(this.$modal_body).length === 1) {
+                self.hideModalWindow();
+                self.hideModalFade();
+            }
+        });
+    }
+
+    hideModalWindow(scale_size, opacity_size) {
+        if (!scale_size) {
+            scale_size = 0.5;
+            opacity_size = 0;
+        }
+        this.$modal_body.clearQueue();
+        this.$modal_body.queue(function () {
+            $(this).css({
+                'transform': 'scale(' + scale_size + ', ' + scale_size + ')',
+                'opacity': opacity_size
+            });
+            $(this).dequeue();
+        });
+    }
+
+    hideModalFade() {
+        this.$modal_fade.clearQueue();
+
+        this.$modal_fade.queue(function () {
+            $(this).css({
+                'opacity': 0
+            });
+            $(this).dequeue();
+        }).delay(400).queue(function () {
+            $(this).hide();
+            this.$modal_fade.empty();
+            $(this).dequeue();
+        });
+    }
+}
+
 
 function showModal(m_type, $click_elem) {
     // var modal_window = modal_fade.find('.in_modal_body');var modal_fade = $(".in_modal_fade[modal_type='" + m_type + "']")

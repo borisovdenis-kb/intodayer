@@ -1,19 +1,19 @@
 class SliderModal {
     constructor(modalId) {
         this.modalIdAccess = ".modal_slider_outer" + modalId;
-        this.$modal_outer_body = $(this.modalIdAccess);
+        this.$modal_fade = $(this.modalIdAccess);
         //создаём модальное окно заново в DOM
         // html модального окна (нужно, чтобы сбрасывать всю DOM информацию о модальном окне
-        this.modal_html = this.$modal_outer_body.html();
-        this.$modal_outer_body.empty();
+        this.modal_html = this.$modal_fade.html();
+        this.$modal_fade.empty();
         this.flag_open = false;
     }
 
     modalInit() {
         // запоминаем компоненты модального окна
-        this.$modal_outer_body.append($(this.modal_html));
-        this.$close_btn = this.$modal_outer_body.find('.close');
-        this.$modal_body = this.$modal_outer_body.find('.modal_slider_body');
+        this.$modal_fade.append($(this.modal_html));
+        this.$close_btn = this.$modal_fade.find('.close');
+        this.$modal_body = this.$modal_fade.find('.modal_slider_body');
         // отвечает за задний фон
         this.$modal_blur = undefined;
         this.setInitListeners();
@@ -26,7 +26,7 @@ class SliderModal {
         this.flag_open = true;
         this.modalInit();
         disableScroll();
-        this.$modal_outer_body.delay(300).fadeIn(500);
+        this.$modal_fade.delay(300).fadeIn(500);
         this.$modal_body.slideToggle(800, 'easeInOutBack').css({'display': 'flex'});
         $('body').append("<div class='modal_blur'></div>");
         $('.modal_blur').show().delay(50).queue(function () {
@@ -64,8 +64,8 @@ class SliderModal {
         let self = this;
         enableScroll();
         this.$modal_body.slideToggle(800, 'easeInOutBack');
-        this.$modal_outer_body.delay(400).fadeOut(500, function () {
-            self.$modal_outer_body.empty();
+        this.$modal_fade.delay(400).fadeOut(500, function () {
+            self.$modal_fade.empty();
             self.flag_open = false;
         });
         $('.modal_blur').queue(function () {
@@ -84,10 +84,10 @@ class SliderModalAva
     extends SliderModal {
     modalInit() {
         super.modalInit();
-        this.$modal_footer = this.$modal_outer_body.find('.modal_slider_footer p');
-        this.$upload_btn = this.$modal_outer_body.find('.file_upload');
-        this.$send_btn = this.$modal_outer_body.find('.send_button');
-        this.$input_file_field = this.$modal_outer_body.find('#id_image_file');
+        this.$modal_footer = this.$modal_fade.find('.modal_slider_footer p');
+        this.$upload_btn = this.$modal_fade.find('.file_upload');
+        this.$send_btn = this.$modal_fade.find('.send_button');
+        this.$input_file_field = this.$modal_fade.find('#id_image_file');
 
     }
 

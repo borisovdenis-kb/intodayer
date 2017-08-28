@@ -49,7 +49,6 @@ function showModal(m_type) {
 
         $('#okay').unbind();
         $('#okay').click(function () {
-            // alert("DSfsadf");
             okayAction();
         });
 
@@ -57,7 +56,7 @@ function showModal(m_type) {
 
         // для 1 ого модального окна сохраняем старый пароль
         if ($('.in_modal_fade').attr('modal_type') === 'oldPassword') {
-            $input_pass.change(function () {
+            $input_pass.on('focusout', function () {
                 oldPassword = $(this).val();
             });
         }
@@ -116,7 +115,6 @@ function hideModalFade(confirm_yes) {
 function okayAction() {
     var pass_input = $('.in_modal_body').find('#pass');
     if (pass_input.val()) {
-        // alert($('.in_modal_fade').attr('modal_type'));
         if ($('.in_modal_fade').attr('modal_type') === 'confirm_pass') {
             completeConfirmPass();
         }
@@ -124,7 +122,7 @@ function okayAction() {
             completeNewPass();
         }
         else if ($('.in_modal_fade').attr('modal_type') === 'oldPassword') {
-            completeOldPass();
+            completeOldPass(pass_input.val());
         }
     } else {
         hideModalFade();
@@ -135,8 +133,8 @@ function okayAction() {
 // Вид модального окна в 3 стадиях ввода пароля
 
 // после подтверждения старого пароля
-function completeOldPass() {
-    var data = JSON.stringify({old_password: oldPassword});
+function completeOldPass(old_pass) {
+    var data = JSON.stringify({old_password: old_pass});
 
     console.log(data);
 
@@ -155,7 +153,7 @@ function completeOldPass() {
                 $('.in_modal_title').text("Creating new password");
                 $okay_btn.removeClass('btn-success');
                 $okay_btn.addClass('btn-primary');
-                $okay_btn.val("Next");
+                $okay_btn.text("Next");
                 $input_pass.attr('placeholder', "Input new password");
 
                 $input_pass.unbind();
@@ -183,7 +181,7 @@ function completeNewPass() {
             showModal();
             var $input_pass = $('.in_modal_body').find('#pass');
             $('.in_modal_body').find('#okay').css('background', 'black');
-            $('.in_modal_body').find('#okay').val('Change password');
+            $('.in_modal_body').find('#okay').text('Change');
             $('.in_modal_title').text("Confirm new password");
             $input_pass.attr('placeholder', "Repeat new password");
 
