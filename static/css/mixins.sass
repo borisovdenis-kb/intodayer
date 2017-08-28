@@ -99,7 +99,15 @@
   background: -webkit-linear-gradient(legacy-direction($direction), $color-stops)
   background: linear-gradient($direction, $color-stops)
 
+
 @mixin text-ellipsis()
   text-overflow: ellipsis
   white-space: nowrap
   overflow: hidden
+
+@mixin background-size($size)
+  -webkit-background-size: $size
+  -moz-background-size: $size
+  -o-background-size: $size
+  background-size: $size
+

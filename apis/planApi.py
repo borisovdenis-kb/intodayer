@@ -76,7 +76,6 @@ def leave_plan(request):
 
         if action_is_available:
             UserPlans.objects.get(plan_id=data['plan_id'], user_id=user.id).delete()
-            # plan.delete_with_message(message='Some message')
         else:
             return HttpResponse(status=403)
 

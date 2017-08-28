@@ -35,10 +35,13 @@ function setInvitationsListeners() {
     }
 
     $(window).on('scroll', function () {
-        if ($(window).scrollTop() > confposTop + 10) {
-            $('.confirmation').css({'position': 'fixed', 'top': '0px', 'left': confposLeft});
+        var $confirm_header = $('.confirmation');
+        if ($(window).scrollTop() > confposTop) {
+            $('.center_page').css({'margin-top': $confirm_header.outerHeight() + 15});
+            $('.confirmation').css({'position': 'fixed', 'top': '0px'});
         } else {
-            $('.confirmation').css({'position': 'relative', 'top': '0', 'left': '0'});
+            $('.center_page').css({'margin-top': 0});
+            $('.confirmation').css({'position': 'relative', 'top': '0'});
         }
     });
 

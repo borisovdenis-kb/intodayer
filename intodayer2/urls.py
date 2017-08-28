@@ -52,7 +52,7 @@ urlpatterns = [
 
     # API расписания
     url(r'^get_avatar', planApi.get_avatar),
-    url(r'^leave_plan', planApi.delete_plan),
+    url(r'^leave_plan', planApi.leave_plan),
     url(r'^delete_plan', planApi.delete_plan),
     url(r'^create_plan', planApi.create_plan),
     url(r'^test_mailing', planApi.mailing_test),
@@ -81,7 +81,7 @@ urlpatterns = [
     url(r'^check_old_password', myprofileApi.check_old_password),
 
     # API приглашений
-    url(r'^invitation/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})', invitationsApi.show_invitation),
+    url(r'^invitation/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})', invitationsApi.verify_invitation),
     url(r'^invitation/confirm/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})', invitationsApi.confirm_invitation),
 ]
 

@@ -146,12 +146,8 @@ button:focus {
 }
 
 .confirmation {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    height: 50px;
+    left: 0px;
     border-radius: 4px;
-    background-color: #8b1deb;
     z-index: 5;
 }
 
