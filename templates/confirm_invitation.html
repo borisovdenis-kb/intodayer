@@ -14,7 +14,14 @@
 {% endblock %}
 
 {% block header %}
-    {% include 'templates_for_ajax/header_welcome.html' %}
+    <div class="top-block">
+        <div class="top" style="height: 38px">
+            <div class="logo"><a href="/">Intodayer</a></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block left_content %}
     <div class="confirmation">
         <div class="accept">
             Принять
@@ -24,7 +31,6 @@
         </div>
     </div>
 {% endblock %}
-
 
 {% block right_content %}
     <div class="plan_load_progres">
