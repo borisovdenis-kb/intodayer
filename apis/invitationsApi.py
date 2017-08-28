@@ -27,9 +27,9 @@ def get_dates_info(cur_plan):
     return context
 
 
-def show_invitation(request, uuid):
+def verify_invitation(request, uuid):
     """
-        This endpoint to confirm invitation.
+        This endpoint to verify invitation.
 
         --> For more detailed documentation see Postman.
     """
@@ -65,7 +65,6 @@ def confirm_invitation(request, uuid):
         except ObjectDoesNotExist:
             return render_to_response("errors/invitation_is_not_valid.html")
         else:
-            print(data['is_accept'])
             if data['is_accept']:
                 UserPlans.objects.create(
                     plan_id=invitation.plan_id, user_id=user.id, role='participant', current_yn='n'
