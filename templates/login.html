@@ -53,7 +53,8 @@
                     <a class="btn-link" href="/registration">Еще нет аккаунта? Зарегистрируйтесь</a>
                 </div>
             </form>
-            {% if authentication_error %}
+
+            {% if auth_error %}
                 <h5 class="text-center alert-warning btn-lg">
                     Неправильный логин или пароль. Попробуйте еще раз.
                 </h5>
@@ -67,6 +68,7 @@
                     .
                 </h5>
             {% endif %}
+
         </div>
     </div>
 

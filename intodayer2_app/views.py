@@ -2,7 +2,6 @@
 
 import json
 from datetime import datetime
-
 from extra.stripes_api import Stripes
 from django.db.utils import IntegrityError
 from django.contrib.auth.models import auth
@@ -10,7 +9,7 @@ from django.contrib.auth import get_user_model
 from django.shortcuts import render_to_response
 from django.contrib.auth.backends import ModelBackend
 from intodayer2_app.forms import CustomUserCreationForm
-from apis.registrationApi import generate_activation_key
+from api.registrationApi import generate_activation_key, send_activation_link
 
 from extra.utils import (
     edit_plan_row, get_today_tomorrow_plans, CloneError, UPDATE, CREATE
@@ -312,10 +311,11 @@ def get_this_user(request):
     return context
 
 
-def login_view(request):
+def login_view(request, message_type):
     context = {
-        'authentication_error': False,
-        'activation_message': False
+        'auth_error': True if message_type == 'auth_error' else False,
+        'activation_message': True if message_type == 'activation_message' else False,
+        'activation_is_expire': True if message_type == 'activation_is_expire' else False
     }
 
     if request.method == 'POST':
@@ -328,7 +328,6 @@ def login_view(request):
             if user.is_active:
                 user_is_not_activated = EmailActivation.objects.filter(user_id=user.id)
                 if user_is_not_activated:
-                    print('HEREHEREHEREHERE')
                     context['activation_message'] = True
                     return render_to_response('login.html', context)
                 else:
@@ -342,7 +341,7 @@ def login_view(request):
             else:
                 return HttpResponse('User is not active.')
         else:
-            context['authentication_error'] = True
+            context['auth_error'] = True
             return render_to_response('login.html', context)
     else:
         return render_to_response('login.html', context)
@@ -364,9 +363,18 @@ def registration_view(request):
 
             new_user.update(**{'username': new_user.email})
             new_user.add_new_plan()
+
+            # добавляем дефолтные настройки
             UserMailingChannels.objects.create(user_id=new_user.id, telegram_yn='n', email_yn='n')
-            EmailActivation.objects.create(user_id=new_user.id, activation_key=generate_activation_key(new_user.email))
-            return HttpResponseRedirect('/login')
+
+            # привязывает код активации к данному пользователю
+            activation_key = generate_activation_key(new_user.email)
+            EmailActivation.objects.create(user_id=new_user.id, activation_key=activation_key)
+
+            # отправляем пользователю письмо с сылкой для подтверждения
+            send_activation_link(new_user.email, activation_key)
+
+            return HttpResponseRedirect('/login/activation_message')
     else:
         form = CustomUserCreationForm()
 

@@ -19,7 +19,9 @@ from django.contrib import admin
 from intodayer2_app import views
 from django.conf import settings
 from django.conf.urls.static import static
-from apis import planApi, participantsApi, myprofileApi, invitationsApi
+from api import (
+    planApi, participantsApi, myprofileApi, invitationsApi, registrationApi
+)
 
 # favicon_view = RedirectView.as_view(url='favicon.ico', permanent=True)
 
@@ -31,7 +33,8 @@ urlpatterns = [
     url(r'^$', views.welcome_view),
     url(r'^home/$', views.home_view),
     url(r'^plan/$', views.plan_view),
-    url(r'^login/$', views.login_view),
+    url(r'^login/$', views.login_view, {'message_type': None}),
+    url(r'^login/(\w+)$', views.login_view),
     url(r'^logout/$', views.logout_view),
     url(r'^account/$', views.profile_view),
     url(r'^statistics/$', views.statistics_view),
@@ -86,6 +89,9 @@ urlpatterns = [
     # API приглашений
     url(r'^invitation/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})', invitationsApi.verify_invitation),
     url(r'^invitation/confirm/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})', invitationsApi.confirm_invitation),
+
+    # API регистрации
+    url(r'^activate/([0-9a-f]{64})', registrationApi.activate_email),
 ]
 
 

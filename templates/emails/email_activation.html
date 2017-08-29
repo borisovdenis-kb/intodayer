@@ -1,0 +1,23 @@
+{% load staticfiles %}
+
+<link rel="stylesheet" type="text/css" href={% static "css/email_style.css" %}>
+
+<div class="mail-container" style="padding: 10px;padding-left: 15px;width: 500px;height: 150px;margin: 0 auto;background-color: #ffffff;-moz-border-radius: 4px;-webkit-border-radius: 4px;-khtml-border-radius: 4px;border-radius: 4px;-ms-border-radius: 4px;">
+    <div class="mail-header" style="padding: 5px;padding-left: 10px;background-color: #8b1deb;color: white;-moz-border-radius: 4px;-webkit-border-radius: 4px;-khtml-border-radius: 4px;border-radius: 4px;-ms-border-radius: 4px;">
+        <h2 style="margin: 0;">Intodayer</h2>
+    </div>
+
+    <div class="split-line"></div>
+
+    <div class="mail-body">
+        <p>
+            Для того, чтобы одтвердить email нажмите кнопку "подтвердить email".
+        </p>
+        <div class="row text-center">
+            <a class="btn btn-sm btn-primary" href={{ link }}>Подтвердить email</a>
+        </div>
+    </div>
+
+    <div class="mail-footer">
+    </div>
+</div>

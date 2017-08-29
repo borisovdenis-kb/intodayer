@@ -374,6 +374,7 @@ class UserMailingChannels(models.Model, UpdateMixin):
 class EmailActivation(models.Model, UpdateMixin):
     user = models.OneToOneField('CustomUser', models.DO_NOTHING, unique=True)
     activation_key = models.TextField(max_length=36, blank=False)
+    date = models.DateField(auto_now=True)
 
     class Meta:
         managed = True
