@@ -315,6 +315,7 @@ def login_view(request, message_type):
     context = {
         'auth_error': True if message_type == 'auth_error' else False,
         'activation_message': True if message_type == 'activation_message' else False,
+        'success_activation': True if message_type == 'success_activation' else False,
         'activation_is_expire': True if message_type == 'activation_is_expire' else False
     }
 
@@ -328,8 +329,7 @@ def login_view(request, message_type):
             if user.is_active:
                 user_is_not_activated = EmailActivation.objects.filter(user_id=user.id)
                 if user_is_not_activated:
-                    context['activation_message'] = True
-                    return render_to_response('login.html', context)
+                    return HttpResponseRedirect("/login/activation_message")
                 else:
                     auth.login(request, user)
                     if 'state' in request.session:
@@ -341,8 +341,7 @@ def login_view(request, message_type):
             else:
                 return HttpResponse('User is not active.')
         else:
-            context['auth_error'] = True
-            return render_to_response('login.html', context)
+            return HttpResponseRedirect("/login/auth_error")
     else:
         return render_to_response('login.html', context)
 

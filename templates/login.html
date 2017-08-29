@@ -55,7 +55,7 @@
             </form>
 
             {% if auth_error %}
-                <h5 class="text-center alert-warning btn-lg">
+                <h5 class="text-center alert-danger btn-lg">
                     Неправильный логин или пароль. Попробуйте еще раз.
                 </h5>
             {% endif %}
@@ -63,9 +63,21 @@
             {% if activation_message %}
                 <h5 class="text-center alert-warning btn-lg">
                     Подтвердите регистрацию. Вам на почту было отпралено сообщение с ссылкой для подтверждения.
-                    </br>Если сообщение не было досталено
+                    </br>Если сообщение не было доставлено
                     <button style="color: #4365ff">выслать сообщение еще раз</button>
                     .
+                </h5>
+            {% endif %}
+
+            {% if activation_is_expire %}
+                <h5 class="text-center alert-danger btn-lg">
+                    Срок ожидания подтверждения регистрации истек. Зарегистрируйтесь заново.
+                </h5>
+            {% endif %}
+
+            {% if success_activation %}
+                <h5 class="text-center alert-success btn-lg">
+                    Подтверждение регистрации прошло успешно!
                 </h5>
             {% endif %}
 
