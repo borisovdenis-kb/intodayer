@@ -253,7 +253,7 @@ def mailing_test(request):
         data = json.loads(request.body.decode('utf-8'))
 
         try:
-            mailing = IntodayerMailing(text=data['text'], image=data['image'])
+            mailing = IntodayerMailing(content=data['text'], image=data['image'])
             mailing.send_by_plan(plan_id=data['plan_id'])
         except ValueError:
             return HttpResponse(status=400)

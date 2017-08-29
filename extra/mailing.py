@@ -17,23 +17,23 @@ from decouple import config
 from base64 import b64decode
 from intodayer_bot import bot
 from intodayer2 import settings
-from django.core.mail import send_mail
+from urllib.error import URLError
 from django.db.utils import IntegrityError
 from django.core.files.base import ContentFile
-from extra.validators import validate_email_field
-from django.core.exceptions import ValidationError
-from sendgrid.helpers.mail import Email, Mail, Content
+from python_http_client.exceptions import BadRequestsError
 from intodayer2_app.models import UserMailingChannels, DivToPng, CustomUser, Invitations
 
 
 class IntodayerMailing:
-    def __init__(self, text='', subject=None, image=None):
+    def __init__(self, content='None', _type="text/plain", subject='None', image=None):
         """
-        :param text: some string
+        :param _type: text/plain, text/html, ...
+        :param content: some string
         :param subject: some string
         :param image: path to image file or string in base64
         """
-        self.text = text
+        self.type = _type
+        self.content = content
         self.subject = subject
         self.sg = sendgrid.SendGridAPIClient(apikey=config('SENDGRID_API_KEY'))
 
@@ -54,7 +54,7 @@ class IntodayerMailing:
             :param recipient_list: [828399002, ...]
         """
         mailing_attrs = {
-            'message': {'text': self.text, 'image': self.image},
+            'message': {'text': self.content, 'image': self.image},
             'recipient_list': recipient_list
         }
 
@@ -68,9 +68,25 @@ class IntodayerMailing:
             via email to all email in recipient_list.
             :param recipient_list: [some@email.com, ...]
         """
-        send_mail(
-            self.subject, self.text, config('PROJECT_EMAIL'), recipient_list, fail_silently=False
-        )
+        recipient_list = [{"email": email} for email in recipient_list]
+        data = {
+            "personalizations": [
+                {
+                    "to": recipient_list,
+                    "subject": self.subject
+                }
+            ],
+            "from": {
+                "email": config('PROJECT_EMAIL')
+            },
+            "content": [
+                {
+                    "type": self.type,
+                    "value": self.content
+                }
+            ]
+        }
+        response = self.sg.client.mail.send.post(request_body=data)
 
     def send_invitations_via_email(self, recipient_list, from_user, plan_id):
         mailing_states = {}
@@ -78,16 +94,21 @@ class IntodayerMailing:
             'from_user': from_user,
         }
 
-        # email validation
-        for email in recipient_list:
-            try:
-                validate_email_field(email)
-            except ValidationError:
-                recipient_list.remove(email)
-                mailing_states[email] = 'validation error'
-
         for email in recipient_list:
             uuid = str(uuid4())
+
+            if settings.DEBUG:
+                context['link'] = "http://127.0.0.1:8000/invitation/{}".format(uuid)
+            else:
+                context['link'] = "http://intodayer.ru/invitation/{}".format(uuid)
+
+            self.content = get_template('emails/invitation.html').render(context)
+
+            try:
+                self.send_via_email([email])
+            except (BadRequestsError, URLError):
+                mailing_states[email] = 'sending error'
+                continue
 
             to_user = CustomUser.objects.filter(email=email)
             to_user = to_user[0] if to_user else None
@@ -102,19 +123,6 @@ class IntodayerMailing:
             except IntegrityError:
                 mailing_states[email] = 'already_invited'
                 continue
-
-            if settings.DEBUG:
-                context['url'] = "http://127.0.0.1:8000/invitation/{}".format(uuid)
-            else:
-                context['url'] = "http://intodayer.ru/invitation/{}".format(uuid)
-
-            mail = Mail(
-                from_email=Email(config('PROJECT_EMAIL')),
-                subject="Invitation",
-                to_email=Email(email),
-                content=Content("text/html", get_template('emails/invitation.html').render(context))
-            )
-            response = self.sg.client.mail.send.post(request_body=mail.get())
 
             mailing_states[email] = 'ok'
 
@@ -152,10 +160,10 @@ class IntodayerMailing:
 
 
 if __name__ == '__main__':
-    recipient_email = ['borisovdenis-kb@yandex.ru']
-    user = CustomUser.objects.get(id=22)
+    recipient_email = ["borisovdenis-kb@yandex.ru"]
+    user = CustomUser.objects.get(id=5)
 
-    Z = IntodayerMailing()
+    Z = IntodayerMailing(_type="text/html")
     res = Z.send_invitations_via_email(recipient_email, user, 322)
 
     print(res)

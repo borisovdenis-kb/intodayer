@@ -85,7 +85,7 @@ def invite_participants(request):
             return HttpResponse(status=403)
 
         if action_is_available:
-            mailing = IntodayerMailing()
+            mailing = IntodayerMailing(_type="text/html")
             invitation_states = mailing.send_invitations_via_email(email_list, user, data['plan_id'])
             return JsonResponse({'invitation_states': invitation_states})
         else:

@@ -176,7 +176,7 @@ class Invitations(models.Model, UpdateMixin):
     plan = models.ForeignKey('PlanLists', models.DO_NOTHING)
     confirmed_yn = models.CharField(max_length=1, blank=True, null=True, validators=[validate_yn_filed])
     email = models.TextField(blank=False, validators=[validate_email_field])
-    uuid = models.TextField(max_length=36, blank=False)
+    uuid = models.TextField(max_length=36, blank=True)
 
     class Meta:
         managed = True
@@ -369,6 +369,15 @@ class UserMailingChannels(models.Model, UpdateMixin):
             self.telegram_yn,
             self.email_yn
         )
+
+
+class EmailActivation(models.Model, UpdateMixin):
+    user = models.OneToOneField('CustomUser', models.DO_NOTHING, unique=True)
+    activation_key = models.TextField(max_length=36, blank=False)
+    date = models.DateField(auto_now=True)
+
+    class Meta:
+        managed = True
 
 
 class CustomUser(AbstractUser, UpdateMixin):
