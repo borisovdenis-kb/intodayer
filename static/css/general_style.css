@@ -360,4 +360,10 @@ button {
   -o-background-size: contain;
   background-size: contain; }
 
+.success_input_validate {
+  background-color: #faffbd; }
+
+.error_input_validate {
+  background-color: #f2dede; }
+
 /*# sourceMappingURL=general_style.css.map */

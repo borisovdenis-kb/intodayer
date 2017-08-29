@@ -271,6 +271,33 @@ function enableScroll() {
 }
 
 
+
+
+// устанавливают стили INPUT валидации
+function setInputSuccess($input) {
+    $input.prop('validate', true);
+    if ($input.next().hasClass('popover')) {
+        $input.popover('hide');
+    }
+    if ($input.next().hasClass('tooltip')) {
+        $input.tooltip('hide');
+    }
+
+    setInputDefault($input);
+    $input.addClass('success_input_validate');
+}
+
+function setInputError($input) {
+    setInputDefault($input);
+    $input.prop('validate', false);
+    $input.addClass('error_input_validate');
+}
+
+function setInputDefault($input) {
+    $input.removeClass('success_input_validate error_input_validate');
+}
+
+// некоторые функции валидации
 function validatePassword(pass) {
     var regex = /(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/;
     return regex.test(pass);
@@ -281,3 +308,10 @@ function validateEmail(email) {
     return regex.test(email);
 }
 
+function inputNotEmpty(input_val) {
+    if (input_val || input_val !== "") {
+        return true;
+    } else {
+        return false;
+    }
+}

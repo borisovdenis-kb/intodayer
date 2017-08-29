@@ -78,12 +78,6 @@ html, body {
   .panel_auth .auth_input_content.second {
     margin-bottom: 10px; }
 
-.success_input_validate {
-  background-color: #faffbd; }
-
-.error_input_validate {
-  background-color: #f2dede; }
-
 .popover {
   width: 300px; }
 

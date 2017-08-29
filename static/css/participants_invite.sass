@@ -3,33 +3,6 @@
 
 $margin-panel: 3px
 
-//.invite_settings_layouts
-//  display: flex
-//  flex-direction: row
-
-//.invite_by_mail
-//  margin-right: $margin-panel
-//  width: calc(50% - #{$margin-panel})
-//
-//.invite_by_link
-//  width: calc(50% - #{$margin-panel})
-//  margin-left: $margin-panel
-
-//.plan_settings_content
-//@media (max-width: 970px)
-//  .invite_settings_layouts
-//    flex-direction: column
-//
-//  .invite_by_mail, .invite_by_link
-//    width: 100%
-//
-//  .invite_by_mail
-//    margin-right: 0
-//
-//  .invite_by_link
-//    margin:
-//      left: 0
-//      top: 5px
 
 .invite_by_mail, .invite_by_link
   background: white
@@ -40,17 +13,66 @@ $margin-panel: 3px
   @include border-radius($gl_border_radius)
   margin-top: 5px
 
+.settings_btns_content.text-center
+  padding:
+    left: 25px
+    top: 0
+  display: flex
+  flex-direction: row
+  justify-content: center
+
+  .btn-back.btn, .btn-okay.btn
+    @include set-flex(center)
+    width: 150px
+
+.invite_input_block
+  display: flex
+  //align-content: center
+  align-items: center
+  flex-direction: column
+  width: 100%
+  padding-bottom: 15px
+
+
+$input_height: 50px
 .invite_by_mail, .invite_by_link
   span
     text-align: left
     font-size: 1.5em
     font-weight: bold
   input
+    height: $input_height
     @extend %input_styles
     width: 100%
+    padding:
+      //left: 30px
+      //right: 50px
     margin:
       top: 2px
       bottom: 2px
+    transition: 0.3s background ease
+
+$loading_circle_margin: 70px
+.left_input_margin
+  width: $loading_circle_margin
+
+.right_input_content
+  @include set-flex(center)
+  justify-content: flex-end
+  width: $loading_circle_margin
+
+.inline_circle_loader
+  display: block
+  height: 100%
+
+
+.input_outer
+  width: 100%
+  max-width: 600px
+  //background: red
+  display: inline-flex
+  flex-direction: row
+  justify-content: center
 
 
 .invite_link_btns
@@ -66,9 +88,6 @@ $margin-panel: 3px
     &:focus, &:link, &:active
       outline: none
 
-.settings_btns_content
-  padding:
-    top: 15px
 
 .invite_link_btns
   padding:
@@ -76,9 +95,27 @@ $margin-panel: 3px
     bottom: 5px
 
 
+
 p.invite_info
   padding-bottom: 5px
 
 @include placeholder()
   color: $gl_placeholder_color
+
+@media (max-width: 768px )
+  .invite_by_mail, .invite_by_link
+    input
+      width: 400px
+  .settings_btns_content.text-center
+    .btn-back.btn, .btn-okay.btn
+      width: 120px
+    //padding:
+    //  left: 0
+  //  justify-content: flex-start
+  //.invite_input_block
+  //  align-items: flex-start
+  //.input_outer
+  //  justify-content: flex-start
+  //.left_input_margin
+  //  display: none
 

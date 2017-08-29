@@ -61,9 +61,11 @@ $modal-height: 120px
   @include border-radius(4px)
 
 .in_modal_bottom
-  display: flex
+  width: inherit
+  display: inline-flex
   flex-direction: row
   justify-content: center
+  min-height: 0px
   background-color: #ffffff
   text-align: center
   padding:
@@ -86,6 +88,8 @@ $modal-height: 120px
 
 // дополнительные стили для модального окна ввода пароля
 .in_modal_fade[pass_modal]
+  .in_modal_title
+    padding-bottom: 5px
   .in_modal_body
     margin:
       bottom: 200px
@@ -107,7 +111,18 @@ $modal-height: 120px
     flex-direction: row
 
   .in_stage_content
+    display: none
+    //height: auto
+    min-height: 0px
+    font-size: 1em
+    margin:
+      top: 0
+    padding:
+      top: 0
     margin-bottom: 0
+  .split-line.last
+    margin:
+      bottom: 8px
 
 
 @media (max-width: 600px)
@@ -119,8 +134,9 @@ $modal-height: 120px
     margin-top: 70px
     width: 69%
 
+
 @media (max-height: 768px)
   .in_modal_fade[pass_modal]
     .in_modal_body
       margin:
-        bottom: 0px
+        bottom: 0

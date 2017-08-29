@@ -226,6 +226,7 @@ class ModalPassword extends SimpleIntodayerModal {
         this.$input_pass.focus();
         this.setInitListeners();
     }
+
 }
 
 //переменные для модального окна ввода пароля
@@ -281,10 +282,12 @@ class ModalPasswordOldPass extends ModalPassword {
         });
     }
 
+
     showWrongFrameMessage() {
         // Выводит переданное сообещение (message) внизу формы.
-        this.$in_stage_content.animate({'color': this.wrong_color}, 200);
         this.$in_stage_content.text("Текущий и введённый пароли не совпадают");
+        this.$in_stage_content.clearQueue();
+        this.$in_stage_content.hide().slideDown(100).animate({'color': this.wrong_color}, 200);
     }
 }
 
@@ -311,8 +314,10 @@ class ModalPasswordNewPass extends ModalPassword {
 
     showWrongFrameMessage() {
         // Выводит переданное сообещение (message) внизу формы.
-        this.$in_stage_content.animate({'color': this.wrong_color}, 200);
         this.$in_stage_content.text("Пароль должен быть не меньше 8 символов и содержать: заглавные буквы, строчные буквы и цифры.");
+        this.$in_stage_content.clearQueue();
+        this.$in_stage_content.hide().slideDown(100).animate({'color': this.wrong_color}, 200);
+
     }
 }
 
@@ -339,13 +344,17 @@ class ModalPasswordNewPassConfirm extends ModalPassword {
 
     showWrongFrameMessage() {
         // Выводит переданное сообещение (message) внизу формы.
-        this.$in_stage_content.animate({'color': this.wrong_color}, 200);
         this.$in_stage_content.text("Пароли не совпадают.");
+        this.$in_stage_content.clearQueue();
+        this.$in_stage_content.hide().slideDown(100).animate({'color': this.wrong_color}, 200);
+
     }
 
     showSuccessFrameMessage() {
-        this.$in_stage_content.animate({'color': this.success_color}, 200);
         this.$in_stage_content.text("Пароль успешно измененён!");
+        this.$in_stage_content.clearQueue();
+        this.$in_stage_content.hide().slideDown(100).animate({'color': this.success_color}, 200);
+
     }
 
     completeConfirmPass(new_password) {

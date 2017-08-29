@@ -74,9 +74,11 @@
   -ms-border-radius: 4px; }
 
 .in_modal_bottom {
-  display: flex;
+  width: inherit;
+  display: inline-flex;
   flex-direction: row;
   justify-content: center;
+  min-height: 0px;
   background-color: #ffffff;
   text-align: center;
   padding-bottom: 10px;
@@ -102,6 +104,8 @@
 #btn_no {
   margin-left: 1px; }
 
+.in_modal_fade[pass_modal] .in_modal_title {
+  padding-bottom: 5px; }
 .in_modal_fade[pass_modal] .in_modal_body {
   margin-bottom: 200px; }
 .in_modal_fade[pass_modal] input, .in_modal_fade[pass_modal] button[id=okay].btn {
@@ -120,7 +124,14 @@
 .in_modal_fade[pass_modal] .in_modal_content {
   flex-direction: row; }
 .in_modal_fade[pass_modal] .in_stage_content {
+  display: none;
+  min-height: 0px;
+  font-size: 1em;
+  margin-top: 0;
+  padding-top: 0;
   margin-bottom: 0; }
+.in_modal_fade[pass_modal] .split-line.last {
+  margin-bottom: 8px; }
 
 @media (max-width: 600px) {
   .in_modal_fade {
@@ -132,6 +143,6 @@
     width: 69%; } }
 @media (max-height: 768px) {
   .in_modal_fade[pass_modal] .in_modal_body {
-    margin-bottom: 0px; } }
+    margin-bottom: 0; } }
 
 /*# sourceMappingURL=intodayer_modal.css.map */

@@ -336,6 +336,7 @@ button
     image: url('../images/reject.png')
 
 
+// закрывалка (крестик) для модальных окон
 .close
   @include set-flex(center)
   margin-left: auto
@@ -345,3 +346,11 @@ button
   cursor: pointer
   background: url("../images/reject.png") no-repeat right
   @include background-size(contain)
+
+
+// стили для валидации полей
+.success_input_validate
+  background-color: rgb(250, 255, 189)
+
+.error_input_validate
+  background-color: #f2dede

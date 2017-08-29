@@ -1,5 +1,4 @@
 {#    этот div класс нужен для стилизации#}
-<div class="plan_settings_layouts"></div>
 
 
 <div class="invite_settings_layouts">
@@ -13,20 +12,25 @@
                 Приглашённые пользователи будут иметь право просматривать расписание и следить за новостями.</p>
             <p></p>
             <div class="invite_input_block">
-                <div class="input_outer row text-center">
-                    <div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-1 col-lg-8 col-md-8 col-sm-10 col-xs-12">
-                        <input type="email" class="invite_input btn-lg"
-                               placeholder="Введите почту для приглашения">
+                <div class="input_outer text-center">
+                    <div class="left_input_margin"></div>
+                    <input type="email" class="invite_input btn-lg"
+                           placeholder="Input email for invite" value="" validation=false old_val="" data-toggle="tooltip" data-placement="right" title="sdafasdf">
+                    <div class="right_input_content">
+                        {% include 'components/loading_circle.html' %}
                     </div>
                 </div>
-            </div>
 
-        </div>
-        <div class="row settings_btns_content text-center">
-            <div class="form-group">
-                <button class="btn-back btn btn-lg btn-primary">Отмена</button>
-                <button id="invite_btn" class="disabled btn-okay btn btn-lg btn-success">Пригласить</button>
             </div>
+        </div>
+        <div class="invite_info_bottom">
+            <p class="info_invite_msg text-center alert-warning" style="display: none">
+                Приглашения будут высланы для всех email, выделенных жёлтым
+            </p>
+        </div>
+        <div class="settings_btns_content text-center">
+            <button class="btn-back btn btn-lg btn-primary">Отмена</button>
+            <button id="invite_btn" class="disabled btn-okay btn btn-lg btn-success">Пригласить</button>
         </div>
 
     </div>
@@ -36,7 +40,8 @@
             <span>Пригласить по ссылке</span>
             <div class="split-line"></div>
             <p class="invite_info">Чтобы пригласить новых участников в расписание отправьте активную ссылку. По данной
-                активной ссылке любой человек сможет стать участником данного расписания. Действите ссылки можно прекратить в любой момент.</p>
+                активной ссылке любой человек сможет стать участником данного расписания. Действите ссылки можно
+                прекратить в любой момент.</p>
             <div class="row text-center">
                 <div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-1 col-lg-8 col-md-8 col-sm-10 col-xs-12">
                     <input id="invite_link" type="url" class="btn-lg" autocomplete="off" placeholder="http://">
@@ -51,9 +56,6 @@
         </div>
         <h5 class="text-center alert-danger btn-lg">Данный функционал пока что недоступен</h5>
     </div>
-
-
-</div>
 
 </div>
 

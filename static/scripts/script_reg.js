@@ -270,35 +270,9 @@ function setValidateTextField($text_input) {
 }
 
 
-// устанавливают стили INPUT валидации
-function setInputSuccess($input) {
-    $input.prop('validate', true);
-    if ($input.next().hasClass('popover')) {
-        $input.popover('hide');
-    }
-
-    setInputDefault($input);
-    $input.addClass('success_input_validate');
-}
-
-function setInputError($input) {
-    setInputDefault($input);
-    $input.prop('validate', false);
-    $input.addClass('error_input_validate');
-}
-
-function setInputDefault($input) {
-    $input.removeClass('success_input_validate error_input_validate');
-}
 
 
-function inputNotEmpty(input_val) {
-    if (input_val || input_val !== "") {
-        return true;
-    } else {
-        return false;
-    }
-}
+
 
 
 function emailNotExistValidation(email_str) {
