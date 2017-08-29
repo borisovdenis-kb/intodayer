@@ -2,6 +2,7 @@
 
 import json
 from datetime import datetime
+
 from extra.stripes_api import Stripes
 from django.db.utils import IntegrityError
 from django.contrib.auth.models import auth
@@ -9,6 +10,7 @@ from django.contrib.auth import get_user_model
 from django.shortcuts import render_to_response
 from django.contrib.auth.backends import ModelBackend
 from intodayer2_app.forms import CustomUserCreationForm
+from apis.registrationApi import generate_activation_key
 
 from extra.utils import (
     edit_plan_row, get_today_tomorrow_plans, CloneError, UPDATE, CREATE
@@ -18,8 +20,8 @@ from django.http import (
 )
 
 from intodayer2_app.models import (
-    UserPlans, Invitations, PlanRows, DaysOfWeek, CustomUser, UserMailingChannels
-)
+    UserPlans, Invitations, PlanRows, DaysOfWeek, CustomUser, UserMailingChannels,
+    EmailActivation)
 
 
 # TODO: Сделать в выводе расписания в /plan сортировку по времени, а не по неделям
@@ -311,6 +313,11 @@ def get_this_user(request):
 
 
 def login_view(request):
+    context = {
+        'authentication_error': False,
+        'activation_message': False
+    }
+
     if request.method == 'POST':
         email = request.POST['email']
         password = request.POST['password']
@@ -319,24 +326,52 @@ def login_view(request):
 
         if user is not None:
             if user.is_active:
-                auth.login(request, user)
-                if 'state' in request.session:
-                    if request.session['state']['operation'] == 'confirm_invitation':
-                        url = "/invitation/{}".format(request.session['state']['uuid'])
-                        return HttpResponseRedirect(url)
+                user_is_not_activated = EmailActivation.objects.filter(user_id=user.id)
+                if user_is_not_activated:
+                    print('HEREHEREHEREHERE')
+                    context['activation_message'] = True
+                    return render_to_response('login.html', context)
                 else:
-                    return HttpResponseRedirect("/home")
+                    auth.login(request, user)
+                    if 'state' in request.session:
+                        if request.session['state']['operation'] == 'confirm_invitation':
+                            url = "/invitation/{}".format(request.session['state']['uuid'])
+                            return HttpResponseRedirect(url)
+                    else:
+                        return HttpResponseRedirect("/home")
             else:
-                return HttpResponse('User is not active')
+                return HttpResponse('User is not active.')
         else:
-            return HttpResponse('Invalid Login or Password')
+            context['authentication_error'] = True
+            return render_to_response('login.html', context)
     else:
-        return render_to_response('login.html')
+        return render_to_response('login.html', context)
 
 
 def logout_view(request):
     auth.logout(request)
     return HttpResponseRedirect("/")
+
+
+def registration_view(request):
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            try:
+                new_user = form.save()
+            except AttributeError:
+                pass
+
+            new_user.update(**{'username': new_user.email})
+            new_user.add_new_plan()
+            UserMailingChannels.objects.create(user_id=new_user.id, telegram_yn='n', email_yn='n')
+            EmailActivation.objects.create(user_id=new_user.id, activation_key=generate_activation_key(new_user.email))
+            return HttpResponseRedirect('/login')
+    else:
+        form = CustomUserCreationForm()
+
+    context = {'form': form}
+    return render_to_response('reg.html', context)
 
 
 def welcome_view(request):
@@ -461,26 +496,6 @@ def about_service_view(request):
         return render_to_response('about_service.html', context)
     else:
         return HttpResponseRedirect("/login")
-
-
-def registration_view(request):
-    if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)
-        if form.is_valid():
-            try:
-                new_user = form.save()
-            except AttributeError:
-                pass
-
-            new_user.update(**{'username': new_user.email})
-            new_user.add_new_plan()
-            UserMailingChannels.objects.create(user_id=new_user.id, telegram_yn='n', email_yn='n')
-            return HttpResponseRedirect('/login')
-    else:
-        form = CustomUserCreationForm()
-
-    context = {'form': form}
-    return render_to_response('reg.html', context)
 
 
 def profile_view(request):

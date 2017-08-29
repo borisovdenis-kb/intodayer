@@ -53,9 +53,22 @@
                     <a class="btn-link" href="/registration">Еще нет аккаунта? Зарегистрируйтесь</a>
                 </div>
             </form>
+            {% if authentication_error %}
+                <h5 class="text-center alert-warning btn-lg">
+                    Неправильный логин или пароль. Попробуйте еще раз.
+                </h5>
+            {% endif %}
+
+            {% if activation_message %}
+                <h5 class="text-center alert-warning btn-lg">
+                    Подтвердите регистрацию. Вам на почту было отпралено сообщение с ссылкой для подтверждения.
+                    </br>Если сообщение не было досталено
+                    <button style="color: #4365ff">выслать сообщение еще раз</button>
+                    .
+                </h5>
+            {% endif %}
         </div>
     </div>
-
 
 {% endblock %}
 
