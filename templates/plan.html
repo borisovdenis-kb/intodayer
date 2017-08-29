@@ -11,7 +11,6 @@
 
 {% block styles %}
     <link rel="stylesheet" type="text/css" href={% static "css/plan_content.css" %}>
-    {#    <link rel="stylesheet" type="text/css" href={% static "css/__old/pl.css" %}>#}
     <link rel="stylesheet" type="text/css" href={% static "css/plan_settings.css" %}>
     <link rel="stylesheet" type="text/css"
             {#          плагины#}
@@ -30,7 +29,6 @@
 {% endblock %}
 
 {% block scripts_bottom %}
-    <script type="text/javascript" src={% static "scripts/components/script_modal_intodayer.js" %}></script>
     <script type="text/javascript" src={% static "scripts/script_plan_editing.js" %}></script>
     <script type="text/javascript" src={% static "scripts/script_plan_settings.js" %}></script>
     <script type="text/javascript" src={% static "scripts/script_droplists_plan_editing.js" %}></script>
@@ -79,6 +77,6 @@
     <div>
         <div class="comment_text_hidden">sdafasdfasdfds</div>
     </div>
-    {% include "modal_frames/modal_elder_leave.html" %}
+    {% include "modal_frames/modal_elder_remove_plan.html" %}
+    {% include "modal_frames/modal_leave_plan.html" %}
 {% endblock %}
-%}

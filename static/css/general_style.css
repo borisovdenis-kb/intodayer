@@ -344,4 +344,20 @@ button {
   background-color: #eb6b66;
   background-image: url("../images/reject.png"); }
 
+.close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  margin-left: auto;
+  margin-right: 5px;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  background: url("../images/reject.png") no-repeat right;
+  -webkit-background-size: contain;
+  -moz-background-size: contain;
+  -o-background-size: contain;
+  background-size: contain; }
+
 /*# sourceMappingURL=general_style.css.map */

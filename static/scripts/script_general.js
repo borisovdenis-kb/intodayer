@@ -3,7 +3,6 @@ $(document).ready(function () {
 });
 
 
-
 function confirmInvitation(is_accept) {
     /*
      *  is_accept: true/false
@@ -147,11 +146,12 @@ function switchPlan($this_plan, flag_open_editing) {
         plan_menu.css({'background': 'black', 'color': 'white'});
 
         // когда создаём новое расписание открываются настройки
-        if (flag_open_editing){
+        if (flag_open_editing) {
+            localStorage.setItem('new_plan_editing', 'true');
             $('.plan_settings').trigger('click');
         }
         // для того, чтобы если мы только создали расписание, то в настройках кнопка Сохранить сразу активна
-        localStorage.setItem('new_plan_editing', 'true');
+
     });
 }
 
@@ -162,44 +162,48 @@ function createPlan($plus_button) {
      *  1. Добавляет кнопку в панели переключения расписаний;
      *  2. Создает для данного пользователя в базе "дефолтное" расписание.
      */
-    var $new_plan_li, $new_plan_li_a;
+    return new Promise(function (resolve, reject) {
 
-    // если мы нажимаем на меню справа, то плюс исчезает на мгновение
-    if ($plus_button) {
-        $plus_button.fadeTo(50, 0).delay(100).fadeTo(200, 1);
-    }
+        var $new_plan_li, $new_plan_li_a;
 
-    $.ajax({
-        url: '/create_plan',
-        type: 'GET',
-        dataType: 'json',
-        success: function (msg) {
-            if (!$plus_button) {
-                location.href = "/plan";
-            }
-            $('.plan_list').append('<li style="display: none; opacity: 0"><a>No name</a></li>');
-
-            $new_plan_li = $('.plan_list li').last();
-
-            $new_plan_li.slideToggle(200);
-
-            $new_plan_li_a = $new_plan_li.find('a');
-            // добавляем этой кнопке в атрибуты id нового расписания
-            $new_plan_li_a.attr('plan_id', msg.new_plan_id);
-
-            setTimeout(function () {
-                $new_plan_li.fadeTo(100, 1);
-            }, 200);
-
-            setTimeout(function () {
-                // навешиваем возможность переключения
-                $new_plan_li_a.click(function () {
-                    switchPlan($(this), true);
-                });
-                // переключаемся на него, иммитируя клик
-                $new_plan_li_a.trigger('click');
-            }, 600);
+        // если мы нажимаем на меню справа, то плюс исчезает на мгновение
+        if ($plus_button) {
+            $plus_button.fadeTo(50, 0).delay(100).fadeTo(200, 1);
         }
+
+        $.ajax({
+            url: '/create_plan',
+            type: 'GET',
+            dataType: 'json',
+            success: function (msg) {
+                $('.plan_list').append('<li style="display: none; opacity: 0"><a>No name</a></li>');
+
+                $new_plan_li = $('.plan_list li').last();
+
+                $new_plan_li.slideToggle(200);
+
+                $new_plan_li_a = $new_plan_li.find('a');
+                // добавляем этой кнопке в атрибуты id нового расписания
+                $new_plan_li_a.attr('plan_id', msg.new_plan_id);
+
+                setTimeout(function () {
+                    $new_plan_li.fadeTo(100, 1);
+                }, 200);
+
+                setTimeout(function () {
+                    // навешиваем возможность переключения
+                    $new_plan_li_a.click(function () {
+                        switchPlan($(this), true);
+                    });
+                    // переключаемся на него, иммитируя клик
+                    $new_plan_li_a.trigger('click');
+                }, 600);
+                return resolve();
+            },
+            error: function () {
+                return reject();
+            }
+        });
     });
 }
 

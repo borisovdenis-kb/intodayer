@@ -4,14 +4,17 @@ $(document).ready(function () {
 
 
 function setListenersEmptyPlan() {
-        // для страницы empty
+    // для страницы empty
     $(".select_plan").click(function () {
         var this_id = $(this).attr('plan_id');
         switch_plan_only(this_id);
     });
 
     $('.create_plan_first').click(function () {
-        createPlan();
+        localStorage.setItem('new_plan_editing', 'true');
+        createPlan().then(function () {
+            location.href = "/plan";
+        });
     });
 }
 

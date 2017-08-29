@@ -43,6 +43,9 @@
   padding-top: 10px; }
 
 .in_modal_content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   background: white; }
   .in_modal_content p {
     overflow-wrap: break-word;
@@ -61,26 +64,9 @@
     font-size: 0.8em;
     text-align: left; }
 
-input[id=pass], button[id=okay].btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  align-content: center;
-  font-size: 1em;
-  height: 30px;
-  border: none;
-  text-align: center; }
-  input[id=pass]:active, button[id=okay].btn:active, input[id=pass]:focus, button[id=okay].btn:focus {
-    outline: none; }
-
-input[id=pass] {
-  margin-right: 10px; }
-
 .in_stage_content {
   background-color: #ffffff;
   text-align: center;
-  padding: 0;
-  margin: 0;
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
   -khtml-border-radius: 4px;
@@ -88,6 +74,9 @@ input[id=pass] {
   -ms-border-radius: 4px; }
 
 .in_modal_bottom {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
   background-color: #ffffff;
   text-align: center;
   padding-bottom: 10px;
@@ -97,17 +86,52 @@ input[id=pass] {
   border-radius: 4px;
   -ms-border-radius: 4px; }
 
-.in_modal_fade[modal_style=pass] .in_modal_bottom {
-  padding-bottom: 0; }
-
 #btn_ok, #btn_no {
-  width: 50px; }
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  width: 60px;
+  text-align: center; }
+  #btn_ok:focus, #btn_ok:link, #btn_ok:active, #btn_no:focus, #btn_no:link, #btn_no:active {
+    outline: none; }
+
+#btn_ok {
+  margin-right: 1px; }
+
+#btn_no {
+  margin-left: 1px; }
+
+.in_modal_fade[pass_modal] .in_modal_body {
+  margin-bottom: 200px; }
+.in_modal_fade[pass_modal] input, .in_modal_fade[pass_modal] button[id=okay].btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  font-size: 1em;
+  height: 30px;
+  border: none;
+  text-align: center; }
+  .in_modal_fade[pass_modal] input:active, .in_modal_fade[pass_modal] button[id=okay].btn:active, .in_modal_fade[pass_modal] input:focus, .in_modal_fade[pass_modal] button[id=okay].btn:focus {
+    outline: none; }
+.in_modal_fade[pass_modal] input {
+  margin-right: 10px; }
+.in_modal_fade[pass_modal] .in_modal_content {
+  flex-direction: row; }
+.in_modal_fade[pass_modal] .in_stage_content {
+  margin-bottom: 0; }
 
 @media (max-width: 600px) {
   .in_modal_fade {
-    min-height: 450px; }
+    min-height: 450px;
+    align-items: flex-start; }
 
   .in_modal_body {
-    width: 250px; } }
+    margin-top: 70px;
+    width: 69%; } }
+@media (max-height: 768px) {
+  .in_modal_fade[pass_modal] .in_modal_body {
+    margin-bottom: 0px; } }
 
 /*# sourceMappingURL=intodayer_modal.css.map */

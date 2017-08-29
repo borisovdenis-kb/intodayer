@@ -54,6 +54,16 @@ var places = ["510x", '110м', "Л-11", "Л-10", '511м', "112ф", "Кафедр
 var parity_PlaceHolder = 'Все';
 
 $(document).ready(function () {
+    // когда создаём новое расписание открываются настройки
+    if (localStorage['new_plan_editing'] === 'true') {
+        // localStorage.setItem('new_plan_editing', 'false');
+        // localStorage.removeItem('new_plan_editing');
+        setTimeout(function () {
+            $('.plan_settings').trigger('click');
+        }, 200);
+    }
+
+
     rightContentActionsAllUsers();
 
     if ($('.plan_title').attr('user_has_edit_plan') === 'yes') {
@@ -816,13 +826,13 @@ function setTrueRandomPlaceholder($this_field) {
         return "hh:mm";
     }
     if ($this_field.hasClass('subject'))
-        // return subjects[getRandomInt(0, subjects.length)];
+    // return subjects[getRandomInt(0, subjects.length)];
         return "Тервер";
     if ($this_field.hasClass('teacher'))
-        // return teachers[getRandomInt(0, teachers.length)];
+    // return teachers[getRandomInt(0, teachers.length)];
         return "Колмогоров А. Н.";
     if ($this_field.hasClass('place'))
-        // return places[getRandomInt(0, places.length)];
+    // return places[getRandomInt(0, places.length)];
         return "Л-1";
     if ($this_field.hasClass('parity'))
         return parity_PlaceHolder;

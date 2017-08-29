@@ -1,8 +1,12 @@
 /**
  * Created by Alexey on 24.07.2017.
  */
+
+
+var password_modal;
 $(document).ready(function () {
     saveInputs();
+    password_modal = new ModalPasswordOldPass('#modal_password_old');
 
     $('.pr_content_title button').unbind();
     $('.pr_content_title button').on('focus click', function () {
@@ -21,7 +25,7 @@ $(document).ready(function () {
 
     $('.pr_pass_btn').unbind();
     $('.pr_pass_btn').click(function () {
-        showModal('oldPassword');
+        password_modal.showModal();
     });
 });
 

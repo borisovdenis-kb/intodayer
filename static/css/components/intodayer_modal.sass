@@ -37,14 +37,15 @@ $modal-height: 120px
   display: flex
   justify-content: center
 
-
-
 .in_modal_title
   text-align: center
   padding-top: 10px
-  //margin-left: auto
+//margin-left: auto
 
 .in_modal_content
+  display: flex
+  flex-direction: column
+  justify-content: center
   background: white
   p
     @include word-break-full()
@@ -54,56 +55,72 @@ $modal-height: 120px
     font-size: 0.8em
     text-align: left
 
-
-%modal_pass_styles
-  @include set-flex(center)
-  font-size: 1em
-  height: 30px
-  border: none
-  text-align: center
-  &:active, &:focus
-    outline: none
-
-input
-  &[id=pass]
-    @extend %modal_pass_styles
-  &[id=pass]
-    margin-right: 10px
-
-button
-  &[id=okay].btn
-    @extend %modal_pass_styles
-
 .in_stage_content
   background-color: #ffffff
   text-align: center
-  padding: 0
-  margin: 0
   @include border-radius(4px)
 
 .in_modal_bottom
+  display: flex
+  flex-direction: row
+  justify-content: center
   background-color: #ffffff
   text-align: center
   padding:
     bottom: 10px
   @include border-radius(4px)
 
-.in_modal_fade[modal_style=pass]
-  .in_modal_bottom
-    padding:
-      bottom: 0
-
 #btn_ok, #btn_no
-  width: 50px
+  @include set-flex(center)
+  width: 60px
+  text-align: center
+  &:focus, &:link, &:active
+    outline: none
+
+#btn_ok
+  margin-right: 1px
+
+#btn_no
+  margin-left: 1px
+
+
+// дополнительные стили для модального окна ввода пароля
+.in_modal_fade[pass_modal]
+  .in_modal_body
+    margin:
+      bottom: 200px
+  %modal_pass_styles
+    @include set-flex(center)
+    font-size: 1em
+    height: 30px
+    border: none
+    text-align: center
+    &:active, &:focus
+      outline: none
+  input
+    @extend %modal_pass_styles
+    margin-right: 10px
+  button
+    &[id=okay].btn
+      @extend %modal_pass_styles
+  .in_modal_content
+    flex-direction: row
+
+  .in_stage_content
+    margin-bottom: 0
 
 
 @media (max-width: 600px)
   .in_modal_fade
+    // модальное окно пароля должно быть чуть выше центра
     min-height: 450px
+    align-items: flex-start
   .in_modal_body
-    width: 250px
+    margin-top: 70px
+    width: 69%
 
-//@media (max-height: 600px)
-//  .in_modal_body
-//    top: 60px
-
+@media (max-height: 768px)
+  .in_modal_fade[pass_modal]
+    .in_modal_body
+      margin:
+        bottom: 0px

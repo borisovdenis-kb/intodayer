@@ -1,4 +1,4 @@
-<div class="in_modal_fade" style="display: none" {% block modal_id %}{% endblock %}>
+<div class="in_modal_fade" style="display: none" {% block modal_id %}{% endblock %}{% block modal_type %}{% endblock %}>
     <div class="in_modal_body">
         <div class="in_modal_header">
             {% block modal_title %}
@@ -13,6 +13,7 @@
         <div class="split-line"></div>
         <div class="in_modal_bottom">
             {% block modal_bottom %}
+
             {% endblock %}
             <p class="in_stage_content">
             </p>

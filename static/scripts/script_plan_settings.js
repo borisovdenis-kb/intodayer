@@ -10,7 +10,6 @@ $(document).ready(function () {
 function setListenersTitleBlock() {
     $('.plan_settings').unbind();
     $('.plan_settings').click(function () {
-        localStorage.removeItem('new_plan_editing');
         if ($('.setting_msg').length > 0) {
             deactivateSettings();
         }
@@ -37,13 +36,37 @@ function removePlan() {
                 return resolve();
             },
             error: function () {
-                alert("Не удалось выполнить операцию. Обновите страницу.");
+                alert("Не удалось удалить расписание. Обновите страницу.");
                 return reject();
             }
         });
     });
 }
 
+function leavePlan() {
+    return new Promise(function (resolve, reject) {
+
+        var plan_id = +$('.title_content').attr('plan_id');
+        var data = {plan_id: plan_id};
+
+        $.ajax({
+            url: '/leave_plan',
+            contentType: "application/json",
+            method: 'POST',
+            data: JSON.stringify(data),
+            dataType: 'text',
+            success: function () {
+                location.href = "/plan";
+                return resolve();
+            },
+            error: function () {
+                alert("Не удалось покинуть расписание. Обновите страницу.");
+                return reject();
+            }
+        });
+    });
+
+}
 
 function activeSettings() {
     // Данная функция активирует все стили и обработчки событий и также подгружает правый контент настроек plan
@@ -67,9 +90,10 @@ function activeSettings() {
         $title_input.attr('old_value', $title_input.val());
         $('#remove_plan').unbind();
 
-        if (localStorage.getItem('new_plan_editing')) {
+        if (localStorage.getItem('new_plan_editing') == 'true') {
             saveBtnSettingActive();
         }
+        localStorage.removeItem('new_plan_editing');
 
 
         // если пользователь староста или админ
@@ -99,18 +123,17 @@ function activeSettings() {
             $('#datetimepicker input').next().css('cursor', 'not-allowed');
 
         }
-        // для старосты выводится отдельное модальное окно
+
+        // модальное окно для старосты (удалить расписание)
         if ($('.plan_title').attr('user_role') === 'elder') {
             $('#remove_plan').click(function () {
                 modal_elder_remove_plan.showModal();
             });
         }
+        // модальное окно для админа и участника (покинуть расписание)
         else {
             $('#remove_plan').click(function () {
-                $('#remove_plan').click(function () {
-                    modal_elder_remove_plan.showModal();
-                });
-
+                modal_participant_leave_plan.showModal();
             });
         }
 

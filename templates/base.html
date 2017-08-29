@@ -54,10 +54,10 @@
 
 <body>
 
-
-<div class="for_invitations">
-    <!--Сюда будут вставляться имеющиеся у данного юзера приглашения-->
-</div>
+{##}
+{#<div class="for_invitations">#}
+{#    <!--Сюда будут вставляться имеющиеся у данного юзера приглашения-->#}
+{#</div>#}
 
 {% block header %}
     {% include "templates_for_ajax/header.html" %}
@@ -111,6 +111,7 @@
 <script type="text/javascript" src={% static "scripts/script_general.js" %}></script>
 <script type="text/javascript" src={% static "scripts/script_header.js" %}></script>
 <script type="text/javascript" src={% static "scripts/components/script_modals_slider.js" %}></script>
+<script type="text/javascript" src={% static "scripts/components/script_modal_intodayer.js" %}></script>
 
 {#    Импорт скриптов для компонентов#}
 <script type="text/javascript" src={% static "scripts/components/script_success_frame.js" %}></script>
