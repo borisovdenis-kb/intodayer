@@ -19,15 +19,12 @@ function newInputInviteBinds($input_field) {
             $(this).tooltip('hide');
             setInputDefault($(this));
         }
-        // if ($(this).attr('validation') === 'false') {
-        //     setInputOldValue($(this));
-        // }
     });
     $input_field.on('focusout', function () {
-        checkTrueCloneInputs($(this));
+        // checkTrueCloneInputs($(this));
         hideEmptyInput($(this));
         if (inputNotEmpty($(this).val()) && !validateEmail($(this).val())) {
-            $(this).attr('data-original-title', "Failed email")
+            $(this).attr('data-original-title', "Failed email");
             $(this).tooltip('show');
             setInputError($(this));
         }
@@ -62,7 +59,6 @@ function hideInput($input_field) {
 }
 
 function showNewInputInvite() {
-    let empty_input = false;
     // проверяем, что нет пустых полей input
     if ($('.invite_input').length >= 8) {
         return false;
@@ -80,7 +76,9 @@ function showNewInputInvite() {
         $last_input.hide();
         $last_input.css('opacity', 0);
         $last_input.slideDown(200);
-        $last_input.fadeTo(200, 1);
+        $last_input.fadeTo(200, 1, function () {
+            $last_input.focus();
+        });
         newInputInviteBinds($last_input);
     }
 

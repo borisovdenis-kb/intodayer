@@ -13,6 +13,26 @@ $(document).ready(function () {
 });
 
 
+// function getExpectedParticipants() {
+//     let data = {
+//         plan_id: $('.title_content').attr('plan_id'),
+//     };
+//     $.ajax({
+//         url: '/get_expected_participants',
+//         method: 'GET',
+//         contentType: 'application/json',
+//         data: JSON.stringify(data),
+//         success: function () {
+//             deleteUserAnimate($part_block);
+//             return resolve();
+//         },
+//         error: function () {
+//             alert("Ошибка. Не удалось выполнить операцию. Обновите страницу");
+//             return reject();
+//         }
+//     });
+// }
+
 function setAdminParticipantsActions() {
     setBindsParticipant();
     modal_confirm_admin = new ModalConfirmRole('#confirm_admin');
