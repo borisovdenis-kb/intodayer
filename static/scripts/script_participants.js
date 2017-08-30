@@ -11,9 +11,9 @@ var participant_expected_block_html;
 $(document).ready(function () {
     setAdminParticipantsActions();
 
-    setTimeout(function () {
-        pushExpectedParticipants();
-    }, 200);
+    // setTimeout(function () {
+    //     pushExpectedParticipants();
+    // }, 200);
 });
 
 
