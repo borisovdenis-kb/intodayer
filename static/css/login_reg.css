@@ -1,6 +1,7 @@
 html, body {
   height: 100%;
-  margin: 0 auto; }
+  margin: 0 auto;
+  min-width: 300px; }
 
 .panel_reg, .panel_auth {
   margin: auto;
@@ -8,7 +9,7 @@ html, body {
   background: rgba(255, 255, 255, 0.8);
   border: 1px solid #e6e6e6;
   padding: 10px;
-  margin-bottom: 50px;
+  margin-bottom: 40px;
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
   -khtml-border-radius: 4px;
@@ -43,7 +44,7 @@ html, body {
   .panel_reg #inputEmail.form-control {
     display: inline-block; }
   .panel_reg input {
-    max-width: 55%; }
+    max-width: 60%; }
   .panel_reg .reg_input_content.first {
     margin-top: 5px; }
   .panel_reg .reg_footer {
@@ -118,7 +119,10 @@ html, body {
     .popover .popover-title {
       padding: 5px;
         padding-bottom: 0; } }
-@media (max-width: 768px) and (orientation: landscape) {
+@media (max-width: 500px) {
+  .panel_reg input {
+    max-width: 65%; } }
+@media only screen and (max-device-width: 1024px) and (orientation: landscape) {
   .panel_auth {
     width: 400px; } }
 

@@ -162,6 +162,7 @@ def get_expected_participants(request):
 
         --> For more detailed documentation see Postman.
     """
+    # print(request.GET)
     if request.user.is_authenticated():
         user = CustomUser.objects.get(email=request.user.email)
         data = request.GET

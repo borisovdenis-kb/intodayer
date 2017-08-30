@@ -31,7 +31,10 @@ $height_ava_user: 65px
 
 .part_username
   float: left
+  @include text-ellipsis()
+  max-width: 350px
   span
+
     font-family: "Fira Sans"
     font-size: 1.4em
     margin:
@@ -107,6 +110,10 @@ $height_ava_user: 65px
       color: red
 //opacity: 0.8
 
+.part_invite
+  span
+    @include set-flex(center)
+    padding-bottom: 5px
 
 .setting_right
   button
@@ -130,3 +137,7 @@ $height_ava_user: 65px
 .margin-block
   padding-left: 15px
 
+@media (max-width: 768px)
+  .part_username
+    span
+      font-size: 1.2em

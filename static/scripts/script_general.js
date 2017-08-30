@@ -127,6 +127,9 @@ function switchPlan($this_plan, flag_open_editing) {
             }
         }
         if (address === 'participants') {
+            setTimeout(function () {
+                pushExpectedParticipants();
+            }, 200);
             if ($('.plan_title').attr('user_has_edit_role') === 'yes') {
                 setAdminParticipantsActions();
             }
@@ -269,8 +272,6 @@ function enableScroll() {
     window.ontouchmove = null;
     document.onkeydown = null;
 }
-
-
 
 
 // устанавливают стили INPUT валидации

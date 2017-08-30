@@ -1,0 +1,59 @@
+<div class="part_block" part_id='{{ participant.user.id }}'>
+    <div class="part_ava">
+        <div class="img_ava" style="background-image: url({{ participant.user.get_avatar_url }})"></div>
+    </div>
+    <div class="part_username">
+                    <span>
+                        {{ participant.user.get_name.first_name }} {{ participant.user.get_name.last_name }}
+                    </span>
+    </div>
+    <div class="part_rights" role='{{ participant.role }}'>
+        <ul>
+            {% if participant.role == 'elder' %}
+                {% include 'components/user_elder_icon.html' %}
+                <div class="margin-block"></div>
+            {% endif %}
+
+            {% if participant.role == 'admin' or  participant.role == 'participant' %}
+                {% if user_has_edit_role %}
+                    {% if participant.user.id != this_user.id %}
+                        {% include 'components/user_participant_icon.html' %}
+                        {% include 'components/user_admin_icon.html' %}
+                    {% endif %}
+                    {% if participant.user.id == this_user.id %}
+                        {% if participant.role == 'admin' %}
+                            {% include 'components/user_admin_icon.html' %}
+                            <div class="margin-block"></div>
+                        {% endif %}
+                        {% if participant.role == 'participant' %}
+                            {% include 'components/user_participant_icon.html' %}
+                            <div class="margin-block"></div>
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+                {% if not user_has_edit_role %}
+                    {% if participant.role == 'admin' %}
+                        {% include 'components/user_admin_icon.html' %}
+                        <div class="margin-block"></div>
+                    {% endif %}
+                    {% if participant.role == 'participant' %}
+                        {% include 'components/user_participant_icon.html' %}
+                        <div class="margin-block"></div>
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+
+            {% if user_has_edit_role and participant.user.id != this_user.id and participant.role != 'elder' %}
+                <li class="part_remove">
+                    {% if this_user.id == participant.user.id %}
+                        <span>Покинуть</span>
+                    {% endif %}
+                    {% if this_user.id != participant.user.id %}
+                        <span>Удалить</span>
+                    {% endif %}
+                </li>
+            {% endif %}
+        </ul>
+
+    </div>
+</div>

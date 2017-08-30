@@ -2,19 +2,21 @@
 @import global_vars
 
 $login_max_width: 500px
-$login_mix_width: 500px
+$login_min_width: 300px
 
 $login_width_mobile: 300px
 $login_width_mobile_landscape: 400px
 
 $reg_min_width: 400px
 $reg_max_width: 500px
+
 $reg_min_width_mobile: 300px
 
 
 html, body
   height: 100%
   margin: 0 auto
+  min-width: $min-width-page-login-welcome-reg
 
 
 %panels_styles
@@ -24,7 +26,7 @@ html, body
   border: $gl_block_border
   padding: $gl_block_padding
   margin:
-    bottom: 50px
+    bottom: 40px
   @include border-radius(4px)
   input.reg_field, #inputPassword_re
     transition: 0.3s background ease
@@ -44,7 +46,7 @@ html, body
     display: inline-block
 
   input
-    max-width: 55%
+    max-width: 60%
   .reg_input_content.first
     margin-top: 5px
   .reg_footer
@@ -101,6 +103,8 @@ html, body
 .row
   margin-left: 20px
 
+
+
 @media (max-width: 768px)
   .row
     margin: 0
@@ -129,8 +133,12 @@ html, body
       padding: 5px
         bottom: 0
 
-
-@media (max-width: 768px) and (orientation: landscape)
+@media (max-width: 500px)
+  .panel_reg
+    input
+      max-width: 65%
+//
+@media only screen and (max-device-width: 1024px) and (orientation: landscape)
   .panel_auth
     width: $login_width_mobile_landscape
 

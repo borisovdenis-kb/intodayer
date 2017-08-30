@@ -3,8 +3,8 @@
 
 {% block scripts_top %}
     <link rel="stylesheet" type="text/css" href={% static "css/welcome_base.css" %}>
-    <link rel="stylesheet" type="text/css" href={% static "css/header.css" %}>
     <link rel="stylesheet" type="text/css" href={% static "css/login_reg.css" %}>
+    <link rel="stylesheet" type="text/css" href={% static "css/login.css" %}>
 {% endblock %}
 
 {% block header %}
@@ -17,7 +17,7 @@
         <div class="welcome_background_fade">
         </div>
     </div>
-    <div class="auth_page container-fluid">
+    <div class="auth_page">
         <form action="" method="post">
             <div class="panel_auth" style="opacity:0;">
 
@@ -45,10 +45,10 @@
                                placeholder="Password">
                     </div>
                 </div>
-                <div classs="">
+
                     <div class=" split-line"></div>
 
-                </div>
+
 
 
                 <div class="row text-center auth_btn_content">

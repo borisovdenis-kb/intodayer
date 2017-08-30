@@ -39,14 +39,16 @@ function setInputOldValue($this_input) {
 }
 
 function hideEmptyInput($click_input) {
-    // let input_outer_block = $(this).parents('.input_outer');
     let $inputs = $('.invite_input').filter(function () {
         return !this.value;
     });
-    if ($inputs.length >= 2) {
-        hideAllTooltips();
-        hideInput($click_input);
-    }
+    setTimeout(function () {
+        if ($inputs.length >= 2) {
+            hideAllTooltips();
+            hideInput($click_input);
+        }
+    }, 200);
+
 }
 
 function hideInput($input_field) {

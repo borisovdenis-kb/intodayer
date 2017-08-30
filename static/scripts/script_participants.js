@@ -3,35 +3,63 @@
  */
 
 var invite_input_block;
-
 var modal_confirm_admin;
 var modal_delete_participant;
 
+var participant_expected_block_html;
 
 $(document).ready(function () {
     setAdminParticipantsActions();
+
+    setTimeout(function () {
+        pushExpectedParticipants();
+    }, 200);
 });
 
 
-// function getExpectedParticipants() {
-//     let data = {
-//         plan_id: $('.title_content').attr('plan_id'),
-//     };
-//     $.ajax({
-//         url: '/get_expected_participants',
-//         method: 'GET',
-//         contentType: 'application/json',
-//         data: JSON.stringify(data),
-//         success: function () {
-//             deleteUserAnimate($part_block);
-//             return resolve();
-//         },
-//         error: function () {
-//             alert("Ошибка. Не удалось выполнить операцию. Обновите страницу");
-//             return reject();
-//         }
-//     });
-// }
+function pushExpectedParticipants() {
+    if (!participant_expected_block_html) {
+        participant_expected_block_html = $('.part_expected_block').html();
+        $('.part_expected_block').remove();
+    }
+    $('.part_block.invite');
+    getExpectedParticipants().then(function (part_arr) {
+        part_arr['expected_participants'].forEach(function (item, i) {
+            pushPart(item);
+        });
+    });
+}
+
+function pushPart(item_part) {
+    let $this_block = $(participant_expected_block_html);
+    $('.part_content').append($this_block);
+    let $this_name_content = $this_block.find('.part_username span');
+    $this_name_content.text(item_part['email']);
+    $this_block.fadeIn(150);
+}
+
+
+function getExpectedParticipants() {
+    return new Promise(function (resolve, reject) {
+        let data = {
+            plan_id: +$('.title_content').attr('plan_id'),
+        };
+        $.ajax({
+            url: '/get_expected_participants',
+            method: 'GET',
+            contentType: 'application/json',
+            data: data,
+            success: function (data) {
+                return resolve(data);
+            },
+            error: function () {
+                alert("Ошибка. Не удалось выполнить операцию. Обновите страницу");
+                return reject();
+            }
+        });
+    });
+
+}
 
 function setAdminParticipantsActions() {
     setBindsParticipant();

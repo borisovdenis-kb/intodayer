@@ -243,7 +243,8 @@ button {
     padding-right: 8px; } }
 html, body {
   height: 100%;
-  margin: 0 auto; }
+  margin: 0 auto;
+  min-width: 300px; }
 
 .content {
   background: none;
@@ -304,9 +305,6 @@ html, body {
     border-color: #323232;
     background-color: #323232; }
 
-.fill-space-bottom {
-  height: 100px; }
-
 .welcome_bottom p {
   margin-top: 20px;
   margin-bottom: 20px; }
@@ -344,6 +342,9 @@ html, body {
   border-radius: 0px 0px 0px 0px;
   -ms-border-radius: 0px 0px 0px 0px; }
 
+.row.fill-space-bottom {
+  height: 200px; }
+
 @media (max-width: 768px) {
   .welcome_info_content {
     height: 80px; }
@@ -359,10 +360,7 @@ html, body {
     font-size: 2em; }
 
   .welcome_info_content p {
-    font-size: 0.8em; }
-
-  .fill-space-bottom {
-    display: none; } }
+    font-size: 0.8em; } }
 @media only screen and (max-width: 768px) and (orientation: landscape) {
   .welcome_info_content {
     height: 70px; }
