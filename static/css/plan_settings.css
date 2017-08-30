@@ -1,6 +1,5 @@
 body {
-  overflow-y: scroll;
-  min-width: 600px; }
+  overflow-y: scroll; }
 
 .plan_window, .plan_window:first-child {
   margin-top: 5px; }
@@ -329,13 +328,6 @@ h4 {
 
 .datepicker_content {
   width: 80%; }
-
-#modal_ok_cancel .modal-dialog {
-  width: 400px; }
-#modal_ok_cancel .close {
-  margin-left: 100px; }
-#modal_ok_cancel .modal_cancel:active, #modal_ok_cancel .modal_cancel:focus, #modal_ok_cancel .modal_cancel:link, #modal_ok_cancel .modal_ok:active, #modal_ok_cancel .modal_ok:focus, #modal_ok_cancel .modal_ok:link {
-  outline: none; }
 
 @media (max-width: 768px) {
   .plan_settings_layouts {

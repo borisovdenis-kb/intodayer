@@ -3,13 +3,11 @@
 
 {% block styles %}
     <link rel="stylesheet" type="text/css" href={% static "css/account.css" %}>
-    <link rel="stylesheet" type="text/css" href={% static "css/components/intodayer_modal.css" %}>
 {% endblock %}
 
 {% block scripts_bottom %}
-    <script type="text/javascript" src={% static "library/jquery.maskedinput.min.js" %}></script>
+{#    <script type="text/javascript" src={% static "library/jquery.maskedinput.min.js" %}></script>#}
     <script type="text/javascript" src={% static "scripts/script_account.js" %}></script>
-    <script type="text/javascript" src={% static "scripts/components/script_modal_change_pass.js" %}></script>
 {% endblock %}
 
 
@@ -116,7 +114,7 @@
                             <div style="position: relative">
                                 <div class="pr_color_type color_elder"></div>
                                 <div class="pr_img_title">{{ plan.plan.title }}</div>
-                                <img src={{ plan.plan.get_avatar_url }} alt="..." class="img-rounded">
+                                <div class="pr_img_plan" style="background-image: url({{ plan.plan.get_avatar_url }})"></div>
                             </div>
                         </div>
                     {% endfor %}
@@ -127,5 +125,7 @@
 {% endblock %}
 
 {% block others %}
-    {% include "modal_frames/modal_profile_pass.html" %}
+    {% include "modal_frames/modal_pass_old.html" %}
+    {% include "modal_frames/modal_pass_new.html" %}
+    {% include 'modal_frames/modal_pass_new_confirm.html' %}
 {% endblock %}

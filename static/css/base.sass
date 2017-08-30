@@ -9,6 +9,7 @@ $avatar-size: 180px
 body
   overflow-y: scroll
   min-width: $min-width-page
+  //min-height: 500px
 
 .page
   clear: both
@@ -170,24 +171,25 @@ body
   width: 100%
   cursor: default
 
-#title_edit_input
+input#title_edit_input
   width: 100%
-  font-size: 2em
-  border: 1px solid white
   text-align: center
-  transition: 0.3s
   text-overflow: ellipsis
+  @extend %input_styles
 
-  &:focus
-    outline: none
-    cursor: auto
-    border: 1px solid rgb(217, 217, 227)
   &:hover
     outline: none
     cursor: pointer
   &:disabled
     background: rgba(255, 255, 255, 0)
     cursor: default
+
+#title_edit_input[disabled='disabled']
+  opacity: 1
+  color: black
+  border: 2px solid rgba(255,255,255,0)
+
+
 
 #count_title
   margin:

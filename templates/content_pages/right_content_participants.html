@@ -12,88 +12,34 @@
 
         </div>
 
-        <div id="plan_title">
+        <div class="plan_title" id="plan_title" {% if user_has_edit_role %}user_has_edit_role="yes"{% endif %}>
             <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
                 <input id='title_edit_input' disabled="disabled" type="text" value="{{ cur_plan.plan.title }}">
             </div>
             <div id="count_title">{{ cur_plan.plan.count_of_users }}</div>
         </div>
+
         <div class="setting_right">
-            <div class="icon_setting_content">
-                <button class="part_settings" >Пригласить</button>
-                {#                <span class="part_settings glyphicon glyphicon-plus"></span>#}
-            </div>
+            {% if user_has_invite_participants %}
+                <div class="icon_setting_content">
+                    <button class="part_settings">Пригласить</button>
+                    {#                <span class="part_settings glyphicon glyphicon-plus"></span>#}
+                </div>
+            {% endif %}
         </div>
+
     </div>
     <div class="setting_invite">
     </div>
     <div class="part_content">
         {% for participant in participants %}
-            <div class="part_block" part_id='{{ participant.user.id }}'>
-                <div class="part_ava">
-                    <div class="img_ava" style="background-image: url({{ participant.user.get_avatar_url }})"></div>
-{#                    <img src={{ participant.user.get_avatar_url }} class="img-rounded"/>#}
-                </div>
-                <div class="part_username">
-                    <span>
-                        {{ participant.user.get_name.first_name }} {{ participant.user.get_name.last_name }}
-                    </span>
-                </div>
-                <div class="part_rights" role='{{ participant.role }}'>
-                    <ul>
-                        {% if this_user.id != participant.user.id %}
-                            <li class="part_role part_participant"
-                                    {% if participant.role == 'participant' %}
-                                style="opacity: 1"
-                                    {% endif %}>
-                                <div class="part_ava_right_content">
-                                    <img src={% static "icons/rights_icons/admin-96.png" %}>
-                                    <p>People</p>
-                                </div>
-                            </li>
-
-                        {% endif %}
-                        {% if this_user.id != participant.user.id %}
-                            <li class="part_role part_admin"
-                                    {% if participant.role == 'elder' or participant.role == 'admin' %}
-                                style="opacity: 1"
-                                    {% endif %}>
-                                <div class="part_ava_right_content">
-                                    <img src={% static "icons/rights_icons/user-96.png" %}>
-                                    <p>Admin</p>
-                                </div>
-                            </li>
-
-                        {% endif %}
-                        {% if this_user.id == participant.user.id %}
-                            <li class="part_role part_elder">
-                                <div class="part_ava_right_content">
-                                    <img src={% static "icons/rights_icons/elder-96.png" %}>
-                                    <p>Elder</p>
-                                </div>
-                            </li>
-                        {% endif %}
-
-
-                        <li class="part_remove">
-                            {% if this_user.id == participant.user.id %}
-                                <span>Покинуть</span>
-                            {% endif %}
-                            {% if this_user.id != participant.user.id %}
-                                <span>Удалить</span>
-                            {% endif %}
-                            {#                            <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>#}
-                        </li>
-
-
-                    </ul>
-
-
-                </div>
-            </div>
+            {% include "components/participant_block.html" %}
         {% endfor %}
     </div>
 
 
 {% endblock %}
 
+{% block components %}
+    {% include "components/participant_empty_block.html" %}
+{% endblock %}

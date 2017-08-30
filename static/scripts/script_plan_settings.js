@@ -1,5 +1,10 @@
+var modal_elder_remove_plan;
+var modal_participant_leave_plan;
+
 $(document).ready(function () {
     setListenersTitleBlock();
+    modal_elder_remove_plan = new ModalElderRemovePlan('#elder_leave');
+    modal_participant_leave_plan = new ModalParticipantLeavePlan('#part_leave_plan');
 });
 
 function setListenersTitleBlock() {
@@ -10,27 +15,58 @@ function setListenersTitleBlock() {
         }
         else {
             activeSettings();
-
         }
     });
 }
 
 function removePlan() {
-    var plan_id = +$('.title_content').attr('plan_id');
-    var data = {plan_id: plan_id};
+    return new Promise(function (resolve, reject) {
 
-    $.ajax({
-        url: '/delete_plan',
-        contentType: "application/json",
-        method: 'POST',
-        data: JSON.stringify(data),
-        dataType: 'text',
-        success: function () {
-            location.href = "/plan";
-        }
+        var plan_id = +$('.title_content').attr('plan_id');
+        var data = {plan_id: plan_id};
+
+        $.ajax({
+            url: '/delete_plan',
+            contentType: "application/json",
+            method: 'POST',
+            data: JSON.stringify(data),
+            dataType: 'text',
+            success: function () {
+                location.href = "/plan";
+                return resolve();
+            },
+            error: function () {
+                alert("Не удалось удалить расписание. Обновите страницу.");
+                return reject();
+            }
+        });
     });
 }
 
+function leavePlan() {
+    return new Promise(function (resolve, reject) {
+
+        var plan_id = +$('.title_content').attr('plan_id');
+        var data = {plan_id: plan_id};
+
+        $.ajax({
+            url: '/leave_plan',
+            contentType: "application/json",
+            method: 'POST',
+            data: JSON.stringify(data),
+            dataType: 'text',
+            success: function () {
+                location.href = "/plan";
+                return resolve();
+            },
+            error: function () {
+                alert("Не удалось покинуть расписание. Обновите страницу.");
+                return reject();
+            }
+        });
+    });
+
+}
 
 function activeSettings() {
     // Данная функция активирует все стили и обработчки событий и также подгружает правый контент настроек plan
@@ -40,53 +76,109 @@ function activeSettings() {
     $('.setting_msg').delay(200).slideDown(250);
 
     // Вставка всей панели настроек
-    $('.right_content_only').load('/plan/settings_plan', {}, function () {
-
+    $('.right_content_settings').load('/plan/settings_plan', {}, function () {
+        $('.right_content_only').hide();
         var start_date = $('#start_date').val().split(' ');
-        $('#datetimepicker').datetimepicker({
+        var $datepicker = $('#datetimepicker').datetimepicker({
             format: 'DD.MM.YYYY',
             locale: 'ru',
             defaultDate: new Date(day = start_date[0], month = start_date[1], year = start_date[2])
         });
 
-
-        // Установка title стилей и обработчиков событий
+        // если у пользователя есть права
         var $title_input = $('#title_edit_input');
-
         $title_input.attr('old_value', $title_input.val());
-        $title_input.prop('disabled', false);
-        $title_input.focus();
+        $('#remove_plan').unbind();
 
-        $title_input.css({
-            "border": "1px solid rgba(217, 217, 227, 1)"
-        });
+        if (localStorage.getItem('new_plan_editing') == 'true') {
+            saveBtnSettingActive();
+        }
+        localStorage.removeItem('new_plan_editing');
 
-        setInputCursorToEnd($title_input);
 
-        $('.return_button').unbind();
-        $('.return_button').click(function () {
-            deactivateSettings();
-        });
+        // если пользователь староста или админ
+        if ($('.plan_settings_layouts').attr('user_has_edit_plan') === 'yes') {
+            // Установка title стилей и обработчиков событий
+            setOldValuesInput();
+
+            $('.settings_input').on('input', function () {
+                validateSettingsInput();
+            });
+            // работает, когда изменяем дату
+            $datepicker.on('dp.change', function () {
+                validateSettingsInput();
+            });
+
+            $title_input.prop('disabled', false);
+            $title_input.focus();
+
+            $title_input.css({
+                "border": "2px solid rgba(139, 29, 235, 0.4)"
+            });
+
+            setInputCursorToEnd($title_input);
+        }
+        else {
+            $('#datetimepicker input').attr('disabled', "");
+            $('#datetimepicker input').next().css('cursor', 'not-allowed');
+
+        }
+
+        // модальное окно для старосты (удалить расписание)
+        if ($('.plan_title').attr('user_role') === 'elder') {
+            $('#remove_plan').click(function () {
+                modal_elder_remove_plan.showModal();
+            });
+        }
+        // модальное окно для админа и участника (покинуть расписание)
+        else {
+            $('#remove_plan').click(function () {
+                modal_participant_leave_plan.showModal();
+            });
+        }
+
         $('.btn-back').unbind();
         $('.btn-back').click(function () {
             deactivateSettings();
         });
-        $('.btn-okay').unbind();
-        $('.btn-okay').click(function () {
-            updateSettings();
-        });
-        $('#remove_plan').unbind();
-        $('#remove_plan').click(function () {
-            $('#modal_ok_cancel').modal();
-            $('.modal_ok').click(function () {
-                removePlan();
-            });
-        });
-
 
     });
 }
 
+
+function setOldValuesInput() {
+    $('input.settings_input').each(function () {
+        $(this).attr('old_value', $(this).val());
+    });
+
+}
+
+function validateSettingsInput() {
+    if (!localStorage.getItem('new_plan_editing')) {
+        let n = $('input.settings_input').length;
+        $('input.settings_input').each(function (i) {
+            if ($(this).attr('old_value') !== $(this).val()) {
+                saveBtnSettingActive();
+                return false;
+            }
+            if (i === n - 1) {
+                saveBtnSettingDeactive();
+            }
+        });
+    }
+}
+
+function saveBtnSettingActive() {
+    $('button.btn-okay').removeClass('disabled');
+    $('button.btn-okay').unbind();
+    $('button.btn-okay').click(function () {
+        updateSettings();
+    });
+}
+function saveBtnSettingDeactive() {
+    $('button.btn-okay').addClass('disabled');
+    $('button.btn-okay').unbind();
+}
 
 function deactivateSettings(flag_update) {
     /*
@@ -105,10 +197,8 @@ function deactivateSettings(flag_update) {
     // удаление контента настроек
     $('.setting_msg').remove();
     var plan_id = $('.title_content').attr('plan_id');
-    var data = {plan_id: plan_id};
-    $('.right_content_only').load('/plan/plan_content_only', data, function () {
-        setListenersRightContent();
-    });
+    $('.right_content_settings').empty();
+    $('.right_content_only').show();
 }
 
 

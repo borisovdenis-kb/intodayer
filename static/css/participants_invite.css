@@ -26,14 +26,58 @@
   -ms-border-radius: 4px;
   margin-top: 5px; }
 
+.settings_btns_content.text-center {
+  padding-left: 25px;
+  padding-top: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: center; }
+  .settings_btns_content.text-center .btn-back.btn, .settings_btns_content.text-center .btn-okay.btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    width: 150px; }
+
+.invite_input_block {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  padding-bottom: 15px; }
+
 .invite_by_mail span, .invite_by_link span {
   text-align: left;
   font-size: 1.5em;
   font-weight: bold; }
 .invite_by_mail input, .invite_by_link input {
+  height: 50px;
   width: 100%;
   margin-top: 2px;
-  margin-bottom: 2px; }
+  margin-bottom: 2px;
+  transition: 0.3s background ease; }
+
+.left_input_margin {
+  width: 70px; }
+
+.right_input_content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  justify-content: flex-end;
+  width: 70px; }
+
+.inline_circle_loader {
+  display: block;
+  height: 100%; }
+
+.input_outer {
+  width: 100%;
+  max-width: 600px;
+  display: inline-flex;
+  flex-direction: row;
+  justify-content: center; }
 
 .invite_link_btns {
   width: 100%;
@@ -60,9 +104,6 @@
     .invite_link_btns button.btn:focus, .invite_link_btns button.btn:link, .invite_link_btns button.btn:active {
       outline: none; }
 
-.settings_btns_content {
-  padding-top: 15px; }
-
 .invite_link_btns {
   padding-top: 10px;
   padding-bottom: 5px; }
@@ -81,5 +122,12 @@ input::-moz-placeholder {
 
 input:-ms-input-placeholder {
   color: gainsboro; }
+
+@media (max-width: 768px) {
+  .invite_by_mail input, .invite_by_link input {
+    width: 400px; }
+
+  .settings_btns_content.text-center .btn-back.btn, .settings_btns_content.text-center .btn-okay.btn {
+    width: 120px; } }
 
 /*# sourceMappingURL=participants_invite.css.map */

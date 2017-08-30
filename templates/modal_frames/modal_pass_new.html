@@ -1,0 +1,20 @@
+{% extends "modal_frames/base_intodayer_modal.html" %}
+{% load staticfiles %}
+
+{% block modal_id %}
+    id=modal_password_new
+{% endblock %}
+{% block modal_type %}
+    pass_modal
+{% endblock %}
+
+{% block modal_title %}
+    <div class="in_modal_title">Creating new password</div>
+{% endblock %}
+
+{% block modal_content %}
+    <input id="pass" type="password" placeholder="Input new password">
+    <button id="okay" class="enter btn btn-sm btn-primary" type="button">Next</button>
+{% endblock %}
+
+

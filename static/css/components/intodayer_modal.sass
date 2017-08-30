@@ -1,6 +1,8 @@
 @import "../mixins"
 
 .in_modal_fade
+  @include set-flex(center)
+  min-height: 350px
   position: fixed
   width: 100%
   height: 100%
@@ -9,55 +11,49 @@
   top: 0
   opacity: 0
   transition: 0.3s opacity ease
+  .close
+    position: absolute
+    right: 0
+    height: 25px
+    width: 25px
 
 $modal-width: 400px
 $modal-height: 120px
 
 .in_modal_body
-  position: fixed
-  width: $modal-width
+  position: relative
+  //top: 60px
   min-height: $modal-height
+  width: $modal-width
   background: white
-  top: calc(50% - #{$modal-height} / 2 - 10%)
-  left: calc(50% - #{$modal-width} / 2)
   transform: scale(0.9, 0.9)
   opacity: 0
   transition: 0.4s transform ease, 0.1s opacity ease
   z-index: 201
-
   @include border-radius(4px)
 
-@media (max-height: 400px)
-  .in_modal_body
-    transition: 0.3s top ease
-    top: calc(50% - #{$modal-height} / 2)
+.in_modal_header
+  position: relative
+  display: flex
+  justify-content: center
 
 .in_modal_title
   text-align: center
-  margin-top: 10px
+  padding-top: 10px
+//margin-left: auto
 
 .in_modal_content
-
-  @include set-flex(center)
+  display: flex
+  flex-direction: column
+  justify-content: center
   background: white
-
   p
+    @include word-break-full()
+    padding:
+      left: 15px
+      right: 10px
     font-size: 0.8em
-    width: calc(#{$modal-width} - 40px)
     text-align: left
-
-input
-  &[id=pass], &[id=okay].btn
-    height: 40px
-    border: none
-    text-align: center
-    &:active, &:focus
-      outline: none
-
-  &[id=pass]
-    margin-right: 10px
-  &[id=okay]
-    width: 70px
 
 .in_stage_content
   background-color: #ffffff
@@ -65,11 +61,82 @@ input
   @include border-radius(4px)
 
 .in_modal_bottom
+  width: inherit
+  display: inline-flex
+  flex-direction: row
+  justify-content: center
+  min-height: 0px
   background-color: #ffffff
   text-align: center
   padding:
     bottom: 10px
   @include border-radius(4px)
 
-#btn_ok.btn, #btn_no.btn
-  width: 50px
+#btn_ok, #btn_no
+  @include set-flex(center)
+  width: 60px
+  text-align: center
+  &:focus, &:link, &:active
+    outline: none
+
+#btn_ok
+  margin-right: 1px
+
+#btn_no
+  margin-left: 1px
+
+
+// дополнительные стили для модального окна ввода пароля
+.in_modal_fade[pass_modal]
+  .in_modal_title
+    padding-bottom: 5px
+  .in_modal_body
+    margin:
+      bottom: 200px
+  %modal_pass_styles
+    @include set-flex(center)
+    font-size: 1em
+    height: 30px
+    border: none
+    text-align: center
+    &:active, &:focus
+      outline: none
+  input
+    @extend %modal_pass_styles
+    margin-right: 10px
+  button
+    &[id=okay].btn
+      @extend %modal_pass_styles
+  .in_modal_content
+    flex-direction: row
+
+  .in_stage_content
+    display: none
+    //height: auto
+    min-height: 0px
+    font-size: 1em
+    margin:
+      top: 0
+    padding:
+      top: 0
+    margin-bottom: 0
+  .split-line.last
+    margin:
+      bottom: 8px
+
+
+@media (max-width: 600px)
+  .in_modal_fade
+    // модальное окно пароля должно быть чуть выше центра
+    min-height: 450px
+    align-items: flex-start
+  .in_modal_body
+    margin-top: 70px
+    width: 69%
+
+
+@media (max-height: 768px)
+  .in_modal_fade[pass_modal]
+    .in_modal_body
+      margin:
+        bottom: 0

@@ -29,7 +29,11 @@
       background-size: cover; }
 
 .part_username {
-  float: left; }
+  float: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 350px; }
   .part_username span {
     font-family: "Fira Sans";
     font-size: 1.4em;
@@ -43,15 +47,15 @@
     opacity: 1; }
 
 .part_rights {
-  margin-left: auto; }
+  margin-left: auto;
+  cursor: default; }
   .part_rights img {
     height: 60px; }
   .part_rights span {
     margin-top: 2px;
     margin-right: 10px;
     font-size: 1.2em;
-    margin-left: 20px;
-    cursor: pointer; }
+    margin-left: 20px; }
   .part_rights ul {
     display: flex; }
     .part_rights ul li {
@@ -63,7 +67,7 @@
         -moz-user-select: none;
         -ms-user-select: none;
         user-select: none;
-        cursor: default;
+        cursor: inherit;
         margin-top: -3px;
         height: 5px;
         font-size: 0.8em;
@@ -75,27 +79,36 @@
   flex-direction: column; }
 
 .part_admin, .part_participant, .part_elder {
-  cursor: pointer;
   width: auto;
   overflow: hidden;
   opacity: 0.3;
   transition: 0.2s opacity ease;
   margin-left: -5px;
   margin-right: -5px; }
+  .part_admin p, .part_participant p, .part_elder p {
+    cursor: inherit; }
 
 .part_elder.part_role {
   opacity: 1; }
 
 .part_remove {
+  cursor: pointer;
   text-align: center;
   display: flex;
   align-content: center;
   align-items: center; }
   .part_remove span {
-    width: 70px;
+    width: 60px;
     padding-bottom: 5px; }
     .part_remove span:hover {
       color: red; }
+
+.part_invite span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  padding-bottom: 5px; }
 
 .setting_right button {
   cursor: pointer;
@@ -115,7 +128,11 @@
   -ms-border-radius: 8px;
   opacity: 0.8; }
 
-.in_modal_content {
-  flex-direction: column; }
+.margin-block {
+  padding-left: 15px; }
+
+@media (max-width: 768px) {
+  .part_username span {
+    font-size: 1.2em; } }
 
 /*# sourceMappingURL=participants_content.css.map */

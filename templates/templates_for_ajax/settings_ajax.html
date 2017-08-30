@@ -1,5 +1,5 @@
 {#    этот div класс нужен для стилизации#}
-<div class="plan_settings_layouts">
+<div class="plan_settings_layouts" {% if user_has_edit_plan %}user_has_edit_plan="yes"{% endif %}>
     <div class="plan_settings_content-1">
         {#    <div class="button_style"></div>#}
 
@@ -13,7 +13,7 @@
                 <label>Date of start plan</label>
 
                 <div class='input-group date' id='datetimepicker'>
-                    <input id="start_date" type='text' class="form-control"
+                    <input id="start_date" type='text' class="settings_input form-control"
                            value="{{ cur_plan.plan.start_date | date:"j m Y " }}"/>
                     <span class="input-group-addon">
                         <span class="glyphicon glyphicon-calendar"></span>
@@ -22,11 +22,18 @@
             </div>
 
             <div class="split-line"></div>
-
-            <div>
-                <label>You can remove this plan</label>
-            </div>
-            <div id="remove_plan" class="btn btn-danger btn-sm">Remove plan</div>
+            {% if not user_has_edit_plan %}
+                <div>
+                    <label>You can leave this plan</label>
+                </div>
+                <div id="remove_plan" class="btn btn-danger btn-sm">Leave plan</div>
+            {% endif %}
+            {% if user_has_edit_plan %}
+                <div>
+                    <label>You can remove this plan</label>
+                </div>
+                <div id="remove_plan" class="btn btn-danger btn-sm">Remove plan</div>
+            {% endif %}
 
         </div>
     </div>
@@ -50,9 +57,11 @@
     </div>
 </div>
 <div class="row settings_btns_content text-center">
-    <button class="btn-back btn btn-lg btn-primary">Назад</button>
-    <button class="btn-okay btn btn-lg btn-success">Сохранить</button>
+    {% if user_has_edit_plan %}
+        <button class="btn-back btn btn-lg btn-primary">Назад</button>
+        <button class="btn-okay btn btn-lg btn-success disabled">Сохранить</button>
+    {% endif %}
+    {% if not user_has_edit_plan %}
+        <button class="btn-back btn btn-lg btn-primary">К расписанию</button>
+    {% endif %}
 </div>
-
-
-{% include "modal_frames/modal_plan_remove.html" %}

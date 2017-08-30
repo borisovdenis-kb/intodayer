@@ -5,9 +5,12 @@
     <title>Intodayer | Plan</title>
 {% endblock %}
 
+{% block meta_html %}
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+{% endblock %}
+
 {% block styles %}
     <link rel="stylesheet" type="text/css" href={% static "css/plan_content.css" %}>
-    {#    <link rel="stylesheet" type="text/css" href={% static "css/__old/pl.css" %}>#}
     <link rel="stylesheet" type="text/css" href={% static "css/plan_settings.css" %}>
     <link rel="stylesheet" type="text/css"
             {#          плагины#}
@@ -18,7 +21,10 @@
 {% endblock %}
 
 {% block scripts_top %}
+
     <script type="text/javascript" src={% static "library/html2canvas.js" %}></script>
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.min.js"></script>
     <script type="text/javascript" src={% static "plug-ins/moments.js/moments_with_locales.js" %}></script>
 {% endblock %}
 
@@ -31,6 +37,7 @@
     <script type="text/javascript" src={% static "library/jquery.maskedinput.min.js" %}></script>
     <script type="text/javascript"
             src={% static "plug-ins/bootstrap-datetimepicker-master/build/js/bootstrap-datetimepicker.min.js" %}></script>
+
 {% endblock %}
 
 {% block invitation %}
@@ -70,4 +77,6 @@
     <div>
         <div class="comment_text_hidden">sdafasdfasdfds</div>
     </div>
+    {% include "modal_frames/modal_elder_remove_plan.html" %}
+    {% include "modal_frames/modal_leave_plan.html" %}
 {% endblock %}

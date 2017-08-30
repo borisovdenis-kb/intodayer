@@ -1,0 +1,22 @@
+{% extends "modal_frames/base_intodayer_modal.html" %}
+{% load staticfiles %}
+
+{% block modal_id %}
+    id="part_leave_plan"
+{% endblock %}
+
+{% block modal_title %}
+    <div class="in_modal_title">Leave plan!</div>
+
+{% endblock %}
+
+{% block modal_content %}
+    <p>Do you want really leave plan "{{ cur_plan.plan.title }}"?</p>
+    <p>You can't undo this action&hellip;</p>
+{% endblock %}
+
+{% block modal_bottom %}
+    <button id=btn_ok class="btn btn-danger btn-sm">Leave</button>
+    <button id=btn_no class="btn btn-primary btn-sm">Cancel</button>
+{% endblock %}
+

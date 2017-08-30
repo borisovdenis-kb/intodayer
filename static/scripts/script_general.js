@@ -24,6 +24,7 @@ function confirmInvitation(is_accept) {
     });
 }
 
+
 function setInvitationsListeners() {
     if (location.href.indexOf('invitation') < 0) {
         show_invitations();
@@ -73,11 +74,13 @@ function setInvitationsListeners() {
 
 
 function setInputCursorToEnd($this_input) {
-    $this_input.val($this_input.val());
+    let val = $this_input.val();
+    $this_input.val("");
+    $this_input.val(val);
 }
 
-
-function switchPlan($this_plan) {
+// если передан флаг, значит при вызове функции сразу откроются настройки расписания (нужно для create нового расписания)
+function switchPlan($this_plan, flag_open_editing) {
     /*
      * Это функция общая для всего приложения.
      * Отвечает за подгрузку и замену данных в right_content при переключении расписания.
@@ -106,16 +109,30 @@ function switchPlan($this_plan) {
 
     $('.plan_load_progres_indicator').css('display', 'flex');
     // alert('/' + address + '/switch_plan');
-    $('.right_content').load('/' + address + '/switch_plan', data, function () {
+    $('.right_content').load('/' + address + '/switch_plan', data, function (responseText) {
         $('.plan_load_progres_indicator').css('display', 'none');
-        // навешиваем обработчики
-        if (address == 'plan') {
-            setListenersTitleBlock();
-            setListenersRightContent();
-        }
 
-        if (address == 'participants'){
-            setBindsParticipants();
+        // навешиваем обработчики, учитывая права редактирования пользователей
+        if (address === 'plan') {
+            rightContentActionsAllUsers();
+
+            if ($('.plan_title').attr('user_has_edit_plan') === 'yes') {
+                pushAvaModalClickBlock();
+                setAvaModalListeners();
+                setListenersAdminRightContent();
+            }
+            else {
+                deleteAvaModalClickBlock();
+                userHasNotRightsEdidting();
+            }
+        }
+        if (address === 'participants') {
+            setTimeout(function () {
+                pushExpectedParticipants();
+            }, 200);
+            if ($('.plan_title').attr('user_has_edit_role') === 'yes') {
+                setAdminParticipantsActions();
+            }
         }
 
         // смена аватарки при изменении расписания
@@ -130,6 +147,14 @@ function switchPlan($this_plan) {
         // установить выбранный цвет
         var plan_menu = $('.plan_selector').find('[plan_id=' + data.plan_id + ']');
         plan_menu.css({'background': 'black', 'color': 'white'});
+
+        // когда создаём новое расписание открываются настройки
+        if (flag_open_editing) {
+            localStorage.setItem('new_plan_editing', 'true');
+            $('.plan_settings').trigger('click');
+        }
+        // для того, чтобы если мы только создали расписание, то в настройках кнопка Сохранить сразу активна
+
     });
 }
 
@@ -140,44 +165,48 @@ function createPlan($plus_button) {
      *  1. Добавляет кнопку в панели переключения расписаний;
      *  2. Создает для данного пользователя в базе "дефолтное" расписание.
      */
-    var $new_plan_li, $new_plan_li_a;
+    return new Promise(function (resolve, reject) {
 
-    // если мы нажимаем на меню справа, то плюс исчезает на мгновение
-    if ($plus_button) {
-        $plus_button.fadeTo(50, 0).delay(100).fadeTo(200, 1);
-    }
+        var $new_plan_li, $new_plan_li_a;
 
-    $.ajax({
-        url: '/create_plan',
-        type: 'GET',
-        dataType: 'json',
-        success: function (msg) {
-            if (!$plus_button) {
-                location.href = "/plan";
-            }
-            $('.plan_list').append('<li style="display: none; opacity: 0"><a>No name</a></li>');
-
-            $new_plan_li = $('.plan_list li').last();
-
-            $new_plan_li.slideToggle(200);
-
-            $new_plan_li_a = $new_plan_li.find('a');
-            // добавляем этой кнопке в атрибуты id нового расписания
-            $new_plan_li_a.attr('plan_id', msg.new_plan_id);
-
-            setTimeout(function () {
-                $new_plan_li.fadeTo(100, 1);
-            }, 200);
-
-            setTimeout(function () {
-                // навешиваем возможность переключения
-                $new_plan_li_a.click(function () {
-                    switchPlan($(this));
-                });
-                // переключаемся на него, иммитируя клик
-                $new_plan_li_a.trigger('click');
-            }, 600);
+        // если мы нажимаем на меню справа, то плюс исчезает на мгновение
+        if ($plus_button) {
+            $plus_button.fadeTo(50, 0).delay(100).fadeTo(200, 1);
         }
+
+        $.ajax({
+            url: '/create_plan',
+            type: 'GET',
+            dataType: 'json',
+            success: function (msg) {
+                $('.plan_list').append('<li style="display: none; opacity: 0"><a>No name</a></li>');
+
+                $new_plan_li = $('.plan_list li').last();
+
+                $new_plan_li.slideToggle(200);
+
+                $new_plan_li_a = $new_plan_li.find('a');
+                // добавляем этой кнопке в атрибуты id нового расписания
+                $new_plan_li_a.attr('plan_id', msg.new_plan_id);
+
+                setTimeout(function () {
+                    $new_plan_li.fadeTo(100, 1);
+                }, 200);
+
+                setTimeout(function () {
+                    // навешиваем возможность переключения
+                    $new_plan_li_a.click(function () {
+                        switchPlan($(this), true);
+                    });
+                    // переключаемся на него, иммитируя клик
+                    $new_plan_li_a.trigger('click');
+                }, 600);
+                return resolve();
+            },
+            error: function () {
+                return reject();
+            }
+        });
     });
 }
 
@@ -213,10 +242,10 @@ function show_invitations() {
 
 
 function preventDefault(e) {
-  e = e || window.event;
-  if (e.preventDefault)
-      e.preventDefault();
-  e.returnValue = false;
+    e = e || window.event;
+    if (e.preventDefault)
+        e.preventDefault();
+    e.returnValue = false;
 }
 
 function preventDefaultForScrollKeys(e) {
@@ -227,12 +256,12 @@ function preventDefaultForScrollKeys(e) {
 }
 
 function disableScroll() {
-  if (window.addEventListener) // older FF
-      window.addEventListener('DOMMouseScroll', preventDefault, false);
-  window.onwheel = preventDefault; // modern standard
-  window.onmousewheel = document.onmousewheel = preventDefault; // older browsers, IE
-  window.ontouchmove  = preventDefault; // mobile
-  document.onkeydown  = preventDefaultForScrollKeys;
+    if (window.addEventListener) // older FF
+        window.addEventListener('DOMMouseScroll', preventDefault, false);
+    window.onwheel = preventDefault; // modern standard
+    window.onmousewheel = document.onmousewheel = preventDefault; // older browsers, IE
+    window.ontouchmove = preventDefault; // mobile
+    document.onkeydown = preventDefaultForScrollKeys;
 }
 
 function enableScroll() {
@@ -245,6 +274,31 @@ function enableScroll() {
 }
 
 
+// устанавливают стили INPUT валидации
+function setInputSuccess($input) {
+    $input.prop('validate', true);
+    if ($input.next().hasClass('popover')) {
+        $input.popover('hide');
+    }
+    if ($input.next().hasClass('tooltip')) {
+        $input.tooltip('hide');
+    }
+
+    setInputDefault($input);
+    $input.addClass('success_input_validate');
+}
+
+function setInputError($input) {
+    setInputDefault($input);
+    $input.prop('validate', false);
+    $input.addClass('error_input_validate');
+}
+
+function setInputDefault($input) {
+    $input.removeClass('success_input_validate error_input_validate');
+}
+
+// некоторые функции валидации
 function validatePassword(pass) {
     var regex = /(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/;
     return regex.test(pass);
@@ -255,3 +309,10 @@ function validateEmail(email) {
     return regex.test(email);
 }
 
+function inputNotEmpty(input_val) {
+    if (input_val || input_val !== "") {
+        return true;
+    } else {
+        return false;
+    }
+}

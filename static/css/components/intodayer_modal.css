@@ -1,4 +1,9 @@
 .in_modal_fade {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  min-height: 350px;
   position: fixed;
   width: 100%;
   height: 100%;
@@ -7,14 +12,17 @@
   top: 0;
   opacity: 0;
   transition: 0.3s opacity ease; }
+  .in_modal_fade .close {
+    position: absolute;
+    right: 0;
+    height: 25px;
+    width: 25px; }
 
 .in_modal_body {
-  position: fixed;
-  width: 400px;
+  position: relative;
   min-height: 120px;
+  width: 400px;
   background: white;
-  top: calc(50% - 120px / 2 - 10%);
-  left: calc(50% - 400px / 2);
   transform: scale(0.9, 0.9);
   opacity: 0;
   transition: 0.4s transform ease, 0.1s opacity ease;
@@ -25,35 +33,36 @@
   border-radius: 4px;
   -ms-border-radius: 4px; }
 
-@media (max-height: 400px) {
-  .in_modal_body {
-    transition: 0.3s top ease;
-    top: calc(50% - 120px / 2); } }
+.in_modal_header {
+  position: relative;
+  display: flex;
+  justify-content: center; }
+
 .in_modal_title {
   text-align: center;
-  margin-top: 10px; }
+  padding-top: 10px; }
 
 .in_modal_content {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: center;
-  align-content: center;
   background: white; }
   .in_modal_content p {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    -ms-word-break: break-all;
+    /* This is the dangerous one in WebKit, as it breaks things wherever */
+    word-break: break-all;
+    /* Instead use this non-standard one: */
+    word-break: break-word;
+    /* Adds a hyphen where the word breaks, if supported (No Blink) */
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    padding-left: 15px;
+    padding-right: 10px;
     font-size: 0.8em;
-    width: calc(400px - 40px);
     text-align: left; }
-
-input[id=pass], input[id=okay].btn {
-  height: 40px;
-  border: none;
-  text-align: center; }
-  input[id=pass]:active, input[id=pass]:focus, input[id=okay].btn:active, input[id=okay].btn:focus {
-    outline: none; }
-input[id=pass] {
-  margin-right: 10px; }
-input[id=okay] {
-  width: 70px; }
 
 .in_stage_content {
   background-color: #ffffff;
@@ -65,6 +74,11 @@ input[id=okay] {
   -ms-border-radius: 4px; }
 
 .in_modal_bottom {
+  width: inherit;
+  display: inline-flex;
+  flex-direction: row;
+  justify-content: center;
+  min-height: 0px;
   background-color: #ffffff;
   text-align: center;
   padding-bottom: 10px;
@@ -74,7 +88,61 @@ input[id=okay] {
   border-radius: 4px;
   -ms-border-radius: 4px; }
 
-#btn_ok.btn, #btn_no.btn {
-  width: 50px; }
+#btn_ok, #btn_no {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  width: 60px;
+  text-align: center; }
+  #btn_ok:focus, #btn_ok:link, #btn_ok:active, #btn_no:focus, #btn_no:link, #btn_no:active {
+    outline: none; }
+
+#btn_ok {
+  margin-right: 1px; }
+
+#btn_no {
+  margin-left: 1px; }
+
+.in_modal_fade[pass_modal] .in_modal_title {
+  padding-bottom: 5px; }
+.in_modal_fade[pass_modal] .in_modal_body {
+  margin-bottom: 200px; }
+.in_modal_fade[pass_modal] input, .in_modal_fade[pass_modal] button[id=okay].btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  font-size: 1em;
+  height: 30px;
+  border: none;
+  text-align: center; }
+  .in_modal_fade[pass_modal] input:active, .in_modal_fade[pass_modal] button[id=okay].btn:active, .in_modal_fade[pass_modal] input:focus, .in_modal_fade[pass_modal] button[id=okay].btn:focus {
+    outline: none; }
+.in_modal_fade[pass_modal] input {
+  margin-right: 10px; }
+.in_modal_fade[pass_modal] .in_modal_content {
+  flex-direction: row; }
+.in_modal_fade[pass_modal] .in_stage_content {
+  display: none;
+  min-height: 0px;
+  font-size: 1em;
+  margin-top: 0;
+  padding-top: 0;
+  margin-bottom: 0; }
+.in_modal_fade[pass_modal] .split-line.last {
+  margin-bottom: 8px; }
+
+@media (max-width: 600px) {
+  .in_modal_fade {
+    min-height: 450px;
+    align-items: flex-start; }
+
+  .in_modal_body {
+    margin-top: 70px;
+    width: 69%; } }
+@media (max-height: 768px) {
+  .in_modal_fade[pass_modal] .in_modal_body {
+    margin-bottom: 0; } }
 
 /*# sourceMappingURL=intodayer_modal.css.map */

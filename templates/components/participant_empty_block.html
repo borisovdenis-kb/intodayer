@@ -1,0 +1,24 @@
+{% load staticfiles %}
+
+<div class="part_expected_block">
+    <div class="part_block invite" part_id='' style="display: none;">
+        <div class="part_ava">
+            <div class="img_ava" style="background-image: url({% static "images/user_avatar_default.png" %})"></div>
+        </div>
+        <div class="part_username">
+                    <span>
+                    </span>
+        </div>
+        <div class="part_rights" role='{{ participant.role }}'>
+            <ul>
+                <li class="part_invite">
+                    <span>(В ожидании..)</span>
+                </li>
+                <li class="part_remove">
+                    <span>Удалить</span>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+</div>

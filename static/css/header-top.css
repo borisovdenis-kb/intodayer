@@ -54,10 +54,9 @@ button {
 
 .droplist {
   display: flex;
-  justify-content: center;
   margin-left: auto;
   min-width: 120px;
-  max-width: 150px;
+  max-width: 200px;
   z-index: 100;
   background: #f0f0f0;
   position: relative;
@@ -97,7 +96,12 @@ button {
     justify-content: center;
     align-content: center;
     height: auto;
-    margin-top: 1px; }
+    margin-top: 1px;
+    display: block;
+    max-width: 100px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden; }
 
 #user_ava_thumbnail_content {
   cursor: pointer;
@@ -238,4 +242,4 @@ button {
     padding-left: 8px;
     padding-right: 8px; } }
 
-/*# sourceMappingURL=header.css.map */
+/*# sourceMappingURL=header-top.css.map */

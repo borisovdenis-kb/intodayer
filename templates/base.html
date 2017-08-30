@@ -5,8 +5,11 @@
     {% block title %}
         <title>Intodayer</title>
     {% endblock %}
+    {% block meta_html %}
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% endblock %}
     <meta http-equiv="Content-type" content="text/html" charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {#    <meta name="viewport" content="width=device-width, initial-scale=1">#}
     {#    картинка сайта#}
     <link href="{% static "images/favicon.ico" %}" rel="shortcut icon" type="image/x-icon"/>
 
@@ -31,10 +34,11 @@
     {#    Импорт стилей контента#}
     <link rel="stylesheet" type="text/css" href={% static "css/general_style.css" %}>
     <link rel="stylesheet" type="text/css" href={% static "css/base.css" %}>
-    <link rel="stylesheet" type="text/css" href={% static "css/header.css" %}>
+    <link rel="stylesheet" type="text/css" href={% static "css/header-top.css" %}>
     <link rel="stylesheet" type="text/css" href={% static "css/font_optimizate_new.css" %}>
 
     {#    Импорт стилей для компонентов#}
+    <link rel="stylesheet" type="text/css" href={% static "css/components/loading_circle.css" %}>
     <link rel="stylesheet" type="text/css" href={% static "css/components/intodayer_modal.css" %}>
     <link rel="stylesheet" type="text/css" href={% static "css/components/elements.css" %}>
     <link rel="stylesheet" type="text/css" href={% static "css/components/success_frame.css" %}>
@@ -51,10 +55,10 @@
 
 <body>
 
-
-<div class="for_invitations">
-    <!--Сюда будут вставляться имеющиеся у данного юзера приглашения-->
-</div>
+{##}
+{#<div class="for_invitations">#}
+{#    <!--Сюда будут вставляться имеющиеся у данного юзера приглашения-->#}
+{#</div>#}
 
 {% block header %}
     {% include "templates_for_ajax/header.html" %}
@@ -101,6 +105,8 @@
 {% block others %}
 {% endblock %}
 
+{% block components %}
+{% endblock %}
 </body>
 
 {#Иморт стилей и скриптов для всего сайта#}
@@ -108,11 +114,15 @@
 <script type="text/javascript" src={% static "scripts/script_general.js" %}></script>
 <script type="text/javascript" src={% static "scripts/script_header.js" %}></script>
 <script type="text/javascript" src={% static "scripts/components/script_modals_slider.js" %}></script>
+<script type="text/javascript" src={% static "scripts/components/script_modal_intodayer.js" %}></script>
 
 {#    Импорт скриптов для компонентов#}
 <script type="text/javascript" src={% static "scripts/components/script_success_frame.js" %}></script>
 
 {% block scripts_bottom %}
+{% endblock %}
+
+{% block script_user_rights %}
 {% endblock %}
 
 </html>

@@ -54,13 +54,49 @@ var places = ["510x", '110м', "Л-11", "Л-10", '511м', "112ф", "Кафедр
 var parity_PlaceHolder = 'Все';
 
 $(document).ready(function () {
-    setListenersRightContent();
-    showTopCheckboxInNotEmptyDays();
-    setColorStr();
+    // когда создаём новое расписание открываются настройки
+    if (localStorage['new_plan_editing'] === 'true') {
+        // localStorage.setItem('new_plan_editing', 'false');
+        // localStorage.removeItem('new_plan_editing');
+        setTimeout(function () {
+            $('.plan_settings').trigger('click');
+        }, 200);
+    }
+
+
+    rightContentActionsAllUsers();
+
+    if ($('.plan_title').attr('user_has_edit_plan') === 'yes') {
+        userHasRightsEditinig();
+    }
+    else {
+        userHasNotRightsEdidting();
+    }
+
 });
 
+function rightContentActionsAllUsers() {
+    $('.day_plan_content').each(function () {
+        setColorStr($(this));
+    });
+    setListenersTitleBlock();
+}
+
+
+function userHasRightsEditinig() {
+    setListenersAdminRightContent();
+    setTimeout(() => {
+        showTopCheckboxInNotEmptyDays();
+    }, 500);
+}
+function userHasNotRightsEdidting() {
+    $('textarea').attr('disabled', "");
+    $('textarea').css('cursor', 'default');
+}
+
+
 // Запуск всего скрипта, навешивание всех обработчиков
-function setListenersRightContent() {
+function setListenersAdminRightContent() {
 
     $('.str_plan.change').each(function () {
         setNewListenersNewStr($(this));
@@ -266,12 +302,13 @@ function setNewListenersNewStr($new_div) {
     // Работа валидации при вводе
     $new_textarea.on('input', function () {
         thisInput = $(this);
-        timerInputId = setInterval(function () {
-            validateField(thisInput);
-        }, 50);
-        setTimeout(function () {
-            clearInterval(timerInputId);
-        }, 100);
+        validateField(thisInput);
+        // timerInputId = setInterval(function () {
+        //
+        // }, 50);
+        // setTimeout(function () {
+        //     clearInterval(timerInputId);
+        // }, 100);
     });
 
 
@@ -327,11 +364,23 @@ function setNewListenersNewStr($new_div) {
         }
     });
     $input_button.mouseout(function () {
-        // $(this).blur();
         if (!$(this).hasClass('drop_is')) {
             $(this).css({'background': 'rgba(255,255,255,0)'});
         }
     });
+
+    $.mask.definitions['5'] = '[0-5]';
+    $.mask.definitions['2'] = '[0-2]';
+    $.mask.definitions['3'] = '[0-3]';
+    $.mask.definitions['4'] = '[0-4]';
+    $new_div.find('textarea.time').each(function () {
+        $(this).mask("29:59", {placeholder: "__:__", autoclear: false});
+    });
+    // $new_div.find('textarea.weeks').each(function () {
+    //     $.mask.definitions['z'] = '[1-9]';
+    //     $(this).mask("5z-5z", {placeholder: "__-__"});
+    //
+    // });
 }
 
 
@@ -397,7 +446,7 @@ function focusFieldWithKeys($this_field, $this_str, e) {
     }
 }
 
-// asdf
+
 function openTextareaDropList($this_field) {
     if ($this_field.hasClass('drop_is')) {
         $('.drop_list').remove();
@@ -644,6 +693,7 @@ function setTopCheckBox($this_plan_content) {
         }
     }
 }
+
 // устанавливаем чек боксы
 
 function setCheckBox($checkbox_wrap, mode) {
@@ -688,12 +738,13 @@ function setCheckBox($checkbox_wrap, mode) {
             unblockInputs($this_str);
             $this_str.removeClass('marked');
             hoverSelectStr($this_str);
-            setColorStr($this_str);
+            setColorStrWhenCheckbox($this_str);
         }
         $this_checkbox.removeClass('marked');
         $this_checkbox.animate({'background-color': 'rgba(0,0,0,0)'}, 50);
     }
 }
+
 // обработчик для верхнего чекбокса, в заголовке каждого дня
 function setGeneralCheckBoxListeners($this_str, $general_checkbox) {
     var this_checkbox;
@@ -715,23 +766,22 @@ function setGeneralCheckBoxListeners($this_str, $general_checkbox) {
 
 // удаляет поле галочки в заголовке для пустых дней
 function showTopCheckboxInNotEmptyDays() {
-    var $days_content = $('.plan_settings_content-1');
+    let $days_content = $('.day_plan_content');
     $days_content.each(function () {
-        var $str_plans = $(this).find('.str_plan.change');
-        if ($str_plans.length > 1) {
-            var $this_checkbox = $(this).find('.checkbox_wrap');
-            setCheckBoxVisible($this_checkbox);
+        let $str_plans = $(this).find('.str_plan.change');
+        if ($str_plans.length >= 1) {
+            let $this_checkbox = $(this).find('.checkbox_wrap');
+            setCheckBoxVisible($this_checkbox, 'only_effect');
         }
     });
 }
 
 function setCheckBoxInvisible($general_checkbox) {
-    var $this_checkbox = $general_checkbox.find('.checkbox_container');
+    let $this_checkbox = $general_checkbox.find('.checkbox_container');
     $this_checkbox.fadeTo(100, 0);
     $this_checkbox.css('cursor', 'default');
     $general_checkbox.off();
     $general_checkbox.css('cursor', 'default');
-    // $general_checkbox.addClass("invisible");
 }
 
 function setCheckBoxVisible($checkbox_wrap, type) {
@@ -744,7 +794,6 @@ function setCheckBoxVisible($checkbox_wrap, type) {
     $this_checkbox.fadeTo(300, 1);
     $this_checkbox.css('cursor', 'pointer');
     $checkbox_wrap.css('cursor', 'pointer');
-    // $checkbox_wrap.removeClass("invisible");
 }
 
 
@@ -777,13 +826,13 @@ function setTrueRandomPlaceholder($this_field) {
         return "hh:mm";
     }
     if ($this_field.hasClass('subject'))
-        // return subjects[getRandomInt(0, subjects.length)];
+    // return subjects[getRandomInt(0, subjects.length)];
         return "Тервер";
     if ($this_field.hasClass('teacher'))
-        // return teachers[getRandomInt(0, teachers.length)];
+    // return teachers[getRandomInt(0, teachers.length)];
         return "Колмогоров А. Н.";
     if ($this_field.hasClass('place'))
-        // return places[getRandomInt(0, places.length)];
+    // return places[getRandomInt(0, places.length)];
         return "Л-1";
     if ($this_field.hasClass('parity'))
         return parity_PlaceHolder;
@@ -895,10 +944,13 @@ function delete_str(checkboxes, i, n) {
         var i = 0;
         var n = checkboxes.length;
     }
+    let $this_checkbox = $(checkboxes[i]);
+    let $this_str = $this_checkbox.parents('.str_plan');
+    let $this_day_block = $this_str.parents('.day_plan_content');
     // дублируем каждую следующую запись, только если успешно продублирована предыдущая
+    // alert($this_checkbox + " " + i + " " + n);
     if (i != undefined && n != undefined && i < n) {
-        var $this_checkbox = $(checkboxes[i]);
-        var $this_str = $this_checkbox.parents('.str_plan');
+
         // получаем данные всех полей из текущей строки
         var data = {};
         if ($this_str.attr('id') && $this_str.attr('id') != 0) {
@@ -906,6 +958,7 @@ function delete_str(checkboxes, i, n) {
             $.ajax({
                 url: '/plan/update_delete',
                 success: function (response) {
+
                     callback_delete($this_str);
                     delete_str(checkboxes, i + 1, n);
                 },
@@ -926,14 +979,13 @@ function delete_str(checkboxes, i, n) {
     else {
         FLAG_DELETE = false;
         setTimeout(function () {
-            setColorStr();
+            setColorStr($this_day_block);
         }, 600);
 
     }
 }
 
 // выполнение стилей и эффектов после успешного удаления строки с сервера
-var timer_setInvisibleTopCheckbox;
 
 function callback_delete($this_str) {
     var $this_plan = $this_str.parents('.plan_window');
@@ -1054,6 +1106,7 @@ function getAjaxActions($pressed_button, i) {
         clone_str($checkboxes);
     }
     if ($pressed_button.hasClass('delete_row')) {
+
         delete_str($checkboxes);
     }
 
@@ -1063,8 +1116,10 @@ function getAjaxActions($pressed_button, i) {
 // работает с AJAX
 function clone_str(checkboxes) {
     var n = checkboxes.length;
+    $(this).css('background', 'black');
+    var $this_day_block = $(checkboxes[0]).parents('.day_plan_content');
     checkboxes.each(function (i) {
-        var $this_str = $(this).parents('.str_plan');
+        let $this_str = $(this).parents('.str_plan');
         // если строка не пустая, то отмечаем синим, так как она уже существует в базе
         if (!strIsEmpty($this_str)) {
             var data = getFieldsInformation($this_str);
@@ -1072,12 +1127,13 @@ function clone_str(checkboxes) {
         }
         // если строка полностью пустая (не сохранена в базе)
         else {
+
             callback_clone({}, $this_str, 'new_str');
         }
         // по окончанию клонирования
         if (n == i + 1) {
             setTimeout(function () {
-                setColorStr();
+                setColorStr($this_day_block);
             }, 500);
             return false;
         }
@@ -1093,12 +1149,16 @@ function callback_clone(data, $this_str, mode) {
 
     appendNewStrAnimation($new_div, $this_str);
     $new_div.find('.weeks').val(data['weeks']);
-    $new_div.find('.parity').val(data['parity']);
     $new_div.find('.time').val(data['time']);
     $new_div.find('.subject').val(data['subject']);
     $new_div.find('.teacher').val(data['teacher']);
     $new_div.find('.place').val(data['place']);
+    if (!data['parity']) {
+        data['parity'] = "Все";
+    }
+    $new_div.find('.parity').val(data['parity']);
     $new_div.attr('id', 0);
+
 
     // преобразовываем поля input в a для всех новых полей
     // и устанавливаем плэйсхолдеры, которые были на строке дублирования
@@ -1132,6 +1192,7 @@ function checkThatFieldIsChanged($str_plan) {
         return false;
     }
 }
+
 // общая валидация строки перед отправкой на сервер
 // нормы и стандарты полей валидации придуманы разработчиками Intodayer!
 function mainValidationStr($this_str) {
@@ -1163,11 +1224,6 @@ function mainValidationStr($this_str) {
         if (place == "") {
             errors['place'] = 'empty_value';
         }
-
-        // if (parity == "") {
-        //     alert(0 == "");
-        //     errors['parity'] = 'empty_value';
-        // }
 
         // Проверка корректности ввода дня недели
         if (!errors['weeks']) {
@@ -1363,50 +1419,55 @@ function printObj(obj) {
 }
 
 var time_color = 200;
-// устанвалвает цвет для нечётных строк таблицы расписания
-function setColorStr($this_str) {
-    if (!$this_str) {
-        $('.str_plan.change').each(function (i) {
+
+
+function setColorStrDayBlock($day_block) {
+    $day_block.each(function () {
+        $(this).find('.str_plan.change').each(function (i) {
+            if ($(this).hasClass('warning_str') || $(this).hasClass('clone_str') || $(this).hasClass('marked')) {
+                return true;
+            }
             if (i % 2 == 0) {
                 $(this).delay(10 * i).animate({'background-color': backgroundColorOddStr}, time_color);
-                if ($(this).hasClass('warning_str') || $(this).hasClass('clone_str')) {
-                    return true;
-                }
                 $(this).find('ul').delay(10 * i).animate({'background-color': backgroundColorOddStr}, time_color);
             }
             else {
                 $(this).delay(10 * i).animate({'background-color': backgroundColorEvenStr}, time_color);
-                if ($(this).hasClass('warning_str') || $(this).hasClass('clone_str')) {
-                    return true;
-                }
                 $(this).find('ul').delay(10 * i).animate({'background-color': backgroundColorEvenStr}, time_color);
             }
-        });
-    }
-    // если передана одна строка, для которой нужно установить правильный цвет,
-    else {
-        // случай, когда после эффекта успшеной отправки строки на сервер мы сразу нажали на галочку
-        if ($this_str.hasClass('warning_str')) {
-            hoverSelectStr($this_str);
-            $this_str.find('ul').css({'background-color': backgroundErrorStr});
-            return false;
-        }
-        if ($this_str.hasClass('clone_str')) {
-            hoverSelectStr($this_str);
-            $this_str.find('ul').css({'background-color': backgroundCloneStr});
-            return false;
-        }
+        })
+    });
+}
 
+// устанвалвает цвет для нечётных строк таблицы расписания
+function setColorStr($this_day_block) {
+    $this_day_block.each(function () {
+        setColorStrDayBlock($(this));
+    });
+}
+
+function setColorStrWhenCheckbox($this_str) {
+    if ($this_str.hasClass('warning_str')) {
         hoverSelectStr($this_str);
-        $this_str.find('ul').css({'background-color': 'rgba(255,255,255,0)'});
-
+        $this_str.find('ul').css({'background-color': backgroundErrorStr});
+        return false;
     }
+    if ($this_str.hasClass('clone_str')) {
+        hoverSelectStr($this_str);
+        $this_str.find('ul').css({'background-color': backgroundCloneStr});
+        return false;
+    }
+
+    hoverSelectStr($this_str);
+    $this_str.find('ul').css({'background-color': 'rgba(255,255,255,0)'});
+
 }
 
 function appendNewStrAnimation($new_div, $insert_after_this) {
     $new_div.insertAfter($insert_after_this);
     $new_div.slideToggle(200);
     $new_div.fadeTo(200, 1);
+    console.log($new_div);
 }
 
 // добавление новой строки с расписанием
@@ -1446,7 +1507,7 @@ function appendPlanStr($this_button) {
 
     // делаем правильный цвет следующей строчки
     setTimeout(function () {
-        setColorStr();
+        setColorStr($this_block);
     }, 800);
 
     //если до этого в текущем дне не было ни одной строки, то при добавлении первой показываем чекбокс сверху
@@ -1482,11 +1543,11 @@ function validateField(field) {
      *  Функция в зависимости от предназначения поля
      *  будет осуществлять валидацию каждого введенного символа
      */
-    var timePatt1 = /^(([0,1])|(2))$/;
-    var timePatt2 = /^(([0,1][0-9])|(2[0-3]))$/;
-    var timePatt3 = /^(([0,1][0-9])|(2[0-3])):$/;
-    var timePatt4 = /^(([0,1][0-9])|(2[0-3])):[0-5]$/;
-    var timePatt5 = /^(([0,1][0-9])|(2[0-3])):[0-5][0-9]$/;
+    // var timePatt1 = /^(([0,1])|(2))$/;
+    // var timePatt2 = /^(([0,1][0-9])|(2[0-3]))$/;
+    // var timePatt3 = /^(([0,1][0-9])|(2[0-3])):$/;
+    // var timePatt4 = /^(([0,1][0-9])|(2[0-3])):[0-5]$/;
+    // var timePatt5 = /^(([0,1][0-9])|(2[0-3])):[0-5][0-9]$/;
     var weekPatt1 = /^([1-9])$/;
     var weekPatt2 = /^([1-9]-)|([1-4][0-9])|([5][0-2])$/;
     var weekPatt3 = /^([1-9]-[1-9])|([1-4][0-9]-)|([5][0-2]-)$/;
@@ -1496,31 +1557,31 @@ function validateField(field) {
     var content = field.val();
     var length = content.length;
 
-    if (field.hasClass('time')) {
-        if (length == 1) {
-            if (content.search(timePatt1) == -1) {
-                delExtraSymbols(field, 0);
-            }
-        } else if (length == 2) {
-            if (content.search(timePatt2) == -1) {
-                delExtraSymbols(field, 1);
-            }
-        } else if (length == 3) {
-            if (content.search(timePatt3) == -1) {
-                delExtraSymbols(field, 2);
-            }
-        } else if (length == 4) {
-            if (content.search(timePatt4) == -1) {
-                delExtraSymbols(field, 3);
-            }
-        } else if (length == 5) {
-            if (content.search(timePatt5) == -1) {
-                delExtraSymbols(field, 4);
-            }
-        } else if (length > 5) {
-            delExtraSymbols(field, 5);
-        }
-    }
+    // if (field.hasClass('time')) {
+    //     if (length == 1) {
+    //         if (content.search(timePatt1) == -1) {
+    //             delExtraSymbols(field, 0);
+    //         }
+    //     } else if (length == 2) {
+    //         if (content.search(timePatt2) == -1) {
+    //             delExtraSymbols(field, 1);
+    //         }
+    //     } else if (length == 3) {
+    //         if (content.search(timePatt3) == -1) {
+    //             delExtraSymbols(field, 2);
+    //         }
+    //     } else if (length == 4) {
+    //         if (content.search(timePatt4) == -1) {
+    //             delExtraSymbols(field, 3);
+    //         }
+    //     } else if (length == 5) {
+    //         if (content.search(timePatt5) == -1) {
+    //             delExtraSymbols(field, 4);
+    //         }
+    //     } else if (length > 5) {
+    //         delExtraSymbols(field, 5);
+    //     }
+    // }
     if (field.hasClass('weeks')) {
         if (length == 1) {
             if (content.search(weekPatt1) == -1) {

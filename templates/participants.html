@@ -15,7 +15,7 @@
 
 {% block scripts_bottom %}
     <script type="text/javascript" src={% static "scripts/script_participants.js" %}></script>
-    <script type="text/javascript" src={% static "scripts/components/script_modal_intodayer.js" %}></script>
+    <script type="text/javascript" src={% static "scripts/script_participants_invite.js" %}></script>
 {% endblock %}
 
 {% block invitation %}
@@ -50,5 +50,5 @@
 {% block others %}
     {% include "modal_frames/modal_confirm_role.html" %}
     {% include "modal_frames/modal_delete_participant.html" %}
-    {% include "modal_frames/modal_elder_leave.html" %}
+    {% include "modal_frames/modal_elder_remove_plan.html" %}
 {% endblock %}

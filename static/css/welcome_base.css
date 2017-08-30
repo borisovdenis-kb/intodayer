@@ -54,10 +54,9 @@ button {
 
 .droplist {
   display: flex;
-  justify-content: center;
   margin-left: auto;
   min-width: 120px;
-  max-width: 150px;
+  max-width: 200px;
   z-index: 100;
   background: #f0f0f0;
   position: relative;
@@ -97,7 +96,12 @@ button {
     justify-content: center;
     align-content: center;
     height: auto;
-    margin-top: 1px; }
+    margin-top: 1px;
+    display: block;
+    max-width: 100px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden; }
 
 #user_ava_thumbnail_content {
   cursor: pointer;
@@ -239,7 +243,8 @@ button {
     padding-right: 8px; } }
 html, body {
   height: 100%;
-  margin: 0 auto; }
+  margin: 0 auto;
+  min-width: 300px; }
 
 .content {
   background: none;
@@ -300,14 +305,17 @@ html, body {
     border-color: #323232;
     background-color: #323232; }
 
-.fill-space-bottom {
-  height: 100px; }
-
 .welcome_bottom p {
   margin-top: 20px;
   margin-bottom: 20px; }
 
 .welcome_info_content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  flex-direction: column;
+  padding: 20px;
   height: 100px;
   background: #2fb370;
   color: white; }
@@ -334,8 +342,29 @@ html, body {
   border-radius: 0px 0px 0px 0px;
   -ms-border-radius: 0px 0px 0px 0px; }
 
-@media (max-height: 900px) {
-  .fill-space-bottom {
-    display: none; } }
+.row.fill-space-bottom {
+  height: 200px; }
+
+@media (max-width: 768px) {
+  .welcome_info_content {
+    height: 80px; }
+    .welcome_info_content img {
+      height: 40px; }
+
+  .welcome_main {
+    padding: 5px; }
+
+  .welcome_main_border p {
+    font-size: 1.2em; }
+  .welcome_main_border h1 {
+    font-size: 2em; }
+
+  .welcome_info_content p {
+    font-size: 0.8em; } }
+@media only screen and (max-width: 768px) and (orientation: landscape) {
+  .welcome_info_content {
+    height: 70px; }
+    .welcome_info_content img {
+      height: 40px; } }
 
 /*# sourceMappingURL=welcome_base.css.map */

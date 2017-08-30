@@ -1,8 +1,8 @@
 {% extends "modal_frames/base_intodayer_modal.html" %}
 {% load staticfiles %}
 
-{% block modal_type %}
-    modal_type="delete_participants"
+{% block modal_id %}
+    id="delete_participant"
 {% endblock %}
 
 {% block modal_title %}
@@ -15,6 +15,6 @@
 {% endblock %}
 
 {% block modal_bottom %}
-    <div id=btn_ok class="btn btn-danger btn-sm">Да</div>
-    <div id=btn_no class="btn btn-primary btn-sm">Нет</div>
+    <button id=btn_ok class="btn btn-danger btn-sm">Да</button>
+    <button id=btn_no class="btn btn-primary btn-sm">Нет</button>
 {% endblock %}

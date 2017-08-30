@@ -1,10 +1,10 @@
 {% block left_content %}
 
     <!--Изменить аву можно только на странице /plan-->
-    {% if is_plan_page == True %}
+    {% if is_plan_page == True and user_has_edit_plan %}
         <div class="ava_cover">
             <div class="ava_cover_text">
-                <p id="upload_ava">Загрузить фото</p>
+                <p class="upload_ava">Загрузить фото</p>
             </div>
         </div>
     {% endif %}

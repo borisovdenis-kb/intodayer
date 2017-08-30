@@ -1,37 +1,50 @@
+{#для загрузки панели настроек#}
+<div class="right_content_settings"></div>
+
 <div class="right_content_only">
     {% for day in day_of_weeks %}
         <div class="plan_window" day_num="{{ day }}">
             <div class="content_day_title">
+
                 <div class="tools_panel left">
-                    <ul>
-                        <li>
-                            <button class="delete_row">Del</button>
-                        </li>
-                        <li>
-                            <button class="clone_row">Clone</button>
-                        </li>
-                    </ul>
+                    {% if user_has_edit_plan %}
+                        <ul>
+                            <li>
+                                <button class="delete_row">Del</button>
+                            </li>
+                            <li>
+                                <button class="clone_row">Clone</button>
+                            </li>
+                        </ul>
+                    {% endif %}
                 </div>
+
                 <div class="day_title_container">
                     <div class="day_title">{{ day.name }}</div>
                 </div>
+
                 <div class="tools_panel right">
-                    <ul>
-                        <li>
-                            <div class=share_button>
-                                <div class="second_layer"></div>
-                                <div class="first_layer">Share</div>
-                            </div>
-                        </li>
-                    </ul>
+                    {% if user_has_edit_plan %}
+                        <ul>
+                            <li>
+                                <div class=share_button>
+                                    <div class="second_layer"></div>
+                                    <div class="first_layer">Share</div>
+                                </div>
+                            </li>
+                        </ul>
+                    {% endif %}
                 </div>
+
 
             </div>
             <div class="day_plan_content">
                 <div class="str_plan str_title">
-                    <div class="checkbox_wrap general_checkbox" flag_active="false">
-                        <div class="checkbox_container" style="opacity: 0"></div>
-                    </div>
+                    {% if user_has_edit_plan %}
+                        <div class="checkbox_wrap general_checkbox" flag_active="false">
+                            <div class="checkbox_container" style="opacity: 0"></div>
+                        </div>
+                    {% endif %}
                     <ul>
                         <li><a>Недели</a></li>
                         <li><a>Время</a></li>
@@ -47,9 +60,11 @@
                     {% if row.day_of_week.id == day.id %}
 
                         <div class="str_plan change" id="{{ row.id }}">
-                            <div class="checkbox_wrap">
-                                <div class="checkbox_container row"></div>
-                            </div>
+                            {% if user_has_edit_plan %}
+                                <div class="checkbox_wrap">
+                                    <div class="checkbox_container row"></div>
+                                </div>
+                            {% endif %}
                             <ul>
                                 <li><textarea class="weeks"
                                               num="1">{{ row.start_week }}-{{ row.end_week }}</textarea></li>
@@ -75,7 +90,7 @@
                         </div>
                     {% endif %}
                 {% endfor %}
-                {% if is_invitation != True %}
+                {% if user_has_edit_plan == True %}
                     <div class="str_plan str_plus">
                         <div class="plus_button_form">
                             <div class="plus_button"></div>
@@ -89,3 +104,22 @@
         </div>
     {% endfor %}
 </div>
+
+{##}
+{#{% block script_user_rights %}#}
+{#    {% if user_has_edit_plan %}#}
+{#        <script>#}
+{#            $(document).ready(function () {#}
+{#                userHasRightsEditinig();#}
+{#            });#}
+{#        </script>#}
+{#    {% endif %}#}
+{##}
+{#    {% if not user_has_edit_plan %}#}
+{#        <script>#}
+{#            $(document).ready(function () {#}
+{#                userHasNotRightsEdidting();#}
+{#            });#}
+{#        </script>#}
+{#    {% endif %}#}
+{#{% endblock %}#}
