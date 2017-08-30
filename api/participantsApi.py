@@ -78,7 +78,7 @@ def invite_participants(request):
         data = json.loads(request.body.decode('utf-8'))
 
         try:
-            email_list = data['email_list']
+            email_list = list(set(data['email_list']))
             params = {'plan_id': data['plan_id']}
             action_is_available = user.has_rights(action='invite_participants', **params)
         except ValueError:
