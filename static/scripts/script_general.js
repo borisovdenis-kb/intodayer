@@ -112,7 +112,7 @@ function switchPlan($this_plan, flag_open_editing) {
 
     // подгружаем правый контент, изменяем стиль кнопок слева
     var loc = location.href.split('/');
-    var address = loc[loc.length - 2];
+    var address = loc[3];
 
     $.each($('.right_content').children(), function () {
         if (!$(this).hasClass('plan_load_progres')) {

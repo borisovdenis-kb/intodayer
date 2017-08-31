@@ -422,8 +422,8 @@ class CustomUser(AbstractUser, UpdateMixin):
         --- avatar
         --- chat_id
     """
-    first_name = models.CharField(max_length=30, blank=False, validators=[validate_not_empty_filed])
-    last_name = models.CharField(max_length=30, blank=False, validators=[validate_not_empty_filed])
+    first_name = models.CharField(max_length=100, blank=False, validators=[validate_not_empty_filed])
+    last_name = models.CharField(max_length=100, blank=False, validators=[validate_not_empty_filed])
     email = models.EmailField(blank=False, unique=True, validators=[validate_email_field])
     avatar = models.ImageField(upload_to='users_avatars/', blank=True, max_length=1000)
     # телефон хранится в формате +7*********

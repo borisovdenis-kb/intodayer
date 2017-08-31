@@ -418,7 +418,7 @@ def plan_view(request, message_type):
             return render_to_response('plan_empty.html', context)
 
         context.update(get_dates_info(context['cur_plan']))
-        plan_rows = PlanRows.objects.select_related().filter(plan_id=context['cur_plan'].plan.id).order_by('start_week')
+        plan_rows = PlanRows.objects.select_related().filter(plan_id=context['cur_plan'].plan.id).order_by('time')
         context['plan_rows'] = plan_rows
         # для появления кнопки добавления расписания
         context['is_plan_page'] = True
