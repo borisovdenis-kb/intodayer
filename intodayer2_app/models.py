@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import os
+
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from datetime import datetime
 from django.contrib.auth.models import AbstractUser
@@ -530,6 +532,14 @@ class CustomUser(AbstractUser, UpdateMixin):
 
         else:
             raise InvalidActionValue(InvalidActionValue.error_message)
+
+    def is_activated(self):
+        try:
+            EmailActivation.objects.get(user_id=self.id)
+        except ObjectDoesNotExist:
+            return True
+        else:
+            return False
 
     def __str__(self):
         return '%s %s %s' % (

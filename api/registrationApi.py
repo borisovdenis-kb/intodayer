@@ -47,6 +47,6 @@ def activate_email(request, activation_key):
     else:
         user_activation.delete()
         if not user_activation.user_id:
-            return HttpResponseRedirect("/login/activation_is_expire")
+            return HttpResponseRedirect("/registration/activation_is_expire")
         else:
-            return HttpResponseRedirect("/login/success_activation")
+            return HttpResponseRedirect("/home/success_activation")

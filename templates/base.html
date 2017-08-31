@@ -65,7 +65,14 @@
 {% endblock %}
 
 {% block center_content_wide %}
+    {% if not user.is_activated %}
+        <p class="text-center alert-warning btn-lg">
+            Подтвердите регистрацию. Вам на почту было отпралено сообщение с ссылкой для подтверждения.
+            </br>Если сообщение не было доставлено<button style="color: #4365ff;">выслать сообщение еще раз</button>.
+        </p>
+    {% endif %}
 {% endblock %}
+
 <div class="center_page" id="'particles-js'">
     <div class="center_table">
         <div class="content">

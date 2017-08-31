@@ -12,6 +12,13 @@
     {% include 'templates_for_ajax/header_welcome.html' %}
 {% endblock %}
 
+{% block center_content_wide %}
+    {% if activation_is_expire %}
+        <p class="text-center alert-danger btn-lg">
+            Срок ожидания подтверждения регистрации истек. Зарегистрируйтесь заново.
+        </p>
+    {% endif %}
+{% endblock %}
 
 {% block content_page %}
     <div class="welcome_background">

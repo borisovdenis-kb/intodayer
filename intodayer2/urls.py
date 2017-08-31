@@ -31,14 +31,16 @@ urlpatterns = [
 
     # получение основных страниц
     url(r'^$', views.welcome_view),
-    url(r'^home/$', views.home_view),
+    url(r'^home/$', views.home_view, {'message_type': None}),
+    url(r'^home/(\w+)$', views.home_view),
     url(r'^plan/$', views.plan_view),
     url(r'^login/$', views.login_view, {'message_type': None}),
     url(r'^login/(\w+)$', views.login_view),
     url(r'^logout/$', views.logout_view),
     url(r'^account/$', views.profile_view),
     url(r'^statistics/$', views.statistics_view),
-    url(r'^registration/$', views.registration_view),
+    url(r'^registration/$', views.registration_view, {'message_type': None}),
+    url(r'^registration/(\w+)$', views.registration_view),
     url(r'^participants/$', views.participant_view),
     url(r'^about_service/$', views.about_service_view),
     url(r'check_email_unique', views.check_email_unique),

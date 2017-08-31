@@ -293,9 +293,6 @@ def get_this_user(request):
 def login_view(request, message_type):
     context = {
         'auth_error': True if message_type == 'auth_error' else False,
-        'activation_message': True if message_type == 'activation_message' else False,
-        'success_activation': True if message_type == 'success_activation' else False,
-        'activation_is_expire': True if message_type == 'activation_is_expire' else False
     }
 
     if request.method == 'POST':
@@ -306,17 +303,13 @@ def login_view(request, message_type):
 
         if user is not None:
             if user.is_active:
-                user_is_not_activated = EmailActivation.objects.filter(user_id=user.id)
-                if user_is_not_activated:
-                    return HttpResponseRedirect("/login/activation_message")
+                auth.login(request, user)
+                if 'state' in request.session:
+                    if request.session['state']['operation'] == 'confirm_invitation':
+                        url = "/invitation/{}".format(request.session['state']['uuid'])
+                        return HttpResponseRedirect(url)
                 else:
-                    auth.login(request, user)
-                    if 'state' in request.session:
-                        if request.session['state']['operation'] == 'confirm_invitation':
-                            url = "/invitation/{}".format(request.session['state']['uuid'])
-                            return HttpResponseRedirect(url)
-                    else:
-                        return HttpResponseRedirect("/home")
+                    return HttpResponseRedirect("/home")
             else:
                 return HttpResponse('User is not active.')
         else:
@@ -330,7 +323,10 @@ def logout_view(request):
     return HttpResponseRedirect("/")
 
 
-def registration_view(request):
+def registration_view(request, message_type):
+    context = {
+        'activation_is_expire': True if message_type == 'activation_is_expire' else False
+    }
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
@@ -352,11 +348,11 @@ def registration_view(request):
             # отправляем пользователю письмо с сылкой для подтверждения
             send_activation_link(new_user.email, activation_key)
 
-            return HttpResponseRedirect('/login/activation_message')
+            return HttpResponseRedirect('/login')
     else:
         form = CustomUserCreationForm()
 
-    context = {'form': form}
+    context['form'] = form
     return render_to_response('reg.html', context)
 
 
@@ -367,13 +363,15 @@ def welcome_view(request):
         return render_to_response('welcome.html')
 
 
-def home_view(request):
+def home_view(request, message_type):
     """
         Функция отображения главной страницы сайта
         с расписанием на сегодня
     """
     if request.user.is_authenticated():
-        context = dict()
+        context = {
+            'success_activation': True if message_type == 'success_activation' else False,
+        }
         context.update(get_this_user(request))
         context.update(get_all_plans(request))
         context.update(get_cur_plan(request))
