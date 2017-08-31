@@ -9,13 +9,13 @@ var modal_delete_participant;
 var participant_expected_block_html;
 
 $(document).ready(function () {
-    setAdminParticipantsActions();
-
-    setTimeout(function () {
-        pushExpectedParticipants();
-    }, 200);
+    if ($('.title_content').attr('user_role') !== 'participant') {
+         setTimeout(function () {
+            pushExpectedParticipants();
+        }, 200);
+        setAdminParticipantsActions();
+    }
 });
-
 
 
 function pushExpectedParticipants() {

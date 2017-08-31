@@ -94,6 +94,7 @@ function setInputCursorToEnd($this_input) {
 
 // если передан флаг, значит при вызове функции сразу откроются настройки расписания (нужно для create нового расписания)
 function switchPlan($this_plan, flag_open_editing) {
+
     /*
      * Это функция общая для всего приложения.
      * Отвечает за подгрузку и замену данных в right_content при переключении расписания.
@@ -127,6 +128,8 @@ function switchPlan($this_plan, flag_open_editing) {
 
         // навешиваем обработчики, учитывая права редактирования пользователей
         if (address === 'plan') {
+
+            showTopCheckboxInNotEmptyDays();
             rightContentActionsAllUsers();
 
             if ($('.plan_title').attr('user_has_edit_plan') === 'yes') {
@@ -140,9 +143,12 @@ function switchPlan($this_plan, flag_open_editing) {
             }
         }
         if (address === 'participants') {
-            setTimeout(function () {
-                pushExpectedParticipants();
-            }, 200);
+            if ($('.title_content').attr('user_role') !== 'participant') {
+                setTimeout(function () {
+                    pushExpectedParticipants();
+                }, 200);
+            }
+
             if ($('.plan_title').attr('user_has_edit_role') === 'yes') {
                 setAdminParticipantsActions();
             }
@@ -162,7 +168,7 @@ function switchPlan($this_plan, flag_open_editing) {
         plan_menu.css({'background': 'black', 'color': 'white'});
 
         // когда создаём новое расписание открываются настройки
-        if (flag_open_editing) {
+        if (flag_open_editing === true) {
             localStorage.setItem('new_plan_editing', 'true');
             $('.plan_settings').trigger('click');
         }
@@ -209,10 +215,11 @@ function createPlan($plus_button) {
                 setTimeout(function () {
                     // навешиваем возможность переключения
                     $new_plan_li_a.click(function () {
-                        switchPlan($(this), true);
+                        switchPlan($(this));
                     });
                     // переключаемся на него, иммитируя клик
-                    $new_plan_li_a.trigger('click');
+                    switchPlan($new_plan_li_a, true);
+                    // $new_plan_li_a.trigger('click');
                 }, 600);
                 return resolve();
             },

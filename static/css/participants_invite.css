@@ -141,5 +141,8 @@ textarea:-ms-input-placeholder {
 
   .settings_btns_content.text-center .btn-back.btn, .settings_btns_content.text-center .btn-okay.btn {
     width: 120px; } }
+.info_invite_msg {
+  margin-top: 20px;
+  margin-bottom: 0px; }
 
 /*# sourceMappingURL=participants_invite.css.map */

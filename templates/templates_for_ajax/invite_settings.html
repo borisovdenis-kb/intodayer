@@ -15,7 +15,8 @@
                 <div class="input_outer text-center">
                     <div class="left_input_margin"></div>
                     <input type="email" class="invite_input btn-lg"
-                           placeholder="Input email for invite" value="" validation=false old_val="" data-toggle="tooltip" data-placement="right" title="sdafasdf">
+                           placeholder="Input email for invite" value="" validation=false old_val=""
+                           data-toggle="tooltip" data-placement="right" title="sdafasdf">
                     <div class="right_input_content">
                         {% include 'components/loading_circle.html' %}
                     </div>
@@ -23,14 +24,14 @@
 
             </div>
         </div>
+        <div class="settings_btns_content text-center">
+            <button class="btn-back btn btn-lg btn-primary">Отмена</button>
+            <button id="invite_btn" class="disabled btn-okay btn btn-lg btn-success">Пригласить</button>
+        </div>
         <div class="invite_info_bottom">
             <p class="info_invite_msg text-center alert-warning" style="display: none">
                 Приглашения будут высланы для всех email, выделенных жёлтым
             </p>
-        </div>
-        <div class="settings_btns_content text-center">
-            <button class="btn-back btn btn-lg btn-primary">Отмена</button>
-            <button id="invite_btn" class="disabled btn-okay btn btn-lg btn-success">Пригласить</button>
         </div>
 
     </div>
