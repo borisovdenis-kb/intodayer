@@ -11,15 +11,17 @@ var participant_expected_block_html;
 $(document).ready(function () {
     setAdminParticipantsActions();
 
-    // setTimeout(function () {
-    //     pushExpectedParticipants();
-    // }, 200);
+    setTimeout(function () {
+        pushExpectedParticipants();
+    }, 200);
 });
+
 
 
 function pushExpectedParticipants() {
     if (!participant_expected_block_html) {
         participant_expected_block_html = $('.part_expected_block').html();
+        // alert(participant_expected_block_html);
         $('.part_expected_block').remove();
     }
     $('.part_block.invite').remove();
@@ -71,9 +73,10 @@ function deleteInviteParticipant($this_block) {
     return new Promise(function (resolve, reject) {
         let data = {
             plan_id: +$('.title_content').attr('plan_id'),
-            id: $this_block.attr('part_id'),
-            email: $this_block.find('.part_username span').text()
+            invitation_id: $this_block.attr('part_id'),
+            // email: $this_block.find('.part_username span').text()
         };
+        // console.log(data);
         $.ajax({
             url: '/cancel_invitation',
             method: 'POST',

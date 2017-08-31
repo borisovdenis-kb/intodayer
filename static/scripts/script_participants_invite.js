@@ -279,7 +279,7 @@ function sendEmailsToServer() {
         plan_id: $('.title_content').attr('plan_id'),
         email_list: email_list
     };
-
+    // console.log(email_list);
     $.ajax({
         url: '/invite_participants',
         method: 'POST',

@@ -47,7 +47,10 @@
     {% include "modal_frames/modal_slider_choose_ava_plan.html" %}
 {% endblock %}
 
-{% block others %}
+{% block components %}
+    {% include "components/participant_empty_block.html" %}
+{% endblock %}
+{% block modal_frames %}
     {% include "modal_frames/modal_confirm_role.html" %}
     {% include "modal_frames/modal_delete_participant.html" %}
     {% include "modal_frames/modal_elder_remove_plan.html" %}
