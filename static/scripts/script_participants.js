@@ -22,7 +22,7 @@ function pushExpectedParticipants() {
         participant_expected_block_html = $('.part_expected_block').html();
         $('.part_expected_block').remove();
     }
-    $('.part_block.invite');
+    $('.part_block.invite').remove();
     getExpectedParticipants().then(function (part_arr) {
         part_arr['expected_participants'].forEach(function (item, i) {
             pushPart(item);
@@ -71,13 +71,14 @@ function deleteInviteParticipant($this_block) {
     return new Promise(function (resolve, reject) {
         let data = {
             plan_id: +$('.title_content').attr('plan_id'),
-            id: $this_block.attr('part_id')
+            id: $this_block.attr('part_id'),
+            email: $this_block.find('.part_username span').text()
         };
         $.ajax({
-            url: '/get_expected_participants',
-            method: 'GET',
+            url: '/cancel_invitation',
+            method: 'POST',
             contentType: 'application/json',
-            data: data,
+            data: JSON.stringify(data),
             success: function (data) {
                 return resolve(data);
             },

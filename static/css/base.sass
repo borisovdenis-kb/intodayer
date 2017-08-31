@@ -52,13 +52,13 @@ body
     width: 100%
 
 %ava_styles
-  width: $avatar-size
-  height: $avatar-size
   cursor: default
   @include border-radius(4px)
 
 .ava_content
   @extend %ava_styles
+  width: $avatar-size
+  height: $avatar-size
   border: 1px solid rgba(230, 230, 230, 1)
   background: center no-repeat
   background-size: cover
@@ -66,6 +66,8 @@ body
   transition: 0.2s
 
 .ava_cover
+  width: $avatar-size
+  height: $avatar-size
   @extend %ava_styles
   position: absolute
   background: white
@@ -76,6 +78,7 @@ body
 
 .ava_cover_text
   @extend %ava_styles
+  height: inherit
   display: flex
   justify-content: center
   align-items: center

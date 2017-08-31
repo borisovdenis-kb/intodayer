@@ -80,8 +80,9 @@ class SliderModal {
     }
 }
 
-class SliderModalAva
-    extends SliderModal {
+
+class SliderModalImageUpload extends SliderModal {
+
     modalInit() {
         super.modalInit();
         this.$modal_footer = this.$modal_fade.find('.modal_slider_footer p');
@@ -96,24 +97,6 @@ class SliderModalAva
         this.setModalListeners();
     }
 
-    setModalListeners() {
-        super.setModalListeners();
-        let self = this;
-
-        this.$send_btn.unbind();
-        this.$send_btn.click(function () {
-            self.sendFile(
-                '#id_image_file',
-                '/upload_plan_avatar',
-                $('.ava_content p').text(),
-                '.ava_content'
-            );
-        });
-        this.$input_file_field.unbind();
-        this.$input_file_field.on('change', function () {
-            self.getFileName();
-        });
-    }
 
     getFileName() {
         /*
@@ -141,67 +124,127 @@ class SliderModalAva
          *  address: /upload_user_avatar или /upload_plan_avatar
          *  update_avatar: элемент, в котором нужно обновить background-image
          */
-        let allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-        let currentType = document.getElementById('id_image_file').files[0].type;
-        let maxFileSizeByte = 2 * 1024 * 1024;
+        var self = this;
+        return new Promise(function (resolve, reject) {
+            let allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+            let currentType = document.getElementById('id_image_file').files[0].type;
+            let maxFileSizeByte = 2 * 1024 * 1024;
+
+
+            // проверяем, что файл - изображение
+            if (allowedTypes.indexOf(currentType) !== -1) {
+                // проверяем, что размер файла <= 2 Мб
+                if (getFileSize('#id_image_file') <= maxFileSizeByte) {
+                    let data = new FormData;
+                    let get_ava_data = {plan_id: $(update_avatar).find('p').text()};
+
+                    data.append('avatar', $(form).prop('files')[0]);
+                    data.append('plan_id', plan_id);
+
+                    $.ajax({
+                        url: address,
+                        data: data,
+                        type: 'POST',
+                        processData: false,
+                        contentType: false,
+                        success: function () {
+                            return resolve(get_ava_data, update_avatar);
+                        },
+                        error: function () {
+                            return reject();
+                        }
+                    });
+                } else {
+                    self.$upload_btn.show();
+                    self.$send_btn.hide();
+                    self.$modal_footer.css({'color': '#FF6068'});
+                    self.$modal_footer.text('Разрешено загружать файлы размером не больше 2 Мб!');
+                }
+            } else {
+                self.$upload_btn.show();
+                self.$send_btn.hide();
+                self.$modal_footer.css({'color': '#FF6068'});
+                self.$modal_footer.text('Изображение можно загрузить в формате jpg, png или gif.');
+            }
+        });
+
+    }
+}
+class SliderModalAva extends SliderModalImageUpload {
+    setModalListeners() {
+        super.setModalListeners();
         let self = this;
 
-        // проверяем, что файл - изображение
-        if (allowedTypes.indexOf(currentType) !== -1) {
-            // проверяем, что размер файла <= 2 Мб
-            if (getFileSize('#id_image_file') <= maxFileSizeByte) {
-                let data = new FormData;
-                let get_ava_data = {plan_id: $(update_avatar).find('p').text()};
-
-                data.append('avatar', $(form).prop('files')[0]);
-                data.append('plan_id', plan_id);
-
-                $.ajax({
-                    url: address,
-                    data: data,
-                    type: 'POST',
-                    processData: false,
-                    contentType: false,
-                    success: function () {
-                        $.getJSON('/get_avatar', get_ava_data, function (data) {
-                            $(update_avatar).css({'background-image': 'url(' + data.plan_avatar_url + ')'})
-                        });
-                        self.hideModal();
-                    }
+        this.$send_btn.unbind();
+        this.$send_btn.click(function () {
+            self.sendFile(
+                '#id_image_file',
+                '/upload_plan_avatar',
+                $('.title_content').attr('plan_id'),
+                '.ava_content'
+            ).then(function (get_ava_data) {
+                // console.log(get_ava_data);
+                $.getJSON('/get_avatar', get_ava_data, function (data) {
+                    $('.ava_content').css({'background-image': 'url(' + data.plan_avatar_url + ')'})
+                    self.hideModal();
                 });
-            } else {
-                this.$upload_btn.show();
-                this.$send_btn.hide();
-                this.$modal_footer.css({'color': '#FF6068'});
-                this.$modal_footer.text('Разрешено загружать файлы размером не больше 2 Мб!');
-            }
-        } else {
-            this.$upload_btn.show();
-            this.$send_btn.hide();
-            this.$modal_footer.css({'color': '#FF6068'});
-            this.$modal_footer.text('Изображение можно загрузить в формате jpg, png или gif.');
-        }
+
+            });
+        });
+        this.$input_file_field.unbind();
+        this.$input_file_field.on('change', function () {
+            self.getFileName();
+        });
+    }
+
+}
+
+class SliderModalAvaProfile extends SliderModalImageUpload {
+    setModalListeners() {
+        super.setModalListeners();
+        let self = this;
+
+        this.$send_btn.unbind();
+        this.$send_btn.click(function () {
+            self.sendFile(
+                '#id_image_file',
+                '/upload_user_avatar',
+                $('.ava_content p').text(),
+                '.ava_content'
+            ).then(function (get_ava_data) {
+                $.getJSON('/get_avatar', get_ava_data, function (data) {
+                    $('.ava_content').css({'background-image': 'url(' + data.plan_avatar_url + ')'})
+                });
+                self.hideModal();
+            });
+        });
+        this.$input_file_field.unbind();
+        this.$input_file_field.on('change', function () {
+            self.getFileName();
+        });
     }
 }
 
-
 class SliderModalShare extends SliderModal {
-    modalInit(){
+    modalInit() {
         super.modalInit();
         this.text_share = this.$modal_body.find('.text_share');
 
     }
+
     showModal() {
         super.showModal();
         super.setModalListeners();
     }
-    setModalListeners(){
+
+    setModalListeners() {
         super.setModalListeners();
 
     }
-    hideModal(){
+
+    hideModal() {
         super.hideModal();
-        this.text_share.fadeTo(300,0);
+        this.text_share.fadeTo(300, 0);
     }
 
 }

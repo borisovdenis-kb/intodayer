@@ -4,9 +4,11 @@
 
 
 var password_modal;
+var modal_ava_profile;
 $(document).ready(function () {
     saveInputs();
     password_modal = new ModalPasswordOldPass('#modal_password_old');
+    modal_ava_profile = new SliderModalAvaProfile('#modal_ava_profile');
 
     $('.pr_content_title button').unbind();
     $('.pr_content_title button').on('focus click', function () {
@@ -26,6 +28,9 @@ $(document).ready(function () {
     $('.pr_pass_btn').unbind();
     $('.pr_pass_btn').click(function () {
         password_modal.showModal();
+    });
+    $('.upload_ava').click(function () {
+        modal_ava_profile.showModal();
     });
 });
 

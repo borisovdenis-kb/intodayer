@@ -38,8 +38,6 @@
   width: 100%
 
 
-
-
 input
   &#first_name
     @extend %input_styles
@@ -50,16 +48,18 @@ input
     @extend %input_styles
     margin:
       top: 4px
-      bottom: 0px
+      bottom: 0
 
-
-
-
+$top-content-height: 140px
+$ava-size: $top-content-height
+.ava_cover
+  width: $ava-size
+  height: $ava-size
 
 .pr_title_content
   //width: calc(#{$profile-left-content} + 50px)
   width: 100%
-  height: 140px
+  height: $top-content-height
   text-align: center
   @extend %block_style
   @include set-flex(center)

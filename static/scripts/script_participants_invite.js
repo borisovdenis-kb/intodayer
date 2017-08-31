@@ -287,6 +287,8 @@ function sendEmailsToServer() {
         data: JSON.stringify(data),
         success: function () {
             success_frame_animate();
+            pushExpectedParticipants();
+
             $('.part_settings').trigger('click');
         },
         error: function () {
