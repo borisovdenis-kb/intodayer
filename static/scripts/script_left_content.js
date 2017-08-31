@@ -8,7 +8,7 @@ $(document).ready(function () {
 function setListenersLeftContent() {
     $('.plan_list li a').unbind();
     $('.plan_list li a').click(function () {
-        switchPlan($(this));
+        switchPlan($(this), false);
     });
     $('.create_plan li a').unbind();
     $('.create_plan li a').click(function () {

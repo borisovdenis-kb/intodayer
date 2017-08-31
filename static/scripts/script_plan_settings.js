@@ -91,9 +91,11 @@ function activeSettings() {
         $('#remove_plan').unbind();
 
         if (localStorage.getItem('new_plan_editing') === 'true') {
+
             saveBtnSettingActive();
         }
         localStorage.removeItem('new_plan_editing');
+
 
 
         // если пользователь староста или админ
@@ -103,6 +105,10 @@ function activeSettings() {
 
             // работает, когда изменяем дату
             $datepicker.on('dp.change', function () {
+                validateSettingsInput();
+            });
+
+            $title_input.on('input', function () {
                 validateSettingsInput();
             });
 
