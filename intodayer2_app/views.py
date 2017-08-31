@@ -314,7 +314,7 @@ def login_view(request, message_type):
             else:
                 return HttpResponse('User is not active.')
         else:
-            return HttpResponseRedirect("/login/auth_error")
+            return HttpResponseRedirect("/login/message/auth_error")
     else:
         return render_to_response('login.html', context)
 

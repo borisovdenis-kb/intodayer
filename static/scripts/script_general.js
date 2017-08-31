@@ -6,10 +6,10 @@ $(document).ready(function () {
             url: '/send_activation_link',
             type: 'POST',
             success: function () {
-                window.location = "/" + location.href.split("/")[3] + "/activation_link_sent";
+                window.location = "/" + location.href.split("/")[3] + "/message/activation_link_sent";
             },
             error: function () {
-                window.location = "/" + location.href.split("/")[3] + "/to_many_requests";
+                window.location = "/" + location.href.split("/")[3] + "/message/to_many_requests";
             }
         });
     });
