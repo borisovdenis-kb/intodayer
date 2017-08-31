@@ -35,6 +35,12 @@ function pushPart(item_part) {
     $('.part_content').append($this_block);
     let $this_name_content = $this_block.find('.part_username span');
     $this_name_content.text(item_part['email']);
+    $this_block.attr('part_id', item_part['id']);
+    $this_block.find('.part_remove span').click(function () {
+        deleteInviteParticipant($this_block).then(function () {
+            deleteUserAnimate($this_block);
+        });
+    });
     $this_block.fadeIn(150);
 }
 
@@ -58,7 +64,29 @@ function getExpectedParticipants() {
             }
         });
     });
+}
 
+
+function deleteInviteParticipant($this_block) {
+    return new Promise(function (resolve, reject) {
+        let data = {
+            plan_id: +$('.title_content').attr('plan_id'),
+            id: $this_block.attr('part_id')
+        };
+        $.ajax({
+            url: '/get_expected_participants',
+            method: 'GET',
+            contentType: 'application/json',
+            data: data,
+            success: function (data) {
+                return resolve(data);
+            },
+            error: function () {
+                alert("Ошибка. Не удалось выполнить операцию. Обновите страницу");
+                return reject();
+            }
+        });
+    });
 }
 
 function setAdminParticipantsActions() {

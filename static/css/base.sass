@@ -278,6 +278,13 @@ input#title_edit_input
   background: white
   @include border-radius(4px)
   cursor: default
+  @include placeholder()
+    color: rgba(210,210,210, 1)
+    text-align: center
+    text-overflow: ellipsis
+    @include word-break-full()
+    @include border-radius(4px)
+
   ul
     display: flex
     min-height: 32px
@@ -299,9 +306,8 @@ input#title_edit_input
         padding-right: 0
         border-right: none
       a, textarea, input
-        @include word-break-full()
-        @include border-radius(4px)
         width: 100%
+        @include border-radius(4px)
         min-height: 32px
         text-align: center
         border: 2px solid rgba(100, 149, 237, 0.0)
@@ -324,29 +330,6 @@ input#title_edit_input
           cursor: auto
           border: 2px solid rgba(139, 29, 235, 0.4)
 
-//%placeholder_settings
-//  padding-top: 10px
-//  color: #b9b9b9
-//  text-align: center
-//  text-overflow: ellipsis
-//
-//textarea::-webkit-input-placeholder
-//  @extend %placeholder_settings
-//
-//textarea:-moz-placeholder
-//  @extend %placeholder_settings
-
-textarea::-webkit-input-placeholder
-  padding-top: 1px
-  color: #c3c3c3
-  text-align: center
-  text-overflow: ellipsis
-
-textarea:-moz-placeholder
-  padding-top: 1px
-  color: #c3c3c3
-  text-align: center
-  text-overflow: ellipsis
 
 .str_title
   background: rgba(103, 198, 97, 0.9)
