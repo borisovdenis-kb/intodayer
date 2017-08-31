@@ -1,17 +1,25 @@
 # -*- coding: utf-8 -*-
-
 import os
+import hmac
+import hashlib
 
-from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
-from datetime import datetime
+from datetime import datetime, timezone
+# from intodayer2.settings import DEBUG
+# # from extra.mailing import IntodayerMailing
+# from django.template.loader import get_template
 from django.contrib.auth.models import AbstractUser
+from django.core.exceptions import ObjectDoesNotExist
 from extra.validators import (
     validate_yn_filed, validate_not_empty_filed, validate_day_of_week_field,
     validate_role_field, validate_weeks_duration_field, validate_date_field,
     validate_time_field, validate_email_field, validate_parity_field,
     validate_telegram_chat_id_field, validate_phone_field
 )
+
+
+class ToManyRequests(Exception):
+    pass
 
 
 class ThereIsNoAction(Exception):
@@ -376,10 +384,34 @@ class UserMailingChannels(models.Model, UpdateMixin):
 class EmailActivation(models.Model, UpdateMixin):
     user = models.OneToOneField('CustomUser', models.DO_NOTHING, unique=True, blank=True)
     activation_key = models.TextField(max_length=36, blank=False)
-    date = models.DateField(auto_now=True)
+    date = models.DateTimeField(auto_now=True)
 
     class Meta:
         managed = True
+
+    @staticmethod
+    def bind_user_and_activation_key(user, activation_key):
+        try:
+            user_activation = EmailActivation.objects.get(user_id=user.id)
+        except ObjectDoesNotExist:
+            user_activation = EmailActivation.objects.create(user_id=user.id, activation_key=activation_key)
+        else:
+            now = datetime.now(timezone.utc)
+            minutes_passed = now - user_activation.date
+
+            if minutes_passed.seconds >= 60:
+                user_activation.update(**{"user_id": user.id, "activation_key": activation_key})
+            else:
+                raise ToManyRequests
+
+        return user_activation
+
+    @staticmethod
+    def generate_activation_key(email):
+        res = hmac.new(bytearray('signature', 'utf-8'), bytearray(email, 'utf-8'), hashlib.sha256)
+        activation_key = res.hexdigest()
+
+        return activation_key
 
 
 class CustomUser(AbstractUser, UpdateMixin):

@@ -3,26 +3,18 @@
 # Вставлять обязательно перед импортом моделей!!!
 import os
 import django
+from django.template.loader import get_template
+
+from extra.mailing import IntodayerMailing
 from intodayer2 import settings
-from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponseRedirect
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "intodayer2.settings")
 django.setup()
 # ---------------------------------------------------------------
 
-import hmac
-import hashlib
-from extra.mailing import IntodayerMailing
-from django.template.loader import get_template
-from intodayer2_app.models import EmailActivation
-
-
-def generate_activation_key(email):
-    res = hmac.new(bytearray('signature', 'utf-8'), bytearray(email, 'utf-8'), hashlib.sha256)
-    activation_key = res.hexdigest()
-
-    return activation_key
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import HttpResponseRedirect, HttpResponse
+from intodayer2_app.models import EmailActivation, CustomUser, ToManyRequests
 
 
 def send_activation_link(email, activation_key):
@@ -37,6 +29,25 @@ def send_activation_link(email, activation_key):
 
     mailing = IntodayerMailing(content=content, subject="Email activation", _type="text/html")
     mailing.send_via_email([email])
+
+
+def repeat_activation(request):
+    if request.user.is_authenticated():
+        user = CustomUser.objects.get(email=request.user.email)
+        activation_key = EmailActivation.generate_activation_key(user.email)
+
+        try:
+            new_user_activation = EmailActivation.bind_user_and_activation_key(user, activation_key)
+        except ToManyRequests:
+            return HttpResponse(status=403)
+        else:
+            send_activation_link(
+                new_user_activation.user.email,
+                new_user_activation.activation_key
+            )
+            return HttpResponse(status=200)
+    else:
+        return HttpResponse(status=401)
 
 
 def activate_email(request, activation_key):

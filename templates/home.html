@@ -5,20 +5,6 @@
     <link rel="stylesheet" type="text/css" href={% static "css/base.css" %}>
 {% endblock %}
 
-{% block center_content_wide %}
-    {% if not user.is_activated %}
-        <p class="text-center alert-warning btn-lg">
-            Подтвердите регистрацию. Вам на почту было отпралено сообщение с ссылкой для подтверждения.
-            </br>Если сообщение не было доставлено<button style="color: #4365ff;">выслать сообщение еще раз</button>.
-        </p>
-    {% endif %}
-
-    {% if success_activation %}
-        <p class="text-center alert-success btn-lg">
-            Подтверждение регистрации прошло успешно!
-        </p>
-    {% endif %}
-{% endblock %}
 
 {% block left_content %}
     {% include "content_pages/left_content.html" %}

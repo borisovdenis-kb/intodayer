@@ -1,16 +1,7 @@
 # -*- coding: utf-8 -*-
 
-import json
-# ---------------------------------------------------------------
-# Для того, что бы тестировать django файлы
-# Вставлять обязательно перед импортом моделей!!!
 import os
-import django
-from django.template.loader import get_template
-
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "intodayer2.settings")
-django.setup()
-# ---------------------------------------------------------------
+import json
 import sendgrid
 from uuid import uuid4
 from decouple import config
@@ -20,6 +11,7 @@ from intodayer2 import settings
 from urllib.error import URLError
 from django.db.utils import IntegrityError
 from django.core.files.base import ContentFile
+from django.template.loader import get_template
 from python_http_client.exceptions import BadRequestsError
 from intodayer2_app.models import UserMailingChannels, DivToPng, CustomUser, Invitations
 

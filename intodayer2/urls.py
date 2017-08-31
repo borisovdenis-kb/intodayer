@@ -33,16 +33,20 @@ urlpatterns = [
     url(r'^$', views.welcome_view),
     url(r'^home/$', views.home_view, {'message_type': None}),
     url(r'^home/(\w+)$', views.home_view),
-    url(r'^plan/$', views.plan_view),
+    url(r'^plan/$', views.plan_view, {'message_type': None}),
+    url(r'^plan/(\w+)$', views.plan_view),
     url(r'^login/$', views.login_view, {'message_type': None}),
     url(r'^login/(\w+)$', views.login_view),
     url(r'^logout/$', views.logout_view),
-    url(r'^account/$', views.profile_view),
+    url(r'^account/$', views.profile_view, {'message_type': None}),
+    url(r'^account/(\w+)$', views.profile_view),
     url(r'^statistics/$', views.statistics_view),
     url(r'^registration/$', views.registration_view, {'message_type': None}),
     url(r'^registration/(\w+)$', views.registration_view),
-    url(r'^participants/$', views.participant_view),
-    url(r'^about_service/$', views.about_service_view),
+    url(r'^participants/$', views.participant_view, {'message_type': None}),
+    url(r'^participants/(\w+)$', views.participant_view),
+    url(r'^about_service/$', views.about_service_view, {'message_type': None}),
+    url(r'^about_service/(\w+)$', views.about_service_view),
     url(r'check_email_unique', views.check_email_unique),
 
     # для ajax запросов
@@ -91,6 +95,7 @@ urlpatterns = [
 
     # API регистрации
     url(r'^activate/([0-9a-f]{64})', registrationApi.activate_email),
+    url(r'^send_activation_link', registrationApi.repeat_activation)
 ]
 
 

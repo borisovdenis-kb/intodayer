@@ -2,6 +2,8 @@
 
 import json
 from datetime import datetime
+
+from api.registrationApi import send_activation_link
 from extra.stripes_api import Stripes
 from django.db.utils import IntegrityError
 from django.contrib.auth.models import auth
@@ -9,7 +11,6 @@ from django.contrib.auth import get_user_model
 from django.shortcuts import render_to_response
 from django.contrib.auth.backends import ModelBackend
 from intodayer2_app.forms import CustomUserCreationForm
-from api.registrationApi import generate_activation_key, send_activation_link
 
 # from apis.planApi import get_user_plan_rights
 
@@ -342,7 +343,7 @@ def registration_view(request, message_type):
             UserMailingChannels.objects.create(user_id=new_user.id, telegram_yn='n', email_yn='n')
 
             # привязывает код активации к данному пользователю
-            activation_key = generate_activation_key(new_user.email)
+            activation_key = EmailActivation.generate_activation_key(new_user.email)
             EmailActivation.objects.create(user_id=new_user.id, activation_key=activation_key)
 
             # отправляем пользователю письмо с сылкой для подтверждения
@@ -371,6 +372,8 @@ def home_view(request, message_type):
     if request.user.is_authenticated():
         context = {
             'success_activation': True if message_type == 'success_activation' else False,
+            'to_many_requests': True if message_type == 'to_many_requests' else False,
+            'activation_link_sent': True if message_type == 'activation_link_sent' else False
         }
         context.update(get_this_user(request))
         context.update(get_all_plans(request))
@@ -396,14 +399,18 @@ def get_user_plan_rights(user, plan_id):
     return context
 
 
-def plan_view(request):
+def plan_view(request, message_type):
     """
        Функция, которая выводит таблицу редактирования текущего (выбранного) расписания.
        На странице имеем доступ для всех дней недели и для всего расписания (всех диапазонов) в целом.
        Поэтому, функция выводит всю информацию расписания на весь год, разбитых по дням недели.
     """
     if request.user.is_authenticated():
-        context = dict()
+        context = {
+            'success_activation': True if message_type == 'success_activation' else False,
+            'to_many_requests': True if message_type == 'to_many_requests' else False,
+            'activation_link_sent': True if message_type == 'activation_link_sent' else False
+        }
         context.update(get_this_user(request))
         context.update(get_all_plans(request))
         context.update(get_cur_plan(request))
@@ -477,9 +484,13 @@ def get_user_participant_rights(user, plan_id):
     return context
 
 
-def participant_view(request):
+def participant_view(request, message_type):
     if request.user.is_authenticated():
-        context = dict()
+        context = {
+            'success_activation': True if message_type == 'success_activation' else False,
+            'to_many_requests': True if message_type == 'to_many_requests' else False,
+            'activation_link_sent': True if message_type == 'activation_link_sent' else False
+        }
         context.update(get_this_user(request))
         context.update(get_all_plans(request))
         context.update(get_cur_plan(request))
@@ -496,22 +507,31 @@ def participant_view(request):
         return HttpResponseRedirect("/login")
 
 
-def about_service_view(request):
+def about_service_view(request, message_type):
     if request.user.is_authenticated():
+        context = {
+            'success_activation': True if message_type == 'success_activation' else False,
+            'to_many_requests': True if message_type == 'to_many_requests' else False,
+            'activation_link_sent': True if message_type == 'activation_link_sent' else False
+        }
         user = CustomUser.objects.get(email=request.user.email)
-        context = {'user': user}
+        context['user'] = user
 
         return render_to_response('about_service.html', context)
     else:
         return HttpResponseRedirect("/login")
 
 
-def profile_view(request):
+def profile_view(request, message_type):
     if request.user.is_authenticated():
+        context = {
+            'success_activation': True if message_type == 'success_activation' else False,
+            'to_many_requests': True if message_type == 'to_many_requests' else False,
+            'activation_link_sent': True if message_type == 'activation_link_sent' else False
+        }
         user = CustomUser.objects.get(email=request.user.email)
         user_plans = UserPlans.objects.select_related().filter(user_id=user.id)
         user_channels = UserMailingChannels.objects.get(user_id=user.id)
-        context = dict()
 
         context['user'] = user
         context['user_plans'] = user_plans

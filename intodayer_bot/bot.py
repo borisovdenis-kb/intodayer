@@ -2,8 +2,8 @@
 
 # from intodayer_bot.utils import *
 # from intodayer_bot.work_with_db import *
-import telebot
 import json
+import telebot
 from intodayer_bot import config
 from intodayer_bot.work_with_db import MySQLer
 from intodayer_bot.utils import (

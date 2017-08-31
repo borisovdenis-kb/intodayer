@@ -68,7 +68,25 @@
     {% if not user.is_activated %}
         <p class="text-center alert-warning btn-lg">
             Подтвердите регистрацию. Вам на почту было отпралено сообщение с ссылкой для подтверждения.
-            </br>Если сообщение не было доставлено<button style="color: #4365ff;">выслать сообщение еще раз</button>.
+            </br>Если сообщение не было доставлено<button class="repeat_activation_btn" style="color: #4365ff;">выслать сообщение еще раз</button>.
+        </p>
+    {% endif %}
+
+    {% if to_many_requests %}
+        <p class="text-center alert-danger btn-lg">
+            Повторно выслать сообщение с сcылкой для активации можно не чаще, чем раз в минуту!
+        </p>
+    {% endif %}
+
+    {% if success_activation %}
+        <p class="text-center alert-success btn-lg">
+            Подтверждение регистрации прошло успешно!
+        </p>
+    {% endif %}
+
+    {% if activation_link_sent %}
+        <p class="text-center alert-success btn-lg">
+            Сообщение с сылкой для подтверждения успешно выслано Вам на почту.
         </p>
     {% endif %}
 {% endblock %}

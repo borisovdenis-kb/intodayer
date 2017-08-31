@@ -1,5 +1,18 @@
 $(document).ready(function () {
     setInvitationsListeners();
+    $(".repeat_activation_btn").click(function () {
+        console.log(('CLICKED'));
+        $.ajax({
+            url: '/send_activation_link',
+            type: 'POST',
+            success: function () {
+                window.location = "/" + location.href.split("/")[3] + "/activation_link_sent";
+            },
+            error: function () {
+                window.location = "/" + location.href.split("/")[3] + "/to_many_requests";
+            }
+        });
+    });
 });
 
 
