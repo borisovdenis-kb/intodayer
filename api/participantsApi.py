@@ -116,7 +116,7 @@ def cancel_invitation(request):
 
         if action_is_available:
             try:
-                Invitations.objects.get(plan_id=data['plan_id'], email=data['email']).delete()
+                Invitations.objects.get(id=data['invitation_id']).delete()
             except ObjectDoesNotExist:
                 return HttpResponse(status=400)
         else:
@@ -162,7 +162,6 @@ def get_expected_participants(request):
 
         --> For more detailed documentation see Postman.
     """
-    # print(request.GET)
     if request.user.is_authenticated():
         user = CustomUser.objects.get(email=request.user.email)
         data = request.GET
@@ -175,7 +174,7 @@ def get_expected_participants(request):
             )
 
             expected_participants = list(
-                Invitations.objects.filter(plan_id=data['plan_id']).values('email')
+                Invitations.objects.filter(plan_id=data['plan_id']).values('id', 'email')
             )
         except ValueError:
             return HttpResponse(status=400)
