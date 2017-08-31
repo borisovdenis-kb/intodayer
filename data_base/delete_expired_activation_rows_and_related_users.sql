@@ -1,6 +1,6 @@
 CREATE DEFINER=`denisko`@`localhost` PROCEDURE `delete_expired_activation_rows_and_related_users`()
 BEGIN
-	DECLARE done INT DEFAULT 0;
+	  DECLARE done INT DEFAULT 0;
     DECLARE usrid, eaid INT;
     DECLARE eadate DATE;
     DECLARE cur CURSOR FOR SELECT id, user_id, date FROM intodayer.intodayer2_app_emailactivation;
@@ -10,8 +10,8 @@ BEGIN
     REPEAT
 		FETCH cur INTO eaid, usrid, eadate;
         IF TO_DAYS(NOW()) - TO_DAYS(eadate) >= 2 THEN
-			DELETE FROM intodayer.intodayer2_app_customuser WHERE id = usrid;
-		END IF;
-	UNTIL done END REPEAT;
+			      DELETE FROM intodayer.intodayer2_app_customuser WHERE id = usrid;
+		    END IF;
+	  UNTIL done END REPEAT;
     CLOSE cur;
 END
