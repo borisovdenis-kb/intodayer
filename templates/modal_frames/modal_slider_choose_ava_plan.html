@@ -1,0 +1,32 @@
+{% extends "modal_frames/base_slide_modal.html" %}
+{% load staticfiles %}
+
+{% block modal_slider_header %}
+    <p class="choose_avatar_text">
+        Загрузка аватарки расписания
+    </p>
+{% endblock %}
+
+{% block modal_slider_id %}
+    id="modal_ava"
+{% endblock %}
+
+
+{% block modal_slider_footer %}
+    <p>Изображение можно загрузить в формате jpg, png или gif.</p>
+{% endblock %}
+
+{% block modal_slider_body %}
+    <label class="btn btn-default send_button btn-lg">
+        Upload
+    </label>
+
+    <form action="" method="post" enctype="multipart/form-data" id="send_avatar_form">
+        <label class="btn btn-default btn-lg file_upload">
+            Browse <input type="file" hidden id="id_image_file">
+        </label>
+
+    </form>
+    <div class="file_info">
+    </div>
+{% endblock %}

@@ -123,6 +123,18 @@ input::-moz-placeholder {
 input:-ms-input-placeholder {
   color: gainsboro; }
 
+textarea::-webkit-input-placeholder {
+  color: gainsboro; }
+
+textarea:-moz-placeholder {
+  color: gainsboro; }
+
+textarea::-moz-placeholder {
+  color: gainsboro; }
+
+textarea:-ms-input-placeholder {
+  color: gainsboro; }
+
 @media (max-width: 768px) {
   .invite_by_mail input, .invite_by_link input {
     width: 400px; }

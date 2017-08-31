@@ -90,7 +90,7 @@ function activeSettings() {
         $title_input.attr('old_value', $title_input.val());
         $('#remove_plan').unbind();
 
-        if (localStorage.getItem('new_plan_editing') == 'true') {
+        if (localStorage.getItem('new_plan_editing') === 'true') {
             saveBtnSettingActive();
         }
         localStorage.removeItem('new_plan_editing');
@@ -101,9 +101,6 @@ function activeSettings() {
             // Установка title стилей и обработчиков событий
             setOldValuesInput();
 
-            $('.settings_input').on('input', function () {
-                validateSettingsInput();
-            });
             // работает, когда изменяем дату
             $datepicker.on('dp.change', function () {
                 validateSettingsInput();

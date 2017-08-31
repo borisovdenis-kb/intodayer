@@ -12,7 +12,7 @@
 
         <div class="plan_title" id="plan_title" {% if user_has_edit_plan %}user_has_edit_plan="yes"{% endif %} user_role="{{ user_role }}">
             <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
-                <input class="settings_input" id='title_edit_input' disabled="disabled" type="text" value="{{ cur_plan.plan.title }}">
+                <input class="settings_input" id='title_edit_input' disabled="disabled" type="text" value="{{ cur_plan.plan.title }}" placeholder="Имя расписания">
             </div>
             <div id="count_title">{{ cur_plan.plan.count_of_users }}</div>
         </div>

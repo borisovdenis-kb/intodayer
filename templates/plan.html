@@ -15,9 +15,6 @@
     <link rel="stylesheet" type="text/css"
             {#          плагины#}
           href={% static "plug-ins/bootstrap-datetimepicker-master/build/css/bootstrap-datetimepicker.css" %}>
-    <link rel="stylesheet" type="text/css" href={% static "css/components/base_slider_modal.css" %}>
-    <link rel="stylesheet" type="text/css" href={% static "css/components/slider_modal_share.css" %}>
-    <link rel="stylesheet" type="text/css" href={% static "css/components/slider_modal_ava.css" %}>
 {% endblock %}
 
 {% block scripts_top %}
@@ -67,7 +64,7 @@
 
 
 {% block modal_frames %}
-    {% include "modal_frames/modal_slider_choose_ava.html" %}
+    {% include "modal_frames/modal_slider_choose_ava_plan.html" %}
     {% include "modal_frames/modal_slider_share_plan.html" %}
 {% endblock %}
 

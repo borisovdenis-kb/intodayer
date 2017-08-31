@@ -366,4 +366,28 @@ button {
 .error_input_validate {
   background-color: #f2dede; }
 
+input::-webkit-input-placeholder {
+  color: #dce6e6; }
+
+input:-moz-placeholder {
+  color: #dce6e6; }
+
+input::-moz-placeholder {
+  color: #dce6e6; }
+
+input:-ms-input-placeholder {
+  color: #dce6e6; }
+
+textarea::-webkit-input-placeholder {
+  color: #dce6e6; }
+
+textarea:-moz-placeholder {
+  color: #dce6e6; }
+
+textarea::-moz-placeholder {
+  color: #dce6e6; }
+
+textarea:-ms-input-placeholder {
+  color: #dce6e6; }
+
 /*# sourceMappingURL=general_style.css.map */

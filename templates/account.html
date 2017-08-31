@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block scripts_bottom %}
-{#    <script type="text/javascript" src={% static "library/jquery.maskedinput.min.js" %}></script>#}
+    {#    <script type="text/javascript" src={% static "library/jquery.maskedinput.min.js" %}></script>#}
     <script type="text/javascript" src={% static "scripts/script_account.js" %}></script>
 {% endblock %}
 
@@ -23,6 +23,11 @@
                 <span>Кол-во расписаний: {{ user_plans|length }}</span>
             </div>
             <div class="pr_ava_content">
+                <div class="ava_cover">
+                    <div class="ava_cover_text">
+                        <p class="upload_ava">Загрузить фото</p>
+                    </div>
+                </div>
                 <div class="pr_ava_img"
                      style="background-image: url({{ user.get_avatar_url }})"></div>
             </div>
@@ -48,7 +53,7 @@
 
                     <input id="pr_send_telegram" type="checkbox"
                             {% if user_channels.telegram_yn == 'y' %}
-                                checked="checked"
+                           checked="checked"
                             {% endif %}
                     >
                     <label class="share"
@@ -57,9 +62,9 @@
                         Bot</label><br>
 
                     <input id="pr_send_email" type="checkbox"
-                           {% if user_channels.email_yn == 'y' %}
-                                checked="checked"
-                           {% endif %}
+                            {% if user_channels.email_yn == 'y' %}
+                           checked="checked"
+                            {% endif %}
                     >
                     <label class="share" for="pr_send_email">
                         Почта
@@ -83,8 +88,10 @@
 
                 <div class="row">
                     <div class="settings_btns_content text-center col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <input type="button" id="cancel" class="disabled btn-back btn btn-lg btn-primary" value="Отменить">
-                        <input type="button" id="save" class="disabled btn-okay btn btn-lg btn-success" value="Сохранить">
+                        <input type="button" id="cancel" class="disabled btn-back btn btn-lg btn-primary"
+                               value="Отменить">
+                        <input type="button" id="save" class="disabled btn-okay btn btn-lg btn-success"
+                               value="Сохранить">
                     </div>
                 </div>
             </div>
@@ -114,7 +121,8 @@
                             <div style="position: relative">
                                 <div class="pr_color_type color_elder"></div>
                                 <div class="pr_img_title">{{ plan.plan.title }}</div>
-                                <div class="pr_img_plan" style="background-image: url({{ plan.plan.get_avatar_url }})"></div>
+                                <div class="pr_img_plan"
+                                     style="background-image: url({{ plan.plan.get_avatar_url }})"></div>
                             </div>
                         </div>
                     {% endfor %}
@@ -124,8 +132,13 @@
     </div>
 {% endblock %}
 
-{% block others %}
+
+{% block modal_frames %}
     {% include "modal_frames/modal_pass_old.html" %}
     {% include "modal_frames/modal_pass_new.html" %}
     {% include 'modal_frames/modal_pass_new_confirm.html' %}
+    {% include 'modal_frames/modal_slider_choose_ava_profile.html' %}
 {% endblock %}
+{#{% block others %}#}
+{#    #}
+{#{% endblock %}#}
