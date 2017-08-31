@@ -238,6 +238,7 @@ var timer_check_email;
 var $inline_circle_loader_email = $('.email_content').find('.inline_circle_loader');
 function setValidateEmail($email_input) {
     if (validateEmail($email_input.val())) {
+        $reg_email.popover('hide');
         clearTimeout(timer_check_email);
         $inline_circle_loader_email.show();
         timer_check_email = setTimeout(() => {

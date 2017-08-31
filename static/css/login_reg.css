@@ -125,5 +125,8 @@ html, body {
 @media only screen and (max-device-width: 1024px) and (orientation: landscape) {
   .panel_auth {
     width: 400px; } }
+.inline_circle_loader {
+  top: 9px;
+  left: 15px; }
 
 /*# sourceMappingURL=login_reg.css.map */
