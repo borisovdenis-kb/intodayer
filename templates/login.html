@@ -12,6 +12,11 @@
 {% endblock %}
 
 {% block center_content_wide %}
+    {% if success_activation %}
+        <p class="text-center alert-success btn-lg">
+            Подтверждение регистрации прошло успешно!
+        </p>
+    {% endif %}
 {% endblock %}
 
 {% block content_page %}

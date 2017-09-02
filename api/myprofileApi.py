@@ -6,7 +6,7 @@ from extra.validators import validate_password
 from django.shortcuts import render_to_response
 from django.contrib.auth.hashers import check_password, make_password
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
-from intodayer2_app.models import CustomUser, UserMailingChannels, UserPlans
+from intodayer2_app.models import CustomUser, UserMailingChannels, UserPlans, EmailActivation
 
 
 def update_user_info(request):
@@ -109,5 +109,28 @@ def get_user_plans(request):
             return HttpResponse(status=400)
 
         return render_to_response('templates_for_ajax/user_plans.html', context, status=200)
+    else:
+        return HttpResponse(status=401)
+
+
+def delete_account(request):
+    """
+        This endpoint to delete user's account with all related information.
+
+        --> For more detailed documentation see Postman.
+    """
+    if request.user.is_authenticated():
+        user = CustomUser.objects.get(email=request.user.email)
+
+        try:
+            user_activation = EmailActivation.objects.get(user_id=user.id)
+        except ObjectDoesNotExist:
+            pass
+        else:
+            user_activation.delete()
+
+        user.delete()
+
+        return HttpResponse(status=200)
     else:
         return HttpResponse(status=401)

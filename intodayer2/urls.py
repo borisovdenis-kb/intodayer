@@ -88,6 +88,7 @@ urlpatterns = [
     url(r'^make_new_password', myprofileApi.make_new_password),
     url(r'^upload_user_avatar', myprofileApi.upload_user_avatar),
     url(r'^check_old_password', myprofileApi.check_old_password),
+    url(r'^account/delete', myprofileApi.delete_account),
 
     # API приглашений
     url(r'^invitation/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})', invitationsApi.verify_invitation),

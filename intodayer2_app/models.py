@@ -430,6 +430,7 @@ class CustomUser(AbstractUser, UpdateMixin):
     phone = models.CharField(max_length=12, blank=True, validators=[validate_phone_field])
     # id чата с ботом в телеграме
     chat_id = models.CharField(max_length=15, blank=True, validators=[validate_telegram_chat_id_field])
+    is_activated = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name']
@@ -565,13 +566,13 @@ class CustomUser(AbstractUser, UpdateMixin):
         else:
             raise InvalidActionValue(InvalidActionValue.error_message)
 
-    def is_activated(self):
-        try:
-            EmailActivation.objects.get(user_id=self.id)
-        except ObjectDoesNotExist:
-            return True
-        else:
-            return False
+    # def is_activated(self):
+    #     try:
+    #         EmailActivation.objects.get(user_id=self.id)
+    #     except ObjectDoesNotExist:
+    #         return True
+    #     else:
+    #         return False
 
     def __str__(self):
         return '%s %s %s' % (

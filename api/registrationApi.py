@@ -54,10 +54,16 @@ def activate_email(request, activation_key):
     try:
         user_activation = EmailActivation.objects.get(activation_key=activation_key)
     except ObjectDoesNotExist:
-        return HttpResponseRedirect("/login")
+        return HttpResponseRedirect("/home")
     else:
-        user_activation.delete()
         if not user_activation.user_id:
             return HttpResponseRedirect("/registration/message/activation_is_expire")
         else:
-            return HttpResponseRedirect("/home/message/success_activation")
+            user = CustomUser.objects.get(id=user_activation.user_id)
+            user.update(**{'is_activated': True})
+
+            user_activation.delete()
+            if request.user.is_authenticated():
+                return HttpResponseRedirect("/home/message/success_activation")
+            else:
+                return HttpResponseRedirect("/login/message/success_activation")

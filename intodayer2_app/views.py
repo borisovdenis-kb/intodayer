@@ -294,6 +294,7 @@ def get_this_user(request):
 def login_view(request, message_type):
     context = {
         'auth_error': True if message_type == 'auth_error' else False,
+        'success_activation': True if message_type == 'success_activation' else False
     }
 
     if request.method == 'POST':
