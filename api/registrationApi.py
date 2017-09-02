@@ -3,7 +3,6 @@
 # Вставлять обязательно перед импортом моделей!!!
 import os
 import django
-from datetime import date
 from intodayer2 import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseRedirect
@@ -16,7 +15,7 @@ import hmac
 import hashlib
 from extra.mailing import IntodayerMailing
 from django.template.loader import get_template
-from intodayer2_app.models import EmailActivation, CustomUser
+from intodayer2_app.models import EmailActivation
 
 
 def generate_activation_key(email):
@@ -44,14 +43,10 @@ def activate_email(request, activation_key):
     try:
         user_activation = EmailActivation.objects.get(activation_key=activation_key)
     except ObjectDoesNotExist:
-        return HttpResponseRedirect("/login/activation_message")
-
-    today = date.today()
-    expire = today - user_activation.date
-
-    if expire.days <= settings.ACCOUNT_ACTIVATION_DAYS:
-        user_activation.delete()
-        return HttpResponseRedirect("/login/success_activation")
+        return HttpResponseRedirect("/login")
     else:
-        CustomUser.objects.get(id=user_activation.user_id).delete()
-        return HttpResponseRedirect("/login/activation_is_expire")
+        user_activation.delete()
+        if not user_activation.user_id:
+            return HttpResponseRedirect("/login/activation_is_expire")
+        else:
+            return HttpResponseRedirect("/login/success_activation")
