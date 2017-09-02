@@ -53,5 +53,11 @@ h2 {
 
 .in_txt {
     color: #8b1deb;
+}
 
+.donate_wrap {
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+    margin-top: 20px;
 }
