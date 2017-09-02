@@ -389,7 +389,7 @@ def home_view(request, message_type):
         return render_to_response('home.html', context)
 
     else:
-        return HttpResponseRedirect("/login")
+        return HttpResponseRedirect("/login", status=401)
 
 
 def get_user_plan_rights(user, plan_id):
@@ -429,7 +429,7 @@ def plan_view(request, message_type):
         return render_to_response('plan.html', context)
 
     else:
-        return HttpResponseRedirect("/login")
+        return HttpResponseRedirect("/login", status=401)
 
 
 def statistics_view(request):
@@ -456,7 +456,14 @@ def statistics_view(request):
         return render_to_response('statistics.html', {'data': json.loads(stripes_dict_json)})
 
     else:
-        return HttpResponseRedirect("/login")
+        return HttpResponseRedirect("/login", status=401)
+
+
+def thank_you_page_view(request):
+    if request.user.is_authenticated():
+        return render_to_response('thank_you_page.html')
+    else:
+        return HttpResponseRedirect("/login", status=401)
 
 
 def get_participants(plan):
@@ -505,7 +512,7 @@ def participant_view(request, message_type):
 
         return render_to_response('participants.html', context)
     else:
-        return HttpResponseRedirect("/login")
+        return HttpResponseRedirect("/login", status=401)
 
 
 def about_service_view(request, message_type):
@@ -520,7 +527,7 @@ def about_service_view(request, message_type):
 
         return render_to_response('about_service.html', context)
     else:
-        return HttpResponseRedirect("/login")
+        return HttpResponseRedirect("/login", status=401)
 
 
 def profile_view(request, message_type):
@@ -539,4 +546,4 @@ def profile_view(request, message_type):
         context['user_channels'] = user_channels
         return render_to_response('account.html', context)
     else:
-        return HttpResponseRedirect("/login")
+        return HttpResponseRedirect("/login", status=401)

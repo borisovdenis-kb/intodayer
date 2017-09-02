@@ -48,6 +48,7 @@ urlpatterns = [
     url(r'^about_service/$', views.about_service_view, {'message_type': None}),
     url(r'^about_service/message(\w+)$', views.about_service_view),
     url(r'check_email_unique', views.check_email_unique),
+    url(r'^donate/thank_you/$', views.thank_you_page_view),
 
     # для ajax запросов
     url(r'^get_invitations', views.get_invitations_ajax),
