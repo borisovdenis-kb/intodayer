@@ -147,7 +147,7 @@ function setRegistrationsListeners() {
             return false;
         }
         if (!validatePassword($reg_pass.val())) {
-            $reg_pass.attr('data-content', 'Пароль должен состоять не менее, чем из 8 латинских символов, букв разного регистра и цифр.');
+            $reg_pass.attr('data-content', 'Пароль должен состоять не менее, чем из 8 латинских символов разного регистра и цифр. </br><b>Пример: mOrphiuS777</b>');
             $reg_pass.attr('data-original-title', 'Слабый пароль');
 
             $reg_pass.popover('show');
