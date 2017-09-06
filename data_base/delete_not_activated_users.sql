@@ -1,4 +1,4 @@
-CREATE DEFINER=`denisko`@`localhost` PROCEDURE `delete_expired_activation_rows_and_related_users`()
+CREATE DEFINER=`denisko`@`localhost` PROCEDURE `delete_not_activated_users`()
 BEGIN
 	  DECLARE done INT DEFAULT 0;
     DECLARE usrid, eaid INT;
@@ -9,9 +9,9 @@ BEGIN
     OPEN cur;
     REPEAT
 		FETCH cur INTO eaid, usrid, eadate;
-        IF TO_DAYS(NOW()) - TO_DAYS(eadate) >= 2 THEN
-			      DELETE FROM intodayer.intodayer2_app_customuser WHERE id = usrid;
-		    END IF;
+      IF TO_DAYS(NOW()) - TO_DAYS(eadate) >= 2 THEN
+			  DELETE FROM intodayer.intodayer2_app_customuser WHERE id = usrid;
+		  END IF;
 	  UNTIL done END REPEAT;
     CLOSE cur;
 END
